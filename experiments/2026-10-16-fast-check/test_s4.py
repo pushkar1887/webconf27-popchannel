@@ -264,3 +264,12 @@ def test_equal_item_norm_still_works():
     ck = torch.load(E.R.ROOT/"runs"/tag/"best_seed0.pt", weights_only=True)
     n = ck["model"]["item_emb_table.weight"].norm(dim=1)
     assert float(n.max()-n.min()) < 1e-4
+
+
+def test_normalize_job_keeps_gpus():
+    import os
+    os.environ["SESSION_NO_AUTORUN"] = "1"
+    import job_queue as JQ
+    j = JQ.normalize_job({"run_id": "x", "script": "exp_run.py", "args": "--a", "gpus": "0,1"})
+    assert j["gpus"] == "0,1"
+    assert "gpus" not in JQ.normalize_job({"run_id": "y", "script": "exp_run.py"})

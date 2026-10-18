@@ -1,0 +1,9 @@
+[2026-10-18T22:11:30] QUEUE_START sessions=2
+[2026-10-18T22:11:34] PUSHED pc-s5b-1018 account-5
+GPU slots full on account-5; pc-s5c-1018 stays pending
+GPU slots full on account-5; pc-s5c-1018 stays pending
+GPU slots full on account-5; pc-s5c-1018 stays pending
+[2026-10-18T22:13:50] DONE pc-s5b-1018 COMPLETE files=11 runs=1 jobs=1 failed_jobs=['gowalla__lightgcn__full__bpr__s0-2gpu'] device_count=2
+[2026-10-18T22:13:54] PUSHED pc-s5c-1018 account-5
+[2026-10-18T22:47:28] FAILED pc-s5c-1018 CANCEL_ACKNOWLEDGED files=0 runs=0 session_status.json=missing
+[2026-10-18T22:47:28] QUEUE_DONE {"pc-s5b-1018": "done", "pc-s5c-1018": "failed"}

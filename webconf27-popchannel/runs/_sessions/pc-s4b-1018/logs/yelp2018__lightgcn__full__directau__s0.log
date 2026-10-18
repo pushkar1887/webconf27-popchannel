@@ -1,0 +1,24 @@
+{"event": "data_ready", "dataset": "Yelp2018", "users": 31668, "items": 38048, "user_id_max": 31667, "item_id_max": 38047, "interactions": 1561406, "split_counts": [1249124, 156140, 156142], "file_sha256": {"train": "4554856760e47effdbe093b5297417084332423266fb0e0a38067fc8aa78f4eb", "val": "c684aa3c518838d1abe93bd816318850689a974923e99c40f0c4e47649727bc7", "test": "05941a1ce56dcf8580c18647709211471d85bbd8a73298103d0ab9c28490987f"}, "user_buckets": 7604, "item_buckets": 7656, "compressed_parameters": 976640, "full_parameters": 4461824}
+/kaggle/working/_work/exp_run.py:74: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:760.)
+  return torch.sparse_coo_tensor(idx, val, (nu+ni, nu+ni)).coalesce().to(device)
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 5, "val_recall": 0.09609196465914537, "best": 0.09609196465914537, "elapsed": 727.6}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 10, "val_recall": 0.09879801023688597, "best": 0.09879801023688597, "elapsed": 1460.5}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 15, "val_recall": 0.10040220753964359, "best": 0.10040220753964359, "elapsed": 2194.8}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 20, "val_recall": 0.10132408049779627, "best": 0.10132408049779627, "elapsed": 2929.2}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 25, "val_recall": 0.1016560150586344, "best": 0.1016560150586344, "elapsed": 3663.7}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 30, "val_recall": 0.10222897793097427, "best": 0.10222897793097427, "elapsed": 4397.8}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 35, "val_recall": 0.10212228937129192, "best": 0.10222897793097427, "elapsed": 5131.6}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 40, "val_recall": 0.10239862860619169, "best": 0.10239862860619169, "elapsed": 5866.1}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 45, "val_recall": 0.10259736299081763, "best": 0.10259736299081763, "elapsed": 6600.0}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 50, "val_recall": 0.10271486288196251, "best": 0.10271486288196251, "elapsed": 7333.9}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 55, "val_recall": 0.10292847225879305, "best": 0.10292847225879305, "elapsed": 8068.1}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 60, "val_recall": 0.1030026555741113, "best": 0.1030026555741113, "elapsed": 8802.0}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 65, "val_recall": 0.10301316533537773, "best": 0.10301316533537773, "elapsed": 9536.6}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 70, "val_recall": 0.1032833554109713, "best": 0.1032833554109713, "elapsed": 10269.4}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 75, "val_recall": 0.10313105214684386, "best": 0.1032833554109713, "elapsed": 10999.5}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 80, "val_recall": 0.10356069365053816, "best": 0.10356069365053816, "elapsed": 11729.4}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 85, "val_recall": 0.10344120679251864, "best": 0.10356069365053816, "elapsed": 12471.4}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 90, "val_recall": 0.10359814237672843, "best": 0.10359814237672843, "elapsed": 13213.6}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 95, "val_recall": 0.10369526970906118, "best": 0.10369526970906118, "elapsed": 13954.7}
+{"event": "val", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "epoch": 99, "val_recall": 0.10342292112569108, "best": 0.10369526970906118, "elapsed": 14547.8}
+{"event": "seed_done", "tag": "yelp2018__lightgcn__full__directau__s0", "seed": 0, "best_epoch": 95, "stop_reason": "time_cap", "test_raw": 0.10698918913144662, "test_cosine": 0.07107743197496035, "test_cos_prior": 0.11432722182069457, "test_raw_prior": 0.10817132064259344}

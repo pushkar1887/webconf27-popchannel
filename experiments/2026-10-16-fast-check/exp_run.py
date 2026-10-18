@@ -90,6 +90,33 @@ class LightProp:
         return acc[:self.nu], acc[self.nu:]
 
 
+class SplitProp(LightProp):
+    """LightProp with the adjacency split by ROWS across two GPUs (--multi-gpu): each layer computes
+    A[:h] @ x on cuda:0 and A[h:] @ x on cuda:1 concurrently and concatenates on cuda:0. Same maths as LightProp."""
+    def __init__(self, adj, nu, ni, layers=2):
+        adj = adj.coalesce().cpu()
+        n = adj.shape[0]; h = n//2
+        idx, val = adj.indices(), adj.values()
+        top = idx[0] < h
+        self.parts = [torch.sparse_coo_tensor(idx[:, top], val[top], (h, n)).coalesce().to("cuda:0"),
+                      torch.sparse_coo_tensor(torch.stack([idx[0, ~top]-h, idx[1, ~top]]), val[~top], (n-h, n)).coalesce().to("cuda:1")]
+        self.nnz = int(adj._nnz())
+        self.adj = self.parts[0]
+        self.nu, self.ni, self.layers = nu, ni, int(layers)
+
+    def __call__(self, model, aliases):
+        ego = torch.cat([table_vec(model.user_emb_table, aliases[0]), table_vec(model.item_emb_table, aliases[1])])
+        acc, x = ego, ego
+        for _ in range(self.layers):
+            x1 = x.to("cuda:1", non_blocking=True)
+            y0 = torch.sparse.mm(self.parts[0], x)
+            y1 = torch.sparse.mm(self.parts[1], x1)
+            x = torch.cat([y0, y1.to("cuda:0")])
+            acc = acc + x
+        acc = acc/(self.layers+1)
+        return acc[:self.nu], acc[self.nu:]
+
+
 def _mask_coords(users, masks):
     lens = [len(masks.get(x, ())) for x in users]
     if not sum(lens):
@@ -552,8 +579,15 @@ def run_seed(args, seed, c, result, out_path, run_dir=None):
     prop = None
     if model_kind == "LightGCN":
         layers = getattr(args, "lightgcn_layers", 2)
-        prop = LightProp(build_norm_adj(c["parts"][0], c["nu"], c["ni"], device), c["nu"], c["ni"], layers)
-        row_model = {"model": "LightGCN", "layers": layers, "adj_nnz": int(prop.adj._nnz())}
+        adj = build_norm_adj(c["parts"][0], c["nu"], c["ni"], device)
+        if getattr(args, "multi_gpu", False):
+            if torch.cuda.device_count() < 2:
+                raise SystemExit("--multi-gpu needs 2 visible GPUs")
+            prop = SplitProp(adj, c["nu"], c["ni"], layers)
+        else:
+            prop = LightProp(adj, c["nu"], c["ni"], layers)
+        row_model = {"model": "LightGCN", "layers": layers, "adj_nnz": getattr(prop, "nnz", None) or int(prop.adj._nnz()),
+                     "multi_gpu": bool(getattr(args, "multi_gpu", False))}
     params = list(model.parameters())
     b = beta = r = None
     emb_params = sum(p.numel() for p in params)
@@ -708,6 +742,8 @@ def parse(argv=None):
     p.add_argument("--model", default="MF", choices=["MF", "LightGCN"],
                    help="LightGCN: K-layer propagation over the shared tables (train-edge adjacency) before every loss/eval")
     p.add_argument("--lightgcn-layers", type=int, default=2, help="K for --model LightGCN")
+    p.add_argument("--multi-gpu", action="store_true",
+                   help="LightGCN only: split propagation rows across cuda:0 and cuda:1 (one job on both T4s)")
     p.add_argument("--seeds", default="0", help="exactly ONE seed per process")
     p.add_argument("--epochs", type=int, required=True)
     p.add_argument("--eval-every", type=int, required=True)

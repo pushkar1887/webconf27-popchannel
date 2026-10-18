@@ -1,0 +1,41 @@
+{"event": "data_ready", "dataset": "Gowalla", "users": 29858, "items": 40981, "user_id_max": 29857, "item_id_max": 40980, "interactions": 1027370, "split_counts": [821896, 102737, 102737], "file_sha256": {"train": "6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8", "val": "18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc", "test": "d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa"}, "user_buckets": 5792, "item_buckets": 5806, "compressed_parameters": 742272, "full_parameters": 4533696}
+/kaggle/working/_work/exp_run.py:74: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:760.)
+  return torch.sparse_coo_tensor(idx, val, (nu+ni, nu+ni)).coalesce().to(device)
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 5, "val_recall": 0.15956436445877767, "best": 0.15956436445877767, "elapsed": 400.9}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 10, "val_recall": 0.16560509749102612, "best": 0.16560509749102612, "elapsed": 801.8}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 15, "val_recall": 0.16816326358782585, "best": 0.16816326358782585, "elapsed": 1196.2}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 20, "val_recall": 0.16928630532279754, "best": 0.16928630532279754, "elapsed": 1590.0}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 25, "val_recall": 0.16961712866592157, "best": 0.16961712866592157, "elapsed": 1983.5}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 30, "val_recall": 0.1706630369921216, "best": 0.1706630369921216, "elapsed": 2379.4}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 35, "val_recall": 0.17084453629197074, "best": 0.17084453629197074, "elapsed": 2775.3}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 40, "val_recall": 0.17154759804139588, "best": 0.17154759804139588, "elapsed": 3168.4}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 45, "val_recall": 0.1718953628132561, "best": 0.1718953628132561, "elapsed": 3562.0}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 50, "val_recall": 0.1724863182896362, "best": 0.1724863182896362, "elapsed": 3955.5}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 55, "val_recall": 0.17259949521293108, "best": 0.17259949521293108, "elapsed": 4348.8}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 60, "val_recall": 0.17330580270766768, "best": 0.17330580270766768, "elapsed": 4742.3}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 65, "val_recall": 0.1735246261732695, "best": 0.1735246261732695, "elapsed": 5136.5}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 70, "val_recall": 0.1738904494700246, "best": 0.1738904494700246, "elapsed": 5530.0}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 75, "val_recall": 0.17429426141482307, "best": 0.17429426141482307, "elapsed": 5923.8}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 80, "val_recall": 0.17473955999949475, "best": 0.17473955999949475, "elapsed": 6317.3}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 85, "val_recall": 0.17458281068529147, "best": 0.17473955999949475, "elapsed": 6710.2}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 90, "val_recall": 0.17526366060501536, "best": 0.17526366060501536, "elapsed": 7103.8}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 95, "val_recall": 0.1753277105836623, "best": 0.1753277105836623, "elapsed": 7497.0}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 100, "val_recall": 0.17592750917492922, "best": 0.17592750917492922, "elapsed": 7890.9}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 105, "val_recall": 0.1759850221858983, "best": 0.1759850221858983, "elapsed": 8286.7}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 110, "val_recall": 0.17637245593976067, "best": 0.17637245593976067, "elapsed": 8687.9}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 115, "val_recall": 0.17648851896759696, "best": 0.17648851896759696, "elapsed": 9088.8}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 120, "val_recall": 0.1766809634908947, "best": 0.1766809634908947, "elapsed": 9489.8}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 125, "val_recall": 0.1769513300878018, "best": 0.1769513300878018, "elapsed": 9890.9}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 130, "val_recall": 0.17693606750277513, "best": 0.1769513300878018, "elapsed": 10292.3}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 135, "val_recall": 0.1776987286429166, "best": 0.1776987286429166, "elapsed": 10693.7}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 140, "val_recall": 0.17754211713580076, "best": 0.1776987286429166, "elapsed": 11094.9}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 145, "val_recall": 0.17778700883248297, "best": 0.17778700883248297, "elapsed": 11495.9}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 150, "val_recall": 0.17794245983961585, "best": 0.17794245983961585, "elapsed": 11897.0}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 155, "val_recall": 0.17826462678579433, "best": 0.17826462678579433, "elapsed": 12298.3}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 160, "val_recall": 0.1785128889786292, "best": 0.1785128889786292, "elapsed": 12699.6}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 165, "val_recall": 0.17820839995177695, "best": 0.1785128889786292, "elapsed": 13100.6}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 170, "val_recall": 0.1788476117958272, "best": 0.1788476117958272, "elapsed": 13501.6}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 175, "val_recall": 0.17889827806053155, "best": 0.17889827806053155, "elapsed": 13902.6}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 180, "val_recall": 0.1789107591073165, "best": 0.1789107591073165, "elapsed": 14303.9}
+{"event": "val", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "epoch": 182, "val_recall": 0.17938795203514826, "best": 0.17938795203514826, "elapsed": 14465.4}
+{"event": "seed_done", "tag": "gowalla__lightgcn__full__directau__s0", "seed": 0, "best_epoch": 182, "stop_reason": "time_cap", "test_raw": 0.17943044973357325, "test_cosine": 0.1331856359973878, "test_cos_prior": 0.19776913261290135, "test_raw_prior": 0.17985006557459932}

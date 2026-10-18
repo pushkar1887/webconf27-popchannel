@@ -1,0 +1,96 @@
+{
+ "run_id": "gowalla__mf__full__directau_eqnorm__s0",
+ "tag": "gowalla__mf__full__directau_eqnorm__s0",
+ "args": {
+  "dataset": "Gowalla",
+  "method": "Full",
+  "loss": "dau",
+  "model": "MF",
+  "lightgcn_layers": 2,
+  "seeds": [
+   0
+  ],
+  "epochs": 200,
+  "eval_every": 5,
+  "patience": 30,
+  "min_delta": 0.0005,
+  "cap_min": 180.0,
+  "lr": 0.01,
+  "wd": 1e-08,
+  "batch": null,
+  "run_id": "gowalla__mf__full__directau_eqnorm__s0",
+  "tag": "gowalla__mf__full__directau_eqnorm__s0",
+  "resolution": 200,
+  "init_match": false,
+  "equal_item_norm": true
+ },
+ "resolved": {
+  "lr": 0.01,
+  "wd": 1e-08,
+  "batch": 1024,
+  "n_train_edges": 821896,
+  "embedding_dim": 64,
+  "eval_every": 5,
+  "patience": 30,
+  "min_delta": 0.0005,
+  "cap_min": 180.0,
+  "epochs": 200,
+  "resolution": 200
+ },
+ "exp_run_sha256": "5957387eddb51a3264ba8b9078b162e1326bef0c78e9e62484b29b74acbbca08",
+ "code_sha256": {
+  "exp_run.py": "5957387eddb51a3264ba8b9078b162e1326bef0c78e9e62484b29b74acbbca08",
+  "repro_run.py": "181882ae0353409c8c143e9c74907659c3f93b1486ed10143db8740868bf1f42",
+  "repro_core.py": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+ },
+ "torch_version": "2.11.0+cu128",
+ "python": "3.13.15",
+ "gpu_name": "Tesla T4",
+ "device_count": 1,
+ "CUDA_VISIBLE_DEVICES": "1",
+ "mapping_sha256": {
+  "users": "d8e2d115e45e4c31e10e439ab2d7f7eeb1fa8d0f07b4a49976c32ebf94faff45",
+  "items": "78a53b621ed643e7908fccc2c32824befc52d61fff3fb59c9130d62fa7adb7d9"
+ },
+ "mapping_shapes": {
+  "users": [
+   29858
+  ],
+  "items": [
+   40981
+  ]
+ },
+ "table_rows": {
+  "users": 29858,
+  "items": 40981
+ },
+ "init_match_factors": null,
+ "model": "MF",
+ "lightgcn_layers": null,
+ "method_label": "Full",
+ "dataset_stats": {
+  "users": 29858,
+  "items": 40981,
+  "user_id_max": 29857,
+  "item_id_max": 40980,
+  "interactions": 1027370,
+  "split_counts": [
+   821896,
+   102737,
+   102737
+  ],
+  "file_sha256": {
+   "train": "6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8",
+   "val": "18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc",
+   "test": "d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa"
+  },
+  "user_buckets": 5792,
+  "item_buckets": 5806,
+  "compressed_parameters": 742272,
+  "full_parameters": 4533696,
+  "train_users": 29858,
+  "val_eval_users": 25738,
+  "test_eval_users": 25789
+ },
+ "started": "2026-10-18T13:20:55+00:00"
+}

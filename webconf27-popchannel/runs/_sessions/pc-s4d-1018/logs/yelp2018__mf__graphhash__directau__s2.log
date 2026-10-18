@@ -1,0 +1,14 @@
+{"event": "data_ready", "dataset": "Yelp2018", "users": 31668, "items": 38048, "user_id_max": 31667, "item_id_max": 38047, "interactions": 1561406, "split_counts": [1249124, 156140, 156142], "file_sha256": {"train": "4554856760e47effdbe093b5297417084332423266fb0e0a38067fc8aa78f4eb", "val": "c684aa3c518838d1abe93bd816318850689a974923e99c40f0c4e47649727bc7", "test": "05941a1ce56dcf8580c18647709211471d85bbd8a73298103d0ab9c28490987f"}, "user_buckets": 7604, "item_buckets": 7656, "compressed_parameters": 976640, "full_parameters": 4461824}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 5, "val_recall": 0.02241750692837691, "best": 0.02241750692837691, "elapsed": 277.6}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 10, "val_recall": 0.023890203724791424, "best": 0.023890203724791424, "elapsed": 555.2}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 15, "val_recall": 0.023647793693120707, "best": 0.023890203724791424, "elapsed": 832.5}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 20, "val_recall": 0.02426077808705987, "best": 0.02426077808705987, "elapsed": 1109.6}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 25, "val_recall": 0.02409859983707449, "best": 0.02426077808705987, "elapsed": 1386.8}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 30, "val_recall": 0.024566220878098562, "best": 0.024566220878098562, "elapsed": 1664.0}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 35, "val_recall": 0.02399598095315094, "best": 0.024566220878098562, "elapsed": 1941.3}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 40, "val_recall": 0.023887557814840147, "best": 0.024566220878098562, "elapsed": 2218.6}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 45, "val_recall": 0.02394552265479763, "best": 0.024566220878098562, "elapsed": 2495.8}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 50, "val_recall": 0.024702694780659677, "best": 0.024702694780659677, "elapsed": 2773.2}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 55, "val_recall": 0.023936545702437858, "best": 0.024702694780659677, "elapsed": 3050.4}
+{"event": "val", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "epoch": 60, "val_recall": 0.024393658170066574, "best": 0.024702694780659677, "elapsed": 3327.5}
+{"event": "seed_done", "tag": "yelp2018__mf__graphhash__directau__s2", "seed": 2, "best_epoch": 50, "stop_reason": "patience", "test_raw": 0.024169834275047014, "test_cosine": 0.020485528308028876, "test_cos_prior": 0.056544809833853155, "test_raw_prior": 0.05006839864803547}

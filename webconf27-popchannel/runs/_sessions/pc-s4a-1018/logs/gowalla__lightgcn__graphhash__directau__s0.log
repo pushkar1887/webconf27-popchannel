@@ -1,0 +1,34 @@
+{"event": "data_ready", "dataset": "Gowalla", "users": 29858, "items": 40981, "user_id_max": 29857, "item_id_max": 40980, "interactions": 1027370, "split_counts": [821896, 102737, 102737], "file_sha256": {"train": "6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8", "val": "18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc", "test": "d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa"}, "user_buckets": 5792, "item_buckets": 5806, "compressed_parameters": 742272, "full_parameters": 4533696}
+/kaggle/working/_work/exp_run.py:74: UserWarning: Sparse invariant checks are implicitly disabled. Memory errors (e.g. SEGFAULT) will occur when operating on a sparse tensor which violates the invariants, but checks incur performance overhead. To silence this warning, explicitly opt in or out. See `torch.sparse.check_sparse_tensor_invariants.__doc__` for guidance.  (Triggered internally at /pytorch/aten/src/ATen/Context.cpp:760.)
+  return torch.sparse_coo_tensor(idx, val, (nu+ni, nu+ni)).coalesce().to(device)
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 5, "val_recall": 0.10104960264506647, "best": 0.10104960264506647, "elapsed": 383.6}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 10, "val_recall": 0.0984635953047079, "best": 0.10104960264506647, "elapsed": 770.1}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 15, "val_recall": 0.10008217609450122, "best": 0.10104960264506647, "elapsed": 1156.5}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 20, "val_recall": 0.10274065934070074, "best": 0.10274065934070074, "elapsed": 1543.0}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 25, "val_recall": 0.1049234349037203, "best": 0.1049234349037203, "elapsed": 1929.5}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 30, "val_recall": 0.10577919836576431, "best": 0.10577919836576431, "elapsed": 2315.8}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 35, "val_recall": 0.10661433360956143, "best": 0.10661433360956143, "elapsed": 2706.6}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 40, "val_recall": 0.10749935116380827, "best": 0.10749935116380827, "elapsed": 3093.6}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 45, "val_recall": 0.1078791015819261, "best": 0.1078791015819261, "elapsed": 3480.1}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 50, "val_recall": 0.10791139540820326, "best": 0.10791139540820326, "elapsed": 3866.4}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 55, "val_recall": 0.1086261901985638, "best": 0.1086261901985638, "elapsed": 4253.1}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 60, "val_recall": 0.1098881749837156, "best": 0.1098881749837156, "elapsed": 4639.7}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 65, "val_recall": 0.10992944474165967, "best": 0.10992944474165967, "elapsed": 5026.6}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 70, "val_recall": 0.11042507910467597, "best": 0.11042507910467597, "elapsed": 5413.4}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 75, "val_recall": 0.1109741479925821, "best": 0.1109741479925821, "elapsed": 5800.2}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 80, "val_recall": 0.1110135571761787, "best": 0.1110135571761787, "elapsed": 6186.7}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 85, "val_recall": 0.11123239685644071, "best": 0.11123239685644071, "elapsed": 6573.8}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 90, "val_recall": 0.11129150029755998, "best": 0.11129150029755998, "elapsed": 6960.0}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 95, "val_recall": 0.1116934600458859, "best": 0.1116934600458859, "elapsed": 7346.5}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 100, "val_recall": 0.11158447953530792, "best": 0.1116934600458859, "elapsed": 7732.8}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 105, "val_recall": 0.11195236545944935, "best": 0.11195236545944935, "elapsed": 8119.3}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 110, "val_recall": 0.11212501044392553, "best": 0.11212501044392553, "elapsed": 8505.9}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 115, "val_recall": 0.11193611781712352, "best": 0.11212501044392553, "elapsed": 8892.4}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 120, "val_recall": 0.11219772653726542, "best": 0.11219772653726542, "elapsed": 9279.1}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 125, "val_recall": 0.11219035619126214, "best": 0.11219772653726542, "elapsed": 9666.1}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 130, "val_recall": 0.11217568591666491, "best": 0.11219772653726542, "elapsed": 10052.8}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 135, "val_recall": 0.1119742396694886, "best": 0.11219772653726542, "elapsed": 10439.3}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 140, "val_recall": 0.11176186919153462, "best": 0.11219772653726542, "elapsed": 10825.4}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 145, "val_recall": 0.11184574040649234, "best": 0.11219772653726542, "elapsed": 11211.7}
+{"event": "val", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "epoch": 150, "val_recall": 0.11188623827170463, "best": 0.11219772653726542, "elapsed": 11598.1}
+{"event": "seed_done", "tag": "gowalla__lightgcn__graphhash__directau__s0", "seed": 0, "best_epoch": 120, "stop_reason": "patience", "test_raw": 0.1128690170907813, "test_cosine": 0.10948205809047942, "test_cos_prior": 0.1706265178526329, "test_raw_prior": 0.12384033070222444}

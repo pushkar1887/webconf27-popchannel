@@ -1,28 +1,102 @@
 {
  "sessions": {
   "pc-s4a-1018": {
-   "state": "running",
+   "state": "done",
    "account": "account-3",
    "pushed_at": "2026-10-18T13:55:59",
-   "status": "RUNNING"
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 146,
+   "run_dirs": [
+    "amazonbook__mf__graphhash__directau__s1",
+    "gowalla__lightgcn__graphhash__directau__s0",
+    "gowalla__mf__graphhash-r400__bpr__s0",
+    "gowalla__mf__graphhash-r400__directau__s0",
+    "gowalla__mf__graphhash-r800__bpr__s0",
+    "gowalla__mf__graphhash-r800__directau__s0",
+    "yelp2018__lightgcn__full__bpr__s0",
+    "yelp2018__mf__graphhash__bpr__s2",
+    "yelp2018__mf__graphhash__directau_resbias__s0"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 10,
+    "failed": [],
+    "device_count": 2
+   }
   },
   "pc-s4b-1018": {
-   "state": "running",
+   "state": "done",
    "account": "account-3",
    "pushed_at": "2026-10-18T13:56:02",
-   "status": "RUNNING"
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 95,
+   "run_dirs": [
+    "amazonbook__mf__full__bpr__s0-long",
+    "amazonbook__mf__graphhash__directau__s2",
+    "gowalla__mf__graphhash-r1600__bpr__s0",
+    "gowalla__mf__graphhash-r1600__directau__s0",
+    "gowalla__mf__graphhash__directau_eqnorm__s0",
+    "yelp2018__lightgcn__full__directau__s0",
+    "yelp2018__lightgcn__graphhash__directau__s0"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 7,
+    "failed": [],
+    "device_count": 2
+   }
   },
   "pc-s4c-1018": {
-   "state": "running",
+   "state": "done",
    "account": "account-4",
    "pushed_at": "2026-10-18T13:56:06",
-   "status": "RUNNING"
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 122,
+   "run_dirs": [
+    "amazonbook__mf__graphhash__directau_resbias__s0",
+    "gowalla__lightgcn__full__bpr__s0",
+    "gowalla__mf__doublegraph__directau__s0",
+    "gowalla__mf__full__directau_eqnorm__s0",
+    "gowalla__mf__graphhash-r3200__bpr__s0",
+    "gowalla__mf__graphhash-r3200__directau__s0",
+    "yelp2018__lightgcn__graphhash__bpr__s0",
+    "yelp2018__mf__doublegraph__bpr__s0",
+    "yelp2018__mf__graphhash__bpr__s1"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 9,
+    "failed": [],
+    "device_count": 2
+   }
   },
   "pc-s4d-1018": {
-   "state": "running",
+   "state": "done",
    "account": "account-4",
    "pushed_at": "2026-10-18T13:56:10",
-   "status": "RUNNING"
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 122,
+   "run_dirs": [
+    "amazonbook__mf__graphhash__bpr__s1",
+    "amazonbook__mf__graphhash__bpr__s2",
+    "gowalla__lightgcn__full__directau__s0",
+    "gowalla__lightgcn__graphhash__bpr__s0",
+    "gowalla__mf__doublegraph__bpr__s0",
+    "gowalla__mf__graphhash__directau_resbias__s0",
+    "yelp2018__mf__doublegraph__directau__s0",
+    "yelp2018__mf__graphhash__directau__s1",
+    "yelp2018__mf__graphhash__directau__s2"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 9,
+    "failed": [],
+    "device_count": 2
+   }
   }
  }
 }

@@ -40,7 +40,10 @@
 13. If a rule or number looks wrong, write the evidence in the LOG and ask the human. Do not silently deviate.
 
 **Kaggle facts:**
-- T4 x2 per session; 2 sessions/account; 2 accounts → 8 GPUs.
+- T4 x2 per session; 2 sessions/account; 2 main accounts (account-3, account-4) → 8 GPUs.
+- **account-5** (added 18 Oct; about 30 h of quota then) is *pinned-only*: used only by sessions that name it (`PINNED_ONLY_ACCOUNTS` in `job_queue.py`). account-3 / account-4 had about 6 h / 8 h left on 18 Oct evening.
+- **One job on both T4s:** a job may set `"gpus": "0,1"` (one GPU list per session); LightGCN then needs `--multi-gpu` (row-split propagation across cuda:0 and cuda:1).
+- **Cancelling** a kernel is done by the human in the Kaggle web UI; this kaggle client has no cancel call. A queued or running kernel holds one of its account's 2 slots.
 - Quota ≈ 30 h/week/account [Guessing], per session-hour [Likely]; the human checks it in the web UI.
 - kaggle 1.7.4.5 sets only `enable_gpu`, so **A0 verifies `device_count == 2`**.
 - Set `KAGGLE_CONFIG_DIR` **before** `import kaggle` (one API call per subprocess, `kapi.py`).
@@ -49,9 +52,9 @@
 - Never name files after stdlib modules.
 
 **Naming:**
-- Run ID `{dataset}__{backbone}__{compression}__{loss}__s{seed}`, plus `-initmatch` / `-r{res}` suffixes; `x__` = exploratory.
-- dataset ∈ {gowalla, yelp2018, amazonbook}; compression ∈ {full, random, dfreq, graphhash}; loss ∈ {bpr, directau, directau_resbias, directau_eqnorm}.
-- Session slug `pc-{stage}{n}-1017`.
+- Run ID `{dataset}__{backbone}__{compression}__{loss}__s{seed}`, plus `-initmatch` / `-r{res}` / `-long` / `-p500` / `-wd{x}` / `-2gpu-v2` suffixes; `x__` = exploratory.
+- dataset ∈ {gowalla, yelp2018, amazonbook}; backbone ∈ {mf, lightgcn}; compression ∈ {full, random, dfreq, graphhash, graphhash-r{res}, doublegraph}; loss ∈ {bpr, directau, directau_resbias, directau_eqnorm}.
+- Session slug `pc-{stage}{n}-{MMDD}`, e.g. `pc-s4a-1018`.
 
 **Status values:** `todo`, `doing (HH:MM, owner)`, `done (HH:MM)`, `blocked (reason)`, `cut (reason)`.
 
@@ -96,8 +99,8 @@
 | Q1 | Kaggle GPU quota on both accounts → LOG | human | Sat ~17:30 | done (18:15) |
 | G0 | T1–T4 tests + A0 smoke OK; `device_count`, co-location speed → LOG | claude | Sat ~19:00 | done (18:36) |
 | G1 | Mechanism framing + novelty (PLAN §9) | human + claude | Sat ~20:30 | done (19:50, framing confirmed; G1.d pending N1) |
-| G2 | Abstract framing + Stage 3 scope (PLAN §9) | human + claude | Sat ~22:30 | todo |
-| G3 | Abstract numbers frozen | human | Sun 12:00 | todo (candidate package prepared 11:49: prompts/g3_abstract_numbers.md; human sign-off pending) |
+| G2 | Abstract framing + Stage 3 scope (PLAN §9) | human + claude | Sat ~22:30 | done (21:15 all PASS; scope approved; Stage 3 pushed 23:52) |
+| G3 | Abstract numbers frozen | human | Sun 12:00 | todo (package prompts/g3_abstract_numbers.md, incl. the orchestrator's revised abstract; **human sign-off pending**) |
 | G4 | Paper numbers frozen | human | Fri 23, 18:00 | todo |
 
 ### Stage 3: candidates (final list and predictions registered at G2). PLAN §5
@@ -126,11 +129,34 @@ Registered sessions (all jobs are prepared; only the orchestrator may push):
 | 3 | BPR-s0-p500 | `gowalla__mf__graphhash__bpr__s0-p500`; patience500; final BPR seeds s0-p500/s1/s2 | done (04:23) |
 | 4 | B1–B4, B10–B18 | Random / DoubleFreq × {BPR, DirectAU} on 3 datasets; AmazonBook Full BPR | done (04:23) |
 | 5 | I2 + partner | AmazonBook GraphHash DirectAU `s0-initmatch` and Full DirectAU `s0`, both max150/cap300 | done (04:23) |
-| 6 | C3 | `gowalla__mf__graphhash__directau_resbias__s0` | blocked: needs new code (learned β·p + regularized residual) |
-| 7 | C1 | gowalla graphhash-r{R1,R2} × {bpr, directau} (exploratory) | todo |
-| 8 | C4 | `gowalla__mf__full__directau_eqnorm__s0` (optional intervention) | todo |
-| 9 | D1, D2 | LightGCN; BACO (not included in this queue) | todo |
+| 6 | C3 | `{gowalla,yelp2018,amazonbook}__mf__graphhash__directau_resbias__s0` | done in Stage 4 (code added 18 Oct; **FAIL**: learned score far below post-hoc; code review pending) |
+| 7 | C1 | gowalla graphhash-r{400,800,1600,3200} × {bpr, directau} | done in Stage 4 (gain trend PASS; ρ_item trend FAIL; r1600 DirectAU capped) |
+| 8 | C4 | Gowalla {full, graphhash} `directau_eqnorm__s0` | done in Stage 4 (as predicted) |
+| 9 | D1, D2 | LightGCN (8 runs in Stage 4; Gowalla Full reruns in Stage 5); BACO replaced by the **DoubleGraph substitute** (4 runs in Stage 4; BACO code not available locally) | done in Stage 4; Stage 5 running |
 | + | D7 | Gowalla Full DirectAU `s0-wd0` and `s0-wd1e-4`, cap180 | done (04:23) |
+
+### Stage 4: post-G3 experiments for the paper (registered 13:55, snapshot PREREG_20261018-1355; pushed 13:56). PLAN §5
+Builder `make_sessions_s4.py` → `sessions_s4.py`; 35 jobs in 4 sessions (pc-s4a/s4b on account-3, pc-s4c/s4d on account-4).
+
+| # | Experiment | Run IDs | Status |
+|---|---|---|---|
+| 1 | AmazonBook GPU rescoring | `amazonbook__mf__graphhash__bpr__s0-legacy-posts3-controls` | done (21:43; PASS) |
+| 2 | Extra seeds | `{yelp2018,amazonbook}__mf__graphhash__{directau,bpr}__s{1,2}` | done (PASS) |
+| 3 | C3 residual bias | `*__mf__graphhash__directau_resbias__s0` × 3 | done (FAIL) |
+| 4 | LightGCN | `{gowalla,yelp2018}__lightgcn__{full,graphhash}__{bpr,directau}__s0` | done (PASS; 5 rows capped at 4 h) |
+| 5 | DoubleGraph | `{gowalla,yelp2018}__mf__doublegraph__{directau,bpr}__s0` | done (PASS) |
+| 6 | C1 resolutions | `gowalla__mf__graphhash-r{400,800,1600,3200}__{directau,bpr}__s0` | done (gain PASS, ρ FAIL) |
+| 7 | C4 equal norms | `gowalla__mf__{full,graphhash}__directau_eqnorm__s0` | done |
+| 8 | AmazonBook Full BPR | `amazonbook__mf__full__bpr__s0-long` | done (patience; PASS) |
+| C3-review | Read the `dau_resbias` code: bug or real negative? (no GPU) | claude / codex | todo |
+
+### Stage 5: LightGCN Gowalla Full, one job on both T4s (registered 22:04, amended 22:10; account-5)
+| Session | Job | Status |
+|---|---|---|
+| pc-s5a-1018 | 1-GPU version | cut (cancelled by the human; replaced by the 2-GPU plan) |
+| pc-s5b-1018, pc-s5c-1018 | 2-GPU, first try | cut (bug: `"gpus"` dropped from the bundle, so the job saw 1 GPU; pc-s5b failed in 7 s, pc-s5c cancelled) |
+| pc-s5d-1018 | `gowalla__lightgcn__full__bpr__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | running (pushed 22:15) |
+| pc-s5e-1018 | `gowalla__lightgcn__full__directau__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | running (pushed 22:47) |
 
 ### Analyses
 | ID | What (PLAN) | Owner | After | Status |
@@ -146,7 +172,7 @@ Registered sessions (all jobs are prepared; only the orchestrator may push):
 | E8 | Retained paired bootstrap and paired-t Holm; separate secondary NDCG; applicable Amazon alternatives | codex | final saved pairs | done (11:49; Recall primary PASS and NDCG CIs positive; alternate Amazon paired CIs unavailable) |
 | E9 | Final popularity-reweighted original/validation-retuned beta checks | codex | final GH pairs | done (11:49; Gowalla all 3 seeds/Yelp PASS; fully retuned Amazon INCONCLUSIVE, GPU-only legacy cells missing) |
 
-| GPU-postS3 | Missing AmazonBook legacy controls: cosine / quantized validation / weighted retuning / full-prior alternate paired CIs; spec prompts/post_stage3_gpu_rescore.md | orchestrator | reviewed GPU scorer | blocked (not submitted; scorer export/weighted-validation extensions required before launch) |
+| GPU-postS3 | Missing AmazonBook legacy controls: cosine / quantized validation / weighted retuning / full-prior alternate paired CIs; spec prompts/post_stage3_gpu_rescore.md | orchestrator | reviewed GPU scorer | done in Stage 4 (`score_controls.py --post-s3`; all tie policies CI > 0, E7 PASS, E9 PASS) |
 
 ### Writing
 | ID | What | Owner | When | Status |

@@ -37,7 +37,16 @@
 | S3-E7 final | Every GH checkpoint within 0.02pp on val and test | I | 3 modern failures; 8 modern passes; 1 legacy missing validation | FAIL; float32 default |
 | PR-E9 final | Weighted-validation β shrinks/stays; corrected ordering retained | I | Gowalla 3 seeds and Yelp PASS; Amazon retuning missing | partial; Amazon INCONCLUSIVE |
 | S3-B, D7 | Main grid and decay checks | I/H | See Stage 3 outcome block; wd0 persistence under this setup | Report failures; no universal loss reversal |
-| C3, C1, C4 | Optional extensions | — | C3 not implemented; optional work not launched | C3 blocked |
+| S3-A2, A8r, B9, B5–B8, I2 | Stage 3 range predictions | I | all inside their ranges | PASS |
+| S4-SEED | Yelp / AmazonBook seeds 1–2 in range, every Δ CI > 0 | I | Δ +0.83 to +1.54 | PASS; PR-E8 now holds on all 9 seed pairs |
+| S4-AMZBPR | AmazonBook Full BPR converges, raw ≥ 8.37 | I | 8.38, stopped on patience | PASS |
+| S4-RESCORE | alternative-tie CIs > 0; uint8; weighted | I/P | +1.51 to +1.52; within 0.002 pp; 5.53 vs 4.04 | PASS (closes the AmazonBook gaps in PR-E8 / PR-E9) |
+| S4-C3 | learned score within ±0.5 of post-hoc | I | 4.56 vs 13.21 (Gowalla), 2.68 vs 5.68, 1.63 vs 6.25 | FAIL (code review pending) |
+| S4-LGN | LightGCN L-i, L-ii, L-iii | H | all three hold; 5 rows capped at 4 h | PASS (budget-limited rows) |
+| S4-DG | DoubleGraph (BACO substitute) repair; DirectAU > BPR | I | 10.91 vs 7.27; 5.52 vs 2.78 | PASS |
+| S4-C1 | gain falls and ρ_item rises with resolution | P | Spearman −0.90 / +0.70 | gain PASS, ρ FAIL |
+| S4-C4 | equal norms (exploratory) | X | Full 12.77 → 19.32; GraphHash 13.27 | as predicted |
+| S5-LGNFULL | LightGCN Gowalla Full, 11.5 h on 2 GPUs | H | — | running |
 
 ---
 
@@ -477,6 +486,50 @@ Secondary NDCG:
 
 **Sources:** exact pair IDs and validated input receipts are in `results/E8_final.json`. AmazonBook BPR is `amazonbook__mf__graphhash__bpr__s0-legacy`, NPZ `runs/_sessions/pc-x2-1017/controls/amazonbook__mf__graphhash__bpr__s0-legacy/per_user__full_prior_s0.npz`. Proposed missing scoring controls are specified in `prompts/post_stage3_gpu_rescore.md`; nothing is queued or pushed. User bootstrap uncertainty is conditional on fixed trained checkpoints and does not replace training-seed variability. D7 establishes persistence at wd=0 under this setup, not a controlled contradiction of PRISM or proof of an optimizer mechanism.
 
+### Stage 4 outcomes, 2026-10-18 22:20 IST (snapshot PREREG_20261018-1355, sha256 7a115933…e36a86a)
+All 34 training runs + 1 rescoring job pass validation; 0 failed jobs. **Capped (time_cap):** LightGCN Gowalla Full BPR (ep 345/1000), LightGCN Gowalla Full DirectAU (ep 182/200), LightGCN Yelp Full BPR (ep 169), LightGCN Yelp Full DirectAU (ep 99), LightGCN Yelp GraphHash DirectAU (ep 102), C1 Gowalla r1600 DirectAU (ep 185). Capped runs are INCONCLUSIVE for convergence.
+
+**S4-SEED: PASS.** Test R@20, paired bootstrap 2,000:
+| Pair | DirectAU cos+prior | BPR raw+prior | Δ | 95% CI |
+|---|---|---|---|---|
+| Yelp s1 | 5.69 | 4.83 | +0.86 | [0.71, 1.01] |
+| Yelp s2 | 5.65 | 4.82 | +0.83 | [0.69, 0.98] |
+| AmazonBook s1 | 6.28 | 4.79 | +1.48 | [1.38, 1.60] |
+| AmazonBook s2 | 6.30 | 4.75 | +1.54 | [1.44, 1.66] |
+All values inside the registered ranges. With Stage 3, PR-E8 now holds on **every seed of every dataset** (3 × 3 pairs).
+
+**S4-AMZBPR: PASS.** AmazonBook Full BPR long stops on patience (best ep 3800): raw 8.38 (≥ 8.37); raw+prior 8.38.
+
+**S4-RESCORE: PASS (all three).** AmazonBook B9 DirectAU vs legacy BPR, full prior at β 0.2, every tie policy (index, popularity, torch.topk, random seeds 0–9): Δ +1.51 to +1.52, every CI ⊂ [+1.39, +1.63]. E7 uint8: val −0.0011 pp, test +0.0021 pp (≤ 0.02 ✓; one checkpoint, the universal one-byte claim stays dropped). E9 weighted recall after weighted-val retuning: DirectAU 5.53 (β 0.05) vs BPR 4.04 (β 0.05) → DirectAU still wins.
+
+**S4-C3: FAIL.** The learned score (cos + β̂·p + r) is far below the post-hoc repair: Gowalla 4.56 vs 13.21; Yelp 2.68 vs 5.68; AmazonBook 1.63 vs 6.25. Learned β̂ > 0 on all 3 (0.90 / 0.93 / 0.93 ✓). Post-hoc modes of the same runs are normal (13.21 / 5.68 / 6.25). Reading: the jointly trained residual r_i hurts ranking badly; an implementation issue is not excluded (code review pending), so report as "learned variant did not work in our implementation".
+
+**S4-LGN: L-i, L-ii, L-iii PASS** (Yelp GraphHash DirectAU and both Full rows capped).
+| Run | raw | cos | cos+prior | raw+prior | ρ | stop |
+|---|---|---|---|---|---|---|
+| Gowalla Full BPR | 18.44 | 13.65 | 18.89 | 18.44 | 0.86 | cap |
+| Gowalla Full DirectAU | 17.94 | 13.32 | 19.78 | 17.99 | 0.66 | cap |
+| Gowalla GraphHash BPR | 16.22 | 10.52 | 15.79 | 16.27 | 0.38 | patience |
+| Gowalla GraphHash DirectAU | 11.29 | 10.95 | **17.06** | 12.38 | 0.15 | patience |
+| Yelp Full BPR | 9.55 | 6.89 | 9.48 | 9.55 | 0.88 | cap |
+| Yelp Full DirectAU | 10.70 | 7.11 | 11.43 | 10.82 | 0.78 | cap |
+| Yelp GraphHash BPR | 6.96 | 3.91 | 6.95 | 6.96 | 0.50 | patience |
+| Yelp GraphHash DirectAU | 4.71 | 5.09 | **9.12** | 5.51 | 0.13 | cap |
+The flip appears with LightGCN too (GraphHash DirectAU raw < BPR raw on both datasets), and the repair reverses it (17.06 > 16.27; 9.12 > 6.96). LightGCN GraphHash BPR is far stronger than MF (16.22 vs 9.37): propagation partly restores item-level differences.
+
+**S4-DG (DoubleGraph, BACO substitute): PASS.** Gowalla DirectAU raw 3.54, cos 5.84, cos+prior 10.91 vs BPR raw+prior 7.27; Yelp 1.12 / 2.17 / 5.52 vs BPR 2.78. ρ ≈ 0 (−0.09 / −0.06).
+
+**S4-C1 (resolution sweep, Gowalla GraphHash DirectAU): gain PASS, ρ_item FAIL.**
+| Resolution | 200 (A1) | 400 | 800 | 1600 (cap) | 3200 |
+|---|---|---|---|---|---|
+| raw | 7.55 | 7.49 | 7.86 | 8.62 | 10.87 |
+| cos+prior | 13.30 | 13.15 | 13.15 | 14.02 | 15.86 |
+| gain | 5.75 | 5.66 | 5.29 | 5.40 | 4.99 |
+| ρ_item | 0.28 | 0.44 | 0.56 | 0.57 | 0.54 |
+| BPR raw / raw+prior | 9.37 / 11.31 | 9.79 / 10.96 | 10.42 / 11.16 | 11.57 / 11.77 | 12.61 / 12.76 |
+Spearman(resolution, gain) = −0.90 (≤ −0.8 ✓). Spearman(resolution, ρ_item) = +0.70 (< +0.8, FAIL; it plateaus after 800). Repaired DirectAU beats repaired BPR at every resolution.
+
+**S4-C4 [X]: as predicted.** Full equal-norm: raw = cos = 12.77, cos+prior 19.32 (≥ raw + 3 ✓; close to Full DirectAU's own 19.57). GraphHash equal-norm: cos+prior 13.27 (A1 13.30 ✓).
 ### PR-N1 (deep sweep), 2026-10-18 22:06 IST
 Kill-rule question (copied): a paper showing that sharing or hashing destroys item-level popularity information **and** repairs it with a per-item popularity term | Observed: **no such paper found**. Closest new entries:
 - **MEmCom** (Pansare et al., MLSys 2022): hashed table + one learned weight per entity.
