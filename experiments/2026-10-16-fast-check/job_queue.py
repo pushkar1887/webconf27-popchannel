@@ -37,6 +37,7 @@ RESULTS = HERE / "results"
 STATE_FILE = RESULTS / "queue_state.json"
 EVENTS = RESULTS / "queue_events.log"
 ACCOUNTS = ["account-3", "account-4"]          # account-2 is invalid
+PINNED_ONLY_ACCOUNTS = ["account-5"]            # usable only by sessions that name it (added 18 Oct, S5)
 GPU_SLOTS = 2                                   # max concurrent GPU sessions per account
 POLL_SECONDS = 60
 SOURCE_ACCOUNT = "account-3"                    # owner of graphhash-fast-bpr-author-1016
@@ -456,7 +457,7 @@ def run_job(job, gpu, status, colocated_with=None):
             return
         status.job(run_id, **rec)
         cmd = [sys.executable, "-u", str(WORK / job["script"])] + shlex.split(job.get("args", ""))
-        env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(gpu), PYTHONUNBUFFERED="1")
+        env = dict(os.environ, CUDA_VISIBLE_DEVICES=str(job.get("gpus", gpu)), PYTHONUNBUFFERED="1")  # "gpus": "0,1" = one job on both T4s
         say(f"{run_id}: start on GPU {gpu}: {job['script']}")
         t0 = time.time()
         with open(WORKING / "logs" / f"{run_id}.log", "wb") as lf:
@@ -555,6 +556,8 @@ RUN_ID_RE = re.compile(r"^[A-Za-z0-9][A-Za-z0-9_.\-]*$")
 
 def normalize_job(job):
     out = {"run_id": job["run_id"], "script": job["script"], "args": job.get("args", "") or ""}
+    if job.get("gpus") is not None:              # one job on several GPUs, e.g. "0,1" (Stage 5)
+        out["gpus"] = str(job["gpus"])
     if job.get("inputs"):
         out["inputs"] = dict(job["inputs"])
     return out
@@ -611,7 +614,7 @@ def validate_sessions(sessions, embedded):
         if s["slug"] in slugs:
             errs.append(f"{where}: duplicate slug")
         slugs.add(s["slug"])
-        if s.get("account") not in (None, *ACCOUNTS):
+        if s.get("account") not in (None, *ACCOUNTS, *PINNED_ONLY_ACCOUNTS):
             errs.append(f"{where}: account must be None or one of {ACCOUNTS}")
         if not all(isinstance(x, str) for x in (s.get("kernel_sources") or [])):
             errs.append(f"{where}: kernel_sources must be a list of slugs")

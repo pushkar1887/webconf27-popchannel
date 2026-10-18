@@ -1,0 +1,6 @@
+{
+ "exit_code": 1,
+ "stop_reason": null,
+ "end_time": "2026-10-18T16:42:54+00:00",
+ "error": "SystemExit: --multi-gpu needs 2 visible GPUs"
+}

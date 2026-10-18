@@ -1,0 +1,7 @@
+Traceback (most recent call last):
+  File "/kaggle/working/_work/exp_run.py", line 792, in main
+    run_seed(args, args.seeds[0], c, result, out_path, run_dir)
+    ~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/working/_work/exp_run.py", line 585, in run_seed
+    raise SystemExit("--multi-gpu needs 2 visible GPUs")
+SystemExit: --multi-gpu needs 2 visible GPUs

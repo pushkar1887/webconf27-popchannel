@@ -284,3 +284,14 @@ Shared contract as Stage 3 (validation-only selection, test scored once; capped 
 
 #### S4-C4 [X]: equal item norms during training (Gowalla, Full and GraphHash DirectAU)
 - Exploratory. Full: raw ≈ cosine by construction; cos+prior ≥ raw + 3.0. GraphHash: cos+prior within ±1.0 of A1 cos+prior (13.30). Optimizer dynamics change, so this is not decisive.
+
+### Stage 5: registered prediction (registered 2026-10-18 IST, before push)
+Queue `make_sessions_s5.py`, session pc-s5a-1018 on account-5 (one job per GPU, cap 690 min = 11.5 h). Requested by the human after Stage 4 capped both LightGCN Gowalla Full runs at 4 h.
+
+#### S5-LGNFULL [H]: LightGCN Gowalla Full, BPR vs DirectAU, longer budget
+- Runs: `gowalla__lightgcn__full__bpr__s0-long` (max 3000 epochs, patience 50), `gowalla__lightgcn__full__directau__s0-long` (max 600 epochs, patience 30). Same lr 1e-3, wd 1e-8, batch 1024 as Stage 4.
+- Prediction: both raw scores ≥ their 4 h values (BPR 18.44, DirectAU 17.94). No prediction on which loss wins on raw scores (the 4 h order was BPR > DirectAU). Repaired Full DirectAU (cos+prior) ≥ repaired Full BPR (raw+prior), as at 4 h (19.78 vs 18.44).
+- If either run hits the cap again, it is reported as an equal 11.5 h budget (INCONCLUSIVE for convergence).
+
+#### S5-LGNFULL amendment (2026-10-18, before the replacement push; no Stage 5 result has been seen)
+At the human's request each job now uses BOTH T4s of its own session: `--multi-gpu` splits the propagation rows across cuda:0 / cuda:1 (verified identical forward and gradients to single-GPU propagation on CPU). Sessions pc-s5b-1018 (BPR) and pc-s5c-1018 (DirectAU) run in parallel on account-5; run_ids `gowalla__lightgcn__full__{bpr,directau}__s0-2gpu`. All other settings and the S5-LGNFULL prediction are unchanged. The single-GPU session pc-s5a-1018 is cancelled and its outputs, if any, are not used.

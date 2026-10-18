@@ -1,0 +1,36 @@
+{
+ "tag": "gowalla__lightgcn__full__bpr__s0-2gpu",
+ "run_id": "gowalla__lightgcn__full__bpr__s0-2gpu",
+ "args": {
+  "dataset": "Gowalla",
+  "method": "Full",
+  "loss": "bpr_author",
+  "model": "LightGCN",
+  "lightgcn_layers": 2,
+  "multi_gpu": true,
+  "seeds": [
+   0
+  ],
+  "epochs": 3000,
+  "eval_every": 5,
+  "patience": 50,
+  "min_delta": 0.0,
+  "cap_min": 690.0,
+  "lr": 0.001,
+  "wd": 1e-08,
+  "batch": 1024,
+  "run_id": "gowalla__lightgcn__full__bpr__s0-2gpu",
+  "tag": "gowalla__lightgcn__full__bpr__s0-2gpu",
+  "resolution": 200,
+  "init_match": false,
+  "equal_item_norm": false
+ },
+ "status": "failed",
+ "bucket_info": {
+  "user_buckets": 5792,
+  "item_buckets": 5806,
+  "compressed_parameters": 742272,
+  "full_parameters": 4533696
+ },
+ "seeds": {}
+}

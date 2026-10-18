@@ -37,7 +37,16 @@
 | S3-E7 final | Every GH checkpoint within 0.02pp on val and test | I | 3 modern failures; 8 modern passes; 1 legacy missing validation | FAIL; float32 default |
 | PR-E9 final | Weighted-validation β shrinks/stays; corrected ordering retained | I | Gowalla 3 seeds and Yelp PASS; Amazon retuning missing | partial; Amazon INCONCLUSIVE |
 | S3-B, D7 | Main grid and decay checks | I/H | See Stage 3 outcome block; wd0 persistence under this setup | Report failures; no universal loss reversal |
-| C3, C1, C4 | Optional extensions | — | C3 not implemented; optional work not launched | C3 blocked |
+| S3-A2, A8r, B9, B5–B8, I2 | Stage 3 range predictions | I | all inside their ranges | PASS |
+| S4-SEED | Yelp / AmazonBook seeds 1–2 in range, every Δ CI > 0 | I | Δ +0.83 to +1.54 | PASS; PR-E8 now holds on all 9 seed pairs |
+| S4-AMZBPR | AmazonBook Full BPR converges, raw ≥ 8.37 | I | 8.38, stopped on patience | PASS |
+| S4-RESCORE | alternative-tie CIs > 0; uint8; weighted | I/P | +1.51 to +1.52; within 0.002 pp; 5.53 vs 4.04 | PASS (closes the AmazonBook gaps in PR-E8 / PR-E9) |
+| S4-C3 | learned score within ±0.5 of post-hoc | I | 4.56 vs 13.21 (Gowalla), 2.68 vs 5.68, 1.63 vs 6.25 | FAIL (code review pending) |
+| S4-LGN | LightGCN L-i, L-ii, L-iii | H | all three hold; 5 rows capped at 4 h | PASS (budget-limited rows) |
+| S4-DG | DoubleGraph (BACO substitute) repair; DirectAU > BPR | I | 10.91 vs 7.27; 5.52 vs 2.78 | PASS |
+| S4-C1 | gain falls and ρ_item rises with resolution | P | Spearman −0.90 / +0.70 | gain PASS, ρ FAIL |
+| S4-C4 | equal norms (exploratory) | X | Full 12.77 → 19.32; GraphHash 13.27 | as predicted |
+| S5-LGNFULL | LightGCN Gowalla Full, 11.5 h on 2 GPUs | H | — | running |
 
 ---
 

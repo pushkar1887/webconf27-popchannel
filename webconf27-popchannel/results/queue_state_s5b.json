@@ -1,0 +1,33 @@
+{
+ "sessions": {
+  "pc-s5b-1018": {
+   "state": "done",
+   "account": "account-5",
+   "pushed_at": "2026-10-18T22:11:34",
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 11,
+   "run_dirs": [
+    "gowalla__lightgcn__full__bpr__s0-2gpu"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 1,
+    "failed": [
+     "gowalla__lightgcn__full__bpr__s0-2gpu"
+    ],
+    "device_count": 2
+   }
+  },
+  "pc-s5c-1018": {
+   "state": "failed",
+   "account": "account-5",
+   "pushed_at": "2026-10-18T22:13:54",
+   "status": "CANCEL_ACKNOWLEDGED",
+   "final_status": "CANCEL_ACKNOWLEDGED",
+   "files_saved": 0,
+   "run_dirs": [],
+   "session_summary": null
+  }
+ }
+}

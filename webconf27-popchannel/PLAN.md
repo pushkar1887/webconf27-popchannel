@@ -344,7 +344,13 @@ Direction of bias: a truncated DirectAU favours the anomaly and works against K2
 - **One session = 2 × T4,** with one condition per GPU (`CUDA_VISIBLE_DEVICES=0/1`). Each GPU may run a short sequential list. A crash on one GPU does not stop the other. Pair jobs of similar length.
 - **Limits:** 2 sessions per account × 2 working accounts = **8 GPUs**. Session max 12 h [Likely]. Quota ≈ 30 h/week/account [Guessing], counted per session-hour [Likely]. The human checks the quota in the web UI.
 - **API:** kaggle 1.7.4.5 sets only `enable_gpu`. Sessions report "Tesla T4", and Kaggle's T4 option is T4 x2 [Likely]. **A0 verifies `device_count == 2`**; otherwise fall back to one condition per session.
-- **Memory:** ≤ 380 MiB per job. A0 measures whether 2 jobs per GPU keep ≥ 70% speed each.
+- **Memory:** ≤ 380 MiB per job. A0 measured 2 jobs per GPU at 82 s/epoch each vs 37 s solo, so we keep 1 job per GPU.
+- **Added 18 Oct:**
+  - **account-5** is a third account, *pinned-only*: only sessions that name it use it. It had about 30 h of quota then; account-3 / account-4 had about 6 h / 8 h left.
+  - **One job on both T4s:** a job with `"gpus": "0,1"` sees both GPUs. LightGCN with `--multi-gpu` splits the propagation rows between them.
+    - Its output and gradients are identical to 1-GPU propagation (checked on CPU).
+    - The speedup is below 2× because of the copies between the GPUs at every layer.
+  - Every job has a cap because of the 12 h session limit: a session that overruns loses **all** its outputs.
 
 ### 7.5 Budget [Guessing]
 | Stage | Conditions | Sessions | Session-hours | Wall-clock |
@@ -373,7 +379,21 @@ Direction of bias: a truncated DirectAU favours the anomaly and works against K2
   - the checkpoint and both mapping files exist;
   - the mapping sha256 in `config.json` matches the files;
   - `stop_reason` is set.
-- **Run ID:** `{dataset}__{backbone}__{compression}__{loss}__s{seed}` (+ suffix `-initmatch`, `-r{res}`). Exploratory runs are prefixed `x__`.
+- **Run ID:** `{dataset}__{backbone}__{compression}__{loss}__s{seed}` (+ suffix `-initmatch`, `-r{res}`, `-long`, `-p500`, `-wd{x}`, `-2gpu-v2`). Exploratory runs are prefixed `x__`.
+- **Code added after Stage 3 (18 Oct):**
+  - `exp_run.py`:
+    - `--model LightGCN [--lightgcn-layers K] [--multi-gpu]`;
+    - `--loss dau_resbias` (C3: learned β·p plus residual r_i with decay 0.01; eval mode `learned`);
+    - `--method DoubleGraph` (the BACO substitute).
+  - `score_controls.py --post-s3` (AmazonBook rescoring: E5 cosine, E7 uint8, E9 weighted, E8 tie policies).
+  - `job_queue.py`: per-job `"gpus"`, `PINNED_ONLY_ACCOUNTS`.
+  - Session builders `make_sessions_s{3,4,5}.py`.
+  - Tests: `test_s3.py`, `test_s4.py`, `test_rescore.py`.
+- **GitHub:** the private repo `pushkar1887/webconf27-popchannel` mirrors `D:\web_2`. It excludes:
+  - credentials, kernel folders, session files with signed URLs, and files containing account usernames;
+  - checkpoints, datasets, and files over 50 MB.
+
+  Every commit is scanned for usernames and signed URLs first.
 - **Loop:** PREREG (+ snapshot) → spec → launch (orchestrator only) → monitor → fetch + strict validate → aggregate → gate (OUTCOME in RESULTS.md, a line in the LOG).
 
 ---
@@ -505,3 +525,11 @@ Format: `YYYY-MM-DD HH:MM IST | agent | IDs | what changed | issues | next`
 2026-10-18 14:00 IST | claude (+2 sonnet subagents) | Stage 4 (items 1-8) | Human asked to run all 8 remaining experiments. Code: exp_run.py --model LightGCN, --loss dau_resbias (C3), --method DoubleGraph (BACO substitute; BACO code not available locally); score_controls.py --post-s3 (AmazonBook rescoring per prompts/post_stage3_gpu_rescore.md). 168 tests pass. PREREG Stage 4 registered; snapshot results/snapshots/PREREG_20261018-1355.txt sha256 7a115933314098090775381db2d48f3cbfbebbee6c7d92d24fcc0a581e36a86a. Pushed pc-s4a…s4d-1018: 35 jobs, lanes est 6.4–7.6 h | LightGCN/DoubleGraph/resbias untested on real data (unit tests only) | validate + score Stage 4 when queue_s4.log shows QUEUE_DONE
 
 2026-10-18 22:20 IST | claude | Stage 4 | All 4 sessions done (scheduler crashed once, exit 4; restarted, resumed, nothing lost). 34 runs + rescoring valid, 0 failed. S4-SEED, S4-AMZBPR, S4-RESCORE, S4-DG PASS; S4-LGN L-i/ii/iii PASS (5 LightGCN rows capped); S4-C1 gain PASS, rho_item FAIL; S4-C3 FAIL (learned score far below post-hoc; code review pending); S4-C4 as predicted. Recorded in RESULTS | 6 capped runs (5 LightGCN, C1 r1600) | rerun capped runs with ~11 h caps, one job per GPU, pending human quota check
+
+2026-10-18 22:07 IST | claude | Stage 5 | Human asked to use the third Kaggle account (30 h quota) for option B. Credentials copied from the default kaggle.json into account-5 (key not printed); job_queue ACCOUNTS += account-5. PREREG S5-LGNFULL registered, snapshot results/snapshots/PREREG_20261018-2204.txt sha256 2c498316897c84c0abbd262df4d37990c450cd015a9587decc947870b2a7f7d8. Pushed pc-s5a-1018: LightGCN Gowalla Full BPR + DirectAU, one per GPU, cap 690 min | — | expect results by ~09:45 IST Mon
+
+2026-10-18 22:13 IST | claude | Stage 5 (2-GPU) | Added --multi-gpu row-split LightGCN propagation (exp_run.py SplitProp; forward+grad equal to 1-GPU on CPU) and per-job "gpus" override (job_queue.py); account-5 pinned-only. 91 tests pass. PREREG amendment snapshot results/snapshots/PREREG_20261018-2210.txt sha256 d79476fe3b56d4d5a04e3120deba6333b0a610a85ae47911a07a59ee5476e86f. pc-s5a-1018 cancelled by human. Pushed pc-s5b-1018 (BPR, 2 GPUs); pc-s5c-1018 (DirectAU, 2 GPUs) pending: Kaggle reports account-5 slots full while pc-s5a still shows QUEUED | — | scheduler retries pc-s5c automatically
+
+2026-10-18 22:23 IST | claude | Stage 5 fix | pc-s5b-1018 failed in 7 s: '--multi-gpu needs 2 visible GPUs' because normalize_job dropped the per-job "gpus" key from the kernel bundle (bug; fixed + test). pc-s5c-1018 carries the same bug and will fail the same way. Re-pushed as pc-s5d-1018 (BPR) and pc-s5e-1018 (DirectAU), run_ids *-2gpu-v2; pc-s5d running past the GPU check; pc-s5e waits for pc-s5c to free the slot | — | fetch + score when done
+
+2026-10-18 22:55 IST | claude | docs | Human asked to update the docs. TASKS: Kaggle facts (account-5 pinned-only, 2-GPU jobs, cancelling), naming, G2 done, C1/C3/C4/D1/D2/GPU-postS3 statuses, new Stage 4 and Stage 5 boards, N1 still open. RESULTS: outcome-board rows for Stages 3–5. PLAN: §7.4 compute additions, §8 code added after Stage 3 and the GitHub mirror | — | Stage 5 running; G3 sign-off pending; C3 code review todo
