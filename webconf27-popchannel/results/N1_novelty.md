@@ -50,3 +50,61 @@ Searches run (none found a paper combining the claim): "embedding compression po
 No. Among everything retrieved, no paper shows both that sharing/hashing destroys item-level popularity information and that a per-item popularity term repairs it. GraphHash reports the DirectAU-under-hashing drop without a mechanism; PRISM gives the norm mechanism for full tables only; DDC, Cheng 2026, MACR, PDA and logit adjustment give score-time popularity terms without hashing. Caveat: the sweep was shallow (DNA citers and Google Scholar unchecked; the last ~3.8k chars of PRISM unread), so recheck before submission.
 
 Three closest: (1) GraphHash (observes the drop, no mechanism); (2) PRISM (norm encodes popularity; DirectAU needs wd); (3) Cheng 2026, arXiv 2606.21275 (log p(i) score term), with DNA next.
+
+---
+
+# N1 deep sweep (run 2026-10-18, 22:06 IST)
+
+Evidence base: search-engine snippets (WebSearch), SciSpace abstracts, and the local full texts in `research/2026-10-16-loss-compression-audit/` (GraphHash, BACO, CCE). This cloud session's network policy **blocked** arxiv.org, export.arxiv.org, api.semanticscholar.org, dl.acm.org, ScienceDirect, OpenReview, DBLP, alphaXiv and par.nsf.gov, so no full text outside the local PDFs was read and no citer list was refreshed. "Verified" below means title, authors and venue appear in a primary or index record.
+
+## (d) New or upgraded entries
+
+| Paper | Verified | Venue/Year | What it shows | Overlap with our claim | How to position |
+|---|---|---|---|---|---|
+| **MEmCom**: Pansare, Katukuri, Arora, Cipollone, Shaik, Tokgozoglu, Venkataraman, *Learning Compressed Embeddings for On-Device Inference*, arXiv 2203.10135 | yes (abstract) | MLSys 2022 (oral) | A hashed shared table plus a second table with **one trainable weight per entity**, "allowing the model to distinguish between entities sharing the same embedding". The survey arXiv 2408.02304 writes it as e_i = w_i · T1[i mod m] (a per-entity scalar times the shared row); not read in the original | **High for the repair's shape** (a few bytes per item on top of a shared table). None on popularity, DirectAU or diagnosis | Must be cited. If the multiplicative form is right, PLAN Prop 1 (scale invariance) gives ∂L_DAU/∂w_i = 0 for w_i > 0: a learned per-item scale gets **no gradient** under DirectAU and is invisible to cosine scoring. That explains why a score-time term is the natural repair for DirectAU. Likely reviewer request: a MEmCom baseline under BPR |
+| **Hash Embeddings**: Svenstrup, Hansen, Winther, arXiv 1709.03933 | yes | NeurIPS 2017 | Each token combines k shared component vectors with **per-token importance parameters** | Medium (per-token parameters resolve collisions); NLP; no popularity | Cite as the origin of "shared vectors + per-entity parameters" |
+| **Proxy-based item representation**: Seol, Gang, Lee, Park | yes (abstract) | WSDM 2024, doi 10.1145/3616855.3635824 | Items = weighted sums of shared proxy embeddings; "may incorporate bias terms in case of frequent items" | Medium (sharing + per-item bias for frequent items); no diagnosis | Cite in the per-item-term related work |
+| **CoRRe**: Kim (KAIST), Loveland (Snap) et al., *Training-Free LLM-Based Recommendation with Post-LLM Item Refinement Using Collaborative Signals*, arXiv 2608.19665 | partial (snippets; arXiv Aug 2026; no venue found) | 2026 | Training-free: refines LLM item-embedding **directions** with a co-purchase graph and **magnitudes with item popularity** | Medium for "training-free popularity injected into magnitudes"; no sharing/hashing | Cite. It also shows the GraphHash/PRISM group (Loveland, Ju, Zhao, Shah, Koutra) is actively publishing on magnitude = popularity: **highest scoop risk and the most likely reviewers** |
+| **Shiao et al.**, *Improving Out-of-Vocabulary Handling (Hashing) in Recommendation Systems*, arXiv 2403.18280 | yes | WWW 2025 Companion, doi 10.1145/3701716.3717581 | This is GraphHash's ref [45] for "DirectAU may not be compatible with hashing-based methods" (GraphHash §5.2.1, local text). Snippets: BPR beats DirectAU for OOV users in its LSH/hashing settings. No mechanism visible in snippets; full text not read | Low–medium: a **second prior report** of the DirectAU-under-hashing problem, without an explanation | Cite next to GraphHash as the observation we explain. Do not say the flip "has never been reported" |
+| **Cheng**, arXiv 2606.21275, *A Rank-One Popularity Component in Dot-Product Recommender Scores: Population Theory and Prior-Separation Evidence* | title + abstract (snippets); first author not re-verified | arXiv, June 2026 | Population-optimal score = PMI + log p(i) + context offset. Prior adjustment raises Macro NDCG@50 (≈0.187 → 0.214) and **lowers catalog coverage (≈0.985 → 0.726)**. No hashing in the visible text | Medium for the log p(i) score term | Cite. Its coverage drop is independent evidence for our E5 tail/coverage cost: a log-prior term trades coverage for accuracy in general, not only under sharing |
+| **DNA**: Yeojun Choi, Woo-Seong Yun, Chanwoo Jeong, Yoon-Sik Cho, *GCNs meet long-tail: Embedding norm bias in GCN-based recommendations* | **yes (DBLP record)**; this resolves the first pass's "UNVERIFIED" | Applied Soft Computing 186:114226 (2026) | As in the first pass | As in the first pass | Citers still not retrievable |
+| **GraphHash** (local full text) | yes | WWW 2025 | Double-frequency hashing "still tend[s] to bias towards popular items in retrieval"; GraphHash "maintains a better balance by retrieving both popular and unpopular items" (Table 10) | Context, not overlap | Say openly that our repair re-concentrates GraphHash's top-20 on head items (Gowalla coverage 95% → 28%, E5). It trades away part of GraphHash's own diversity advantage for accuracy |
+| **BACO**, arXiv 2604.18351 (local full text) | yes | SIGIR 2026 | Degree-related weights in the clustering objective; BPR/LightGCN only; reports beating GraphHash | None (no DirectAU, no score-time popularity term) | Newer sharing method; future work for our analysis |
+| Frequency-aware allocation: frequency/double hashing (arXiv 2007.14523), Learning to Collide (arXiv 2203.15837), CAFE (SIGMOD 2024), MEC (arXiv 2502.15355, popularity-weighted quantization) | yes (abstracts) | 2020–2025 | Popularity decides **which IDs get rows or codes** | Low: popularity used for allocation, not to repair scores | Our double-frequency cells (alias tuples ≈ unique, η² 0.999) still show DirectAU raw < BPR raw on Gowalla (3.22 vs 3.93): allocation alone does not restore what DirectAU loses |
+| *Curse of "Low" Dimensionality in Recommender Systems*, arXiv 2305.13597 | yes (abstract) | SIGIR 2023 | Low-dimensional dot-product models amplify popularity bias | Low | Cite in capacity ↔ popularity background |
+| Meehan & Pauwels, *On Inherited Popularity Bias in Cold-Start Item Recommendation* | yes (abstract) | RecSys 2025 | Post-hoc mitigation using embedding magnitude as a popularity proxy | Low | Optional cite (magnitude ↔ popularity, post-hoc) |
+
+Searches run this pass (none found a paper combining both kill-rule parts): hashing collisions × item-level popularity; embedding compression × popularity bias / long tail / fairness; DirectAU × compression / hashing; hashed embeddings + per-item bias / scalar; QR trick + item bias; hashing trick + log-popularity prior (2025–2026); GraphHash follow-ups 2026; Loveland/Koutra 2026 papers; SciSpace semantic queries on the same three questions.
+
+## (e) Kill-rule verdict after the deep sweep
+**Not triggered.** No paper found shows that sharing/hashing destroys item-level popularity information **and** repairs it with a per-item popularity term.
+
+The repair's **shape** is not new, though:
+- per-item scalars on a hashed table (MEmCom, Hash Embeddings);
+- per-item bias on shared proxies (Seol et al.);
+- training-free popularity magnitudes (CoRRe);
+- log-prior score terms (logit adjustment, PDA, Cheng).
+
+The DirectAU-under-hashing problem has also been **reported twice** (Shiao et al.; GraphHash), both times without a mechanism.
+
+**Recommended G1.d: PASS, with a narrowed contribution** (the human decides). The contribution is:
+1. the diagnosis: bucket pooling of length (ρ_bucket 0.93–0.94 on Gowalla/Yelp vs GraphHash ρ_item 0.19–0.52 across the 3 datasets);
+2. the exact decomposition (item residual 0.71–0.76 of the gain; ties 12%);
+3. the capacity bound (Theorem 2);
+4. the explanation of the reported DirectAU-vs-BPR flip, with controlled comparisons.
+
+The post-hoc term is the **instrument**, not the novelty.
+
+## (f) Consequences for the abstract and paper
+1. Never write "first", "novel repair", or "propose a repair". Present the per-item term as a known, minimal, training-free probe.
+2. **Title risk** [Likely]: "the Few Bytes That Repair It" invites the reviewer reply "that is MEmCom with a fixed weight". Put the diagnosis in the title.
+3. Related work must cite MEmCom, Hash Embeddings, Shiao et al. and CoRRe in addition to PRISM, DNA and Cheng.
+4. Add the Prop 1 corollary: under DirectAU a learned multiplicative per-item scale receives zero gradient. This must be checked against MEmCom's actual equation before it goes in the paper.
+5. Expect the GraphHash/PRISM authors as reviewers. Credit their observations precisely.
+
+## (g) Still not done (access-blocked here; about 30 min on a normal connection)
+- Full text of Cheng 2606.21275 (scope check for hashing).
+- The last ~3.8k characters of PRISM.
+- The DirectAU section of Shiao et al. (does it propose a reason?).
+- MEmCom's exact embedding equation.
+- DNA citers and Google Scholar citers of GraphHash/PRISM after August 2026.

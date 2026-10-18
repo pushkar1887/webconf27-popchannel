@@ -23,7 +23,7 @@
 | PR-E2e | Decile shuffle \|Δ\| small; global shuffle drop large (Full models) | P | decile −4.19; global −11.47; replacement +0.83 (favourable) | decile FAIL, global PASS, repl. FAIL (favourable) |
 | PR-M1 | Theorem check holds; GraphHash η² ≤ 0.5 | P | η² GraphHash 0.36–0.48; bound holds | M-i PASS, M-ii PASS, M-iii mixed [X] |
 | PR-A6 | Popularity-only ≥ 2 points below the repair (Yelp, AmazonBook) | P | pop-only 2.97 / 1.68 / 0.96 vs repair 13.29 / 5.68 / 6.33 | PASS (3/3) |
-| PR-N1 | Novelty verdict | — | PRISM, DNA confirmed (see §N1); full reading pending | pending |
+| PR-N1 | Novelty verdict | — | Deep sweep 18 Oct: kill rule not triggered; repair shape has precedent (MEmCom, Hash Embeddings, CoRRe); DirectAU-hashing problem reported by Shiao et al. + GraphHash without mechanism | recommended G1.d PASS, narrowed contribution (human decides); 5 full-text checks access-blocked |
 | PR-A1 | GraphHash-DirectAU raw ≤ 9.04 **and** stopped by patience (capped = INCONCLUSIVE) | I | raw 7.55; cos+prior 13.30; stop = patience (ep 55) | PASS |
 | PR-I1 | Init-sensitivity control: within ±0.3 of A1, both converged (not a sharing test) | P | raw Δ −0.01; cos+prior Δ +0.05 | PASS |
 | PR-A8 | Full-BPR ∈ [15.4, 15.8] | I | 16.55, capped at max epochs | FAIL (not converged) |
@@ -476,3 +476,15 @@ Secondary NDCG:
 **AmazonBook robustness:** primary B9 versus the saved legacy BPR raw+prior random-key-seed-0 CI excludes zero. The same-checkpoint/base/β alternate legacy torch.topk summary retains Recall Δ **+1.516886** and NDCG Δ **+1.179439** points. All ten saved random-key aggregate Recall differences are positive, **+1.508196 to +1.524243** points. Only seed 0 has stored per-user full-prior predictions. Alternative-policy paired CIs therefore remain **unavailable**, not inferred from small aggregate changes. `base_popkey` has β=0 and cannot substitute for an alternate full-prior ranking.
 
 **Sources:** exact pair IDs and validated input receipts are in `results/E8_final.json`. AmazonBook BPR is `amazonbook__mf__graphhash__bpr__s0-legacy`, NPZ `runs/_sessions/pc-x2-1017/controls/amazonbook__mf__graphhash__bpr__s0-legacy/per_user__full_prior_s0.npz`. Proposed missing scoring controls are specified in `prompts/post_stage3_gpu_rescore.md`; nothing is queued or pushed. User bootstrap uncertainty is conditional on fixed trained checkpoints and does not replace training-seed variability. D7 establishes persistence at wd=0 under this setup, not a controlled contradiction of PRISM or proof of an optimizer mechanism.
+
+### PR-N1 (deep sweep), 2026-10-18 22:06 IST
+Kill-rule question (copied): a paper showing that sharing or hashing destroys item-level popularity information **and** repairs it with a per-item popularity term | Observed: **no such paper found**. Closest new entries:
+- **MEmCom** (Pansare et al., MLSys 2022): hashed table + one learned weight per entity.
+- **Hash Embeddings** (Svenstrup et al., NeurIPS 2017): per-token importance parameters.
+- **Proxy-based items** (Seol et al., WSDM 2024): bias terms for frequent items.
+- **CoRRe** (Kim, Loveland et al., arXiv 2608.19665): training-free popularity magnitudes, no sharing.
+- **Shiao et al.** (WWW 2025 Companion; GraphHash ref [45]): a second, mechanism-free report that DirectAU suits hashing poorly.
+- **Cheng** (arXiv 2606.21275): log p(i) term; prior adjustment lowers coverage 0.985 → 0.726, which parallels our E5.
+
+DNA authors verified (DBLP: Choi, Yun, Jeong, Cho; ASOC 186:114226). | Verdict: kill rule **not triggered** → **recommended G1.d PASS with a narrowed contribution** (diagnosis, decomposition, capacity bound, flip explanation; the post-hoc term is the instrument, not the novelty). The human confirms G1.d. | Limits: arxiv.org, Semantic Scholar, ACM DL, ScienceDirect, OpenReview, DBLP and NSF PAR were blocked by this session's network policy. Not read in full: Cheng; the PRISM tail; the Shiao DirectAU section; MEmCom's equation (the multiplicative form is from survey arXiv 2408.02304). Citer lists were not refreshed and Google Scholar was not queried. | Details: results/N1_novelty.md §(d)–(g)
+
