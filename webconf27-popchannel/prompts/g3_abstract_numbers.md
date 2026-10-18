@@ -55,3 +55,29 @@ The E8 AmazonBook BPR source is the legacy control NPZ; the headline legacy scal
 **Orchestrator-suggested revision (adds the flip hook; same numbers, 185 words)**
 
 Embedding sharing cuts recommender memory, but we show it also erases item-level popularity information, and this changes which training loss looks best. With full tables, DirectAU beats BPR (Gowalla 18.02 vs 16.55 Recall@20; Yelp2018 11.10 vs 8.02); under GraphHash sharing the order flips (7.55 vs 9.37; 2.41 vs 3.78). Building on PRISM's observation that embedding magnitudes track popularity and DNA's normalization-and-bias design, we trace the flip to pooling: a shared row's length follows its bucket's total traffic (Spearman 0.93–0.94), not the item's own popularity. A fixed-β decomposition attributes 71–76% of the repair gain to within-bucket item-level popularity; exact ties explain a smaller share. Adding a validation-tuned per-item term β·log(1+count) to cosine scores restores the order: repaired DirectAU exceeds equally repaired BPR by 0.88–2.13 points, with positive paired-user confidence intervals on Gowalla, Yelp2018 and AmazonBook and across three Gowalla seeds; the pattern extends to random and double-frequency sharing. The gain has a cost: tail recall stays below the full-table model and coverage contracts. The prior costs 3.9–7.3% of the compressed table in float32.
+
+---
+
+## v2 after the N1 full-text check (2026-10-18 23:10 IST) — for both authors' sign-off
+
+**What changed and why**
+- Cheng (arXiv 2606.21275, eq. 53) already publishes the score form `hᵀe_i + β·log π_i` on full tables. MEmCom (MLSys 2022) and Hash Embeddings already give each item a learned weight over a shared row. So the **repair is not our contribution**: it is presented as a minimal, training-free *test*, and the title leads with the diagnosis.
+- Shiao et al. and GraphHash already *reported* that DirectAU does poorly under hashing, so we say "reported but not explained", never "never reported".
+- New point that survives from the theory: DirectAU's loss is scale-invariant (Euler), so a learned per-item scale like MEmCom's gets **exactly zero gradient** from it. That is why a scoring-time term is needed. To add to PLAN §4 as a corollary [Identity] before the paper.
+- Stage 4 is added: all 9 seed pairs pass, and the result also holds under random, double-frequency and double-graph sharing. LightGCN is left out of the abstract because 5 of its rows are budget-capped.
+- We say plainly that the repair trades away part of GraphHash's popular/unpopular balance: coverage falls.
+
+**Title options (pick one)**
+1. *What Embedding Sharing Erases: Item-Level Popularity and the DirectAU–BPR Flip* ← recommended
+2. *Shared Embeddings Forget Popularity: Why DirectAU Loses to BPR Under Hashing*
+3. *Bucket-Level Popularity: How Embedding Sharing Reverses Loss Rankings in Recommendation*
+
+**Abstract v2 (≈ 195 words)**
+
+Embedding sharing, which hashes many items into one table row, is a standard way to shrink recommender memory. We show that it also erases item-level popularity information, and that this changes which training loss looks best. With full tables, DirectAU beats BPR (Gowalla 18.02 vs 16.55 Recall@20; Yelp2018 11.10 vs 8.02); under GraphHash sharing the order flips (7.55 vs 9.37; 2.41 vs 3.78), a gap reported before but not explained. Building on evidence that embedding magnitudes track popularity (PRISM), we trace the flip to pooling: a shared row's length follows its bucket's total traffic (Spearman 0.93–0.94), not the item's own. A capacity bound limits what any per-bucket quantity can encode, and because DirectAU is scale-invariant, a learned per-item scale receives no gradient from it. A validation-tuned β·log(1+count) term added at scoring time, a known score form, serves as a minimal test: a fixed-β decomposition attributes 71–76% of its gain to within-bucket item-level popularity, and repaired DirectAU exceeds equally repaired BPR by 0.83–2.13 points, with positive paired confidence intervals on three datasets with three seeds each, and under random, double-frequency and double-graph sharing. The recovered accuracy concentrates on popular items: tail recall and catalog coverage fall.
+
+**Numbers used and their sources:** Full / GraphHash rows: RESULTS Stage 3 table and PR-Y. 0.93–0.94: PR-H. 71–76%: PR-DEC. 0.83–2.13 on 9 seed pairs: PR-E8 + S4-SEED. Other sharing schemes: Stage 3 main grid (6/6) + S4-DG. Tail and coverage: S3-E5 + PR-E5 addendum.
+
+**Cite in the paper (from N1):** Cheng eq. (53) for the score form; MEmCom, Hash Embeddings, Seol et al. (WSDM 2024) for per-item parameters on shared tables; PRISM and CoRRe for popularity in vector length; Shiao et al. + GraphHash for the reported DirectAU-under-hashing gap; GDE (SIGIR 2026) for soft gating instead of hard buckets.
+
+**Decisions for the authors:** (1) G1.d PASS with the narrower contribution? (2) title; (3) abstract v2 as is, or edits.
