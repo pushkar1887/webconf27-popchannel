@@ -23,7 +23,7 @@
 | PR-E2e | Decile shuffle \|Δ\| small; global shuffle drop large (Full models) | P | decile −4.19; global −11.47; replacement +0.83 (favourable) | decile FAIL, global PASS, repl. FAIL (favourable) |
 | PR-M1 | Theorem check holds; GraphHash η² ≤ 0.5 | P | η² GraphHash 0.36–0.48; bound holds | M-i PASS, M-ii PASS, M-iii mixed [X] |
 | PR-A6 | Popularity-only ≥ 2 points below the repair (Yelp, AmazonBook) | P | pop-only 2.97 / 1.68 / 0.96 vs repair 13.29 / 5.68 / 6.33 | PASS (3/3) |
-| PR-N1 | Novelty verdict | — | Deep sweep 18 Oct: kill rule not triggered; repair shape has precedent (MEmCom, Hash Embeddings, CoRRe); DirectAU-hashing problem reported by Shiao et al. + GraphHash without mechanism | recommended G1.d PASS, narrowed contribution (human decides); 5 full-text checks access-blocked |
+| PR-N1 | Novelty verdict | — | Deep sweep 18 Oct: kill rule not triggered; repair shape has precedent (MEmCom, Hash Embeddings, CoRRe); DirectAU-hashing problem reported by Shiao et al. + GraphHash without mechanism | recommended G1.d PASS, narrowed contribution (human decides); full texts verified 22:56 (Cheng eq. 53 = our score form on full tables; MEmCom Alg. 2 = learned per-item scale) |
 | PR-A1 | GraphHash-DirectAU raw ≤ 9.04 **and** stopped by patience (capped = INCONCLUSIVE) | I | raw 7.55; cos+prior 13.30; stop = patience (ep 55) | PASS |
 | PR-I1 | Init-sensitivity control: within ±0.3 of A1, both converged (not a sharing test) | P | raw Δ −0.01; cos+prior Δ +0.05 | PASS |
 | PR-A8 | Full-BPR ∈ [15.4, 15.8] | I | 16.55, capped at max epochs | FAIL (not converged) |
@@ -487,4 +487,15 @@ Kill-rule question (copied): a paper showing that sharing or hashing destroys it
 - **Cheng** (arXiv 2606.21275): log p(i) term; prior adjustment lowers coverage 0.985 → 0.726, which parallels our E5.
 
 DNA authors verified (DBLP: Choi, Yun, Jeong, Cho; ASOC 186:114226). | Verdict: kill rule **not triggered** → **recommended G1.d PASS with a narrowed contribution** (diagnosis, decomposition, capacity bound, flip explanation; the post-hoc term is the instrument, not the novelty). The human confirms G1.d. | Limits: arxiv.org, Semantic Scholar, ACM DL, ScienceDirect, OpenReview, DBLP and NSF PAR were blocked by this session's network policy. Not read in full: Cheng; the PRISM tail; the Shiao DirectAU section; MEmCom's equation (the multiplicative form is from survey arXiv 2408.02304). Citer lists were not refreshed and Google Scholar was not queried. | Details: results/N1_novelty.md §(d)–(g)
+
+### PR-N1 (full-text verification), 2026-10-18 22:56 IST
+Observed after network access was opened (full PDFs):
+- **Cheng 2606.21275:** no hashing or sharing. Eq. (53) r = hᵀe_i + β·log π_i, with β tuned for accuracy vs coverage. Coverage 0.985 → 0.726.
+- **PRISM:** no hashing or sharing anywhere; no optimizer named; λ = 0 DirectAU is qualitative only.
+- **Shiao et al.:** "BPR outperforms DirectAU on OOV users across all three datasets", with no mechanism.
+- **MEmCom Algorithm 2:** U[i mod m] ⊙ V[i] with V ∈ R^{v×1}. Under DirectAU or cosine scoring, ∂L/∂V[i] = 0 for V[i] > 0 (PLAN Prop 1), so it cannot carry popularity there.
+- **CoRRe:** no sharing.
+- **Citers** (Semantic Scholar): no new overlap. New sharing method GDE (SIGIR 2026), cite.
+
+| Verdict: kill rule **not triggered**. Recommended G1.d PASS with narrowed contribution stands, now on full texts. Cite Cheng eq. (53) as the score form and MEmCom as the per-item-parameter precedent. | Details: results/N1_novelty.md §(h)
 

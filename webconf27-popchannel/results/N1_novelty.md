@@ -108,3 +108,29 @@ The post-hoc term is the **instrument**, not the novelty.
 - The DirectAU section of Shiao et al. (does it propose a reason?).
 - MEmCom's exact embedding equation.
 - DNA citers and Google Scholar citers of GraphHash/PRISM after August 2026.
+
+---
+
+# (h) Full-text verification after network access was opened (2026-10-18, 22:56 IST)
+
+The human opened network access. arxiv.org, export.arxiv.org, Crossref, DBLP, OpenReview and NSF PAR now return 200. Semantic Scholar and OpenAlex return 429 (rate-limited, reachable after retries). dl.acm.org returns 403 (bot block). The PDFs were read with `pdftotext`; facts below are from the full texts.
+
+| Check from (g) | Full-text finding | Consequence |
+|---|---|---|
+| **Cheng 2606.21275** (Yang Cheng, independent researcher; v1 19 Jun 2026; 21 pp.) | **0** matches for hash / compress / collision. "shar" appears only as "context-shared". DirectAU is cited once, as related work. Eq. (53): **r_ci = h_c^T e_i + β·log π_i**, "where β is selected for the desired balance among accuracy, novelty, coverage, and tail exposure". Prior restoration: catalog coverage 0.98482 → 0.72612; Macro NDCG@50 0.18662 → 0.21350; Macro Recall@50 Δ CI includes 0. Setting: sequential recommendation, Alibaba/Tianchi, full tables | **Our scoring formula already exists on full models.** Cite eq. (53) as the score form. Our contribution is what sharing removes and why the β·log-count term recovers it under sharing, not the formula |
+| **PRISM 2505.11318** (18 pp., incl. appendix) | **0** mentions of hashing, compression, buckets or collisions (the one "hash" hit is the name "Mahashweta" in the references). **No optimizer is named anywhere** (the one "Adam" hit is "Jay Adams" in the references). Grid lr {0.1, 0.01, 0.001}, wd {0, 1e-4, 1e-6, 1e-8}; dim 64; uniform Xavier; ≤1000 epochs; patience 10 on NDCG@20; V100. λ = 0 for DirectAU appears only qualitatively (Fig. 2b "weak correlation"). Fig. 3: batched weight decay performs like λ = 0. "Embedding tables are partitioned" appears only in a distributed-training remark about how weight decay is applied | No overlap with sharing. Our D7 (ρ 0.74 at wd 0, Adam) remains a **difference under our setup**. PRISM gives no optimizer to compare against |
+| **Shiao et al. 2403.18280** (11 pp.) | DirectAU appears 4 times. Only result statement: "Surprisingly, BPR outperforms DirectAU on OOV users across all three of the datasets" (context-free OOV setting, NDCG@20 for **unseen** users). No mechanism; popularity mentions are generic | An observation for OOV users only, not for in-vocabulary compressed tables. Cite as a prior report; our explanation is new relative to it |
+| **MEmCom 2203.10135** (16 pp.) | Algorithm 2 (no bias): x = U[i mod m] ⊙ V[i], with **V ∈ R^{v×1}**: **one learned scalar per entity multiplies the shared row**. Indices are sorted by frequency. Algorithm 3 adds W ∈ R^{v×1} broadcast as a per-entity **vector offset** (not a score bias); "MEmCom with no bias performs equally well". Softmax-trained models on Newsgroup, MovieLens, Netflix, MSD, Games. **No popularity analysis; no cosine/normalized loss** (0 matches for "cosine") | Prop 1 corollary **holds for Algorithm 2** [Certain]: DirectAU and cosine scoring see only x/‖x‖ = θ̂_b for V[i] > 0, so ∂L_DAU/∂V[i] = 0. A learned per-item scale cannot carry popularity under DirectAU. It does **not** hold for Algorithm 3, whose offset changes the direction |
+| **CoRRe 2608.19665** (full text) | **0** matches for hash / compress / bucket / collision / DirectAU / GraphHash / PRISM. Training-free LLM recommender: co-purchase-graph direction refinement + **popularity-based magnitude refinement** | No sharing. Keep it as a positioning cite and as the scoop-risk signal |
+| **Citers** (Semantic Scholar, 18 Oct) | GraphHash 10, the same list as the first pass. PRISM 6, the same. DNA 1 (*A Robust Non-negative Tucker Factorization of Tensor Model for Dynamic QoS Prediction*, unrelated). Shiao 3 (unrelated, plus GraphHash). Cheng 0. OpenAlex lists fewer (GraphHash 4, PRISM 1, DNA 1) | No citing paper overlaps our claim |
+| New: **GDE**, Lee, Roh, Seo, Lim (LINE Plus), *Graph Diffusion Gated Embeddings for Recommender Systems*, SIGIR 2026, pp. 913–923, doi 10.1145/3805712.3809569 (a GraphHash citer) | Abstract (search snippet): soft heat-kernel-diffusion gating over seed-cluster embeddings replaces hard buckets; beats hashing baselines on top-K and CTR. No popularity or DirectAU in the abstract | Newer sharing method; cite. Soft mixtures give items distinct vectors, so our exact-tie analysis would not apply there |
+| arXiv API structured search (DirectAU × compression; hashing/sharing × popularity; compression × embedding norm) | No new candidates. Weak evidence: `all:DirectAU` returned only 1 entry, so the API indexes that token poorly | Not counted as a negative |
+
+**Updated kill-rule verdict: not triggered.** This now rests on the full texts of every close paper that was readable. The two closest overlaps are now confirmed in full text:
+1. **Cheng eq. (53)** has our score form on full tables.
+2. **MEmCom Algorithm 2** has our "one number per item on a shared table" shape, learned and multiplicative.
+
+Neither studies what sharing removes, the decomposition, the capacity bound, or the DirectAU-vs-BPR flip.
+
+**Remaining gaps:** DNA full text (ScienceDirect not tried; low priority, since its citer list shows no overlap); Google Scholar; papers not yet indexed.
+
