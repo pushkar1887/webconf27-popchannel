@@ -1,0 +1,28 @@
+[{"stream_name":"stdout","time":11.824176812,"data":"[2026-10-18T08:47:47+00:00] session pc-s4d-1018: device_count=2 mode=parallel_2gpu\n"}
+,{"stream_name":"stdout","time":66.065555579,"data":"[2026-10-18T08:48:41+00:00] warm-up prepare exit code 0\n"}
+,{"stream_name":"stdout","time":66.06698715,"data":"[2026-10-18T08:48:41+00:00] yelp2018__mf__graphhash__directau__s1: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":66.068125017,"data":"[2026-10-18T08:48:41+00:00] yelp2018__mf__graphhash__directau__s2: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":2664.592302773,"data":"[2026-10-18T09:31:59+00:00] yelp2018__mf__graphhash__directau__s1: exit code 0 after 2599s\n"}
+,{"stream_name":"stdout","time":2664.593289694,"data":"[2026-10-18T09:31:59+00:00] amazonbook__mf__graphhash__bpr__s2: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":3472.34659418,"data":"[2026-10-18T09:45:27+00:00] yelp2018__mf__graphhash__directau__s2: exit code 0 after 3406s\n"}
+,{"stream_name":"stdout","time":3472.347352142,"data":"[2026-10-18T09:45:27+00:00] amazonbook__mf__graphhash__bpr__s1: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":3615.963362449,"data":"[2026-10-18T09:47:51+00:00] amazonbook__mf__graphhash__bpr__s2: exit code 0 after 951s\n"}
+,{"stream_name":"stdout","time":3615.963996038,"data":"[2026-10-18T09:47:51+00:00] gowalla__lightgcn__full__directau__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":4182.593745956,"data":"[2026-10-18T09:57:17+00:00] amazonbook__mf__graphhash__bpr__s1: exit code 0 after 710s\n"}
+,{"stream_name":"stdout","time":4182.59456038,"data":"[2026-10-18T09:57:17+00:00] gowalla__mf__graphhash__directau_resbias__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":5939.335670864,"data":"[2026-10-18T10:26:34+00:00] gowalla__mf__graphhash__directau_resbias__s0: exit code 0 after 1757s\n"}
+,{"stream_name":"stdout","time":5939.336785232,"data":"[2026-10-18T10:26:34+00:00] gowalla__lightgcn__graphhash__bpr__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":11862.865498399,"data":"[2026-10-18T12:05:18+00:00] gowalla__lightgcn__graphhash__bpr__s0: exit code 0 after 5924s\n"}
+,{"stream_name":"stdout","time":11862.866606798,"data":"[2026-10-18T12:05:18+00:00] gowalla__mf__doublegraph__bpr__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":12036.996465839,"data":"[2026-10-18T12:08:12+00:00] gowalla__mf__doublegraph__bpr__s0: exit code 0 after 174s\n"}
+,{"stream_name":"stdout","time":18140.519969072,"data":"[2026-10-18T13:49:55+00:00] gowalla__lightgcn__full__directau__s0: exit code 0 after 14525s\n"}
+,{"stream_name":"stdout","time":18140.520973885,"data":"[2026-10-18T13:49:55+00:00] yelp2018__mf__doublegraph__directau__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":20773.366248683,"data":"[2026-10-18T14:33:48+00:00] yelp2018__mf__doublegraph__directau__s0: exit code 0 after 2633s\n"}
+,{"stream_name":"stdout","time":20773.366963556,"data":"[2026-10-18T14:33:48+00:00] session finished: state=complete jobs=9 failed=[]\n"}
+,{"stream_name":"stderr","time":20775.802251102,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":20775.802284951,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":20776.149571036,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":20776.149590745,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":20777.048156198,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":20778.223649933,"data":"[NbConvertApp] Writing 517945 bytes to __results__.html\n"}
+]

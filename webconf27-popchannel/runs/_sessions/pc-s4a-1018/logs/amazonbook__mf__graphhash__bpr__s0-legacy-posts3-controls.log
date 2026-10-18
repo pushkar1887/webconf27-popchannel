@@ -1,0 +1,15 @@
+{"event": "start", "run_id": "amazonbook__mf__graphhash__bpr__s0-legacy-posts3-controls", "dataset": "AmazonBook", "method": "GraphHash", "base": "raw", "mapping_source": "stored", "device": "cuda", "mapping_items_sha256": "6b62ddde92ca4dd8b86d7d2c717855645855ba09e81f2d84c96e76d5b1c9a1b5"}
+{"event": "progress", "tag": "post_s3_val", "split": "val", "users": 512, "of": 50355, "cells": 11, "seconds": 0.8}
+{"event": "progress", "tag": "post_s3_val", "split": "val", "users": 10752, "of": 50355, "cells": 11, "seconds": 12.8}
+{"event": "progress", "tag": "post_s3_val", "split": "val", "users": 20992, "of": 50355, "cells": 11, "seconds": 24.7}
+{"event": "progress", "tag": "post_s3_val", "split": "val", "users": 31232, "of": 50355, "cells": 11, "seconds": 36.6}
+{"event": "progress", "tag": "post_s3_val", "split": "val", "users": 41472, "of": 50355, "cells": 11, "seconds": 48.5}
+{"event": "run_done", "tag": "post_s3_val", "split": "val", "cells": 11, "users": 50355, "seconds": 58.9}
+{"event": "post_s3_selected", "beta_fixed": 0.2, "beta_selected": 0.05}
+{"event": "progress", "tag": "post_s3_test", "split": "test", "users": 512, "of": 50407, "cells": 17, "seconds": 0.9}
+{"event": "progress", "tag": "post_s3_test", "split": "test", "users": 10752, "of": 50407, "cells": 17, "seconds": 17.8}
+{"event": "progress", "tag": "post_s3_test", "split": "test", "users": 20992, "of": 50407, "cells": 17, "seconds": 34.6}
+{"event": "progress", "tag": "post_s3_test", "split": "test", "users": 31232, "of": 50407, "cells": 17, "seconds": 51.4}
+{"event": "progress", "tag": "post_s3_test", "split": "test", "users": 41472, "of": 50407, "cells": 17, "seconds": 68.0}
+{"event": "run_done", "tag": "post_s3_test", "split": "test", "cells": 17, "users": 50407, "seconds": 82.8}
+{"event": "done", "out": "/kaggle/working/controls/amazonbook__mf__graphhash__bpr__s0-legacy-posts3-controls/controls.json"}

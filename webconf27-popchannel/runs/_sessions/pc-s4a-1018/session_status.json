@@ -1,0 +1,141 @@
+{
+ "slug": "pc-s4a-1018",
+ "state": "complete",
+ "started": "2026-10-18T08:47:33+00:00",
+ "ended": "2026-10-18T16:07:00+00:00",
+ "device_count": 2,
+ "mode": "parallel_2gpu",
+ "inputs": {
+  "amz_gh_bpr": {
+   "ok": true,
+   "bytes": 6177465
+  }
+ },
+ "jobs": {
+  "amazonbook__mf__graphhash__bpr__s0-legacy-posts3-controls": {
+   "run_id": "amazonbook__mf__graphhash__bpr__s0-legacy-posts3-controls",
+   "gpu": 0,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/amz_gh_bpr --dataset AmazonBook --method GraphHash --base raw --post-s3 --beta 0.2 --run-id amazonbook__mf__graphhash__bpr__s0-legacy-posts3-controls --seeds 10 --out-root /kaggle/working/controls",
+   "state": "done",
+   "started": "2026-10-18T08:48:40+00:00",
+   "ended": "2026-10-18T08:51:44+00:00",
+   "duration_s": 183.6,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__graphhash__bpr__s0-legacy-posts3-controls.log"
+  },
+  "amazonbook__mf__graphhash__directau__s1": {
+   "run_id": "amazonbook__mf__graphhash__directau__s1",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset AmazonBook --method GraphHash --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 240 --epochs 150 --lr 0.001 --wd 1e-8 --seeds 1 --run-id amazonbook__mf__graphhash__directau__s1",
+   "state": "done",
+   "started": "2026-10-18T08:48:40+00:00",
+   "ended": "2026-10-18T10:12:08+00:00",
+   "duration_s": 5008.3,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__graphhash__directau__s1.log"
+  },
+  "yelp2018__mf__graphhash__bpr__s2": {
+   "run_id": "yelp2018__mf__graphhash__bpr__s2",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Yelp2018 --method GraphHash --loss bpr_author --epochs 3000 --eval-every 10 --patience 500 --min-delta 0 --cap-min 30 --lr 0.005 --wd 1e-6 --seeds 2 --run-id yelp2018__mf__graphhash__bpr__s2",
+   "state": "done",
+   "started": "2026-10-18T08:51:44+00:00",
+   "ended": "2026-10-18T08:56:09+00:00",
+   "duration_s": 265.8,
+   "exit_code": 0,
+   "log": "logs/yelp2018__mf__graphhash__bpr__s2.log"
+  },
+  "yelp2018__mf__graphhash__directau_resbias__s0": {
+   "run_id": "yelp2018__mf__graphhash__directau_resbias__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Yelp2018 --method GraphHash --loss dau_resbias --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 150 --epochs 150 --lr 0.005 --wd 1e-6 --seeds 0 --run-id yelp2018__mf__graphhash__directau_resbias__s0",
+   "state": "done",
+   "started": "2026-10-18T08:56:09+00:00",
+   "ended": "2026-10-18T09:31:04+00:00",
+   "duration_s": 2094.5,
+   "exit_code": 0,
+   "log": "logs/yelp2018__mf__graphhash__directau_resbias__s0.log"
+  },
+  "gowalla__lightgcn__graphhash__directau__s0": {
+   "run_id": "gowalla__lightgcn__graphhash__directau__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --model LightGCN --lightgcn-layers 2 --batch 1024 --loss dau --epochs 200 --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 240 --lr 0.001 --wd 1e-8 --seeds 0 --run-id gowalla__lightgcn__graphhash__directau__s0",
+   "state": "done",
+   "started": "2026-10-18T09:31:04+00:00",
+   "ended": "2026-10-18T12:45:21+00:00",
+   "duration_s": 11657.2,
+   "exit_code": 0,
+   "log": "logs/gowalla__lightgcn__graphhash__directau__s0.log"
+  },
+  "yelp2018__lightgcn__full__bpr__s0": {
+   "run_id": "yelp2018__lightgcn__full__bpr__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Yelp2018 --method Full --model LightGCN --lightgcn-layers 2 --batch 1024 --loss bpr_author --epochs 1000 --eval-every 5 --patience 50 --min-delta 0 --cap-min 240 --lr 0.001 --wd 1e-8 --seeds 0 --run-id yelp2018__lightgcn__full__bpr__s0",
+   "state": "done",
+   "started": "2026-10-18T10:12:08+00:00",
+   "ended": "2026-10-18T14:13:27+00:00",
+   "duration_s": 14478.5,
+   "exit_code": 0,
+   "log": "logs/yelp2018__lightgcn__full__bpr__s0.log"
+  },
+  "gowalla__mf__graphhash-r400__directau__s0": {
+   "run_id": "gowalla__mf__graphhash-r400__directau__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --resolution 400 --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 120 --epochs 200 --lr 0.01 --wd 1e-8 --seeds 0 --run-id gowalla__mf__graphhash-r400__directau__s0",
+   "state": "done",
+   "started": "2026-10-18T12:45:21+00:00",
+   "ended": "2026-10-18T13:35:39+00:00",
+   "duration_s": 3017.8,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash-r400__directau__s0.log"
+  },
+  "gowalla__mf__graphhash-r400__bpr__s0": {
+   "run_id": "gowalla__mf__graphhash-r400__bpr__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --resolution 400 --loss bpr_author --epochs 3000 --eval-every 10 --patience 500 --min-delta 0 --cap-min 30 --lr 0.01 --wd 1e-6 --seeds 0 --run-id gowalla__mf__graphhash-r400__bpr__s0",
+   "state": "done",
+   "started": "2026-10-18T13:35:39+00:00",
+   "ended": "2026-10-18T13:43:55+00:00",
+   "duration_s": 495.8,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash-r400__bpr__s0.log"
+  },
+  "gowalla__mf__graphhash-r800__directau__s0": {
+   "run_id": "gowalla__mf__graphhash-r800__directau__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --resolution 800 --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 120 --epochs 200 --lr 0.01 --wd 1e-8 --seeds 0 --run-id gowalla__mf__graphhash-r800__directau__s0",
+   "state": "done",
+   "started": "2026-10-18T14:13:27+00:00",
+   "ended": "2026-10-18T16:00:27+00:00",
+   "duration_s": 6419.9,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash-r800__directau__s0.log"
+  },
+  "gowalla__mf__graphhash-r800__bpr__s0": {
+   "run_id": "gowalla__mf__graphhash-r800__bpr__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --resolution 800 --loss bpr_author --epochs 3000 --eval-every 10 --patience 500 --min-delta 0 --cap-min 30 --lr 0.01 --wd 1e-6 --seeds 0 --run-id gowalla__mf__graphhash-r800__bpr__s0",
+   "state": "done",
+   "started": "2026-10-18T16:00:27+00:00",
+   "ended": "2026-10-18T16:07:00+00:00",
+   "duration_s": 393.1,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash-r800__bpr__s0.log"
+  }
+ },
+ "errors": [],
+ "prepare_exit_code": 0,
+ "n_jobs": 10,
+ "n_failed": 0,
+ "failed_run_ids": []
+}
