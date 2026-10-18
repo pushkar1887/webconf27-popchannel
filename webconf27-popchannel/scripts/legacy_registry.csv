@@ -1,0 +1,35 @@
+file,dir,sub,run_id,status,role,parser,session_slug,stop_reason,note
+exp_p2-gh-dau-s0.json,results,,gowalla__mf__graphhash__directau__s0,valid-short,primary,exp,gh-exp-p2-gh-dau-s0-1017,fixed_epochs,P2; 30 epochs; lr 1e-2 wd 1e-8 batch 1024; no early stopping
+fast_dau_seed0.json,results,,gowalla__mf__graphhash__directau__s0,valid-short,supplement,fast,graphhash-fast-dau-s012-1016,,duplicate of exp_p2 s0 (identical test numbers); fast-check runner
+fast_dau.json,results,,gowalla__mf__graphhash__directau__s0,valid-short,supplement,fast,graphhash-fast-dau-1016,,first fast-check DirectAU run; identical to fast_dau_seed0
+exp_p2-gh-dau-s1.json,results,,gowalla__mf__graphhash__directau__s1,valid-short,primary,exp,gh-exp-p2-gh-dau-s1-1017,fixed_epochs,P2; 30 epochs
+fast_dau_seed1.json,results,,gowalla__mf__graphhash__directau__s1,valid-short,supplement,fast,graphhash-fast-dau-s012-1016,,duplicate of exp_p2 s1 (identical test numbers); fast-check runner
+fast_dau_seed2.json,results,,gowalla__mf__graphhash__directau__s2,valid-short,primary,fast,graphhash-fast-dau-s012-1016,fixed_epochs,s2 raw; 30 epochs; cosine and cos_prior come from graphhash-popprior-gh-1017 and rho from graphhash-mech-1017
+graphhash-popprior-gh-1017.json,results,GraphHash,gowalla__mf__graphhash__directau__s2,valid-short,supplement,popprior,,,GPU-image scoring of the s2 checkpoint (cosine and cos_prior); checkpoint path graphhash-fast-dau-s012-1016
+graphhash-mech-1017.json,results,GH_DAU,gowalla__mf__graphhash__directau__s2,valid-short,supplement,mech,,,rho of the s2 checkpoint
+graphhash-rescore-dau-s012-1016.json,results,,gowalla__mf__graphhash__directau__s2,valid-short,supplement,rescore,,,raw and cosine test of the s2 checkpoint (duplicate of the two files above)
+exp_p3-random-dau.json,results,,gowalla__mf__random__directau__s0,valid-short,primary,exp,gh-exp-p3-random-dau-1017,fixed_epochs,P3; authors' Random lr 1e-2 wd 1e-6; 30 epochs; collapsed (matches the paper's 0.478)
+exp_p3-dfreq-dau.json,results,,gowalla__mf__dfreq__directau__s0,valid-short,primary,exp,gh-exp-p3-dfreq-dau-1017,fixed_epochs,P3; authors' Double-frequency lr 5e-3 wd 1e-6; 30 epochs; alias pairs
+exp_p5-gh-dau-bias.json,results,,gowalla__mf__graphhash__directau_bias__s0,ablation,primary,exp,gh-exp-p5-gh-dau-bias-1017,fixed_epochs,P5; learned unconstrained per-item bias b_i (negative result); 30 epochs
+fast_bpr_author.json,results,,gowalla__mf__graphhash__bpr__s0,valid,primary,fast,graphhash-fast-bpr-author-1016,patience,authors' BPR config (full batch; lr 1e-2 wd 1e-6); patience 100 epochs per fast_run.py (epochs_run = best_epoch + 100); stop_reason inferred
+graphhash-popprior-full2-1017.json,results,GraphHash,gowalla__mf__graphhash__bpr__s0,valid,supplement,popprior,,,cosine and cos_prior of the BPR checkpoint (GPU image)
+p1_bpr_ext.json,results,,gowalla__mf__graphhash__bpr__s0,valid,supplement,p1ext,gh-exp-p1-bpr-ext-gpu2-1017,,raw_prior beta sweep; this is the GPU rerun (val 9.39 at beta 0); the CPU-image attempt is invalid (p1-bpr-ext.log)
+graphhash-mech-1017.json,results,GH_BPR,gowalla__mf__graphhash__bpr__s0,valid,supplement,mech,,,rho and raw_prior of the BPR checkpoint (duplicate of p1_bpr_ext)
+graphhash-rescore-bpr-author-1016.json,results,,gowalla__mf__graphhash__bpr__s0,valid,supplement,rescore,,,raw and cosine test of the BPR checkpoint (duplicate)
+metrics.csv,repro,,gowalla__mf__full__directau__s0,capped,primary,repro_csv,graphhash-loss-sharing-repro-1016,time_cap,Full x DirectAU Gowalla; 90-minute cap; best checkpoint epoch 120 (zero-based); epochs_run = last validation epoch 130 (approximate); not a valid controlled partner (PLAN 7.2)
+graphhash-popprior-full2-1017.json,results,Full,gowalla__mf__full__directau__s0,capped,supplement,popprior,,,raw test; cosine and cos_prior of the epoch-120 checkpoint (GPU image)
+graphhash-mech-1017.json,results,Full_DAU,gowalla__mf__full__directau__s0,capped,supplement,mech,,,rho = 0.815 of the epoch-120 checkpoint
+exp_p4-amz-full-dau.json,results,,amazonbook__mf__full__directau__s0,valid,primary,exp,gh-exp-p4-amz-full-dau-1017,,P4; authors' settings; patience 10 epochs (= 2 evaluations); stopped by patience at epoch 35
+exp_p4-amz-gh-dau.json,results,,amazonbook__mf__graphhash__directau__s0,capped,primary,exp,gh-exp-p4-amz-gh-dau-1017,,P4; 75-minute cap at epoch 41; validation still rising (replacement planned: B9)
+exp_p4-amz-gh-bpr-long.json,results,,amazonbook__mf__graphhash__bpr__s0,valid,primary,exp,gh-exp-p4-amz-gh-bpr-long-1017,,P4; authors' BPR config; patience 500; best epoch 1450
+exp_p4-amz-gh-bpr.json,results,,amazonbook__mf__graphhash__bpr__s0-pat100,invalid,primary,exp,gh-exp-p4-amz-gh-bpr-1017,,patience 100 stopped on an early spike at epoch 110; superseded by exp_p4-amz-gh-bpr-long
+fast_bpr.json,results,,gowalla__mf__graphhash__bpr__s0-b1024,invalid,primary,fast,graphhash-fast-bpr-1016,fixed_epochs,BPR at batch 1024 is the wrong setup for BPR; 30 epochs with no checkpoint selection (test at the last epoch)
+fast_bpr_long.json,results,,gowalla__mf__graphhash__bpr__s0-b1024-pat10,invalid,primary,fast,graphhash-fast-bpr-long-1016,patience,BPR at batch 1024 with patience 10 epochs; wrong setup for BPR
+fast_dau_fix_seed0.json,results,,x__gowalla__mf__graphhash__directau_dedup__s0,exploratory,primary,fast,graphhash-fast-dau-fix-s012-1016,fixed_epochs,unique-bucket dedup inside the uniformity term (negative result; also changes the pair weighting); 30 epochs
+fast_dau_fix.json,results,,x__gowalla__mf__graphhash__directau_dedup__s0,exploratory,supplement,fast,graphhash-fast-dau-fix-1016,,duplicate of fast_dau_fix_seed0
+fast_dau_fix_seed1.json,results,,x__gowalla__mf__graphhash__directau_dedup__s1,exploratory,primary,fast,graphhash-fast-dau-fix-s012-1016,fixed_epochs,unique-bucket dedup; 30 epochs
+fast_dau_fix_seed2.json,results,,x__gowalla__mf__graphhash__directau_dedup__s2,exploratory,primary,fast,graphhash-fast-dau-fix-s012-1016,fixed_epochs,unique-bucket dedup; 30 epochs
+poponly.json,results,,gowalla__poponly__none__none__s0,valid,primary,poponly,,,popularity-only baseline (no model); values are already in percent
+graphhash-popprior-full-1017.json,results,,gowalla__mf__full__directau__s0-emptyscore,truncated,none,none,graphhash-popprior-full-1017,,empty file ({}); first scoring attempt; superseded by graphhash-popprior-full2-1017.json
+p1-bpr-ext.log,results,,gowalla__mf__graphhash__bpr__s0-p1cpu,invalid,none,none,gh-exp-p1-bpr-ext-1017,,P1 raw_prior sweep on the Kaggle CPU image (val 4.24 at beta 0); the CPU image numbers buckets differently; rerun on GPU = p1_bpr_ext.json
+p1-bpr-ext-gpu.log,results,,gowalla__mf__graphhash__bpr__s0-p1gpu1,invalid,none,none,gh-exp-p1-bpr-ext-gpu-1017,,first GPU attempt; Google Drive HTTP 500 during download; no result

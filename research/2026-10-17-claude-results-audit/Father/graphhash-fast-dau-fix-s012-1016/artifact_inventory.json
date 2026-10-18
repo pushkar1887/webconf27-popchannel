@@ -1,0 +1,18 @@
+{
+  "slug": "graphhash-fast-dau-fix-s012-1016",
+  "status": {
+    "status": "COMPLETE",
+    "failureMessage": ""
+  },
+  "checkpoint_files": [
+    "_work/best.pt",
+    "_work/datasets/AmazonBook-processed/test.pt",
+    "_work/datasets/AmazonBook-processed/train.pt",
+    "_work/datasets/AmazonBook-processed/val.pt",
+    "_work/datasets/Gowalla-processed/test.pt",
+    "_work/datasets/Gowalla-processed/train.pt",
+    "_work/datasets/Gowalla-processed/val.pt"
+  ],
+  "source_slugs": [],
+  "rescoring_results": []
+}

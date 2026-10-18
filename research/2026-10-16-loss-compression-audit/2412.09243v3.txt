@@ -1,0 +1,640 @@
+=== PDF PAGE 1 ===
+          SPRec:Self-PlaytoDebiasLLM-basedRecommendation
+
+              Chongming Gao∗                                         Ruijun Chen∗                                          Shuai Yuan
+          chongminggao@ustc.edu.cn                            rjchen20@mail.ustc.edu.cn                             syuanaf@connect.ust.hk
+    UniversityofScienceandTechnology                    UniversityofScienceandTechnology                    Hong Kong University of Science and
+                      of China                                            of China                                          Technology
+                    Hefei, China                                        Hefei, China                                    Hong Kong, China
+
+                 Kexin Huang                                          Yuanqing Yu                                       Xiangnan He†
+          huangkx@mail.ustc.edu.cn                          yyq23@mails.tsinghua.edu.cn                             xiangnanhe@gmail.com
+   UniversityofScienceandTechnology                               Tsinghua University                        MoE Key Lab of BIPC, University of
+                      of China                                        Beijing, China                          Science and Technology of China
+                   Hefei, China                                                                                             Hefei, China
+Abstract
+Largelanguagemodels(LLMs)haveattractedsignificantattention
+in recommendation systems. Current work primarily applies su-
+pervisedfine-tuning(SFT)toadaptthemodelforrecommendation
+tasks. However, SFT on positive examples only limits the model’s
+ability toalign with user preference. To address this,researchers
+recently introduced Direct Preference Optimization (DPO), which
+explicitly aligns LLMs with user preferences using offline prefer-
+ence ranking data. However, we found that DPOinherently biases
+the model towards a few items, exacerbating the filter bubble issue
+and ultimately degrading user experience.
+   In this paper, we propose SPRec, a novel self-play framework
+designedtomitigateover-recommendationandimprovefairness
+without requiringadditional dataor manualintervention. In each
+self-play iteration, the model undergoes an SFT step followed by
+a DPO step, treating offline interaction data as positive samples                  Figure1:HomogeneityissuesinLLM-basedrecommendation
+andthe predictedoutputs fromthe previousiteration asnegative                       resultscausedbytoken-levelanditem-levelbiases.
+samples.Thiseffectively re-weightstheDPOloss functionusing
+themodel’slogits,adaptivelysuppressingbiaseditems.Extensive                        ACMReferenceFormat:
+experimentsonmultiplereal-worlddatasetsdemonstrateSPRec’s                          Chongming Gao, Ruijun Chen, Shuai Yuan, Kexin Huang, Yuanqing Yu,
+effectivenessinenhancingrecommendationaccuracyandfairness.                         and Xiangnan He. 2025. SPRec: Self-Play to Debias LLM-based Recommen-
+The code is available via https://github.com/RegionCh/SPRec.                       dation.In Proceedings of the ACM Web Conference 2025 (WWW ’25), April
+                                                                                   28-May2,2025,Sydney,NSW,Australia.ACM,NewYork,NY,USA,10pages.
+CCSConcepts                                                                        https://doi.org/10.1145/3696410.3714524
+
+•Informationsystems→Recommendersystems.                                            1   Introduction
+Keywords                                                                           Recently, large language models (LLMs) have demonstrated signifi-
+                                                                                   cantsuccessacrossnumerousdomains,showcasingadvancedcapa-
+LargeLanguageModel-basedRecommendation,HomogeneityIs-                              bilitiesinlearning,reasoning,andgeneralizingtodownstreamtasks
+sue, Fairness, Self-play, Direct Preference Optimization                           [12,38].Inthefieldofrecommendersystems,therehasbeengrow-
+                                                                                   inginterestinleveragingthepotentialofLLMs[41].Oneprominent
+∗Both authors contributed equally to this research.                                approachinvolvespositioningLLMsasthecentralrecommendation
+†Corresponding Author.
+                                                                                   backbone, utilizing users’ past interactions and current needs to
+                                                                                   generatepersonalizedrecommendations[3,40].Comparedtotradi-
+Permission to make digital or hard copies of all or part of this work for personal ortionalmethods,LLM-basedrecommendationsystems(LRSs)offer
+classroom use isgranted without fee providedthat copies are notmade or distributed
+forprofitorcommercialadvantageandthatcopiesbearthisnoticeandthefullcitation        distinctadvantages,includingadeepercontextualunderstanding
+on the first page. Copyrights for components of this work owned by others than the and the flexibility to adapt to users’ evolving preferences.
+author(s)mustbehonored.Abstractingwithcreditispermitted.Tocopyotherwise,or             ToenableLLMstolearncollaborativefilteringsignalsandeffec-
+republish,topostonserversortoredistributetolists,requirespriorspecificpermission
+and/or a fee. Request permissions from permissions@acm.org.                        tively perform item recommendations, a prevalent strategy is to
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                              fine-tune pre-trained LLMs via Supervised Fine-Tuning (SFT) [3].
+© 2025 Copyright held by the owner/author(s). Publication rights licensed to ACM.  This approach allows LLMs to efficiently internalize user prefer-
+ACM ISBN 979-8-4007-1274-6/25/04
+https://doi.org/10.1145/3696410.3714524                                            ences from offlinedata by adjustingtheir parametersto alignwith
+
+=== PDF PAGE 2 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                   Gao and Chen et al.
+
+the recommendation task. Building on SFT, recent research has                            • WeanalyzehowcurrentLRSstunedthroughDPOinevitably
+adoptedDirectPreferenceOptimization(DPO)[31]tofurtherre-                                   exhibit biases due to their underlying learning mechanisms,
+fineuserpreferences[2,10,25].WhileSFTreliessolelyondesirable                               leading to the homogeneity issue.
+answers,DPOincorporatesbothchosenandrejectedresponsepairs,                               • WeproposeSPRec,aself-playrecommendationtuningframe-
+allowingtheLLMtolearnuserrankingpreferencesandgainamore                                    workthataddressesthesebiasesandimprovesfairnesswith-
+nuanced understanding of fine-grained, personalized information.                           out the need for external knowledge.
+This approach mirrors the common practice in recommendation                              •  Experiments validate SPRec improves accuracy, diversity,
+models,whichutilizebothpositiveandnegativesamplesforeffec-                                 and fairness, with ablation studies indicating that the self-
+tive training [7, 32].                                                                     play negative samples contribute significantly to the im-
+   Despite these advancements, we find that employing DPO to                               provements.
+alignuserpreferencesinrecommendersystemsinherentlyintro-
+ducessignificantbiasesduetoitsunderlyingmechanisms.These                           2   Relatedwork
+biasescanlead toserioushomogeneityissues, whereLLMsrecom-                          WeprovideabriefoverviewofLLM-basedrecommendersystems
+mend items with similar names or content. Fig. 1 illustrates how                   andtheirassociatedbiasissues,followedbyanintroductiontothe
+token-levelanditem-levelbiasesmanifestintheTop-𝐾 movierec-                         self-play mechanism employed in our method.
+ommendation. Token-level biasesarise dueto thefact that LLMs
+generateitemnamesinatokenizedfashion.SinceLLMsareusually
+tunedtomaximizethelikelihoodoftargettokens,itemswithmore                           2.1   LLMsforRecommendation
+commontokens(e.g.,movieswiththeword“the”intheirtitles)may                          LLMs have shown exceptional generative, generalization, and rea-
+beoverrepresented,regardlessofuserrelevance.Attheitemlevel,                        soningcapabilities inNLP,driving research intotheirapplications
+biases can emerge from multiple factors, particularly after fine-                  forpersonalizedrecommendations.Theirintegrationintorecom-
+tuning,whereLLMsmaydisproportionatelyrecommendpopular                              mendation tasksfollows threemain paradigms:(1) acting asdeci-
+items,suchastheBatmanfilmseries.Thiscanleadtofilterbubbles                         sion makers [4, 27], (2) assisting by providing contextual informa-
+[16, 17], where users are repeatedly exposed to a narrow range of                  tion[19,26],and(3)servingasusersimulators[5,46].Earlystudies
+popular content, limiting the diversity of recommendations and                     exploredpromptengineeringtoleverageLLMsforrecommendation
+degrading the user experience.                                                     tasks [18, 20].
+   Some research has been conducted on bias and unfairness is-                         Later, fine-tuningmethods emerged,demonstrating that adapt-
+suesinLRSs[12,15,45].Daietal.[12]providedacomprehensive                            ing LLM parameters on recommendation data significantly en-
+overviewofthevarioustypesofbiasesthatemergeacrossdifferent                         hancesperformance.TheseapproachesprimarilyrelyonSFT[4,9].
+stagesofthesemodelsandoutlinedstrategiestomitigatethem.For                         To further align LLMs with user preferences, DPO has been em-
+example, Jiang et al. [22] proposed re-weighting the fine-tuning                   ployed for post-training [2, 10, 25]. However, prior work has over-
+loss foreach item and re-rankingthe generated results toensure                     lookedDPO’s inherenttendency tointroducesevere biases,favor-
+equitable treatment across genre groups. Similarly, Bao et al. [4]                 ingonlyfrequently exposeditemsanddegradinguser experience.
+adjustedtheLLMdecodingprocessbyremovingthelengthnormal-                            In this work, we are the first to identify this issue and propose a
+ization term and incorporating predictions from a text-free model,                 mitigation strategy.
+helping to reduce amplification bias and address homogeneity is-
+sues.However,thesemethodsoftenrelyoncarefullycraftedrulesor                        2.2   BiasesinRecommenderSystems
+externalknowledge,limitingtheirbroaderapplicabilityingeneral
+recommendation systems.                                                            Biasandfairnessissuesarepervasiveinrecommendersystemsand
+   To this end, we propose a self-play recommendation tuning                       havebeenextensivelystudied.Chenetal.[8]provideacomprehen-
+framework,SPRec,toadaptivelysuppressbiasesandimprovefair-                          sive survey on biases such as popularity bias, selection bias, and
+nessinLRSswithouttheneedforadditionaldataorexpertknowl-                            positionbias.Thesebiasescansignificantlyimpactusersatisfaction,
+edge. Thecore idea of SPRecis straightforward: each tuningitera-                   promotingclickbaitcontentorreinforcingfilterbubblesthatreduce
+tionbeginswithanSFTroundusingpositivesamplesfromoffline                            engagement [17]. Additionally, algorithmic decisions may favor
+data,followedbyaDPO.IntheDPOstep,theSFTdataistreated                               certainitems,raisingfairnessconcerns[24,39],disproportionately
+as positive samples, while the predicted outputs from the previous                 affecting user groups and discouraging content creators [21, 44].
+iteration are treated as negative samples. The philosophy is to let                    These challenges persist in LLM-based recommender systems
+themodel“play”withitsownoutputbyre-weightingtheDPOloss                             [36, 41, 43]. Research shows that LLMs can inherit social biases,
+functionbasedonitspredictions.Asaresult,itemsthatrankhigher                        leading to unfair recommendations related to sensitive attributes
+in the model’s predictions are penalized, while the SFT process                    like gender and race [45]. Dai et al. [12] provide a unified distri-
+reinforcestherankingofpositiveitems.Overtime,thisself-play                         butionmismatchperspectiveonbiasandfairnessininformation
+learningprocessadaptivelysuppressesundesirableitems(biases)                        retrieval. Existing bias mitigation methods in LRSs typically rely
+whilemaintainingalignmentwithpositivesamples.Extensiveex-                          on predefined target distributions or external guidance for LLM
+periments on public datasets demonstrate that SPRec effectively                    alignment.Incontrast,weintroducethefirst self-playframework
+improvesbothaccuracyandfairness,showcasingitspotentialasa                          formitigatingbiasinLRSs,requiringneitherpriorknowledgenor
+practical and efficient solution for LRSs.                                         additional models. By simply modifying the tuning process, our
+   The main contributions of this paper are as follows:                            approach reduces long-tail effects and improves fairness.
+
+=== PDF PAGE 3 ===
+SPRec: Self-Play to Debias LLM-based Recommendation                                                                                                       WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+2.3   Self-PlayMechanism
+Machine learningmodels are oftendata-driven, relyingheavily on
+theavailabilityofofflinedata.However,offlinedataisinherently
+limited, raising an important question: can algorithms improve
+themselvesiterativelywithouttheneedforadditionaldata?This
+is precisely the challenge that the self-play mechanism aims to
+address. The concept of self-play originated from board games
+such as Go and chess, exemplified by groundbreaking systems like
+AlphaGo Zero [34] and AlphaZero [33].
+   In the era of LLMs, early preference alignment algorithms like
+RLHFandDPOoperateassingleoptimizationprocedures.Build-
+ing on this, Chen et al. [11] proposed that LLMs can refine their                   Figure2:Distributionofcold-startrecommendationresults.
+capabilitiesthroughself-playbyinteractingwithinstancesofthem-                       Group0:leastpopular,group4:mostpopular.
+selves.Morespecifically,theLLMgeneratesitsowntrainingdata
+from prior iterations and subsequently learns a new policy that                     regularization factor,controlling theextent towhichthe learned
+outperforms theold one[42].This iterativefine-tuning framework                      policy𝜋𝜃 deviates from the reference policy𝜋ref.
+hasbeenshowntobeequivalenttofindingtheNashequilibriumof                                In the context of recommendation tasks,𝑥 represents the user
+atwo-playergame, gainingsignificantrecognitiondueto itssolid                        context, typically comprising user features and historical interac-
+theoreticalfoundationandsimplicity[6].Inrecommendersystems,                         tionsequences,while𝑦𝑤 and𝑦𝑙 correspondtopositiveandnegative
+we leverage the self-play mechanism to adaptively reduce biased                     samples, respectively. The goal is to encourage the model to assign
+items in a simple and effective manner.                                             higherprobabilitiestopreferreditems(𝑦𝑤)overlessdesirableones
+3   Preliminary                                                                     (𝑦𝑙), effectively capturing user preferences.
+In thissection, weprovide abrief overviewof thetechnologies for                        DPOoffersanefficientandstablesolutionforpreferencealign-
+aligning LLMs with the recommendation task. We then introduce                       ment, eliminating the need for complex reward models often re-
+the idea of evaluating the biases and unfairness in LRSs.                           quiredinreinforcementlearning-basedapproaches.Itsnaturalabil-
+                                                                                    ity to incorporate both positive and negative samples makes it
+3.1   SupervisedFine-tuning(SFT)                                                    particularly well-suited for recommender systems, where learning
+                                                                                    from contrasting user interactions is crucial [2, 10, 25].
+Toenableanopen-sourceLLMtolearnrecommendationtaskseffec-
+tively,apracticalapproachisfine-tuningallorpartofitsparameters                      3.3   EvaluatingBiasviaDistributionAlignment
+usingdemonstrationdatafromofflinerecommendationlogs.The                             When aligning user preferences, LLMs may inadvertently learn
+objectiveistoalignthemodel’sbehaviorwiththerecommendation                           biased or unfair outcomes. To assess the bias and fairness issues
+taskbymaximizingthelog-likelihoodoverthetrainingdatasetD:                           in LRSs, a mainstream perspective is to formulate the problems
+              𝜋𝑆𝐹𝑇 = argmax                                                         as a mismatch distribution problem [12]. Specifically, let𝑅 denote
+                             𝜋𝜃  E(𝑥𝑖,𝑦𝑖)∼D log𝜋𝜃(𝑦𝑖|𝑥𝑖),                (1)        theground-truthuser preference(e.g.,anitemlist), followingthe
+where(𝑥𝑖,𝑦𝑖) areinput-output pairs fromD, with𝑥𝑖 representing                       distribution𝑃(𝑅), and let ˆ𝑅 represent the model-predicted prefer-
+usercontextandinteractionhistory,and𝑦𝑖 thetargetitem.Defining                       ences, drawn from𝑃(ˆ𝑅). Bias or unfairness is then quantified by
+𝑝D(𝑦|𝑥) as the empirical probability (i.e., item popularity), SFT                   the mismatch between these two distributions:𝑃(𝑅) ≠ 𝑃(ˆ𝑅).
+alignsmodelpredictionsbyminimizingtheforwardKL-divergence:                             Toapplythisframework,wefollowJiangetal.[22],approximat-
+                                                                                    ing𝑃(𝑅) using the category distribution from offline training data.
+       𝜋𝑆𝐹𝑇 = argmin𝜋𝜃 D𝐾𝐿(𝑝D(𝑦|𝑥),𝜋𝜃(𝑦|𝑥))                                         We further employ their MGU metric to systematically measure
+              = argmin                                                              the degree of mismatch in our experiments.
+                      𝜋𝜃 E(𝑥𝑖,𝑦𝑖)∼D −log𝜋𝜃(𝑦𝑖|𝑥𝑖)+𝐻(𝑝D),      (2)
+where𝐻(𝑝D) is the constant entropy of𝑝D.                                            4   ProblemofDPO:AmplifyPopularityBias
+                                                                                    We present an empirical analysis to demonstrate how DPO exacer-
+3.2   DirectPreferenceOptimization(DPO)                                             batespopularitybiasinLRSs,followedbyatheoreticalexamination
+To ensure that model outputs align with intricate user preferences,                 of the underlying mechanisms driving this phenomenon.
+researchers have proposed Direct Preference Optimization (DPO)                      4.1   EmpiricalAnalysis
+[31], which optimizes the following objective function:                             To systematically evaluate how DPO amplifies recommendation
+                             "       𝜋𝜃(𝑦𝑤|𝑥)                𝜋𝜃(𝑦𝑙|𝑥)    #          bias,wedesignacold-startrecommendationtaskusingtwowidely-
+min𝜋𝜃  −E(𝑥,𝑦𝑤,𝑦𝑙)∼D log𝜎     𝛽log   𝜋ref(𝑦𝑤|𝑥)    −𝛽log     𝜋ref(𝑦𝑙|𝑥)    ,        usedbenchmark datasets:MovieLensandGoodreads1.Inthis task,
+                                                                         (3)        theLLMgeneratesrecommendationswithoutaccesstouserinterac-
+where (𝑥,𝑦𝑤,𝑦𝑙) denotes a prompt 𝑥 with a chosen (preferred)                        tionhistory.Werandomlysample100itemsandpartitiontheminto
+answer 𝑦𝑤 and a rejected answer 𝑦𝑙. The parameter 𝛽 acts as a                       1Dataset details are provided in Section 6.1.1
+
+=== PDF PAGE 4 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                   Gao and Chen et al.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure 3: Illustrationof SFT, DPO,and SPRec inLLM-based recommendations. (a) SFTgenerates mass-covering results but
+retainsinherentbiases.(b)DPOamplifiesthesebiasesbyover-representingcertainitems.(c)SPRecmitigatesbiasthrough
+self-play,leveragingmodeloutputsasnegativesamplestoachievebalancedrecommendations.
+
+
+five groups based on interaction probabilities, ensuring balanced                        In most recommendation settings, negative samples are uni-
+popularity levels. Positive samples are drawn accordingly, while                     formly distributed[2, 10], i.e.,𝑞D(𝑦|𝑥) =U =   1|I|, whereI is the
+negativesamplesforDPOtrainingarerandomlyselected.Thetrain-                           setof allcandidateitems. Additionally,intypical DPO-basedpref-
+ing and validation sets contain 4096 and 512 samples, respectively.                  erence alignment scenarios, 𝛽 is constrained to 0< 𝛽 < 1. Under
+After training, we analyze the distribution of recommendations                       these conditions, the DPO loss inherently biases the model toward
+across the five groups.                                                              popular items with higher𝑝D(𝑦|𝑥), exacerbating popularity bias. In
+   Fig. 2 shows the proportion of recommendations allocated to                       theextremecasewhere 𝛽 → 0,theoptimalpolicycollapsestorec-
+eachgroup beforeand aftertraining,where group0represents the                         ommendingonlythemostpopularitems,effectivelydisregarding
+leastpopularitemsandgroup4themostpopular.Theresultsreveal                            less frequent but potentially valuable recommendations.
+three key insights: (1) SFT introduces a slightbias toward group 4;
+(2) DPO significantly amplifies this bias, causing recommendations                   Remark: This result is a byproduct of DPO’s loss function. Un-
+to concentrate almostentirely on the mostpopular items; and (3)                      like the forward KL-divergence D𝐾𝐿(𝑝D(𝑦|𝑥),𝜋𝜃(𝑦|𝑥)) used in
+ourproposedmethod,SPRec(introducedindetaillater),effectively                         theSFTloss inEq.(2),DPOoptimizesthe reverseKL-divergence
+mitigates the bias amplification induced by DPO.                                     D𝐾𝐿(𝜋𝜃(𝑦|𝑥),𝜋ref(𝑦|𝑥)).ForwardKL-divergenceisknownforits
+                                                                                     mass-covering property, which encourages learning an average
+4.2   TheoreticalAnalysis                                                            behavior and is less sensitive to subtle differences in the prefer-
+Inrecommendation tasks,the inputandpositive samples(𝑥,𝑦𝑤)                            ence distribution (as illustrated in Fig. 3(a)) [35]. In contrast, the
+arederivedfromloggedinteractionsinofflinedata,whilenegative                          reverse KL-divergence used in DPO promotes mode-seeking be-
+samples𝑦𝑙 are drawn from non-interacted items. Given an input                        havior [28, 37], guiding the model to focus on the “peaks” of the
+𝑥, the probability 𝑝D(𝑦|𝑥) represents the conditional popularity                     distribution (Fig. 3(b)).
+of item𝑦 in the dataset, and 𝑞D(𝑦|𝑥) denotes the probability of                          TheissueofDPOhasalsobeenhighlightedbyotherresearchers
+thesameitem𝑦 beingselectedasanegativesample.Usingthese                               [29].Specifically,Fengetal. [14]derivethat DPOsuppressesneg-
+definitions, the DPO loss in Eq. (3) can be rewritten as:                            ative samples more aggressively than it elevates positive samples
+  LDPO(𝜋𝜃;𝜋𝑟𝑒𝑓) =−E(𝑥,𝑦𝑤)∼D,𝑦𝑙∼𝑞D(·|𝑥)ℓ(𝜋𝜃,𝜋ref,𝑥,𝑦𝑤,𝑦𝑙),                            during optimization. Moreover, Azar et al. [1] demonstrate that
+                                                                                     the empirical optimal policy often drives 𝜋𝜃(𝑦𝑙|𝑥) → 0 for all 𝛽,
+    withℓ(·)= log𝜎[𝛽log(  𝜋𝜃(𝑦𝑤|𝑥)𝜋𝑟𝑒𝑓(𝑦𝑤|𝑥))−𝛽log(  𝜋𝜃(𝑦𝑙|𝑥)𝜋𝑟𝑒𝑓(𝑦𝑙|𝑥))].           stemming from an underfitting of the potential reward.
+                                                                           (4)           In the context of recommendation, this behavior can be detri-
+In this setting, the optimal policy has a closed-form solution, as                   mental, as it exacerbates the filter bubble issue and undermines
+stated in the following theorem:                                                     user interests by limiting exposure to diverse items [16].
+
+   Theorem1.  The optimal policy𝜋∗𝜃(·|𝑥) for the DPO loss defined                    5   Method
+in Eq. (4) is given by:                                                              We present how to address the popularity bias in DPO by utiliz-
+                                           𝑝D(𝑦|𝑥)     1/𝛽                           ing the self-play philosophy. Then we detail the proposed SPRec
+                𝜋∗𝜃(𝑦|𝑥) ∝ 𝜋ref(𝑦|𝑥)·       𝑞D(𝑦|𝑥)         .                        architecture.
+
+   TheproofisdeferredtoAppendixA.Thisresulthighlightsthat                            5.1   Solution:SuppressBiasesthroughSelf-Play
+theoptimal policyisproportional tothereferencepolicy𝜋ref(𝑦|𝑥), 𝑝D(𝑦|𝑥) 1/𝛽.          Since the DPO loss inherently causes the policy𝜋𝜃 to learn sharp
+adjusted by the relative likelihood ratio        𝑞D(𝑦|𝑥)                             “peaks”,leadingtobias,anintuitivesolutionistodirectlysuppress
+
+=== PDF PAGE 5 ===
+SPRec: Self-Play to Debias LLM-based Recommendation                                                                                                       WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+these learned peaks. To address this, we utilize a self-play frame-                  For example, each iteration of post-training for Llama 3 includes
+work, dubbed SPDPO, which iteratively alternates between policy                      an SFT stage followed by a DPO stage [13]. Similarly, Pang et al.
+learningandbiassuppression.Specifically,inthe(𝑡+1)-thiteration,                      [30]demonstratetheeffectivenessofaniterativepreferenceopti-
+negativesamplesaredrawnfromthemodel’spredictivedistribution                          mizationalgorithmusingamodifiedDPOlosswithanadditional
+𝜋𝜃𝑡(·|𝑥) atiteration𝑡,resultinginthefollowinglearningparadigm:                       negative log-likelihood (NLL) term, which mirrors the SFT loss
+                                                                                     defined in Eq. (1).
+   𝜋𝜃𝑡+1 ← argmax𝜋𝜃  E(𝑥,𝑦𝑤)∼𝐷,𝑦𝑙∼𝜋𝜃𝑡(·|𝑥)𝑙(𝜋𝜃;𝜋𝜃𝑡;𝑥,𝑦𝑤,𝑦𝑙).    (5)
+                                                                                     6   Experiments
+By comparing Eq. (5) with Eq. (4), we obtain that the objective                      In this section, we conduct experiments to address the following
+functionL𝑆𝑃𝐷𝑃𝑂 inthe(𝑡+1)-thiterationcanbeviewedasL𝐷𝑃𝑂                               research questions:
+weighted by 𝜋𝜃𝑡(𝑦𝑙|𝑥)𝑞D(𝑦𝑙|𝑥) , which can be expressed as follows:                   • RQ1:HowdoestheSPRectrainingframeworkcomparetobase-
+                                          𝜋𝜃𝑡(𝑦𝑙|𝑥)                                     line methods in terms of accuracy, diversity, and fairness?
+ L𝑆𝑃𝐷𝑃𝑂 =−E(𝑥,𝑦𝑤)∼D,𝑦𝑙∼𝑞D(·|𝑥)            𝑞D(𝑦𝑙|𝑥)𝑙(𝜋𝜃;𝜋𝜃𝑡;𝑥,𝑦𝑤,𝑦𝑙).                 • RQ2:Whatarethecontributionsofdifferentcomponentswithin
+                                                                          (6)           the SPRec framework?
+Again,ifDPOusesnegativesamplesfromadiscreteuniformdistri-                            • RQ3: How do the random sampling ratio and the number of
+bution𝑞D(𝑦|𝑥) =U =    1|I|, then the objective functionL𝑆𝑃𝐷𝑃𝑂                           negative samples impact the performance?
+can be viewed as L𝐷𝑃𝑂 weighted by 𝜋𝜃𝑡(𝑦𝑙|𝑥). This highlights                         6.1   ExperimentalSetup
+thattheobjectiveadaptivelypaysmoreattentiontobiaseditems
+by increasing their learning rates if they have higher probabilities                 6.1.1   Datasets. We conducted extensive experiments on four real-
+in the model’s output distribution.                                                  world datasets: MovieLens2, Steam3, Goodreads4, andthe CDs and
+Remark: Unlike traditional recommendation methods that prede-                        Vinyl categoryoftheAmazonReviewDataset5.Additionaldetails
+finenegativesamplesorallocateweightsinadvance,ourapproach                            about the datasets are provided in the Appendix B. Following the
+dynamically selects negative samples during the learning process.                    data processing approach in [4, 10], interaction sequences with
+Thisprovidesa significant advantage, enabling the model to adap-                     fewer than 10entries were excluded. Thedatasets were then split
+tivelyadjustitslearningparadigmforeffectivebiassuppression.Asa                       chronologically into training, validation, and test sets in an 8:1:1
+result,thisapproachmitigatesthefilterbubbleissueand enhances                         ratio, ensuring mutual exclusivity and preventing data leakage.
+the diversity of recommendations.                                                    ToensurecomparabilityacrossdifferentLLM-basedmethods,we
+                                                                                     further sampled 4,096 interactions from each dataset’s training set
+5.2   ArchitectureofSPRec                                                            asthetrainingsamplesforallmethods,512interactionsfromthe
+Utilizing the loss function in Eq. (5), we propose a self-play rec-                  validation set, and 1,000 interactions from the test set.
+ommendation tuning framework, SPRec, which generally includes                           Toprocesscategoryinformation,weextractedcategorymetadata
+multiple iterationsof both anSFT step and aDPO step. Thework-                        from each dataset and identified the most 10 popular categories
+flowisillustratedinFig.3(c),inwhichthreekeystepsareconducted                         within the training sets. To ensure category independence, we
+sequentially in each iteration:                                                      removedcategorieswithclearhierarchicalrelationships,suchas
+                                                                                     “FPS”and“Shooting”intheSteamdataset,and“Rock”and“Classical
+(1) DatasetConstruction: For each positive sample{(𝑥𝑖,𝑦𝑖𝑤)} in                       Rock” in the CDs and Vinyl dataset.
+    theofflinedataset,sampleanegativesample𝑦𝑖𝑙 byrunningthe                          6.1.2   Evaluation Setting. To leverage the strengths of LLMs in
+    current model𝜋𝜃𝑡 and using its predicted recommendation as                       generativerecommendationtasks,weprompttheLLMtogeneratea
+    𝑦𝑖𝑙. Thus we obtain pairwise preference data for each sample as                  predicteditembasedontheinputhistorysequence.Then,following
+    {(𝑥𝑖,𝑦𝑖𝑤,𝑦𝑖𝑙)}.                                                                  the procedures in BIGRec [3], we calculate scores and rankings for
+(2) SFTStep:Useonlythepositivesample{(𝑥𝑖,𝑦𝑖𝑤)} torefinethe                           the entire item space and ground our predicted item to an exact
+    model𝜋𝜃𝑡 throughSFTtechniquessuchasinstructionlearning.                          item in the dataset.
+(3) DPO Step: Align the model 𝜋𝜃𝑡 by perform DPO step using
+    pairwise dataset{(𝑥𝑖,𝑦𝑖𝑤,𝑦𝑖𝑙)}, and obtain𝜋𝜃𝑡+1.                                 6.1.3   Metrics. We evaluate the model on 1,000 randomly sampled
+   This process repeats for𝑇 iterations per epoch. The self-play                     test cases per iteration using four key metrics. Accuracy is mea-
+mechanism is adaptable to any LLM-based recommender system.                          suredbyNDCG@5andHR@5,averagedacrossresults.Diversity
+ToensurecomparabilitywithexistingDPO-basedrecommenders                               is assessed via DivRatio, representing the proportion of unique
+[2,10,25],wecanextendfromasingletomultiplenegativesamples,                           recommendations.Over-recommendationisquantifiedbyORRatio,
+with results analyzed in experiments.                                                indicatingtheproportionofresultsdominatedbythethreemostfre-
+                                                                                     quentlyrecommendeditems.FairnessisevaluatedusingMGU[22],
+Remark:AlthoughthelossfunctioninEq.(5)isinherentlycapable                            capturing category-level discrepancies between recommendations
+ofaligningthemodelwithpositivesamples,ourexperimentsreveal                           and user history.
+thatincorporatinganSFTstepineachself-playiterationcanfurther                         2https://grouplens.org/datasets/movielens/
+enhance performance.                                                                 3https://cseweb.ucsd.edu/~jmcauley/datasets.html#amazon_reviews
+   In fact, combining SFT and DPO has been shown to be an ef-                        4https://mengtingwan.github.io/data/goodreads
+fective practice in recent research and open-sourced LLM models.                     5http://jmcauley.ucsd.edu/data/amazon/index_2014.html
+
+=== PDF PAGE 6 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                   Gao and Chen et al.
+
+
+
+
+
+
+
+
+
+
+
+
+                Figure4:ComparisonofmodelsacrossgenresonGroupUnfairness(GU)intop-1recommendation.
+
+
+Table1:Overallperformancecomparisonof                     SPRec(green) ,              serves as an instruction-tuning LLM framework for sequential rec-
+ SFT-based(brown) , and           DPO-based(blue)  methods. Best                      ommendationsandformsthefoundationforSPRec.Re-weighting
+results are bold, sub-optimal ones underlined. ↑ indicates                            (RW) [22] improves fairness in BIGRec by balancing recommen-
+higherisbetter,while↓indicateslowerisbetter.                                          dations across categories through dataset-based training weights.
+                                                                                      Debiasing-DiversifyingDecoding(D3)[4]enhancesdiversityin
+                                                                                      BIGRecusingadecodingstrategyguidedbySASRec.(2)ForDPO-
+     Dataset        Model DivRatio↑ORRatio↓MGU↓  HR↑  NDCG↑                           basedmodels,DMPO[2]introducesDPOintoLRSsbysampling
+                   SASRec     0.0031        1.0000     0.1209  0.0225   0.0136        multiplenegativeitemsasrejectedresponses,whileSoftmax-DPO
+                   BIGRec     0.1939       0.2561    0.0620  0.0347   0.0281          (SDPO)[10] follows asimilar approachbut incorporatesa softmax
+                     RW       0.1918       0.2551    0.0577  0.0327   0.0276          lossover multiplenegativesamples. Finally,RosePO[25]is apref-
+                      D3      0.1246       0.3238    0.0664  0.0266   0.0197          erenceoptimizationframeworkthatcombinesnegativesampling
+   MovieLens       DMPO       0.1827       0.2561    0.0529  0.0310   0.0264          strategiesand personalized uncertaintytoachievefairness,unbi-
+                    SDPO      0.1816       0.2449    0.0462  0.0310   0.0258          asedness,androbustness.Theimplementationdetailsarelistedin
+                   RosePO     0.1857       0.2378    0.0538  0.0290   0.0244          Appendix C.
+                    SPRec     0.2806      0.1510    0.0432  0.0388   0.0319
+                   SASRec     0.0030        1.0000     0.0458  0.0202   0.0139        6.2   OverallPerformanceComparison(RQ1)
+                   BIGRec     0.1420       0.3170    0.0175  0.0310   0.0236          The experimental results are presented in Table 1, leading to the
+                     RW       0.1050       0.3730    0.0238  0.0380   0.0281
+                      D3      0.1199       0.2581    0.0260  0.0413  0.0324           followingobservations.Thenon-LLMbaseline,SASRec,performs
+   Goodreads       DMPO       0.1560       0.3310    0.0164  0.0410   0.0314          poorly withthe given training size, whichis expected asSASRec
+                    SDPO      0.1580       0.3270    0.0161 0.0420    0.0315          requireslargedatasetstoachieveeffectivefitting.Inthisstudy,we
+                   RosePO     0.1860       0.3230    0.0181  0.0300   0.0215          primarily focus on LLM-based methods, and SASRec’s results are
+                    SPRec     0.2090      0.2170    0.0099   0.0330   0.0250          includedonlyforreferenceandastheassistantmodelforD3 during
+                   SASRec     0.0021        1.0000     0.1205  0.0226   0.0170        the decoding stage.
+
+                   BIGRec     0.3198       0.2597    0.0461  0.0132   0.0130          6.2.1   LimitationsofSFT-basedMethods. Fine-tuningLLMswith
+                     RW       0.2821       0.2648    0.0432  0.0112   0.0103
+                      D3      0.3135       0.2672    0.0320  0.0103   0.0088          instruction-based methods results in recommendations heavily fa-
+CDs_and_Vinyl      DMPO       0.3116       0.1740   0.0195   0.0090   0.0090          voring popular items, leading to a lack of diversity. For example,
+                    SDPO      0.3218       0.2118    0.0380  0.0110   0.0106          in the Goodreads dataset, the DivRatio of BIGRec is only 0.142,
+                   RosePO     0.3625       0.1853    0.0426  0.0090   0.0090          meaning the modelprovides just 14 distinctrecommendations per
+                    SPRec     0.3859      0.1670     0.0242 0.0143   0.0140           100tasks.Similarly,intheSteamdataset,BIGRec’sORRatioreaches
+                   SASRec     0.0010        1.0000     0.1094  0.0660   0.0379        0.391, with over 39% of recommendations concentrated on the 3
+                   BIGRec     0.1940       0.3910    0.0650  0.0780   0.0766          most popular items. These findings highlight that relying solely
+                     RW       0.2890       0.2710   0.0313   0.0760   0.0735          onSFTintroducesseverebiases,significantlyoverexposingcertain
+                      D3      0.1580       0.4560    0.0511  0.0730   0.0718          popular items.
+      Steam        DMPO       0.2270       0.2990    0.0443  0.0850   0.0834
+                    SDPO      0.2080       0.3510    0.0475  0.0820   0.0810          6.2.2   Limitations of DPO-based Methods. For DPO methods us-
+                   RosePO     0.2310       0.3160    0.0499  0.0820   0.0805          ing random sampling, such as SDPO and DMPO, while multiple
+                    SPRec     0.2930      0.2560     0.0367 0.0910   0.0893           negativesamplesimproverecommendationaccuracy,theyperform
+                                                                                      poorly on diversity and fairness metrics. On the Goodreads and
+                                                                                      MovieLensdatasets,SDPOandDMPOhaveminimalimpactonDi-
+                                                                                      vRatioandORRatioandmayevendegrademodelperformance.On
+6.1.4   Baseline. For traditional recommendation models, we select                    the CDs and Steam datasets, although ORRatio decreases, diversity
+SASRec[23],awidelyusedbaselineemployingasequentialmethod                              metricsremainlargelyunchanged,suggestingthatthemodelfavors
+withaself-attentionmechanism.ForLLM-basedmodels,wecon-                                moderatelypopular itemsbut failstoeffectively recommendnew
+sider several baselines. (1) For SFT-based methods, BIGRec [3]                        ones.In contrast,RosePO performswell onthe CDdataset dueto
+
+=== PDF PAGE 7 ===
+SPRec: Self-Play to Debias LLM-based Recommendation                                                                                                       WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+Table 2: Ablation results. “with RN” for random negative
+samples,“w/o”forwithoutspecificcomponents.
+
+
+     Dataset         Model  DivRatio↑ORRatio↓MGU↓  HR↑  NDCG↑
+                   w/o SFT    0.3020       0.0837    0.0198 0.0184   0.0149
+   MovieLens       w/o DPO     0.1959        0.2714     0.06370.0316   0.0260
+                   with RN     0.2194        0.2224     0.0544  0.0286   0.0230
+                    SPRec       0.2806      0.1510    0.0432  0.0388   0.0319
+                   w/o SFT      0.2010      0.2390    0.0044 0.0270   0.0206
+   Goodreads       w/o DPO     0.1350        0.2970     0.01420.0350   0.0274
+                   with RN     0.1380        0.3380     0.0188 0.0420  0.0310
+                    SPRec      0.2090       0.2170    0.0099  0.0330   0.0250
+                   w/o SFT     0.3381        0.2373    0.0216 0.0132   0.0126
+CDs_and_Vinyl      w/o DPO     0.3136       0.2363     0.0333  0.0143   0.0136
+                   with RN      0.3625        0.2536     0.0359 0.0163  0.0150
+                    SPRec      0.3859       0.1670    0.0242  0.0143   0.0140
+                   w/o SFT      0.2900       0.2260    0.0173 0.0880   0.0868
+     Steam         w/o DPO     0.2220        0.3910     0.0620  0.0790   0.0776       Figure5:PerformanceontheMovieLensdatasetacrossdif-
+                   with RN     0.2860       0.2530    0.0351  0.0860   0.0837         ferentablationexperiments.
+                    SPRec      0.2930       0.2560    0.0367  0.0910   0.0893
+
+
+itsnegativesamplingstrategybasedonsemanticinformation.How-                            6.3.1   SPRec without SFT. As shown in Table 2, SPRec w/o SFT
+ever,thisapproachheavilyreliesonthesemanticcharacteristicsof                          achieves the lowest recommendation accuracy across alldatasets
+thedataset’sstructure,resultinginrelativelypoorperformanceon                          exceptSteam.Thisindicatesthat, duringtheself-playprocess,the
+other datasets and limiting its generalizability for debiasing.                       model’s excessive focuson fairness compromises its accuracy.In
+   Insummary,existingDPO-basedmethodsfailtoaddressfairness                            theMovieLensdataset(Fig.5),theabsenceoftheSFTstageleads
+issues in LRS.                                                                        toasteadydeclineinrecommendationaccuracy(NDCG)through-
+                                                                                      out training. These findings highlight the critical role of SFT in
+6.2.3   Superiority of SPRec. As shown in Table 1, SPRec signif-                      maintaining SPRec’s recommendation performance.
+icantly improves both DivRatio and ORRatio metrics across all                         6.3.2   SPRecwithoutDPO. RemovingDPOreducesSPRectofur-
+datasets compared to BIGRec, demonstrating its effectiveness in                       ther SFT training, ensuring that performance gains are not due
+mitigating the over-recommendation of popular items and enhanc-                       toincorporatingadditionaldata.AsshowninTable2,additional
+ing diversity. Additionally, SPRec outperforms BIGRec on most                         SFTfails toimprovediversityor fairnessmetrics, andtherecom-
+fairness metrics, reducing the discrepancies between the model’s                      mendations remain biased. Furthermore, Fig. 5 reveals minimal
+recommendations and users’ historical sequences, thereby provid-                      fluctuationsduringtraining,indicatingthat thepriorSFTtraining
+ing fairer recommendations.                                                           hasalreadyconverged.Thisexperimentunderscoresthelimitations
+   SPRec also surpasses all baseline models on DivRatio and ORRa-                     of SFT-based methodsin addressingrecommendation fairnessand
+tio, showcasing its superior ability to balance recommendation dis-                   diversity.
+tributions.Forfairness,SPRecachievedthehighestMGUscoreson
+theMovieLensandGoodreadsdatasets,andthesecond-higheston                               6.3.3   Randomly sampling negative items. As observed in Table 2,
+theSteamandCDdatasets.Moreover,asshowninFig.4,SPRecal-                                whenthenegativesamplingstrategy isreplacedwithrandomsam-
+leviatescategory-levelunfairnessontheMovieLensdataset,achiev-                         pling,SPRec-RNfailstoachievefurtherimprovementsinDivRatio
+ing the best results in 7 out of 8 categories, further underscoring                   and ORRatio metrics on the MovieLens and Goodreads datasets.
+its effectiveness in improving fairness.                                              Additionally,SPRec-RN’sfairnessmetricsperformworsecompared
+   While RosePO performs well on the CDs and Vinyl dataset,                           toSPRec. AlthoughSPRec-RNshows asignificantimprovementin
+leveraging semantic-based negativesampling toaddress fairness                         DivRatio on the CDs and Vinyl dataset, its ORRatio still performs
+in music recommendations, and Re-weighting shows strong per-                          poorly. This suggests that random sampling of negative samples
+formance on the Steam dataset by employing category-based re-                         duringtrainingisineffectiveatsuppressingpopularitems,andthe
+weightingforgamingrecommendations,thesemethodsaretailored                             recommendationresultscontinuetoexhibitasignificantlong-tail
+tospecificdatasets andlack generalizability.Incontrast, SPRec’s                       effect. This ablation experiment demonstrates that our Self-play
+self-play framework provides a universal solution, overcoming                         negative sampling strategy effectively balances the distribution
+dataset-specificchallengesanddeliveringfairerrecommendations                          of the model’s output, leading to debiasing in recommendations.
+across diverse scenarios.                                                             Replacingthenegativesamplingstrategywithrandomsampling
+6.3   AblationStudy(RQ2)                                                              (SPRec-RN) failsto improveDivRatio andORRatio metricson the
+                                                                                      MovieLens and Goodreads datasets (Table 2). Additionally, SPRec-
+Weconductedaseriesofablationexperimentstoexploretheimpact                             RN exhibits worse fairness metrics compared to SPRec. While it
+of each component of the SPRec training framework.                                    achieves a significant boost in DivRatio on the CDs dataset, its
+
+=== PDF PAGE 8 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                   Gao and Chen et al.
+
+                                                                                     a small subset of popular items. These results highlight the supe-
+                                                                                     riorityofourproposedself-playnegativesamplingstrategyover
+                                                                                     random sampling.
+
+                                                                                     6.4.2   EffectofNegativeSampleSize. Togenerate 𝑁 negativesam-
+                                                                                     ples, we use beam search decoding to sample 2𝑁 items from the
+                                                                                     model’soutput.Afterdeduplication,thetop𝑁 itemswiththehigh-
+                                                                                     est predicted probabilities are selected as negative samples. As
+                                                                                     shown in Fig. 7, increasing the number of negative samples re-
+                                                                                     sultsinstablerecommendationaccuracybutsignificantlyimproves
+                                                                                     diversity and fairness, reducing the focus on popular items. This
+                                                                                     demonstrates the versatility of the self-play negative sampling
+                                                                                     strategy, which can be effectively combined with multi-negative
+           Figure6:Effectofrandomsamplingratio.                                      sampling approaches to further debias LRS.
+
+                                                                                     7   Conclusion&Discussion
+                                                                                     Our work establishes a critical bridge between preference align-
+                                                                                     menttechniquesandfairness-awarerecommendationintheeraof
+                                                                                     LLMs.Throughboththeoreticalanalysisandempiricalvalidation,
+                                                                                     we demonstrate that conventional DPO-based tuning fundamen-
+                                                                                     tally conflicts with the principles of equitable recommendation,
+                                                                                     creatingself-reinforcingpopularitybiasesthattraditionaldebias-
+                                                                                     ing approaches fail to address. The proposed SPRec framework
+                                                                                     represents a paradigm shift in recommendation alignment - rather
+                                                                                     than treating bias mitigation as a post-hoc correction, we redesign
+                                                                                     thecorelearningmechanismtoenableautonomousbiassuppres-
+                                                                                     sion through self-regulated competition between model genera-
+                                                                                     tions.Thisapproachnotonlyachievesstate-of-the-artperformance
+             Figure7:Effectofnegativesamplesize.                                     acrossaccuracyandfairnessmetricsbutmoreimportantly,provides
+                                                                                     ablueprintfordevelopingself-correctingAIsystemsthatmaintain
+ORRatio remains poor. These results suggest that random nega-                        alignment with both user preferences and ethical constraints.
+tive sampling is ineffective in suppressing popular items, leaving a                    Despite its effectiveness, our work primarily addresses bias in
+pronouncedlong-taileffectintherecommendations.Thisexperi-                            DPO-basedtuning,whileoverlookingthepopularitybiasalready
+ment demonstrates thatour self-play negative sampling strategy                       presentinSFTduetoitscross-entropyloss.Futureresearchshould
+effectively balances the model’s output distribution, resulting in                   focus on mitigating bias at the SFT stage to ensure fairness from
+debiased recommendations.                                                            thestartoffine-tuning.Additionally,optimizingpreferencesinrec-
+                                                                                     ommendation isa long-term challenge, requiring alignmentacross
+                                                                                     sequential recommendations rather than individual predictions.
+6.4   ImpactofNegativeSamples(RQ3)                                                   However, LLMs generate outputs token by token, making it dif-
+WeinvestigatetheroleofnegativesamplesinSPRecbyintroducing                            ficult to optimize preferences from token-level to item-level and
+aproportionofrandomnegativesamplestocontaminateSPRec’s                               ultimatelylist-levelrecommendations.Tacklingthisissuewillre-
+original self-play samples. Additionally, we examine the impact of                   quire new datasets, benchmarks, and models capable of long-term
+increasingthenumberofnegativesamplesinSPRec’slossfunction                            alignment.A promisingdirectionis reinforcementlearning with
+(Eq.(6)).Toachievethis,weadopttheSDPOlossfunctiontoexpand                            process-level rewards, shifting optimization from short-term token
+to multiple negative samples. For efficiency, we limit the training                  likelihood to long-horizon user engagement.
+samplesizeto1,024,keepingotherexperimentalsettingsconsistent
+withSection6.2.Toensureresultstability,themodel’sperformance                         Acknowledgements
+is averaged over the last three training iterations. We report the                   This work is supported by the National Key Research and Devel-
+results on the Movielens dataset.                                                    opment Program of China (2021ZD0111802), the National Natu-
+6.4.1   Effect of Random Sampling Ratio. In each training iteration,                 ral Science Foundation of China (62402470, 62272437, U24B20180,
+we randomly replace a proportion of negative samples with ran-                       62121002),theFundamentalResearchFundsfortheCentralUniver-
+domlyselecteditemswhileleavingtheremainingnegativesamples                            sities of China (WK2100000053, PA2024GDSK0107), Anhui Provin-
+unchanged as the model’s recommendation outputs. As shown in                         cial NaturalScience Foundation (2408085QF189), andthe Postdoc-
+Fig.6,increasingtheproportionofrandomnegativesamplesleads                            toral Fellowship Program of CPSF (GZC20241643). This research is
+to a steady decline in diversity and accuracy. Fairness also dete-                   supportedbytheadvancedcomputingresourcesprovidedbythe
+riorates, with recommendations becoming more skewed toward                           Supercomputing Center of the USTC.
+
+=== PDF PAGE 9 ===
+SPRec: Self-Play to Debias LLM-based Recommendation                                                                                                       WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+References                                                                                                      Proceedings, Part II. 364–381.
+ [1]  MohammadGheshlaghiAzar,ZhaohanDanielGuo,BilalPiot,RemiMunos,Mark                                    [21]  MeenaJagadeesan,NikhilGarg,andJacobSteinhardt.2024.Supply-sideequilibria
+      Rowland, Michal Valko, and Daniele Calandriello. 2024. A general theoretical                              inrecommendersystems. In Proceedings of the 37th International Conference on
+      paradigmtounderstandlearningfromhumanpreferences.In International Con-                                    Neural Information Processing Systems (NeurIPS ’23). Article 642, 12 pages.
+      ference on Artificial Intelligence and Statistics (AISTATS ’24). PMLR, 4447–4455.                   [22]  Meng Jiang, Keqin Bao, Jizhi Zhang, Wenjie Wang, Zhengyi Yang, Fuli Feng,
+ [2]  Zhuoxi Bai, Ning Wu, Fengyu Cai, Xinyi Zhu, and Yun Xiong. 2024. Aligning                                 and Xiangnan He. 2024.  Item-side Fairness of Large Language Model-based
+      Large Language Model with Direct Multi-Preference Optimization for Recom-                                 Recommendation System. In Proceedings of the ACM on Web Conference 2024
+      mendation.InProceedingsofthe33rdACMInternationalConferenceonInformation                                   (WWW ’24). 4717–4726.
+      and Knowledge Management (CIKM ’24). 76–86.                                                         [23]  Wang-ChengKangandJulianMcAuley.2018. Self-attentivesequentialrecom-
+ [3]  KeqinBao,JizhiZhang,WenjieWang,YangZhang,ZhengyiYang,YanchenLuo,                                          mendation.In 2018 IEEE international conference on data mining (ICDM).IEEE,
+      ChongChen, FuliFeng,andQiTian. 2025. A Bi-StepGroundingParadigm for                                       197–206.
+      Large Language Models in Recommendation Systems.  ACM Transactions on                               [24]  YunqiLi,HanxiongChen,ShuyuanXu,YingqiangGe,JuntaoTan,ShuchangLiu,
+      Recommender Systems (TORS) (2025).                                                                        andYongfengZhang.2023. FairnessinRecommendation:Foundations,Methods,
+ [4]  KeqinBao,JizhiZhang,YangZhang,XinyueHuo,ChongChen,andFuliFeng.                                            andApplications. ACM Transactions on Intelligent Systems and Technology (TIST)
+      2024. DecodingMatters:AddressingAmplificationBiasandHomogeneityIssue                                      14, 5, Article 95 (Oct. 2023), 48 pages.
+      for LLM-based Recommendation. EMNLP (2024).                                                         [25]  Jiayi Liao, Xiangnan He, Ruobing Xie, Jiancan Wu, Yancheng Yuan, Xingwu Sun,
+ [5]  ShihaoCai,JizhiZhang,KeqinBao,ChongmingGao,andFuliFeng.2024. FLOW:                                        Zhanhui Kang, and Xiang Wang. 2024. RosePO: Aligning LLM-based Recom-
+      A Feedback LOop FrameWork for Simultaneously Enhancing Recommendation                                     menders with Human Values. arXiv preprint arXiv:2410.12519 (2024).
+      and User Agents. arXiv preprint arXiv:2410.20027 (2024).                                            [26]  QidongLiu,XianWu,XiangyuZhao,YejingWang,ZijianZhang,FengTian,and
+ [6]  DanieleCalandriello,ZhaohanDanielGuo,RemiMunos,MarkRowland,Yunhao                                         Yefeng Zheng. 2024. Large Language Models Enhanced Sequential Recommen-
+      Tang,BernardoAvilaPires,PierreHarveyRichemond,CharlineLeLan,Michal                                        dation for Long-tail User and Item. Advances in Neural Information Processing
+      Valko, Tianqi Liu, Rishabh Joshi, Zeyu Zheng, and Bilal Piot. 2024.  Human                                Systems (NeurIPS) (2024).
+      alignment of large language models through online preference optimisation. In                       [27]  Wenyu Mao, Jiancan Wu, Weijian Chen, Chongming Gao, Xiang Wang, and
+      Proceedings of the 41st International Conference on Machine Learning (ICML ’24).                          Xiangnan He. 2024. Reinforced Prompt Personalization for Recommendation
+      Article 211, 27 pages.                                                                                    with Large LanguageModels. ACM Transactions on Information Systems (TOIS)
+ [7]  Chong Chen,Weizhi Ma,Min Zhang,Chenyang Wang,Yiqun Liu,and Shaoping                                       (2024).
+      Ma. 2023. Revisiting Negative Sampling vs. Non-sampling in Implicit Recom-                          [28]  MotokiOmura,YasuhiroFujita,andToshikiKataoka.2024. EntropyControllable
+      mendation. ACM Transactions on Information Systems (TOIS) 41, 1, Article 12                               Direct Preference Optimization. arXiv preprint arXiv:2411.07595 (2024).
+      (Feb. 2023), 25 pages.                                                                              [29]  ArkaPal,DeepKarkhanis,SamuelDooley,ManleyRoberts,SiddarthaNaidu,and
+ [8]  JiaweiChen,HandeDong,XiangWang,FuliFeng,MengWang,andXiangnanHe.                                           Colin White. 2024. Smaug: Fixing failure modes of preference optimisation with
+      2023. Bias and Debias in Recommender System: A Survey and Future Directions.                              dpo-positive. arXiv preprint arXiv:2402.13228 (2024).
+      ACM Trans. Inf. Syst. 41, 3, Article 67 (Feb. 2023), 39 pages.                                      [30]  Richard Yuanzhe Pang, Weizhe Yuan, Kyunghyun Cho, He He, Sainbayar
+ [9]  JiajuChen,ChongmingGao,ShuaiYuan,ShuchangLiu,QingpengCai,andPeng                                          Sukhbaatar,andJasonWeston.2024.IterativeReasoningPreferenceOptimization.
+      Jiang.2025. DLCRec:ANovelApproachforManagingDiversityinLLM-Based                                          Advances in Neural Information Processing Systems (NeurIPS) (2024).
+      Recommender Systems. The 18th ACM International Conference on Web Search                            [31]  RafaelRafailov,ArchitSharma,EricMitchell,ChristopherDManning,Stefano
+      and Data Mining (WSDM ’25)(2025).                                                                         Ermon, andChelseaFinn. 2024. Directpreference optimization:Yourlanguage
+[10]  YuxinChen,JunfeiTan,AnZhang,ZhengyiYang,LehengSheng,EnzhiZhang,                                           model is secretly a reward model.  Advances in Neural Information Processing
+      XiangWang,andTat-SengChua.2024. OnSoftmaxDirectPreferenceOptimiza-                                        Systems 36 (2024).
+      tion for Recommendation. In The Thirty-eighth Annual Conference on Neural                           [32]  WentaoShi,JiaweiChen,FuliFeng,JizhiZhang,JunkangWu,ChongmingGao,
+      Information Processing Systems (NeurIPS ’24).                                                             and Xiangnan He. 2023. On the Theories Behind Hard Negative Sampling for
+[11]  Zixiang Chen, Yihe Deng, Huizhuo Yuan, Kaixuan Ji, and Quanquan Gu. 2024.                                 Recommendation. In Proceedings of the ACM Web Conference 2023 (WWW ’23).
+      Self-Play Fine-Tuning Converts Weak Language Models to Strong Language                                    812–822.
+      Models. In Forty-first International Conference on Machine Learning (ICML ’24).                     [33]  DavidSilver,ThomasHubert,JulianSchrittwieser,IoannisAntonoglou,Matthew
+[12]  Sunhao Dai, Chen Xu, Shicheng Xu, Liang Pang, Zhenhua Dong, and Jun Xu.                                   Lai, Arthur Guez,Marc Lanctot, Laurent Sifre,Dharshan Kumaran, Thore Grae-
+      2024. Bias andUnfairness inInformation RetrievalSystems: New Challengesin                                 pel, Timothy Lillicrap, Karen Simonyan, and Demis Hassabis. 2018. A general
+      the LLMEra. In Proceedings of the 30th ACM SIGKDD Conference on Knowledge                                 reinforcement learning algorithm that masters chess, shogi, and Go through
+      Discovery and Data Mining (KDD ’24). 6437–6447.                                                           self-play. Science 362, 6419 (2018), 1140–1144.
+[13]  AbhimanyuDubey,Abhinav Jauhri,AbhinavPandey,AbhishekKadian,Ahmad                                    [34]  David Silver, Julian Schrittwieser, Karen Simonyan, Ioannis Antonoglou, Aja
+      Al-Dahle, Aiesha Letman, Akhil Mathur, Alan Schelten, Amy Yang, Angela Fan,                               Huang,ArthurGuez, ThomasHubert,LucasBaker, Matthew Lai,AdrianBolton,
+      et al. 2024. The llama 3 herd of models. arXiv preprint arXiv:2407.21783 (2024).                          et al. 2017. Mastering the game of go without human knowledge. nature 550,
+[14]  Duanyu Feng, Bowen Qin, Chen Huang, Zheng Zhang,and Wenqiang Lei. 2024.                                   7676 (2017), 354–359.
+      Towards Analyzingand UnderstandingtheLimitationsofDPO: ATheoretical                                 [35]  Hao Sun and Mihaela van der Schaar. 2024. Inverse-RLignment: Inverse Rein-
+      Perspective. arXiv preprint arXiv:2404.04626 (2024).                                                      forcement Learning from Demonstrations for LLM Alignment. arXiv preprint
+[15]  IsabelO.Gallegos,RyanA.Rossi,JoeBarrow,MdMehrabTanjim,SungchulKim,                                        arXiv:2405.15624 (2024).
+      Franck Dernoncourt, Tong Yu, Ruiyi Zhang, and Nesreen K. Ahmed. 2024. Bias                          [36]  Antonela Tommasel. 2024. Fairness Matters: A look at LLM-generated group
+      and Fairness in Large Language Models: A Survey. Computational Linguistics 50,                            recommendations. In Proceedings of the 18th ACM Conference on Recommender
+      3 (Sept. 2024), 1097–1179.                                                                                Systems (RecSys ’24). 993–998.
+[16]  Chongming Gao, KexinHuang, Jiawei Chen, Yuan Zhang, Biao Li,Peng Jiang,                             [37]  Chaoqi Wang, Yibo Jiang, Chenghao Yang, Han Liu, and Yuxin Chen. 2024.
+      ShiqiWang,ZhongZhang,andXiangnanHe.2023. AlleviatingMatthewEffectof                                       BeyondReverseKL:GeneralizingDirectPreferenceOptimizationwithDiverse
+      Offline Reinforcement Learning in Interactive Recommendation. InProceedings                               Divergence Constraints. In The Twelfth International Conference on Learning
+      of the 46th International ACM SIGIR Conference on Research and Development in                             Representations (ICLR ’24).
+      Information Retrieval (SIGIR ’23). 11 pages.                                                        [38]  QiWang,JindongLi, ShiqiWang, QianliXing, RunliangNiu, HeKong, RuiLi,
+[17]  ChongmingGao,ShiqiWang,ShijunLi,JiaweiChen,XiangnanHe,WenqiangLei,                                        Guodong Long, Yi Chang, and Chengqi Zhang. 2024. Towards Next-Generation
+      BiaoLi,YuanZhang,andPengJiang.2023. CIRS:BurstingFilterBubblesbyCoun-                                     LLM-based Recommender Systems: A Survey and Beyond.    arXiv preprint
+      terfactual InteractiveRecommender System. ACM Transactions on Information                                 arXiv:2410.19744 (2024).
+      Systems (TOIS) 42, 1, Article 14 (aug 2023), 27 pages.                                              [39]  YifanWang,WeizhiMa,MinZhang,YiqunLiu,andShaopingMa.2023. ASurvey
+[18]  Yunfan Gao, Tao Sheng, Youlin Xiang, Yun Xiong, Haofen Wang, and Jiawei                                   on the Fairness of Recommender Systems.  ACM Transactions on Information
+      Zhang. 2023.  Chat-rec: Towards interactive and explainable llms-augmented                                Systems (TOIS) 41, 3, Article 52 (Feb. 2023), 43 pages.
+      recommender system. arXiv preprint arXiv:2303.14524 (2023).                                         [40]  Wei Wei, Xubin Ren, Jiabin Tang, Qinyong Wang, Lixin Su, Suqi Cheng, Junfeng
+[19]  Binzong Geng, Zhaoxin Huan, Xiaolu Zhang, Yong He, Liang Zhang, Fajie Yuan,                               Wang, Dawei Yin, and Chao Huang. 2024.  LLMRec: Large Language Models
+      JunZhou,andLinjianMo.2024.BreakingtheLengthBarrier:LLM-EnhancedCTR                                        withGraphAugmentationforRecommendation.In Proceedings of the 17th ACM
+      PredictioninLongTextualUserBehaviors.InProceedingsofthe47thInternational                                  International Conference on Web Search and Data Mining (WSDM ’24). 806–815.
+      ACM SIGIR Conference on Research and Development in Information Retrieval                           [41]  Likang Wu, Zhi Zheng, Zhaopeng Qiu, Hao Wang, Hongchao Gu, Tingjia Shen,
+      (SIGIR ’24). 2311–2315.                                                                                   ChuanQin,ChenZhu,HengshuZhu,QiLiu,HuiXiong,andEnhongChen.2024.
+[20]  Yupeng Hou, Junjie Zhang, Zihan Lin, Hongyu Lu, Ruobing Xie, Julian McAuley,                              ASurveyonLargeLanguageModelsforRecommendation. World Wide Web 27,
+      and Wayne Xin Zhao. 2024.  Large Language Models are Zero-Shot Rankers                                    5 (Aug. 2024), 31 pages.
+      for RecommenderSystems. In Advances in Information Retrieval: 46th European                         [42]  YueWu,ZhiqingSun,HuizhuoYuan,KaixuanJi,YimingYang,andQuanquan
+      Conference on Information Retrieval, ECIR 2024, Glasgow, UK, March 24–28, 2024,                           Gu.2025. Self-PlayPreferenceOptimizationforLanguageModelAlignment.In
+
+=== PDF PAGE 10 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                   Gao and Chen et al.
+
+
+     TheThirteenth InternationalConferenceonLearning Representations (ICLR’2025).              By settingthe gradientsto be0, weobtain that for∀𝑦 ∈I, the
+[43]  ChenXu, WenjieWang,YuxinLi,LiangPang, JunXu,andTat-SengChua. 2024.                    optimal reward𝑟∗(𝑦|𝑥) is:
+     AStudyofImplicitRankingUnfairnessinLargeLanguageModels.InFindingsof
+     the Association for Computational Linguistics: EMNLP 2024. 7957–7970.
+[44]  Fan Yao, Yiming Liao, Jingzhou Liu, Shaoliang Nie, Qifan Wang, Haifeng Xu,                                         ˆ𝑟∗(𝑦|𝑥) ∝ 𝑝D(𝑦|𝑥)𝑞D(𝑦|𝑥).
+     andHongningWang.2024. UnveilingUserSatisfactionandCreatorProductiv-
+     ity Trade-Offs in Recommendation Platforms. Advances in Neural Information                By plugging it into Eq. (8), we have:
+     Processing Systems (NeurIPS) (2024).
+[45]  Jizhi Zhang, Keqin Bao, Yang Zhang, Wenjie Wang, Fuli Feng, and Xiangnan                        𝑟∗(𝑥,𝑦) = log𝑝D(𝑦|𝑥)−log𝑞D(𝑦|𝑥)+Constant.
+     He.2023. IsChatGPTFairforRecommendation?EvaluatingFairnessinLarge
+     LanguageModelRecommendation.In Proceedings of the 17th ACM Conference on                  Back to the RLHF objective, we have:
+     Recommender Systems (RecSys ’23). 993–999.                                             max
+[46]  JunjieZhang,YupengHou,RuobingXie,WenqiSun,JulianMcAuley,WayneXin                        𝜃  E𝑥∼D,𝑦∼𝜋𝜃(·|𝑥)[log𝑝D(𝑦|𝑥)−log𝑞D(𝑦|𝑥)]−𝛽DKL(𝜋𝜃∥𝜋ref),
+     Zhao, Leyu Lin, and Ji-Rong Wen. 2024. AgentCF: Collaborative Learning with
+     Autonomous Language Agents for Recommender Systems. In Proceedings of the              which has a well-known closed form solution [31]:
+     ACM Web Conference 2024 (WWW ’24). 3679–3689.                                                                                         𝑝D(𝑦|𝑥)      1/𝛽
+A   MathematicalDerivations                                                                                   𝜋∗𝜃(𝑦|𝑥) ∝ 𝜋ref(𝑦|𝑥)·        𝑞D(𝑦|𝑥)           .
+
+   ProofofTheorem1. TheDPOlossisderivedfromtheobjec-                                                                                                                          □
+tive of Reinforcement Learning with Human Feedback (RLHF):                                  B   DatasetStatistics
+            max𝜃  E𝑥∼D,𝑦∼𝜋𝜃(·|𝑥)[𝑟(𝑥,𝑦)]−𝛽DKL(𝜋𝜃∥𝜋ref),           (7)                       Our datasets span diverse domains, including movies, books, mu-
+where the reward model is defined via the BT model:                                         sic,andgames,offeringvariedsizesanduserinteractionpatterns
+           max𝑟  E(𝑥,𝑦𝑤)∼D,𝑦𝑙∼𝑌𝑢 log𝜎(𝑟(𝑥,𝑦𝑤)−𝑟(𝑥,𝑦𝑙)).                                     to provide a comprehensive basis for evaluating LRSs. Note that
+                                                                                            while we report the full dataset statistics, only a subset of inter-
+   In the original paper of DPO [31], the authors proved that the                           action sequences is sampled for LLM fine-tuning, as detailed in
+optimalpolicy𝜋∗𝜃 forDPOlossinEq.Eq.(4)andthesolutiontothe                                   Section 6.1.1.
+optimizationprobleminEq.(7)arethesame.Thus,wecananalyze                                                          Table3:StatisticsofDatasets.
+the solution to Eq. (7), equivalent to examining the DPO loss.
+   Consider a fixed context𝑥 and define ˆ𝑟(𝑦|𝑥) as:
+                            ˆ𝑟(𝑦|𝑥) = exp(𝑟(𝑥,𝑦)),                                (8)               Datasets          #Items    #Interactions    #Sequences
+thenourgoalistooptimize ˆ𝒓(·|𝑥) ∈RI+,whichisa|I|-dimvector                                         MovieLens         10,682         10,000,054           9,301,274
+representingthelatentrewardsforallitemsintherecommendation                                         Goodreads          4,058            160,398                6,031
+datasetI. we can rewrite the reward model’s optimization as:                                   CDs_and_Vinyl     13,078           185,855               21,347
+              ∑︁     ∑︁                                          ˆ𝑟(𝑦𝑤|𝑥)                             Steam             32,094           178,961               29,876
+   max                    𝑝D(𝑦𝑤|𝑥)𝑞D(𝑦𝑙|𝑥)log             ˆ𝑟(𝑦𝑤|𝑥)+ ˆ𝑟(𝑦𝑙|𝑥)       .
+ˆ𝒓(·|𝑥)∈RI+ 𝑦𝑤∈I    𝑦𝑙∈I
+Then we calculate the gradients:         ˆ𝑟(𝑦𝑤|𝑥)                                           C   ImplementationDetails
+  𝜕𝑝D(𝑦𝑤|𝑥)𝑞D(𝑦𝑙|𝑥)log                                     /𝜕ˆ𝑟(𝑦|𝑥)                        For LLM-based methods, we adopted Llama-3.2-1B-Instruct as the
+                                   ˆ𝑟(𝑦𝑤|𝑥)+ ˆ𝑟(𝑦𝑙|𝑥)                                       backboneLLM.ConsideringtheabilityofLLMstoquicklyadaptto
+  𝑝D(𝑦|𝑥)𝑞D(𝑦𝑙|𝑥)(    1                                                             downstreamtaskswithlimiteddata,wefollowedBIGRec[3]and
+                             ˆ𝑟(𝑦|𝑥) −             1ˆ𝑟(𝑦|𝑥)+ ˆ𝑟(𝑦𝑙|𝑥))    𝑦𝑤 =𝑦,𝑦𝑙 ≠𝑦,      used relatively smaller datasets. To ensure fairness in comparison,
+=    −𝑝D(𝑦𝑤|𝑥)𝑞D(𝑦|𝑥)             1                                                         all baseline methods and SPRec utilize the same dataset as used in
+                         ˆ𝑟(𝑦𝑤|𝑥)+ ˆ𝑟(𝑦|𝑥)                𝑦𝑤 ≠𝑦,𝑦𝑙 =𝑦,               theSFTtrainingphase.ForSPRec,thetotalnumberofiterations
+    0                                                                             else.     wasset to5,with eachSFTand DPOphasetrainedfor1 epoch.To
+Hence, the objective’s gradient w.r.t.ˆ𝑟(𝑦|𝑥) can be written as:                            ensure that the training data used in each iteration is not identical,
+     ∑︁     ∑︁                                           ˆ𝑟(𝑦𝑤|𝑥)                           we further randomly sample half of the training data (i.e., 2048
+  𝜕               𝑝D(𝑦𝑤|𝑥)𝑞D(𝑦𝑙|𝑥)log                                     /𝜕ˆ𝑟(𝑦|𝑥)         interactions) for training in each iteration. All experiments were
+    𝑦𝑤∈I   𝑦𝑙∈I                                   ˆ𝑟(𝑦𝑤|𝑥)+ ˆ𝑟(𝑦𝑙|𝑥)                        carried out on four RTX 3090 GPUs, each with 24GB of VRAM.
+       ∑︁                                                                                      For the traditional model SASRec, we use the same training and
+=0+           𝑝D(𝑦|𝑥)𝑞D(𝑦𝑙|𝑥)(    1ˆ𝑟(𝑦|𝑥) −             1ˆ𝑟(𝑦|𝑥)+ ˆ𝑟(𝑦𝑙|𝑥))                validation datasetsas otherLLM-based methods,with datasetsizes
+      𝑦𝑙≠𝑦                                                                                  of 4,096 and 512, respectively. The embedding size was fixed at
+         ∑︁                                                                                 64, and the dropout ratio was set to 0.1. Negative samples were
+     −         𝑝D(𝑦𝑤|𝑥)𝑞D(𝑦|𝑥)             1ˆ𝑟(𝑦𝑤|𝑥)+ ˆ𝑟(𝑦|𝑥)                               randomly sampled in training, with Adam as the optimizer and
+        𝑦𝑤≠𝑦                                                                                a learning rate of 4e-3. More details of the implementation are
+   ∑︁                                                                                       available via https://github.com/RegionCh/SPRec.
+=         𝑝D(𝑦|𝑥)𝑞D(𝑦𝑖|𝑥)(    1ˆ𝑟(𝑦|𝑥) −             1ˆ𝑟(𝑦|𝑥)+ ˆ𝑟(𝑦𝑖|𝑥))
+  𝑦𝑖∈I
+      ∑︁
+  −        𝑝D(𝑦𝑖|𝑥)𝑞D(𝑦|𝑥)            1ˆ𝑟(𝑦𝑖|𝑥)+ ˆ𝑟(𝑦|𝑥)    (add 0)
+     𝑦𝑖∈I 𝑝D(𝑦|𝑥)𝑞D(𝑦𝑖|𝑥)
+   ∑︁
+=                 ˆ𝑟(𝑦|𝑥)         − 𝑝D(𝑦𝑖|𝑥)𝑞D(𝑦|𝑥)+𝑝D(𝑦|𝑥)𝑞D(𝑦𝑖|𝑥)ˆ𝑟(𝑦𝑖|𝑥)+ ˆ𝑟(𝑦|𝑥)     .
+  𝑦𝑖∈I

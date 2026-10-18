@@ -1,0 +1,153 @@
+{
+ "slug": "pc-x1-1017",
+ "state": "complete",
+ "started": "2026-10-17T13:07:09+00:00",
+ "ended": "2026-10-17T13:34:22+00:00",
+ "device_count": 2,
+ "mode": "parallel_2gpu",
+ "inputs": {
+  "gh_dau_s0": {
+   "ok": true,
+   "bytes": 2971365
+  },
+  "p5_gow_gh": {
+   "ok": true,
+   "bytes": 3702751
+  },
+  "gh_bpr": {
+   "ok": true,
+   "bytes": 2970957
+  },
+  "rnd_dau": {
+   "ok": true,
+   "bytes": 2971373
+  },
+  "gow_full_dau": {
+   "ok": true,
+   "bytes": 18137029
+  },
+  "amz_full_dau": {
+   "ok": true,
+   "bytes": 38082715
+  },
+  "amz_gh_dau": {
+   "ok": true,
+   "bytes": 6177415
+  }
+ },
+ "jobs": {
+  "gowalla__mf__graphhash__directau__s0-legacy30": {
+   "run_id": "gowalla__mf__graphhash__directau__s0-legacy30",
+   "gpu": 0,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/gh_dau_s0 --dataset Gowalla --method GraphHash --base cos --run-id gowalla__mf__graphhash__directau__s0-legacy30 --seeds 10 --out-root /kaggle/working/controls --assert-aliases inputs/p5_gow_gh",
+   "state": "done",
+   "started": "2026-10-17T13:08:16+00:00",
+   "ended": "2026-10-17T13:10:47+00:00",
+   "duration_s": 150.9,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash__directau__s0-legacy30.log"
+  },
+  "c0_maps": {
+   "run_id": "c0_maps",
+   "gpu": 1,
+   "script": "make_maps.py",
+   "args": "--datasets Gowalla,Yelp2018,AmazonBook --out-root /kaggle/working/maps --gowalla-resolutions 400,800,1600,3200 --assert-aliases gowalla__graphhash=inputs/p5_gow_gh amazonbook__graphhash=inputs/amz_gh_dau",
+   "state": "done",
+   "started": "2026-10-17T13:08:16+00:00",
+   "ended": "2026-10-17T13:08:44+00:00",
+   "duration_s": 28.1,
+   "exit_code": 0,
+   "log": "logs/c0_maps.log"
+  },
+  "yelp2018__mf__graphhash__bpr__s0": {
+   "run_id": "yelp2018__mf__graphhash__bpr__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Yelp2018 --method GraphHash --loss bpr_author --epochs 3000 --eval-every 10 --patience 500 --min-delta 0 --cap-min 90 --lr 0.005 --wd 1e-6 --seeds 0 --run-id yelp2018__mf__graphhash__bpr__s0",
+   "state": "done",
+   "started": "2026-10-17T13:08:44+00:00",
+   "ended": "2026-10-17T13:13:04+00:00",
+   "duration_s": 259.2,
+   "exit_code": 0,
+   "log": "logs/yelp2018__mf__graphhash__bpr__s0.log"
+  },
+  "gowalla__mf__graphhash__bpr__s0-legacy": {
+   "run_id": "gowalla__mf__graphhash__bpr__s0-legacy",
+   "gpu": 0,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/gh_bpr --dataset Gowalla --method GraphHash --base raw --run-id gowalla__mf__graphhash__bpr__s0-legacy --seeds 10 --out-root /kaggle/working/controls --assert-aliases inputs/p5_gow_gh",
+   "state": "done",
+   "started": "2026-10-17T13:10:47+00:00",
+   "ended": "2026-10-17T13:13:32+00:00",
+   "duration_s": 164.9,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash__bpr__s0-legacy.log"
+  },
+  "yelp2018__mf__full__bpr__s0": {
+   "run_id": "yelp2018__mf__full__bpr__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Yelp2018 --method Full --loss bpr_author --epochs 3000 --eval-every 10 --patience 500 --min-delta 0 --cap-min 90 --lr 0.01 --wd 1e-6 --seeds 0 --run-id yelp2018__mf__full__bpr__s0",
+   "state": "done",
+   "started": "2026-10-17T13:13:04+00:00",
+   "ended": "2026-10-17T13:24:14+00:00",
+   "duration_s": 670.9,
+   "exit_code": 0,
+   "log": "logs/yelp2018__mf__full__bpr__s0.log"
+  },
+  "gowalla__mf__random__directau__s0-legacy30": {
+   "run_id": "gowalla__mf__random__directau__s0-legacy30",
+   "gpu": 0,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/rnd_dau --dataset Gowalla --method Random --base cos --run-id gowalla__mf__random__directau__s0-legacy30 --seeds 10 --out-root /kaggle/working/controls",
+   "state": "done",
+   "started": "2026-10-17T13:13:32+00:00",
+   "ended": "2026-10-17T13:16:11+00:00",
+   "duration_s": 159.3,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__random__directau__s0-legacy30.log"
+  },
+  "gowalla__mf__full__directau__s0-legacy120": {
+   "run_id": "gowalla__mf__full__directau__s0-legacy120",
+   "gpu": 0,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/gow_full_dau --dataset Gowalla --method Full --base cos --run-id gowalla__mf__full__directau__s0-legacy120 --seeds 10 --out-root /kaggle/working/controls --e2e",
+   "state": "done",
+   "started": "2026-10-17T13:16:11+00:00",
+   "ended": "2026-10-17T13:19:41+00:00",
+   "duration_s": 209.7,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__full__directau__s0-legacy120.log"
+  },
+  "amazonbook__mf__full__directau__s0-legacy": {
+   "run_id": "amazonbook__mf__full__directau__s0-legacy",
+   "gpu": 0,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/amz_full_dau --dataset AmazonBook --method Full --base cos --run-id amazonbook__mf__full__directau__s0-legacy --seeds 10 --out-root /kaggle/working/controls --e2e",
+   "state": "done",
+   "started": "2026-10-17T13:19:41+00:00",
+   "ended": "2026-10-17T13:34:22+00:00",
+   "duration_s": 881.3,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__full__directau__s0-legacy.log"
+  },
+  "gowalla__mf__full__bpr__s0": {
+   "run_id": "gowalla__mf__full__bpr__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method Full --loss bpr_author --epochs 3000 --eval-every 10 --patience 500 --min-delta 0 --cap-min 90 --lr 0.005 --wd 1e-8 --seeds 0 --run-id gowalla__mf__full__bpr__s0",
+   "state": "done",
+   "started": "2026-10-17T13:24:14+00:00",
+   "ended": "2026-10-17T13:34:00+00:00",
+   "duration_s": 585.9,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__full__bpr__s0.log"
+  }
+ },
+ "errors": [],
+ "prepare_exit_code": 0,
+ "n_jobs": 9,
+ "n_failed": 0,
+ "failed_run_ids": []
+}

@@ -1,0 +1,98 @@
+{
+  "completed_ist": "2026-10-18 11:49 IST",
+  "status": "candidate_ready_for_human_G3_signoff",
+  "protected_prereg_unchanged": true,
+  "kaggle_actions": 0,
+  "new_training": 0,
+  "mapping_recomputation": 0,
+  "tests_passed": 124,
+  "test_command": "python -B -m pytest -q -p no:cacheprovider scripts",
+  "validation": {
+    "stage3_valid": 25,
+    "patience": 24,
+    "capped": 1
+  },
+  "csv": {
+    "v1_rows": 398,
+    "v2_unique_rows": 401
+  },
+  "E5": {
+    "records": 90,
+    "observed": 89,
+    "missing_gpu": 1,
+    "direction_by_dataset": {
+      "Gowalla": "PASS",
+      "Yelp2018": "PASS",
+      "AmazonBook": "PASS"
+    }
+  },
+  "E7": {
+    "verdict": "FAIL",
+    "modern_complete": 11,
+    "modern_fail": 3,
+    "modern_pass": 8,
+    "legacy_missing_validation": 1
+  },
+  "E9": {
+    "Gowalla": "PASS",
+    "Yelp2018": "PASS",
+    "AmazonBook": "INCONCLUSIVE"
+  },
+  "abstract_words": 162,
+  "code_review": "no P1/P2; caveats retained",
+  "changed_files": [
+    "scripts/aggregate.py",
+    "scripts/render_stage3_tables.py",
+    "scripts/analyze_e5.py",
+    "scripts/analyze_e7_e9.py",
+    "scripts/analyze_e8_final.py",
+    "scripts/test_aggregate_post_s3.py",
+    "scripts/test_e5_final.py",
+    "scripts/test_e7_e9_final.py",
+    "scripts/test_e8_final.py",
+    "results/master_metrics.csv",
+    "results/master_metrics_v2.csv",
+    "results/master_metrics_v2.schema.json",
+    "results/E5_final.json",
+    "results/E7_final.json",
+    "results/E8_final.json",
+    "results/E9_final.json",
+    "results/G3_sources.json",
+    "prompts/g3_abstract_numbers.md",
+    "prompts/post_stage3_gpu_rescore.md",
+    "RESULTS.md",
+    "TASKS.md",
+    "PLAN.md"
+  ],
+  "artifact_sha256": {
+    "scripts/aggregate.py": "8e34637abf24ea8e6df47ecf5784c8296bfdc338bad14c036e453d6e736b1e17",
+    "scripts/render_stage3_tables.py": "64b10fd5afbc39e1082aebaf37f82169f69d5477543710901f44499f4effe56c",
+    "scripts/analyze_e5.py": "329f1e1ef479cebb515a3c577eebdf42dade0ee38a034b0289c65fd93793d932",
+    "scripts/analyze_e7_e9.py": "7752ad7628cf3ae211cf11d046dbd219aa297414ff39fdb02d1472055c23d474",
+    "scripts/analyze_e8_final.py": "619ee6b155d6ea242099a9ac25a04773da90117c0f7f25a5c1ad8624c36ab51d",
+    "scripts/test_aggregate_post_s3.py": "79703c78de8842c6a400b65af0d81b05213495ba1292125c6e8ffa1db1e531d3",
+    "scripts/test_e5_final.py": "993a59cd90a060ebc67da503fd425c3b8bfffba31cffc86c65347a919457b415",
+    "scripts/test_e7_e9_final.py": "bc971b176b12c086ba143f1a53e80c06dc8e30e6b402e36c8b4a269766ec0244",
+    "scripts/test_e8_final.py": "fc2706e94600e96697be8799676ddc840a794a9cfc9bc8145675e3ef3a3ab303",
+    "results/master_metrics.csv": "70da9b4797efe194948ffb388faa43bbb1452bd8cbec870ae61ca9241a0d4805",
+    "results/master_metrics_v2.csv": "5b501b5b021e92a70d17a9a0bbb1050614b0e3190f586e14628a6ad51e993cd1",
+    "results/master_metrics_v2.schema.json": "f9906ec7327f8b2dac57e2e0cd6d82b2c3b637fdcf7790084548fbb7a59a30ca",
+    "results/E5_final.json": "c83450cec2f85c9ed333a21575327f4254a3490d58ce088b58e4edac7479fc66",
+    "results/E7_final.json": "41ee8cec547a0a796a3aeba6e5e2a1293d0c41990ab22f2bfe32b509752bc894",
+    "results/E8_final.json": "8e4fb9867abe586eb0e6d3630fb81211008ff54f998f5119ebb1aa30729c14eb",
+    "results/E9_final.json": "d1fa51e5f48c36c0d9991d5020a5b399d1074f89889f6ff6fb8bb1fc3b510715",
+    "results/G3_sources.json": "8b95f1bd264f1a1455b10de47c3b312327c0e947c0ffd9e81649c2f1e153dd8c",
+    "prompts/g3_abstract_numbers.md": "7be67508cb2ccffce35fa0dec67b7d393336b4883c3a703049c2f115b3e5afe0",
+    "prompts/post_stage3_gpu_rescore.md": "2eb7aa6bcb23f93160ed627dc1d6f775a63bf053e5e13d77779a48ec3f462a8a",
+    "RESULTS.md": "31ea24b9b8d7d287e68e65f1e7299615608a16084f5b7e0aec2006f634995f02",
+    "TASKS.md": "01326ed7d8f0e0fdf4ec130f003832b57b7538c0a08c993030a89893dcf043b1",
+    "PLAN.md": "bda79f97017e72c7855166cc4986efdd7350c263247c6d4cb9f66a526833892a"
+  },
+  "unresolved": [
+    "Amazon legacy BPR cosine rankings",
+    "Amazon legacy BPR uint8 validation",
+    "Amazon legacy BPR weighted validation and selected test",
+    "Amazon alternate full-prior per-user tie predictions/CIs"
+  ],
+  "optional_C3_note": "not created; time allowance expired"
+}

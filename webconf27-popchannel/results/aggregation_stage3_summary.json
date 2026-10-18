@@ -1,0 +1,75 @@
+{
+  "task": "B1 / E1 / T5 aggregation refresh",
+  "status": "completed_local",
+  "files_changed": [
+    "scripts/aggregate.py",
+    "scripts/test_aggregate_stage3.py",
+    "scripts/render_stage12_tables.py",
+    "results/master_metrics.csv",
+    "results/stage12_controls_table.md",
+    "RESULTS.md sections 1-2",
+    "results/aggregation_stage3_summary.json"
+  ],
+  "tests": {
+    "command": "python -m pytest scripts/test_t5.py scripts/test_aggregate_stage3.py -q",
+    "passed": 83,
+    "failed": 0,
+    "existing_t5": 77,
+    "new_regression_tests": 6
+  },
+  "aggregation": {
+    "total_rows": 298,
+    "unique_run_labels": 40,
+    "training_scoring_rows": 97,
+    "training_run_lineages": 28,
+    "popularity_only_rows": 3,
+    "control_rows": 198,
+    "control_documents": 10,
+    "status_row_counts": {
+      "valid-short": 114,
+      "ablation": 6,
+      "valid": 100,
+      "capped": 69,
+      "invalid": 6,
+      "exploratory": 3
+    },
+    "comparison_row_counts": {
+      "reproduction": 294,
+      "controlled": 4
+    },
+    "unique_run_mode_keys": 298
+  },
+  "warnings": [
+    "preserved distinct legacy lineage: gowalla__mf__graphhash__directau__s0 -> gowalla__mf__graphhash__directau__s0-legacy30"
+  ],
+  "fixes": [
+    "Recursive controls discovery includes _sessions output directories and avoids repeated path traversal outputs.",
+    "Legacy source status and comparison type inherited using explicit legacy checkpoint suffixes; session slug recovered from archive layout.",
+    "Legacy and modern s0 checkpoints retained as distinct lineages instead of duplicate run/mode keys; legacy_rows standalone API unchanged.",
+    "RESULTS sections 1-2 generated directly from CSV; Full Gowalla cosine rounds to 13.00 and raw-minus-cosine gap to 4.90.",
+    "All CSV rows explicitly labelled controlled or reproduction; I1 interpretation remains initialization sensitivity pending matched A2."
+  ],
+  "limitations": [
+    "The controlled tag identifies an eligible configuration, not proof of a complete mapping-only contrast; A2 is pending.",
+    "E5/E7/E9 outcome blocks are intentionally left to root integration. No PREREG, PLAN, TASKS, or LOG edits were made.",
+    "The fixed master CSV schema has no dedicated E5 group/count fields or weighted metric family field. Companion analysis artifacts are needed unless schema is explicitly versioned."
+  ],
+  "scope_verification": {
+    "nonowned_results_bytes_sha256": "cf2b63f84e98c89effc4b461d070f6df46983b9290867d692f1104899c57cf7e",
+    "renderer_unit_test": "byte equality of prefix before section 1 and suffix from section 3",
+    "kaggle_operations": 0,
+    "network_calls": 0,
+    "new_training_jobs": 0,
+    "renderer_idempotent": true
+  },
+  "headline": {
+    "gowalla_full_directau_cosine_test_recall_percent": 13.0,
+    "gowalla_full_directau_raw_minus_cosine_pp": 4.9,
+    "gowalla_legacy3seed_graphhash_directau_cos_prior_recall_mean_sd_percent": [
+      13.29,
+      0.03
+    ],
+    "yelp_graphhash_directau_cos_prior_recall_percent": 5.68,
+    "yelp_graphhash_bpr_raw_prior_recall_percent": 4.8
+  }
+}

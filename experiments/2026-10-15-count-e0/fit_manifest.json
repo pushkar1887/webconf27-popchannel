@@ -1,0 +1,1625 @@
+{
+  "frozen_utc": "2026-10-15T18:02:54.567898+00:00",
+  "protocol_sha256": "1b1bd8bb08ff7e2cfec5a974aa0d2e9db3031ee1087072ceb9e19218459ac9c1",
+  "sources": {
+    "run_e0.py": "2cbc2baf907aa7f6183054ca32d2398d68069f2babc0e17037421a067260370e",
+    "e0_math.py": "ed3bc0618a36e7c7d9a0678679dfaba77a3cc3f53c9750eb554b22b6d5bc4d24"
+  },
+  "common_sha256": "b7823328fb0f5ddf9cc2f4ed73cbbb68f2cdd3ac3f231e25c5e0a97a7c46d29d",
+  "models": [
+    {
+      "name": "ungrouped",
+      "kind": "ungrouped",
+      "budget": null,
+      "criterion": null,
+      "lambda": null,
+      "seed": null,
+      "validation_log_loss": 0.5349347713025561,
+      "varying_array_bytes": 1637100,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 2092144,
+      "model_sha256": "6c61a74b0542a337578ec5ec0ba0d97ab795c053883dc601398f18db2fa4865d"
+    },
+    {
+      "name": "item_only",
+      "kind": "item_only",
+      "budget": null,
+      "criterion": null,
+      "lambda": null,
+      "seed": null,
+      "validation_log_loss": 0.5624695272939016,
+      "varying_array_bytes": 0,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 455044,
+      "model_sha256": "2631bd909e08660ded71bd2b10082fcf3f899d88e3e851d2186b96d87cdd58f1"
+    },
+    {
+      "name": "global",
+      "kind": "global",
+      "budget": null,
+      "criterion": null,
+      "lambda": null,
+      "seed": null,
+      "validation_log_loss": 0.6311627535000657,
+      "varying_array_bytes": 0,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 455044,
+      "model_sha256": "f3139f9e9223916f06a1f6b545a51f5b0532cc05c83c1090bb49fcd40a030f17"
+    },
+    {
+      "name": "random_B64_s11",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 11,
+      "validation_log_loss": 0.5623562009219325,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "1ec834e4212fbe5553769e7700689f0243b26a4389a14886880bdfba458d4d02",
+      "group_min_users": 405,
+      "group_max_users": 406,
+      "group_cap": 812,
+      "history": null
+    },
+    {
+      "name": "random_B64_s29",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 29,
+      "validation_log_loss": 0.562124355204087,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "d62e5b24e7b31628f0b7bd18a522a366a063ba437bd467c5e2eb866b4ccfb164",
+      "group_min_users": 405,
+      "group_max_users": 406,
+      "group_cap": 812,
+      "history": null
+    },
+    {
+      "name": "random_B64_s47",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 47,
+      "validation_log_loss": 0.5622412154508398,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "ff81270f33d2b4a5e20c9ff6cd6c85320a5c24c5df48acb98206de3a310045f0",
+      "group_min_users": 405,
+      "group_max_users": 406,
+      "group_cap": 812,
+      "history": null
+    },
+    {
+      "name": "marginal_B64",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "marginal_quantile",
+      "lambda": null,
+      "seed": null,
+      "validation_log_loss": 0.5419407416693525,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "8ea883e33841bb9a3e47fc19b73fb9f7950b80f06e242871ab220a1dc2538781",
+      "group_min_users": 405,
+      "group_max_users": 406,
+      "group_cap": 812,
+      "history": null
+    },
+    {
+      "name": "frequency_B64",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "frequency",
+      "lambda": null,
+      "seed": 11,
+      "validation_log_loss": 0.5417752107537718,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "9d11335878d055786c2df10fc0d2ad951ab6c400b3fd8af8f6b6a97cfde2a4d2",
+      "group_min_users": 2,
+      "group_max_users": 812,
+      "group_cap": 812,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.0260994566535264,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0020791366485533795,
+          "moved_users": 25541,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0009375793520556001,
+          "moved_users": 13412,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0006786216572684428,
+          "moved_users": 9671,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.0006233173336055237,
+          "moved_users": 7830,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0006138701119777824,
+          "moved_users": 5511,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.0006023909552060093,
+          "moved_users": 2822,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.0005787801860418884,
+          "moved_users": 2848,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0005486964916857193,
+          "moved_users": 5191,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.0005333178720632768,
+          "moved_users": 2544,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.0005225037527639442,
+          "moved_users": 2429,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.0005135279827890672,
+          "moved_users": 2465,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.0005035486717614139,
+          "moved_users": 2330,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B64_L0.1",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "tilted",
+      "lambda": 0.1,
+      "seed": 11,
+      "validation_log_loss": 0.5414900908665642,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "948906af2bdba567ec1bac874afb093eb68953f377165e2ed2d4f7c061c12720",
+      "group_min_users": 1,
+      "group_max_users": 812,
+      "group_cap": 812,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.026944511795153524,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0009524076613148439,
+          "moved_users": 25539,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0006665874971659876,
+          "moved_users": 10904,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0006533233217231504,
+          "moved_users": 7072,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.000620102588576239,
+          "moved_users": 7429,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.000579383428141007,
+          "moved_users": 5582,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.0005517577124797405,
+          "moved_users": 4873,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.0005340429890238715,
+          "moved_users": 3651,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0005165297521683893,
+          "moved_users": 4330,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.0005081887557141419,
+          "moved_users": 1149,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.000496340662450916,
+          "moved_users": 956,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.0004830308120658309,
+          "moved_users": 2521,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.0004742361575230167,
+          "moved_users": 862,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B64_L0.3",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "tilted",
+      "lambda": 0.3,
+      "seed": 11,
+      "validation_log_loss": 0.5415136945015447,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "31c3f16f1a6af02ba1f586e35e77a5bacea52652b85d19499ff2bebe9f8d4600",
+      "group_min_users": 5,
+      "group_max_users": 812,
+      "group_cap": 812,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.026391825579282813,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.001731105235114399,
+          "moved_users": 25549,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.000793245074002531,
+          "moved_users": 13929,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0006755733344682249,
+          "moved_users": 7393,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.0006322891393389588,
+          "moved_users": 7660,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0006066456063424458,
+          "moved_users": 7708,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.0005889064023121894,
+          "moved_users": 3234,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.0005674011024758624,
+          "moved_users": 2873,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0005336797265671378,
+          "moved_users": 5262,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.0005129232601723925,
+          "moved_users": 4626,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.0004982286621343324,
+          "moved_users": 2151,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.0004859787570267741,
+          "moved_users": 4324,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.0004746248090754697,
+          "moved_users": 699,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B64_L1",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "tilted",
+      "lambda": 1.0,
+      "seed": 11,
+      "validation_log_loss": 0.5419192140174486,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "7798360b6c110ad1305bf78f0dd812dc3ead8c261d1ac9b65052695fe206022a",
+      "group_min_users": 16,
+      "group_max_users": 812,
+      "group_cap": 812,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.026188280282581335,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.00220775724525251,
+          "moved_users": 25542,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0009728270492230435,
+          "moved_users": 13869,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0006515914973001382,
+          "moved_users": 9262,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.0006067769528775396,
+          "moved_users": 6758,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0005837807018190699,
+          "moved_users": 3815,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.0005609945215998086,
+          "moved_users": 5157,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.0005390060500016071,
+          "moved_users": 2553,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0005237695706052788,
+          "moved_users": 935,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.0005145037445524758,
+          "moved_users": 2389,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.0005012006771572577,
+          "moved_users": 894,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.0004935700368593084,
+          "moved_users": 824,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.0004855609797815821,
+          "moved_users": 610,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B64_L3",
+      "kind": "grouped",
+      "budget": 64,
+      "criterion": "tilted",
+      "lambda": 3.0,
+      "seed": 11,
+      "validation_log_loss": 0.5417404412432218,
+      "varying_array_bytes": 58410,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 513454,
+      "model_sha256": "304d90ffebc881db645ecae9f122ffaa0ae01eaef71a2b3fd7370f2ee906e1ec",
+      "group_min_users": 4,
+      "group_max_users": 812,
+      "group_cap": 812,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.026129170069249526,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0019711462591466148,
+          "moved_users": 25559,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0007267336745593343,
+          "moved_users": 12295,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0006596977339397242,
+          "moved_users": 8558,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.0006394412557751296,
+          "moved_users": 7542,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0006148120463581913,
+          "moved_users": 6987,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.0005937418662779236,
+          "moved_users": 3356,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.000563913534396998,
+          "moved_users": 5446,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0005428299388630667,
+          "moved_users": 4393,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.0005269696687163275,
+          "moved_users": 2827,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.0005184904276883081,
+          "moved_users": 1103,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.0005091747553681394,
+          "moved_users": 2518,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.0005030793042801391,
+          "moved_users": 2383,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "random_B256_s11",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 11,
+      "validation_log_loss": 0.5616244098750115,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "aab572f6db2c8f72e57ede81358aa23cda0dc9849ce6b22532afd9e038fafa83",
+      "group_min_users": 101,
+      "group_max_users": 102,
+      "group_cap": 203,
+      "history": null
+    },
+    {
+      "name": "random_B256_s29",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 29,
+      "validation_log_loss": 0.5619040100560928,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "9d3b5996a3ea8d817492bda0bd4bd282ad0738fa6d911e5db6c7d0cd63e55bb0",
+      "group_min_users": 101,
+      "group_max_users": 102,
+      "group_cap": 203,
+      "history": null
+    },
+    {
+      "name": "random_B256_s47",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 47,
+      "validation_log_loss": 0.561761996023123,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "51cbb2b6fccf3d8fa8f23cc206ec96907bed25f0cde0c6243e56582c38dd3f2f",
+      "group_min_users": 101,
+      "group_max_users": 102,
+      "group_cap": 203,
+      "history": null
+    },
+    {
+      "name": "marginal_B256",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "marginal_quantile",
+      "lambda": null,
+      "seed": null,
+      "validation_log_loss": 0.5440213267242597,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "bd61519b1c75285db497691a30ce2f9e9b09557c2340b54ee8b3b2e00e07d1d6",
+      "group_min_users": 101,
+      "group_max_users": 102,
+      "group_cap": 203,
+      "history": null
+    },
+    {
+      "name": "frequency_B256",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "frequency",
+      "lambda": null,
+      "seed": 11,
+      "validation_log_loss": 0.5415918908470713,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "1f426af7fcfe975d0d6a0e7d83281da9ceae6dc1f70535ac89ab0783f9519279",
+      "group_min_users": 1,
+      "group_max_users": 203,
+      "group_cap": 203,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.02590510929344919,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.002472421585178733,
+          "moved_users": 25847,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.00047529174727360554,
+          "moved_users": 18035,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0003346232713808153,
+          "moved_users": 12133,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.000293787810228352,
+          "moved_users": 9043,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.00027314186907202053,
+          "moved_users": 7107,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.00025963187878965104,
+          "moved_users": 4059,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.00025001651491603856,
+          "moved_users": 3359,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.00024437660524722255,
+          "moved_users": 2116,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.00023485392938039237,
+          "moved_users": 1349,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.00022803098378620514,
+          "moved_users": 1853,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.00022530053298452492,
+          "moved_users": 710,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.00022190449227032778,
+          "moved_users": 1740,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B256_L0.1",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "tilted",
+      "lambda": 0.1,
+      "seed": 11,
+      "validation_log_loss": 0.5415553141748738,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "0869827dbc3c42eef2c0dae3a99342965031c23adbcf849a048509be073072f5",
+      "group_min_users": 1,
+      "group_max_users": 203,
+      "group_cap": 203,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.026755802890393383,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0012557802550191167,
+          "moved_users": 25841,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.00041309361723521656,
+          "moved_users": 17608,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0003334507108607232,
+          "moved_users": 11583,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.0003070514354702082,
+          "moved_users": 8430,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0002892721882285291,
+          "moved_users": 7784,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.0002743269602809176,
+          "moved_users": 5676,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.0002684644241157127,
+          "moved_users": 6158,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0002593936780003697,
+          "moved_users": 6134,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.0002518255578968998,
+          "moved_users": 1349,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.0002441504516797416,
+          "moved_users": 1409,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.00023533286295459902,
+          "moved_users": 2531,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.0002288113369336987,
+          "moved_users": 2196,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B256_L0.3",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "tilted",
+      "lambda": 0.3,
+      "seed": 11,
+      "validation_log_loss": 0.5413610112777086,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "86a0629401c9a26fdb9d1a2c17370118d17b81c08eadcf4f80208194c0b5a105",
+      "group_min_users": 1,
+      "group_max_users": 203,
+      "group_cap": 203,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.026199886731390364,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.001112543880497024,
+          "moved_users": 25844,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.00046109277598490044,
+          "moved_users": 15231,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0003529046479337279,
+          "moved_users": 11539,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.00031381344414596775,
+          "moved_users": 9272,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.00028766977206827216,
+          "moved_users": 8777,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.00026602828678359884,
+          "moved_users": 8188,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.00025435728399708565,
+          "moved_users": 5254,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0002519273526334497,
+          "moved_users": 6221,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.00024472320636981254,
+          "moved_users": 4673,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.0002315780082156105,
+          "moved_users": 6235,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B256_L1",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "tilted",
+      "lambda": 1.0,
+      "seed": 11,
+      "validation_log_loss": 0.5413585134107188,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "122025108f4d50e669c3e308dd68eb8cdd6f8410c12034a4a1afb18b4a55a18b",
+      "group_min_users": 1,
+      "group_max_users": 203,
+      "group_cap": 203,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.025994711244887798,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0014972054895707819,
+          "moved_users": 25842,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0005483784772696854,
+          "moved_users": 17625,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0003547330427607076,
+          "moved_users": 12545,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.0003179640422724954,
+          "moved_users": 10254,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0002943925025084032,
+          "moved_users": 7778,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.00028649686629141915,
+          "moved_users": 6257,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.0002777688290277287,
+          "moved_users": 1904,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.00026852395297595727,
+          "moved_users": 3326,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.00026691321653390476,
+          "moved_users": 4304,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.00025181997243031766,
+          "moved_users": 5081,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.00024268523988911503,
+          "moved_users": 1389,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.00023760776968926879,
+          "moved_users": 1273,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B256_L3",
+      "kind": "grouped",
+      "budget": 256,
+      "criterion": "tilted",
+      "lambda": 3.0,
+      "seed": 11,
+      "validation_log_loss": 0.5412122206412497,
+      "varying_array_bytes": 69930,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 524974,
+      "model_sha256": "76e6230e5e23837e4779b92ef5bd9b2790b7feae9a2e203a1b2148a0a9634f1e",
+      "group_min_users": 1,
+      "group_max_users": 203,
+      "group_cap": 203,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.025935087437115513,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.002016648472431451,
+          "moved_users": 25834,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0004719105007564223,
+          "moved_users": 17418,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0003409994915430324,
+          "moved_users": 12083,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.00030810193396029416,
+          "moved_users": 8960,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0002922985042065355,
+          "moved_users": 7803,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.0002755428896127043,
+          "moved_users": 6368,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.00026716722167076726,
+          "moved_users": 1743,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0002527121435923335,
+          "moved_users": 4389,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.00023943737024705044,
+          "moved_users": 1422,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.00023785841818789997,
+          "moved_users": 5697,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.0002372021180122179,
+          "moved_users": 1948,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.0002341783546727709,
+          "moved_users": 1871,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "random_B1024_s11",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 11,
+      "validation_log_loss": 0.5596301370575837,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "9c0ab931dd3aa508f6b5f358ac94af61fb853b03ad364516181d0c8e2a9efece",
+      "group_min_users": 25,
+      "group_max_users": 26,
+      "group_cap": 51,
+      "history": null
+    },
+    {
+      "name": "random_B1024_s29",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 29,
+      "validation_log_loss": 0.5607813483200942,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "6cc767d34e217655668ab835e474e3665437ebe1b14ed68ae6722436bbfe9b46",
+      "group_min_users": 25,
+      "group_max_users": 26,
+      "group_cap": 51,
+      "history": null
+    },
+    {
+      "name": "random_B1024_s47",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "random",
+      "lambda": null,
+      "seed": 47,
+      "validation_log_loss": 0.5611304171601503,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "49abf6256b9788424a51b5dca6def4c2dbd582e238b868cf9a2d851bd6cd8df8",
+      "group_min_users": 25,
+      "group_max_users": 26,
+      "group_cap": 51,
+      "history": null
+    },
+    {
+      "name": "marginal_B1024",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "marginal_quantile",
+      "lambda": null,
+      "seed": null,
+      "validation_log_loss": 0.5439249779161952,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "6ce1879fbfe40fd8fe09c408f48a2e31e7d089fd0b3f1a7b78706908b3cc27b6",
+      "group_min_users": 25,
+      "group_max_users": 26,
+      "group_cap": 51,
+      "history": null
+    },
+    {
+      "name": "frequency_B1024",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "frequency",
+      "lambda": null,
+      "seed": 11,
+      "validation_log_loss": 0.5419913485332964,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "33ff4faeabfee6980856029b140785546b76d7dc0a7f5c0d00afb2c77bcbd40a",
+      "group_min_users": 1,
+      "group_max_users": 51,
+      "group_cap": 51,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.025160889302743013,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0012300449604850084,
+          "moved_users": 25933,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0002797334561790315,
+          "moved_users": 19645,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.00016849800251097314,
+          "moved_users": 13338,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.00014515824019833355,
+          "moved_users": 10367,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.00013562897885710667,
+          "moved_users": 9261,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.00013317366752701147,
+          "moved_users": 8528,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.00012854894931475807,
+          "moved_users": 8275,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0001237297675036835,
+          "moved_users": 1999,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.00012122355262151821,
+          "moved_users": 1935,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.00011921922086779195,
+          "moved_users": 6589,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.00011852083266533044,
+          "moved_users": 1488,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.00011650198712230363,
+          "moved_users": 1412,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B1024_L0.1",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "tilted",
+      "lambda": 0.1,
+      "seed": 11,
+      "validation_log_loss": 0.541827733008242,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "7b481f79a9ef7eaf6209e1207a6e5db8d006aa8d859ba028ae7afdf3713a9f9c",
+      "group_min_users": 1,
+      "group_max_users": 51,
+      "group_cap": 51,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.02603573591386163,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0006818943815662192,
+          "moved_users": 25949,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.00021527655961815808,
+          "moved_users": 20856,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.00015684770929305183,
+          "moved_users": 12133,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.00013339018537100785,
+          "moved_users": 10948,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0001202474961407602,
+          "moved_users": 9202,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.00011292237316723915,
+          "moved_users": 7516,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.00010857009525727447,
+          "moved_users": 2269,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.00010404409628559398,
+          "moved_users": 1967,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.00010363873035706093,
+          "moved_users": 1278,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.00010268869789297058,
+          "moved_users": 1016,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B1024_L0.3",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "tilted",
+      "lambda": 0.3,
+      "seed": 11,
+      "validation_log_loss": 0.5419840866754193,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "62ffd78cf73e5c22545b3d1bc906bdaa13b980062ee436397c1efb9451a20315",
+      "group_min_users": 1,
+      "group_max_users": 51,
+      "group_cap": 51,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.025465818183305674,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0006038657332187384,
+          "moved_users": 25938,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0002281013638785547,
+          "moved_users": 19124,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0001730880689954665,
+          "moved_users": 13953,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.00015661061414195344,
+          "moved_users": 10136,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.00014332877830993828,
+          "moved_users": 7437,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.00013581769720612093,
+          "moved_users": 2616,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.00012803234043278145,
+          "moved_users": 2317,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.00012442666458669518,
+          "moved_users": 2153,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.00012193890676103693,
+          "moved_users": 1782,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.0001186345097585411,
+          "moved_users": 1561,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.00011571687510507472,
+          "moved_users": 1251,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.0001131735607570849,
+          "moved_users": 1419,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B1024_L1",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "tilted",
+      "lambda": 1.0,
+      "seed": 11,
+      "validation_log_loss": 0.5419128629878032,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "4c15f81d49de3ef04b6b33daa8857da8b20afca962d77a3bea8c2bf42e45ad20",
+      "group_min_users": 1,
+      "group_max_users": 51,
+      "group_cap": 51,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.025253758436043758,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.0009154303411623043,
+          "moved_users": 25938,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.00024148320969522456,
+          "moved_users": 18994,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.00017011798644520228,
+          "moved_users": 13307,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.00015156180452259943,
+          "moved_users": 9785,
+          "step_fraction": 1.0
+        }
+      ]
+    },
+    {
+      "name": "tilted_B1024_L3",
+      "kind": "grouped",
+      "budget": 1024,
+      "criterion": "tilted",
+      "lambda": 3.0,
+      "seed": 11,
+      "validation_log_loss": 0.5419476315237333,
+      "varying_array_bytes": 116010,
+      "common_array_bytes": 455044,
+      "total_array_bytes": 571054,
+      "model_sha256": "725f137f60378fea77a6407061f8cd9a71cf5d6397ee1f47621aee9d0f2b76ca",
+      "group_min_users": 1,
+      "group_max_users": 51,
+      "group_cap": 51,
+      "history": [
+        {
+          "iteration": 0,
+          "objective": 0.025191977519286243,
+          "moved_users": 0,
+          "step_fraction": 0.0
+        },
+        {
+          "iteration": 1,
+          "objective": 0.001052027529091399,
+          "moved_users": 25935,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 2,
+          "objective": 0.0002317368035644495,
+          "moved_users": 19271,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 3,
+          "objective": 0.0001596821516285209,
+          "moved_users": 13579,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 4,
+          "objective": 0.00014314600154526145,
+          "moved_users": 6884,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 5,
+          "objective": 0.0001381959217046535,
+          "moved_users": 3221,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 6,
+          "objective": 0.0001310521355248021,
+          "moved_users": 6339,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 7,
+          "objective": 0.00012635852507816346,
+          "moved_users": 2407,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 8,
+          "objective": 0.0001239735083339687,
+          "moved_users": 2142,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 9,
+          "objective": 0.00012044880805954512,
+          "moved_users": 2084,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 10,
+          "objective": 0.00011709731351353602,
+          "moved_users": 6784,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 11,
+          "objective": 0.00011654772150322138,
+          "moved_users": 2645,
+          "step_fraction": 1.0
+        },
+        {
+          "iteration": 12,
+          "objective": 0.00011435563194422031,
+          "moved_users": 1515,
+          "step_fraction": 1.0
+        }
+      ]
+    }
+  ],
+  "elapsed_seconds": 35.061168799998995,
+  "test_labels_loaded_in_fit_stage": false,
+  "selection": "No selection; fixed primary B=256,lambda=.3; full requested grid retained."
+}

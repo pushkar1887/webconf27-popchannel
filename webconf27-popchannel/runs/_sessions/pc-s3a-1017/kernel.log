@@ -1,0 +1,18 @@
+[{"stream_name":"stdout","time":9.413639616,"data":"[2026-10-17T18:22:46+00:00] session pc-s3a-1017: device_count=2 mode=parallel_2gpu\n"}
+,{"stream_name":"stdout","time":67.570305564,"data":"[2026-10-17T18:23:45+00:00] warm-up prepare exit code 0\n"}
+,{"stream_name":"stdout","time":67.572096459,"data":"[2026-10-17T18:23:45+00:00] amazonbook__mf__graphhash__directau__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":67.573107986,"data":"[2026-10-17T18:23:45+00:00] amazonbook__mf__random__directau__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":4108.324681913,"data":"[2026-10-17T19:31:05+00:00] amazonbook__mf__random__directau__s0: exit code 0 after 4041s\n"}
+,{"stream_name":"stdout","time":4108.32555052,"data":"[2026-10-17T19:31:05+00:00] gowalla__mf__dfreq__directau__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":7228.734759354,"data":"[2026-10-17T20:23:06+00:00] gowalla__mf__dfreq__directau__s0: exit code 0 after 3120s\n"}
+,{"stream_name":"stdout","time":7550.29055523,"data":"[2026-10-17T20:28:27+00:00] amazonbook__mf__graphhash__directau__s0: exit code 0 after 7483s\n"}
+,{"stream_name":"stdout","time":7550.291477749,"data":"[2026-10-17T20:28:27+00:00] gowalla__mf__random__directau__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":9170.693111821,"data":"[2026-10-17T20:55:28+00:00] gowalla__mf__random__directau__s0: exit code 0 after 1620s\n"}
+,{"stream_name":"stdout","time":9170.693758718,"data":"[2026-10-17T20:55:28+00:00] session finished: state=complete jobs=4 failed=[]\n"}
+,{"stream_name":"stderr","time":9173.060494194,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":9173.060523538,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":9173.332993058,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":9173.333025045,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":9174.193145449,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":9175.258276946,"data":"[NbConvertApp] Writing 487594 bytes to __results__.html\n"}
+]

@@ -1,0 +1,13 @@
+Traceback (most recent call last):
+  File "/kaggle/working/_work/repro_run.py", line 399, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/working/_work/repro_run.py", line 374, in main
+    MF, MFDAU, BPRLoss, DAULoss, namespace = prepare()
+                                             ~~~~~~~^^
+  File "/kaggle/working/_work/repro_run.py", line 111, in prepare
+    ensure_clustering()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/kaggle/working/_work/repro_run.py", line 87, in ensure_clustering
+    source = next(x for x in metadata["urls"] if x["packagetype"] == "sdist")
+StopIteration

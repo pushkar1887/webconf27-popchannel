@@ -1,0 +1,33 @@
+{
+  "scope": "local Stage3 fix; no push authorization",
+  "inputs": {
+    "D:\\web_2\\webconf27-popchannel\\PREREG.md": {
+      "sha256": "be704ebe0632dd7aa4ab1b42ec69502bb2d1f421ebcfc0939aa8d8ba8b140de4",
+      "bytes": 11353
+    },
+    "D:\\web_2\\webconf27-popchannel\\PLAN.md": {
+      "sha256": "60b73135842866c711e56bb04ae3a9643061d5d37d9b698fe0cd8b9a6493eb6e",
+      "bytes": 44582
+    },
+    "D:\\web_2\\webconf27-popchannel\\TASKS.md": {
+      "sha256": "7429aafc9669903079c6cebba5c12f9f80c110966619bf6ca942dbf4d89adbde",
+      "bytes": 15814
+    },
+    "D:\\web_2\\webconf27-popchannel\\RESULTS.md": {
+      "sha256": "98278341beb7713c45db728d244d6e7366d81842828cb4b1cae35a12b6c54336",
+      "bytes": 42511
+    },
+    "D:\\web_2\\experiments\\2026-10-16-fast-check\\exp_run.py": {
+      "sha256": "3fe6421564350eda5f0ccf82123d394a65a9582bc06255541bee27ca142a214b",
+      "bytes": 31239
+    },
+    "D:\\web_2\\experiments\\2026-10-16-fast-check\\make_sessions_s3.py": {
+      "sha256": "9c306be1785d3afd338cf62aca523c4935ece477a25d24e9df68b8effa7a1a0d",
+      "bytes": 11643
+    },
+    "D:\\web_2\\experiments\\2026-10-16-fast-check\\test_s3.py": {
+      "sha256": "78786b72926962e9be1bb92bde5fee1d1c5f1f83947852ce18de6a8dde7c5b67",
+      "bytes": 6736
+    }
+  }
+}

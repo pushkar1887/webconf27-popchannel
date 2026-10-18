@@ -1,0 +1,1151 @@
+{
+  "schema": "E8-final-v1",
+  "created_utc": "2026-10-18T06:07:57.255802+00:00",
+  "analysis_script": {
+    "path": "D:\\web_2\\webconf27-popchannel\\scripts\\analyze_e8_final.py",
+    "sha256": "619ee6b155d6ea242099a9ac25a04773da90117c0f7f25a5c1ad8624c36ab51d",
+    "bytes": 18394
+  },
+  "runtime": {
+    "numpy": "2.2.6",
+    "scipy": "1.15.3"
+  },
+  "method": {
+    "recall": "macro mean hits/min(20,npos)",
+    "ndcg": "saved per-user NDCG checked against exact original test truth",
+    "bootstrap": "paired user percentile 95% CI; conditional on trained checkpoints",
+    "n_resamples": 2000,
+    "rng": "numpy.random.default_rng",
+    "seed": 0,
+    "rng_reset": "each pair; same sampled user indices for Recall and NDCG",
+    "p_values": "two-sided paired t-test; Holm across three datasets separately per metric",
+    "not_bootstrap_p": "Zero nonpositive means in 2000 draws does not establish tiny empirical p values",
+    "training_seed_uncertainty": "reported separately as three-seed sample SD, ddof=1",
+    "limitations": [
+      "paired-user uncertainty is conditional on checkpoints",
+      "shared training graph means users are not independent training replications",
+      "AmazonBook BPR uses legacy random-key predictions; alternate full-prior CIs unavailable"
+    ]
+  },
+  "split_lineage": {
+    "Gowalla": {
+      "split_sizes": {
+        "train": 821896,
+        "val": 102737,
+        "test": 102737
+      },
+      "files": [
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\Gowalla-processed\\train.pt",
+          "sha256": "6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8"
+        },
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\Gowalla-processed\\val.pt",
+          "sha256": "18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc"
+        },
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\Gowalla-processed\\test.pt",
+          "sha256": "d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa"
+        }
+      ]
+    },
+    "Yelp2018": {
+      "split_sizes": {
+        "train": 1249124,
+        "val": 156140,
+        "test": 156142
+      },
+      "files": [
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\Yelp2018-processed\\train.pt",
+          "sha256": "4554856760e47effdbe093b5297417084332423266fb0e0a38067fc8aa78f4eb"
+        },
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\Yelp2018-processed\\val.pt",
+          "sha256": "c684aa3c518838d1abe93bd816318850689a974923e99c40f0c4e47649727bc7"
+        },
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\Yelp2018-processed\\test.pt",
+          "sha256": "05941a1ce56dcf8580c18647709211471d85bbd8a73298103d0ab9c28490987f"
+        }
+      ]
+    },
+    "AmazonBook": {
+      "split_sizes": {
+        "train": 2387286,
+        "val": 298410,
+        "test": 298412
+      },
+      "files": [
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\AmazonBook-processed\\train.pt",
+          "sha256": "f2c3b1459b215aee2bcb2c64ea725179c08ea39cb525e794192e1e7cd2c80d02"
+        },
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\AmazonBook-processed\\val.pt",
+          "sha256": "f6be12aeabb91d098bcb3b9ccc40cad3aaaabac073d482509015fe77f138ada1"
+        },
+        {
+          "path": "D:\\web_2\\experiments\\2026-10-16-loss-sharing-repro\\_work\\datasets\\AmazonBook-processed\\test.pt",
+          "sha256": "56a2abc9edf05224013a03ea983e4c5e506b71a74cec3d8babf6e261f72f3b26"
+        }
+      ]
+    }
+  },
+  "pairs": [
+    {
+      "label": "Gowalla_s0",
+      "dataset": "Gowalla",
+      "a_run_id": "gowalla__mf__graphhash__directau__s0",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s0-p500",
+      "a_mode": "cos_prior",
+      "b_mode": "raw_prior",
+      "comparison_type": "reproduction",
+      "a_lineage": "modern",
+      "b_lineage": "modern",
+      "inputs": [
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s0\\per_user_test__cos_prior.npz",
+          "sha256": "e5ab978ca46b07fd7f79b1a7cfdc0ecfbb4861c925e04b6151bf169923e46f53",
+          "bytes": 1047086
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s0-p500\\per_user_test__raw_prior.npz",
+          "sha256": "d0200bb06288e6ff3258599db3eff2602399dd4b6955ad75c51dd2dfdc73534d",
+          "bytes": 953619
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s0\\metrics.json",
+          "sha256": "84d1dcd240f3f07221f30ba51555e74a4fed7d0d0eca79acc8b92f60769510b6",
+          "bytes": 5057
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s0-p500\\metrics.json",
+          "sha256": "e609633a52da97051b2bc29a9f7f3cbe17062bdf7d58e1d302c0c00e5392f268",
+          "bytes": 7762
+        }
+      ],
+      "truth_validation": [
+        {
+          "n_users": 25789,
+          "reconstructed_recall": 0.13304719003934126,
+          "reconstructed_ndcg": 0.0857225819507222,
+          "total_hits": 11717,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        },
+        {
+          "n_users": 25789,
+          "reconstructed_recall": 0.11314673768905972,
+          "reconstructed_ndcg": 0.06957299378308725,
+          "total_hits": 9715,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        }
+      ],
+      "run_validation": [
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s0",
+          "run_id": "gowalla__mf__graphhash__directau__s0",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 0,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        },
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s0-p500",
+          "run_id": "gowalla__mf__graphhash__bpr__s0-p500",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 0,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        }
+      ],
+      "n_users": 25789,
+      "metrics": {
+        "recall": {
+          "a_mean_percent": 13.304719003934128,
+          "b_mean_percent": 11.31467376890597,
+          "delta_pp": 1.990045235028156,
+          "ci95_pp": [
+            1.7711862936318368,
+            2.2378177448573964
+          ],
+          "paired_t_p_two_sided": 1.2141404029296414e-63,
+          "paired_t_statistic": 16.88793833472774,
+          "holm_adjusted_p": 2.4282808058592828e-63,
+          "bootstrap_nonpositive_means": 0
+        },
+        "ndcg": {
+          "a_mean_percent": 8.57225820726101,
+          "b_mean_percent": 6.957299383928839,
+          "delta_pp": 1.6149588233321712,
+          "ci95_pp": [
+            1.4916508158483182,
+            1.743059809756608
+          ],
+          "paired_t_p_two_sided": 3.9298492352073512e-137,
+          "paired_t_statistic": 25.076708505578104,
+          "holm_adjusted_p": 7.8596984704147025e-137,
+          "bootstrap_nonpositive_means": 0
+        }
+      },
+      "selection": {
+        "a": {
+          "beta": 0.2,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 55,
+          "epochs_run": 60,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s0\\metrics.json"
+        },
+        "b": {
+          "beta": 0.5,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 460,
+          "epochs_run": 960,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s0-p500\\metrics.json"
+        }
+      }
+    },
+    {
+      "label": "Gowalla_s1",
+      "dataset": "Gowalla",
+      "a_run_id": "gowalla__mf__graphhash__directau__s1",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s1",
+      "a_mode": "cos_prior",
+      "b_mode": "raw_prior",
+      "comparison_type": "reproduction",
+      "a_lineage": "modern",
+      "b_lineage": "modern",
+      "inputs": [
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s1\\per_user_test__cos_prior.npz",
+          "sha256": "5c0515386638968cf3d53fdb0664fef0d681a17aa054838d4ad326cf129c94ff",
+          "bytes": 1047500
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s1\\per_user_test__raw_prior.npz",
+          "sha256": "6229095504f8d289eeeab97c4c3cb7af2a24509ed90c443fb06c59f178098db5",
+          "bytes": 954480
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s1\\metrics.json",
+          "sha256": "f5acca6e55320f7e931288b0d9135f18f21b83ea5f469994c9e2bbbf9aa10fc1",
+          "bytes": 5185
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s1\\metrics.json",
+          "sha256": "901d87ad6d906e28f9bd1f1fae6c25009253628e5682d89ca5f35502c972834c",
+          "bytes": 8796
+        }
+      ],
+      "truth_validation": [
+        {
+          "n_users": 25789,
+          "reconstructed_recall": 0.13319323690490922,
+          "reconstructed_ndcg": 0.08554759194422541,
+          "total_hits": 11718,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        },
+        {
+          "n_users": 25789,
+          "reconstructed_recall": 0.11189429058158819,
+          "reconstructed_ndcg": 0.06891473372521585,
+          "total_hits": 9707,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        }
+      ],
+      "run_validation": [
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s1",
+          "run_id": "gowalla__mf__graphhash__directau__s1",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 1,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        },
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s1",
+          "run_id": "gowalla__mf__graphhash__bpr__s1",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 1,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        }
+      ],
+      "n_users": 25789,
+      "metrics": {
+        "recall": {
+          "a_mean_percent": 13.319323690490922,
+          "b_mean_percent": 11.189429058158822,
+          "delta_pp": 2.129894632332102,
+          "ci95_pp": [
+            1.9085562057483025,
+            2.3700419331045146
+          ],
+          "paired_t_p_two_sided": 5.9369987702074085e-71,
+          "paired_t_statistic": 17.864832967944732,
+          "holm_adjusted_p": null,
+          "bootstrap_nonpositive_means": 0
+        },
+        "ndcg": {
+          "a_mean_percent": 8.554759205639781,
+          "b_mean_percent": 6.891473378132261,
+          "delta_pp": 1.6632858275075202,
+          "ci95_pp": [
+            1.5433673784289892,
+            1.7936256834252338
+          ],
+          "paired_t_p_two_sided": 1.0285084279612617e-142,
+          "paired_t_statistic": 25.59584465050807,
+          "holm_adjusted_p": null,
+          "bootstrap_nonpositive_means": 0
+        }
+      },
+      "selection": {
+        "a": {
+          "beta": 0.2,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 50,
+          "epochs_run": 80,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s1\\metrics.json"
+        },
+        "b": {
+          "beta": 0.5,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 780,
+          "epochs_run": 1280,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s1\\metrics.json"
+        }
+      }
+    },
+    {
+      "label": "Gowalla_s2",
+      "dataset": "Gowalla",
+      "a_run_id": "gowalla__mf__graphhash__directau__s2",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s2",
+      "a_mode": "cos_prior",
+      "b_mode": "raw_prior",
+      "comparison_type": "reproduction",
+      "a_lineage": "modern",
+      "b_lineage": "modern",
+      "inputs": [
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s2\\per_user_test__cos_prior.npz",
+          "sha256": "dbd0e11f2334f986ad69ffee99e8ceb008c883a6220512ccc90dc0ceee32301c",
+          "bytes": 1046682
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s2\\per_user_test__raw_prior.npz",
+          "sha256": "99269a5bdf9fdea52307585d3efd9f4e6be5ffa3993d087c69bf788ba1a95e2b",
+          "bytes": 960303
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s2\\metrics.json",
+          "sha256": "1b2addf5d97c01d41f7772be36b30342f2e1b51d58e76f71db2f40797742bb9a",
+          "bytes": 5059
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s2\\metrics.json",
+          "sha256": "5e13c58d4efc4d68da35cd9a77a3918ee0ab81255d42b05c67b5455d6fd3af32",
+          "bytes": 11286
+        }
+      ],
+      "truth_validation": [
+        {
+          "n_users": 25789,
+          "reconstructed_recall": 0.13351555901182563,
+          "reconstructed_ndcg": 0.08576352531308763,
+          "total_hits": 11717,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        },
+        {
+          "n_users": 25789,
+          "reconstructed_recall": 0.1126714678983136,
+          "reconstructed_ndcg": 0.06884177027192667,
+          "total_hits": 9684,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        }
+      ],
+      "run_validation": [
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s2",
+          "run_id": "gowalla__mf__graphhash__directau__s2",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 2,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        },
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s2",
+          "run_id": "gowalla__mf__graphhash__bpr__s2",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 2,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        }
+      ],
+      "n_users": 25789,
+      "metrics": {
+        "recall": {
+          "a_mean_percent": 13.351555901182563,
+          "b_mean_percent": 11.26714678983136,
+          "delta_pp": 2.084409111351203,
+          "ci95_pp": [
+            1.8547958083259146,
+            2.32945019012353
+          ],
+          "paired_t_p_two_sided": 1.599273244806964e-67,
+          "paired_t_statistic": 17.413074296897154,
+          "holm_adjusted_p": null,
+          "bootstrap_nonpositive_means": 0
+        },
+        "ndcg": {
+          "a_mean_percent": 8.576352541581617,
+          "b_mean_percent": 6.884177035965456,
+          "delta_pp": 1.692175505616161,
+          "ci95_pp": [
+            1.5725824269173043,
+            1.8212910505102178
+          ],
+          "paired_t_p_two_sided": 3.1414695855971485e-146,
+          "paired_t_statistic": 25.917683469979703,
+          "holm_adjusted_p": null,
+          "bootstrap_nonpositive_means": 0
+        }
+      },
+      "selection": {
+        "a": {
+          "beta": 0.2,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 50,
+          "epochs_run": 60,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__directau__s2\\metrics.json"
+        },
+        "b": {
+          "beta": 0.5,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 1540,
+          "epochs_run": 2040,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\gowalla__mf__graphhash__bpr__s2\\metrics.json"
+        }
+      }
+    },
+    {
+      "label": "Yelp2018_s0",
+      "dataset": "Yelp2018",
+      "a_run_id": "yelp2018__mf__graphhash__directau__s0",
+      "b_run_id": "yelp2018__mf__graphhash__bpr__s0",
+      "a_mode": "cos_prior",
+      "b_mode": "raw_prior",
+      "comparison_type": "reproduction",
+      "a_lineage": "modern",
+      "b_lineage": "modern",
+      "inputs": [
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\yelp2018__mf__graphhash__directau__s0\\per_user_test__cos_prior.npz",
+          "sha256": "0f8963fa491532d8848bb96cd2530c05edec968e30e03b0301bb03511c078ffb",
+          "bytes": 1219951
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\yelp2018__mf__graphhash__bpr__s0\\per_user_test__raw_prior.npz",
+          "sha256": "697720a93c6464a53d8308bc2537235a081dd12c1e257f6c3d4a4c709aed3501",
+          "bytes": 928289
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\yelp2018__mf__graphhash__directau__s0\\metrics.json",
+          "sha256": "a20411f2df554fb8b022d0c1d4bc5b43228efcc2100987385f235153c6f074fe",
+          "bytes": 5112
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\yelp2018__mf__graphhash__bpr__s0\\metrics.json",
+          "sha256": "c441f87f42a2302222acd09de15a526a7ede9d324d6717c14f18b84f1a183943",
+          "bytes": 7484
+        }
+      ],
+      "truth_validation": [
+        {
+          "n_users": 30304,
+          "reconstructed_recall": 0.05682250738869086,
+          "reconstructed_ndcg": 0.035490143661784136,
+          "total_hits": 8227,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        },
+        {
+          "n_users": 30304,
+          "reconstructed_recall": 0.04800655555101575,
+          "reconstructed_ndcg": 0.030031148771811025,
+          "total_hits": 6887,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        }
+      ],
+      "run_validation": [
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\yelp2018__mf__graphhash__directau__s0",
+          "run_id": "yelp2018__mf__graphhash__directau__s0",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 0,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        },
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\yelp2018__mf__graphhash__bpr__s0",
+          "run_id": "yelp2018__mf__graphhash__bpr__s0",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 0,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        }
+      ],
+      "n_users": 30304,
+      "metrics": {
+        "recall": {
+          "a_mean_percent": 5.682250738869086,
+          "b_mean_percent": 4.800655555101574,
+          "delta_pp": 0.8815951837675103,
+          "ci95_pp": [
+            0.7348819504788406,
+            1.0314165107132403
+          ],
+          "paired_t_p_two_sided": 6.1373122391844255e-33,
+          "paired_t_statistic": 11.968882997386327,
+          "holm_adjusted_p": 6.1373122391844255e-33,
+          "bootstrap_nonpositive_means": 0
+        },
+        "ndcg": {
+          "a_mean_percent": 3.5490143661108946,
+          "b_mean_percent": 3.003114876875786,
+          "delta_pp": 0.5458994892351093,
+          "ci95_pp": [
+            0.4603368935942696,
+            0.6295524128923417
+          ],
+          "paired_t_p_two_sided": 7.964475140773634e-36,
+          "paired_t_statistic": 12.51106573646341,
+          "holm_adjusted_p": 7.964475140773634e-36,
+          "bootstrap_nonpositive_means": 0
+        }
+      },
+      "selection": {
+        "a": {
+          "beta": 0.2,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 50,
+          "epochs_run": 60,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\yelp2018__mf__graphhash__directau__s0\\metrics.json"
+        },
+        "b": {
+          "beta": 0.5,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 360,
+          "epochs_run": 860,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\yelp2018__mf__graphhash__bpr__s0\\metrics.json"
+        }
+      }
+    },
+    {
+      "label": "AmazonBook_s0",
+      "dataset": "AmazonBook",
+      "a_run_id": "amazonbook__mf__graphhash__directau__s0",
+      "b_run_id": "amazonbook__mf__graphhash__bpr__s0-legacy",
+      "a_mode": "cos_prior",
+      "b_mode": "raw_prior",
+      "comparison_type": "reproduction",
+      "a_lineage": "modern",
+      "b_lineage": "legacy",
+      "inputs": [
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\amazonbook__mf__graphhash__directau__s0\\per_user_test__cos_prior.npz",
+          "sha256": "258d3e937f004c74a7a281a0608b30f3665cf8027d072e79d3faead23ae8203a",
+          "bytes": 2675635
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\_sessions\\pc-x2-1017\\controls\\amazonbook__mf__graphhash__bpr__s0-legacy\\per_user__full_prior_s0.npz",
+          "sha256": "4dc5204f91e8b959bb8bd57ade5fcd30d7e56824564ae27e5d7733d56982dd7a",
+          "bytes": 2192899
+        },
+        {
+          "path": "D:\\web_2\\webconf27-popchannel\\runs\\amazonbook__mf__graphhash__directau__s0\\metrics.json",
+          "sha256": "bdc1e28ee663f4d444376073040f8d0bb5583643a937e21c167b1fb77d13ac47",
+          "bytes": 5141
+        }
+      ],
+      "truth_validation": [
+        {
+          "n_users": 50407,
+          "reconstructed_recall": 0.0632848774967555,
+          "reconstructed_ndcg": 0.04464318217414665,
+          "total_hits": 15561,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        },
+        {
+          "n_users": 50407,
+          "reconstructed_recall": 0.04810312868593233,
+          "reconstructed_ndcg": 0.03284560565574639,
+          "total_hits": 11743,
+          "seen_overlap": 0,
+          "truth_hit_lineage": "validated"
+        }
+      ],
+      "run_validation": [
+        {
+          "run_dir": "D:\\web_2\\webconf27-popchannel\\runs\\amazonbook__mf__graphhash__directau__s0",
+          "run_id": "amazonbook__mf__graphhash__directau__s0",
+          "kind": "run",
+          "ok": true,
+          "problems": [],
+          "warnings": [],
+          "stop_reason": "patience",
+          "converged": true,
+          "exit_code": 0,
+          "seed": 0,
+          "modes": [
+            "raw",
+            "cosine",
+            "cos_prior",
+            "raw_prior"
+          ]
+        }
+      ],
+      "n_users": 50407,
+      "metrics": {
+        "recall": {
+          "a_mean_percent": 6.328487749675552,
+          "b_mean_percent": 4.810312868593234,
+          "delta_pp": 1.5181748810823161,
+          "ci95_pp": [
+            1.405149936684027,
+            1.6288279367981835
+          ],
+          "paired_t_p_two_sided": 3.973411615722139e-160,
+          "paired_t_statistic": 27.061049068525953,
+          "holm_adjusted_p": 1.1920234847166416e-159,
+          "bootstrap_nonpositive_means": 0
+        },
+        "ndcg": {
+          "a_mean_percent": 4.464318218856986,
+          "b_mean_percent": 3.2845605655746386,
+          "delta_pp": 1.179757653282348,
+          "ci95_pp": [
+            1.1068282017709277,
+            1.2541284994823403
+          ],
+          "paired_t_p_two_sided": 5.387409999992782e-209,
+          "paired_t_statistic": 30.997630764126438,
+          "holm_adjusted_p": 1.6162229999978347e-208,
+          "bootstrap_nonpositive_means": 0
+        }
+      },
+      "selection": {
+        "a": {
+          "beta": 0.1,
+          "scoring_policy": "saved GPU torch.topk",
+          "stop_reason": "patience",
+          "best_epoch": 40,
+          "epochs_run": 65,
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\amazonbook__mf__graphhash__directau__s0\\metrics.json"
+        },
+        "b": {
+          "beta": 0.2,
+          "scoring_policy": "random-key tie seed 0",
+          "selection_source": "D:\\web_2\\webconf27-popchannel\\runs\\_sessions\\pc-x2-1017\\controls\\amazonbook__mf__graphhash__bpr__s0-legacy\\controls.json"
+        }
+      }
+    }
+  ],
+  "human_table": [
+    {
+      "label": "Gowalla_s0",
+      "a_run_id": "gowalla__mf__graphhash__directau__s0",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s0-p500",
+      "n_users": 25789,
+      "recall": {
+        "a_mean_percent": 13.304719003934128,
+        "b_mean_percent": 11.31467376890597,
+        "delta_pp": 1.990045235028156,
+        "ci95_pp": [
+          1.7711862936318368,
+          2.2378177448573964
+        ],
+        "paired_t_p_two_sided": 1.2141404029296414e-63,
+        "paired_t_statistic": 16.88793833472774,
+        "holm_adjusted_p": 2.4282808058592828e-63,
+        "bootstrap_nonpositive_means": 0
+      },
+      "ndcg": {
+        "a_mean_percent": 8.57225820726101,
+        "b_mean_percent": 6.957299383928839,
+        "delta_pp": 1.6149588233321712,
+        "ci95_pp": [
+          1.4916508158483182,
+          1.743059809756608
+        ],
+        "paired_t_p_two_sided": 3.9298492352073512e-137,
+        "paired_t_statistic": 25.076708505578104,
+        "holm_adjusted_p": 7.8596984704147025e-137,
+        "bootstrap_nonpositive_means": 0
+      }
+    },
+    {
+      "label": "Gowalla_s1",
+      "a_run_id": "gowalla__mf__graphhash__directau__s1",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s1",
+      "n_users": 25789,
+      "recall": {
+        "a_mean_percent": 13.319323690490922,
+        "b_mean_percent": 11.189429058158822,
+        "delta_pp": 2.129894632332102,
+        "ci95_pp": [
+          1.9085562057483025,
+          2.3700419331045146
+        ],
+        "paired_t_p_two_sided": 5.9369987702074085e-71,
+        "paired_t_statistic": 17.864832967944732,
+        "holm_adjusted_p": null,
+        "bootstrap_nonpositive_means": 0
+      },
+      "ndcg": {
+        "a_mean_percent": 8.554759205639781,
+        "b_mean_percent": 6.891473378132261,
+        "delta_pp": 1.6632858275075202,
+        "ci95_pp": [
+          1.5433673784289892,
+          1.7936256834252338
+        ],
+        "paired_t_p_two_sided": 1.0285084279612617e-142,
+        "paired_t_statistic": 25.59584465050807,
+        "holm_adjusted_p": null,
+        "bootstrap_nonpositive_means": 0
+      }
+    },
+    {
+      "label": "Gowalla_s2",
+      "a_run_id": "gowalla__mf__graphhash__directau__s2",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s2",
+      "n_users": 25789,
+      "recall": {
+        "a_mean_percent": 13.351555901182563,
+        "b_mean_percent": 11.26714678983136,
+        "delta_pp": 2.084409111351203,
+        "ci95_pp": [
+          1.8547958083259146,
+          2.32945019012353
+        ],
+        "paired_t_p_two_sided": 1.599273244806964e-67,
+        "paired_t_statistic": 17.413074296897154,
+        "holm_adjusted_p": null,
+        "bootstrap_nonpositive_means": 0
+      },
+      "ndcg": {
+        "a_mean_percent": 8.576352541581617,
+        "b_mean_percent": 6.884177035965456,
+        "delta_pp": 1.692175505616161,
+        "ci95_pp": [
+          1.5725824269173043,
+          1.8212910505102178
+        ],
+        "paired_t_p_two_sided": 3.1414695855971485e-146,
+        "paired_t_statistic": 25.917683469979703,
+        "holm_adjusted_p": null,
+        "bootstrap_nonpositive_means": 0
+      }
+    },
+    {
+      "label": "Yelp2018_s0",
+      "a_run_id": "yelp2018__mf__graphhash__directau__s0",
+      "b_run_id": "yelp2018__mf__graphhash__bpr__s0",
+      "n_users": 30304,
+      "recall": {
+        "a_mean_percent": 5.682250738869086,
+        "b_mean_percent": 4.800655555101574,
+        "delta_pp": 0.8815951837675103,
+        "ci95_pp": [
+          0.7348819504788406,
+          1.0314165107132403
+        ],
+        "paired_t_p_two_sided": 6.1373122391844255e-33,
+        "paired_t_statistic": 11.968882997386327,
+        "holm_adjusted_p": 6.1373122391844255e-33,
+        "bootstrap_nonpositive_means": 0
+      },
+      "ndcg": {
+        "a_mean_percent": 3.5490143661108946,
+        "b_mean_percent": 3.003114876875786,
+        "delta_pp": 0.5458994892351093,
+        "ci95_pp": [
+          0.4603368935942696,
+          0.6295524128923417
+        ],
+        "paired_t_p_two_sided": 7.964475140773634e-36,
+        "paired_t_statistic": 12.51106573646341,
+        "holm_adjusted_p": 7.964475140773634e-36,
+        "bootstrap_nonpositive_means": 0
+      }
+    },
+    {
+      "label": "AmazonBook_s0",
+      "a_run_id": "amazonbook__mf__graphhash__directau__s0",
+      "b_run_id": "amazonbook__mf__graphhash__bpr__s0-legacy",
+      "n_users": 50407,
+      "recall": {
+        "a_mean_percent": 6.328487749675552,
+        "b_mean_percent": 4.810312868593234,
+        "delta_pp": 1.5181748810823161,
+        "ci95_pp": [
+          1.405149936684027,
+          1.6288279367981835
+        ],
+        "paired_t_p_two_sided": 3.973411615722139e-160,
+        "paired_t_statistic": 27.061049068525953,
+        "holm_adjusted_p": 1.1920234847166416e-159,
+        "bootstrap_nonpositive_means": 0
+      },
+      "ndcg": {
+        "a_mean_percent": 4.464318218856986,
+        "b_mean_percent": 3.2845605655746386,
+        "delta_pp": 1.179757653282348,
+        "ci95_pp": [
+          1.1068282017709277,
+          1.2541284994823403
+        ],
+        "paired_t_p_two_sided": 5.387409999992782e-209,
+        "paired_t_statistic": 30.997630764126438,
+        "holm_adjusted_p": 1.6162229999978347e-208,
+        "bootstrap_nonpositive_means": 0
+      }
+    }
+  ],
+  "holm_families": {
+    "recall": {
+      "role": "primary",
+      "members": [
+        "Gowalla_s0",
+        "Yelp2018_s0",
+        "AmazonBook_s0"
+      ],
+      "n_tests": 3,
+      "p_source": "two-sided paired t-test",
+      "adjustment": "Holm step-down",
+      "all_positive_adjusted_p_lt_005": true
+    },
+    "ndcg": {
+      "role": "secondary",
+      "members": [
+        "Gowalla_s0",
+        "Yelp2018_s0",
+        "AmazonBook_s0"
+      ],
+      "n_tests": 3,
+      "p_source": "two-sided paired t-test",
+      "adjustment": "Holm step-down",
+      "all_positive_adjusted_p_lt_005": true
+    }
+  },
+  "gowalla_three_seed_spread": {
+    "recall": {
+      "a": {
+        "n_seeds": 3,
+        "mean_percent": 13.325199531869204,
+        "sample_sd_pp": 0.02396492999973407,
+        "values_percent": [
+          13.304719003934128,
+          13.319323690490922,
+          13.351555901182563
+        ]
+      },
+      "b": {
+        "n_seeds": 3,
+        "mean_percent": 11.25708320563205,
+        "sample_sd_pp": 0.06322591389404082,
+        "values_percent": [
+          11.31467376890597,
+          11.189429058158822,
+          11.26714678983136
+        ]
+      }
+    },
+    "ndcg": {
+      "a": {
+        "n_seeds": 3,
+        "mean_percent": 8.567789984827469,
+        "sample_sd_pp": 0.011469167278444246,
+        "values_percent": [
+          8.57225820726101,
+          8.554759205639781,
+          8.576352541581617
+        ]
+      },
+      "b": {
+        "n_seeds": 3,
+        "mean_percent": 6.910983266008851,
+        "sample_sd_pp": 0.04027649732334454,
+        "values_percent": [
+          6.957299383928839,
+          6.891473378132261,
+          6.884177035965456
+        ]
+      }
+    }
+  },
+  "gowalla_all_seeds_positive_ci": {
+    "recall": true,
+    "ndcg": true
+  },
+  "primary_verdict": "PASS",
+  "amazon_tie_robustness": {
+    "alternate_paired_ci_status": "missing_per_user_predictions",
+    "legacy_topk_raw_prior": {
+      "applicable_same_base_beta": true,
+      "same_checkpoint_evidence": "same controls.json source checkpoint",
+      "base": "raw",
+      "beta": 0.2,
+      "policy": "legacy torch.topk scoring path",
+      "ci95_pp": null,
+      "paired_ci_status": "missing_per_user_predictions",
+      "metrics": {
+        "recall": {
+          "directau_percent": 6.328487749675552,
+          "bpr_percent": 4.811601360008548,
+          "delta_pp": 1.5168863896670035
+        },
+        "ndcg": {
+          "directau_percent": 4.464318218856986,
+          "bpr_percent": 3.2848795409479563,
+          "delta_pp": 1.1794386779090302
+        }
+      }
+    },
+    "random_key_seed_means": {
+      "recall": {
+        "bpr_values_percent": [
+          4.810312868593233,
+          4.8202921572193365,
+          4.813221795395492,
+          4.811064844154089,
+          4.81341499821053,
+          4.809597169622783,
+          4.8042445180080735,
+          4.806061271135336,
+          4.810757412140742,
+          4.805212307141648
+        ],
+        "deltas_pp": [
+          1.5181748810823188,
+          1.508195592456215,
+          1.5152659542800595,
+          1.517422905521462,
+          1.5150727514650213,
+          1.5188905800527688,
+          1.5242432316674783,
+          1.5224264785402155,
+          1.5177303375348097,
+          1.5232754425339037
+        ],
+        "delta_min_pp": 1.508195592456215,
+        "delta_max_pp": 1.5242432316674783,
+        "all_deltas_positive": true,
+        "per_user_predictions_available_seeds": [
+          0
+        ],
+        "other_seed_paired_ci_status": "missing_per_user_predictions"
+      },
+      "ndcg": {
+        "bpr_values_percent": [
+          3.2845605655746386,
+          3.2876707360094364,
+          3.2857801874058894,
+          3.2843636415436186,
+          3.28300819449989,
+          3.2838087402950653,
+          3.2822239474435855,
+          3.282797333515767,
+          3.2837637354346514,
+          3.281936040287628
+        ],
+        "deltas_pp": [
+          1.1797576532823477,
+          1.1766474828475502,
+          1.1785380314510971,
+          1.1799545773133677,
+          1.1813100243570962,
+          1.180509478561921,
+          1.182094271413401,
+          1.1815208853412196,
+          1.1805544834223352,
+          1.1823821785693585
+        ],
+        "delta_min_pp": 1.1766474828475502,
+        "delta_max_pp": 1.1823821785693585,
+        "all_deltas_positive": true,
+        "per_user_predictions_available_seeds": [
+          0
+        ],
+        "other_seed_paired_ci_status": "missing_per_user_predictions"
+      }
+    },
+    "excluded_substitutes": {
+      "per_user__base_popkey.npz": "no prior (beta 0), not alternate full-prior ties",
+      "per_user__base_randomkey_s0.npz": "no prior (beta 0)",
+      "per_user__cell_mu_s0.npz": "bucket-only prior; different intervention",
+      "per_user__cell_eps_s0.npz": "residual-only prior; different intervention"
+    },
+    "conclusion": "Primary random-key paired CI excludes zero; aggregate alternatives remain positive. Alternate full-prior paired-CI robustness is not established.",
+    "controls_json": {
+      "path": "D:\\web_2\\webconf27-popchannel\\runs\\_sessions\\pc-x2-1017\\controls\\amazonbook__mf__graphhash__bpr__s0-legacy\\controls.json",
+      "sha256": "19ce1aee1d449a800a3f30cd305660562dd8f5c9eb2d429d95e6a3bb06d9d806",
+      "bytes": 24127
+    },
+    "available_per_user_files": [
+      "per_user__base_popkey.npz",
+      "per_user__base_randomkey_s0.npz",
+      "per_user__cell_eps_s0.npz",
+      "per_user__cell_mu_s0.npz",
+      "per_user__full_prior_s0.npz"
+    ],
+    "source_checkpoint_name": "amz_gh_bpr",
+    "required_gpu_rescoring_spec": {
+      "dataset": "AmazonBook",
+      "method": "GraphHash",
+      "bpr_run_id": "amazonbook__mf__graphhash__bpr__s0-legacy",
+      "source_checkpoint": "original BPR-long source used by controls.json; no retraining",
+      "source_checkpoint_name": "amz_gh_bpr",
+      "source_metadata": "D:\\web_2\\webconf27-popchannel\\runs\\_sessions\\pc-x2-1017\\controls\\amazonbook__mf__graphhash__bpr__s0-legacy\\controls.json",
+      "mapping_source": "same stored GPU checkpoint aliases",
+      "base": "raw",
+      "prior": "p_i=log(1+training_count_i)",
+      "beta": 0.2,
+      "beta_selection": "frozen existing validation-selected beta; do not retune",
+      "k": 20,
+      "split": "test",
+      "n_users": 50407,
+      "exclude": "train plus validation seen items, identical original item IDs",
+      "arithmetic": "same float32 GPU score tensor for each tie-key variant",
+      "tie_policies": [
+        "random-key seeds 0..9",
+        "index-key",
+        "popularity-key",
+        "legacy torch.topk"
+      ],
+      "ties": "secondary order only among exactly equal scores, no score jitter",
+      "outputs_per_policy": [
+        "users",
+        "top20",
+        "hits",
+        "npos",
+        "recall",
+        "ndcg"
+      ],
+      "save": "separate NPZ per full-prior policy plus checkpoint/mapping/beta receipts",
+      "directau_partner": "D:\\web_2\\webconf27-popchannel\\runs\\amazonbook__mf__graphhash__directau__s0\\per_user_test__cos_prior.npz",
+      "inference": "paired 2000-user-resample percentile CI seed 0 against fixed B9 saved predictions",
+      "execution_status": "not run; job specification only; orchestrator submission required"
+    }
+  },
+  "mechanism_pointers": [
+    {
+      "path": "D:\\web_2\\webconf27-popchannel\\RESULTS.md",
+      "blocks": [
+        "PR-H",
+        "PR-DEC",
+        "PR-TIE"
+      ],
+      "status": "prior mechanism evidence; no new mechanism computation in E8"
+    }
+  ],
+  "side_effects": "Read saved NPZs, metrics and original split tensors; wrote this JSON only. No model inference or mapping construction."
+}

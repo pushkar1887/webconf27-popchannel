@@ -1,0 +1,101 @@
+{
+ "slug": "pc-x2-1017",
+ "state": "complete",
+ "started": "2026-10-17T13:07:10+00:00",
+ "ended": "2026-10-17T13:32:53+00:00",
+ "device_count": 2,
+ "mode": "parallel_2gpu",
+ "inputs": {
+  "gh_dau_s1": {
+   "ok": true,
+   "bytes": 2971365
+  },
+  "p5_gow_gh": {
+   "ok": true,
+   "bytes": 3702751
+  },
+  "gh_dau_s2": {
+   "ok": true,
+   "bytes": 2970957
+  },
+  "df_dau": {
+   "ok": true,
+   "bytes": 2971365
+  },
+  "amz_gh_dau": {
+   "ok": true,
+   "bytes": 6177415
+  },
+  "amz_gh_bpr": {
+   "ok": true,
+   "bytes": 6177465
+  }
+ },
+ "jobs": {
+  "gowalla__mf__graphhash__directau__s1-legacy30": {
+   "run_id": "gowalla__mf__graphhash__directau__s1-legacy30",
+   "gpu": 0,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/gh_dau_s1 --dataset Gowalla --method GraphHash --base cos --run-id gowalla__mf__graphhash__directau__s1-legacy30 --seeds 10 --out-root /kaggle/working/controls --assert-aliases inputs/p5_gow_gh",
+   "state": "done",
+   "started": "2026-10-17T13:08:25+00:00",
+   "ended": "2026-10-17T13:10:57+00:00",
+   "duration_s": 151.9,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash__directau__s1-legacy30.log"
+  },
+  "gowalla__mf__dfreq__directau__s0-legacy30": {
+   "run_id": "gowalla__mf__dfreq__directau__s0-legacy30",
+   "gpu": 1,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/df_dau --dataset Gowalla --method DoubleFreq --base cos --run-id gowalla__mf__dfreq__directau__s0-legacy30 --seeds 10 --out-root /kaggle/working/controls",
+   "state": "done",
+   "started": "2026-10-17T13:08:25+00:00",
+   "ended": "2026-10-17T13:11:17+00:00",
+   "duration_s": 172.0,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__dfreq__directau__s0-legacy30.log"
+  },
+  "gowalla__mf__graphhash__directau__s2-legacy30": {
+   "run_id": "gowalla__mf__graphhash__directau__s2-legacy30",
+   "gpu": 0,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/gh_dau_s2 --dataset Gowalla --method GraphHash --base cos --run-id gowalla__mf__graphhash__directau__s2-legacy30 --seeds 10 --out-root /kaggle/working/controls --assert-aliases inputs/p5_gow_gh",
+   "state": "done",
+   "started": "2026-10-17T13:10:57+00:00",
+   "ended": "2026-10-17T13:13:28+00:00",
+   "duration_s": 151.4,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash__directau__s2-legacy30.log"
+  },
+  "amazonbook__mf__graphhash__directau__s0-legacy41": {
+   "run_id": "amazonbook__mf__graphhash__directau__s0-legacy41",
+   "gpu": 1,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/amz_gh_dau --dataset AmazonBook --method GraphHash --base cos --run-id amazonbook__mf__graphhash__directau__s0-legacy41 --seeds 10 --out-root /kaggle/working/controls",
+   "state": "done",
+   "started": "2026-10-17T13:11:17+00:00",
+   "ended": "2026-10-17T13:21:37+00:00",
+   "duration_s": 619.9,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__graphhash__directau__s0-legacy41.log"
+  },
+  "amazonbook__mf__graphhash__bpr__s0-legacy": {
+   "run_id": "amazonbook__mf__graphhash__bpr__s0-legacy",
+   "gpu": 1,
+   "script": "score_controls.py",
+   "args": "--ckpt inputs/amz_gh_bpr --dataset AmazonBook --method GraphHash --base raw --run-id amazonbook__mf__graphhash__bpr__s0-legacy --seeds 10 --out-root /kaggle/working/controls",
+   "state": "done",
+   "started": "2026-10-17T13:21:37+00:00",
+   "ended": "2026-10-17T13:32:53+00:00",
+   "duration_s": 676.7,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__graphhash__bpr__s0-legacy.log"
+  }
+ },
+ "errors": [],
+ "prepare_exit_code": 0,
+ "n_jobs": 5,
+ "n_failed": 0,
+ "failed_run_ids": []
+}

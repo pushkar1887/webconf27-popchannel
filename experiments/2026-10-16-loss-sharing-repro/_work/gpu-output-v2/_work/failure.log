@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/kaggle/working/_work/repro_run.py", line 431, in <module>
+    main()
+    ~~~~^^
+  File "/kaggle/working/_work/repro_run.py", line 410, in main
+    run_one("Gowalla", "Full", "DirectAU", data, classes)
+    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/kaggle/working/_work/repro_run.py", line 341, in run_one
+    raise TimeoutError("90-minute training cap reached")
+TimeoutError: 90-minute training cap reached

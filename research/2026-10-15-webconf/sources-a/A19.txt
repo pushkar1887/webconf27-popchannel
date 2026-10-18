@@ -1,0 +1,1298 @@
+https://arxiv.org/html/2412.12468
+
+
+Transferable and Forecastable User Targeting Foundation Model
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+Submit in GitHub
+
+arXiv is now an independent nonprofit!
+Learn more
+×
+
+Back to arXiv
+
+Why HTML?
+
+Report Issue
+
+Back to Abstract
+
+Download PDF
+
+Abstract.
+
+1 Introduction
+
+2 Related Work
+
+2.1 Multi-modal Pre-training
+
+2.2 User Modeling and Targeting
+
+3 Preliminaries
+
+3.1 Notations
+
+3.2 User Targeting
+
+4 Method
+
+4.1 Forecastable User-Text Pair Preparation
+
+4.2 Self-Supervised User Modeling
+
+4.2.1 User Behavioral Sequence Encoding
+
+4.2.2 Tabular Encoding
+
+4.2.3 Text Encoding
+
+4.3 User-Text Alignment
+
+4.3.1 Attention-based User Feature Fusion
+
+4.3.2 Contrastive User-Text Pre-training
+
+4.4 User Targeting
+
+4.4.1 Zero-shot Transfer
+
+4.4.2 Few-shot User Targeting via Prompt Tuning
+
+5 Experiments
+
+5.1 Experimental Setups
+
+5.1.1 Datasets
+
+5.1.2 Baselines
+
+5.1.3 Evaluation Metrics
+
+5.1.4 Implementation Details
+
+5.2 Comparisons
+
+5.2.1 Zero-shot User Targeting
+
+5.2.2 Few-shot User Targeting
+
+5.2.3 User Representation Evaluation
+
+5.3 Ablation Studies
+
+5.3.1 Pre-training Data Modal
+
+5.3.2 Attention-based Feature Fusion
+
+6 Conclusion
+
+Acknowledgements
+
+References
+
+A Additional Model Details
+
+A.1 Self-Supervised User Modeling
+
+A.2 User-Text Alignment
+
+B Additional Experimental Results
+
+C Limitations and Future Work
+
+License: CC BY 4.0
+
+arXiv:2412.12468v2 [cs.LG] 20 Feb 2025
+
+Transferable and Forecastable User Targeting Foundation Model
+
+Conference: Companion Proceedings of the ACM Web
+Conference 2025; April 28-May 2, 2025; Sydney, NSW, AustraliaCompanion Proceedings of the ACM Web Conference 2025 (WWW
+Companion ’25), April 28-May 2, 2025, Sydney, NSW, AustraliaDOI: 10.1145/3701716.3715266ISBN: 979-8-4007-1331-6/2025/04CCS: Information systems Data miningCCS: Information systems Collaborative filteringCCS: Information systems Retrieval models and ranking
+
+Bin Dou
+
+Note: The contributions by Bin Dou and Yun Zhu have been conducted completely during internship at Ant Group.
+
+Affiliation: Ant Group, Hangzhou, China
+
+Alternate Affiliation: Xi’an Jiaotong University, Xi’an, China
+
+email: doubin.dou@antgroup.com
+
+, 
+Baokun Wang
+
+Note: Corresponding author.
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: yike.wbk@antgroup.com
+
+, 
+Yun Zhu
+
+Affiliation: Ant Group, Hangzhou, China
+
+Alternate Affiliation: Zhejiang University, Hangzhou, China
+
+email: zhuyun_dcd@zju.edu.cn
+
+, 
+Xiaotong Lin
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: lxt203095@antgroup.com
+
+, 
+Yike Xu
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: xuyike.xyk@antgroup.com
+
+, 
+Xiaorui Huang
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: huangxiaorui.hxr@antgroup.com
+
+, 
+Yang Chen
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: cy462023@antgroup.com
+
+, 
+Yun Liu
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: ly319278@antgroup.com
+
+, 
+Shaoshuai Han
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: hanshaoshuairs@163.com
+
+, 
+Yongchao Liu
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: yongchao.ly@antgroup.com
+
+, 
+Tianyi Zhang
+
+Affiliation: Ant Group, Shanghai, China
+
+email: zty113091@antgroup.com
+
+, 
+Yu Cheng
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: cy122623@antgroup.com
+
+, 
+Weiqiang Wang
+
+Affiliation: Ant Group, Hangzhou, China
+
+email: weiqiang.wwq@antgroup.com
+
+and 
+Chuntao Hong
+
+Affiliation: Ant Group, Beijing, China
+
+email: chuntao.hct@antgroup.com
+
+© cc
+
+Abstract.
+
+User targeting, the process of selecting targeted users from a pool of candidates for non-expert marketers, has garnered substantial attention with the advancements in digital marketing. However, existing user targeting methods encounter two significant challenges: (i) Poor cross-domain and cross-scenario transferability and generalization, and (ii) Insufficient forecastability in real-world applications. These limitations hinder their applicability across diverse industrial scenarios.
+In this work, we propose Found, an industrial-grade, transferable, and forecastable user targeting foundation model.
+To enhance cross-domain transferability, our framework integrates heterogeneous multi-scenario user data, aligning them with one-sentence targeting demand inputs through contrastive pre-training. For improved forecastability, the text description of each user is derived based on anticipated future behaviors, while user representations are constructed from historical information.
+Experimental results demonstrate that our approach significantly outperforms existing baselines in cross-domain, real-world user targeting scenarios, showcasing the superior capabilities of Found. Moreover, our method has been successfully deployed on the Alipay11
+1
+
+https://global.alipay.com/platform/site/ihome platform and is widely utilized across various scenarios.
+
+Keywords: 
+User Targeting; User Understanding; Self-supervised Pre-training;
+Multi-modal Pretraining
+
+††cc-license: by
+
+1. Introduction
+
+Recently, user targeting(Milana and Ashta, 2021; Simester et al., 2020), the strategic practice of concentrating on specific customers or users to deliver tailored content, messaging, and product recommendations(Ko et al., 2022), has garnered significant attention with the advancement of digital marketing(Chaffey and Ellis-Chadwick, 2019). Precise customer targeting forms the cornerstone of any effective marketing strategy, enabling the identification of optimal target audiences for each message and fostering consistent, personalized experiences across channels for individual customers.
+
+To achieve precise user targeting, some previous studies(Nikzad-Khasmakhi et al., 2019) have developed domain-specific experts tailored to individual scenarios or learning common user embeddings(Shin et al., 2021) through user behavioral sequence data for e-commerce domain. However, expert methods are constrained by their exclusive focus on single scenarios, which limits their transferability and generalization. Additionally, most of them rely on labeled data to train supplementary classification heads for downstream tasks, posing challenges for application in low-resource settings, such as zero-shot learning.
+More recently, LLM-based methods, such as ARALLM(Wang et al., 2024), aim to enhance generalization across certain scenarios by leveraging vast repositories of common knowledge. Nevertheless, LLMs face significant challenges in utilizing industrial multi-source data, such as payment records and user behavior patterns, due to their insufficient understanding of long-tail knowledge(Sun et al., 2023; Bang et al., 2023). This limitation undermines the effectiveness of LLM-based methods in complex scenarios, particularly those involving multi-modal temporal and personal data.
+In conclusion, current methods primarily face two challenges: (i) Poor transferability and generalization, and (ii) insufficient forecastability in complex real-world scenarios.
+
+Therefore, we propose Found, a transferable and forecastable user targeting foundation model designed to address the aforementioned challenges. To enhance transferability and generalization, we develop a user modeling framework that integrates heterogeneous multi-source data, such as billing records, super position model 22
+2
+
+Dataflow statistics generated from page burial (SPM) logs, mini-program descriptions, user information tables (containing user consumption records, financial irregularities, etc), and search texts within the Alipay application. To improve the forecastability, we collect and curate forecastable user-text pair data to align diverse modalities using contrastive learning. Considering the complexity of Alipay’s data, this process is executed in two stages to ensure training stability.
+First, we design two novel self-supervised tasks to pretrain user models, facilitating the extraction of universal embeddings from heterogeneous, multi-scenario user data. Subsequently, we perform user-text alignment, where features from multi-modal data are fused and aligned with representations generated by a fine-tuned LLM through contrastive learning.
+Building on this foundation model, we propose two strategies for utilizing the pretrained models in user targeting: (1) Zero-shot Transfer, which directly inputting requirements in text format to identify targeted users based on user-text similarity. (2) Few-shot Targeting via Prompt-tuning, which Leverages a small set of seed users to enhance the text prompt’s descriptive capabilities, thereby improving the performance of text-based user targeting.
+Extensive experiments demonstrate that Found consistently outperforms baseline methods in user targeting, particularly in real-world Alipay applications, where it showcases strong predictive capabilities in complex scenarios. Furthermore, Found achieves superior performance across diverse scenarios and domains, including security, marketing, and recommendation, highlighting its exceptional transferability and generalization.
+
+In summary, our work makes the following contributions:
+
+• 
+
+We propose Found, an industrial-grade, transferable, and forecastable user-targeting foundation model capable of understanding users through large-scale heterogeneous multi-source data to accurately identify targeted users.
+
+• 
+
+We design novel self-supervised tasks for pretraining user models and align different modalities through constructed user-text pair data in subsequent phases, ensuring training stability and forecastability within complex real-world scenarios while enabling the selection of targeted users based on one-sentence demands.
+
+• 
+
+Extensive experiments reveal that our model surpasses baseline methods across diverse scenarios and multiple domains, demonstrating its superior transferability and forecastability in real-world Alipay applications.
+
+2. Related Work
+
+2.1. Multi-modal Pre-training
+
+Multimodal pretraining(Wang et al., 2023) has become essential for integrating diverse data types, such as text, images, audio, and video, to enhance model performance across various tasks. For instance, CLIP(Radford et al., 2021) employs contrastive learning to align image and text embeddings in a shared latent space, enabling zero-shot transfer without task-specific fine-tuning. ALIGN(Jia et al., 2021) expands this approach by utilizing larger datasets and more complex architectures, achieving state-of-the-art results in image-text retrieval and other benchmarks. BLIP(Li et al., 2022b) advances the field by combining contrastive and generative objectives within a unified transformer framework, enriching multimodal representations and improving tasks like image captioning. Additionally, BLIP-2(Li et al., 2023) and LLaVA(Liu et al., 2024) integrate multimodal encoders with large language models, creating robust multimodal large language models. Collectively, these methodologies facilitate the seamless integration of diverse modalities and leverage intermodal connections to boost model performance.
+
+Building upon these advancements, applications in other domains have garnered significant attention, particularly in recommendation systems, by incorporating user-item interactions with multimodal features. This synthesis enhances recommendation accuracy by capturing intricate relationships, as exemplified by models such as MGCL(Liu et al., 2023), MMSSL(Wei et al., 2023), and MMCPR(Liu et al., 2022). In the graph domain, models such as ConGrat(Brannon et al., 2023), G2P2(Wen and Fang, 2023), and GraphCLIP(Zhu et al., 2024) extend CLIP into graph tasks, with the goal of enhancing zero-shot learning capabilities for graph-related applications.
+
+Unlike existing approaches, we integrate multi-source data of greater complexity. The distinct information across modalities complicates direct model alignment. To overcome these challenges, we propose a two-stage pretraining process: first, pretrain multimodal models using proposed novel auxiliary tasks, and second, align the pretrained models through meticulously constructed data pairs.
+
+2.2. User Modeling and Targeting
+
+User modeling focuses on learning transferable user patterns from user behavioral sequence data(Fu et al., 2023; Shin et al., 2021), while user targeting involves selecting targeted users based on the trained user models. In the context of user modeling, deep representation learning frameworks(Ni et al., 2018; Yuan et al., 2020) aimed at obtaining universal user representations are still in their early stages.
+For instance, (Ni et al., 2018) performs multitask representation learning using an attention-based RNN architecture to capture in-depth representations of portal users.
+(Yuan et al., 2020) propose parameter-efficient transfer learning architecture named PeterRec to relieve the computational cost burden of fine-tuning.
+PeterRec covers five downstream tasks that include predicting user profiles like gender, age, and life status, as well as a cold-start recommendation task for browser recommender systems. (Zhang et al., 2020) trains autoencoder-coupled Transformer networks that model retention, installation, and uninstallation collectively.
+They test the user embeddings in three downstream tasks for mobile app management scenarios. (Gu et al., 2021) proposes a behavioral consistency loss to preserve the user’s longterm interest and an aggregation scheme for the benefit of model capacity.
+The proposed method is evaluated on user preference prediction and user profiling tasks.
+
+3. Preliminaries
+
+In this section, we begin by introducing the notation used in this study (Section 3.1), followed by an overview of the key downstream tasks addressed in our work (Section 3.2).
+
+3.1. Notations
+
+In the Alipay application, extensive non-sensitive user information and interactions are accessible. For instance, user behavioral sequence data is denoted as 𝒱={{Bn}n=1N,{Sn}n=1N,{Mn}n=1N}\mathcal{V}=\{\{B_{n}\}_{n=1}^{N},\{S_{n}\}_{n=1}^{N},\{M_{n}\}_{n=1}^{N}\}, comprising PayBill BB, Super Position Model SS, and MiniProgram MM. Here, Bn∈𝒯Ln(B)B_{n}\in\mathcal{T}^{L^{(B)}_{n}}, Sn∈𝒯Ln(S)S_{n}\in\mathcal{T}^{L^{(S)}_{n}}, and Mn∈𝒯Ln(M)M_{n}\in\mathcal{T}^{L^{(M)}_{n}} represent the raw text for PayBill information, Super Position Model details, and MiniProgram descriptions, respectively. Let NN denotes the number of users and n∈[1,2,…,N]n\in[1,2,\ldots,N], 𝒯\mathcal{T} is the token dictionary, and Ln(M)L_{n}^{(M)} indicates the sequence length.
+Tabular data is denoted as T∈ℝN×F×DT\in\mathbb{R}^{N\times F\times D}, where FF represents the number of features and DD denotes the dimensionality of each feature. Search text data is represented as R∈𝒯Ln(R)R\in\mathcal{T}^{L^{(R)}_{n}}. This work focuses on the user targeting task, utilizing the aforementioned data to pretrain a user model capable of selecting targeted users based on a single-sentence demand Q∈𝒯L(Q)Q\in\mathcal{T}^{L^{(Q)}}.
+
+3.2. User Targeting
+
+To develop a user targeting foundation model, extensive user data can be utilized to pre-train a general model endowed with transferable knowledge:
+
+(1)
+
+gθ⋆=arg​min𝔼Vns∈𝒱sℒpretrain\displaystyle g_{\theta^{\star}}=\argmin\underset{V_{n}^{\text{s}}\in\mathcal{V}^{\text{s}}}{\mathbb{E}}\mathcal{L}_{\text{pretrain}}
+(gθ;Vns),\displaystyle\left(g_{\theta};V_{n}^{\text{s}}\right),
+
+where 𝒱s\mathcal{V}^{\mathrm{s}} represents the source data of user behavioral sequences, gθ⋆g_{\theta^{\star}} denotes the pretrained user targeting foundation model, and ℒpretrain\mathcal{L}_{\text{pretrain}} refers to our proposed pretraining tasks, which will be detailed in Sec. 4.
+
+With the user targeting foundation model trained, the zero-shot transfer for user targeting and few-shot user targeting via prompt-tuning are proposed.
+For zero-shot setting, the pre-trained user model can be directly deployed on target data:
+
+(2)
+
+pi=arg​maxUi∈𝒰⁡Pθ⋆​(Ui∣Qi)p_{i}=\argmax_{U_{i}\in\mathcal{U}}P_{\theta^{\star}}(U_{i}\mid Q_{i})
+
+where QiQ_{i} denotes a single-sentence demand and UiU_{i} are the targeted users which require the demand which are sampled from user candidates 𝒰\mathcal{U}.
+
+For the few-shot setting, a limited number of training samples for each class are used for fine-tuning:
+
+(3)
+
+gθ′∈arg​maxθ⁡𝔼(Qi,Ui)∈ℐt | tr​Pθ​(U^i=Ui∣Qi),g_{\theta^{\prime}}\in\argmax_{\theta}\mathbb{E}_{(Q_{i},U_{i})\in\mathcal{I}^{\text{t | tr}}}P_{\theta}(\hat{U}_{i}=U_{i}\mid Q_{i}),
+
+where ℐt | tr\mathcal{I}^{\text{t | tr}} represents the supervised training paired data for downstream user targeting, comprising user demand and the corresponding targeted user group. U^i\hat{U}_{i} is the predicted user group based on demand sentence QiQ_{i}. fθ′f_{\theta^{\prime}} denotes the fine-tuned model, which will be evaluated on test samples.
+
+4. Method
+
+In this section, we first present the training corpus we collected and curated in Sec. 4.1. Next, we detail the proposed self-supervised tasks for user modeling in Sec. 4.2. Subsequently, we explain the user-text alignment process in Sec. 4.3. Finally, we demonstrate the application of our pre-trained model to downstream tasks in Sec. 4.4. The overall pipeline of Found is illustrated in Fig. 1.
+
+Figure 1. Pre-training and inference for user targeting foundation model.
+We propose an industrial framework for language-based user targeting, i.e., selecting users from only one sentence.
+it’ pre-trained in a two strategy, as the first stage focuses on the self-supervised user modeling while the second is employed to align user-text pairs.
+For user targeting, we develop two approaches: zero-shot transfer, which selects users with one-sentence input, and few-shot user targeting via prompt-tuning.
+
+4.1. Forecastable User-Text Pair Preparation
+
+Based on the full amount of user bill, page clicking behavior, miniprogram browsing and ordering, homepage search and other data within the Alipay system, a natural language description of user behavior is constructed.
+It should be noticed that the each user’s language description is built based on the future behaviors mentioned before, which will enhance the forecastability of the model pre-trained by the data.
+Specifically, each user-text pair can be denoted as:
+
+(4)
+
+𝒜={Vi,t1,Ti,t1,Ri,t1;Qi,t2}i=1N\mathcal{A}=\{V_{i,t_{1}},T_{i,t_{1}},R_{i,t_{1}};Q_{i,t_{2}}\}_{i=1}^{N}
+
+where t1t_{1} and t2t_{2} denote the previous and future period.
+
+Additionally, different templates are designed according to different data sources, and there are five types in total, divided into purchase category, browsing category, search category, click category and payment channel category.
+For example, the billing information occurred by a user will be strung together into a complete description as a user behavioral alignment label based on being at a certain merchant, purchasing a certain product, belonging to a certain category, transaction amount and payment channel.
+The template takes the form as:
+
+Template for purchase category: The user purchased {items} amounting more than {num} dollars with {status} payment.
+
+In the above template, the placeholders are represented in blue font: “items” denotes the purchased items, “num” represents the amount spent by the user, and “status” indicates whether the bill payment was successful. For instance, a user’s purchase description could be expressed as:
+"The user purchased gold, gold bars, etc., amounting to more than $10,000 with successful payment."
+Templates for other data sources follow similar structures.
+
+4.2. Self-Supervised User Modeling
+
+4.2.1. User Behavioral Sequence Encoding
+
+As user behavior contains abundant information,
+which greatly improves the generalization ability of user representation and empowers user modeling in many downstream tasks, behavioral sequence is selected
+for user modeling.
+At AliPay platform, PayBill PP, MiniProgram MM and SPM SS are the main data sources for user representation, thus they are utilized as the input data for user understanding.
+Therefore, representational embedding for user ii can formulated as:
+
+(5)
+
+ei(𝒱)=𝒫⁡(gθ​(Bi,Mi,Si))e^{(\mathcal{V})}_{i}=\mathcal{P}(g_{\theta}(B_{i},M_{i},S_{i}))
+
+where 𝒫\mathcal{P} denotes the average pooling function crossing all time windows along each user behavioral sequence, gθg_{\theta} is a composite function gθ=gμ∘gνg_{\theta}=g_{\mu}\circ g_{\nu}, with gμg_{\mu} representing a time-aware function such as GRU(Cho, 2014) or self-attention networks(Vaswani, 2017),
+and gνg_{\nu} serving as a text encoding function, such as ALBERT(Lan, 2019). Here, z=gν​(Bi,Mi,Si)z=g_{\nu}(B_{i},M_{i},S_{i}) and c=gμ​(z)c=g_{\mu}(z).
+
+As the modals of user behavioral sequence are represented with text sequences, for User Behavioral Sequence Encoder gθg_{\theta}, we utilize ALBERT(Lan, 2019), a light BERT(Kenton and Toutanova, 2019) for self-supervised learning of language representations, to first encode text sequences to embeddings.
+Then, as illustrated in Fig. 2 (a), the forecasting prediction is utilized as the main proxy self-supervised pre-training task inspired by Contrastive Predictive Coding(Oord et al., 2018), as contrastive learning is employed to train the model33
+3
+
+For clarity, we set batch size as 1 here.:
+
+(6)
+
+ℒCL=−1K​k∑t=1K∑i=1k[logexp⁡(s⁡(ct,zt+i))∑j=1Kexp⁡(s⁡(ct,zt+j))]\mathcal{L}_{\text{CL}}=-\frac{1}{Kk}\sum_{t=1}^{K}\sum_{i=1}^{k}\left[\log\frac{\operatorname{exp}({s(c_{t},z_{t+i}))}}{\sum_{j=1}^{K}\operatorname{exp}({s(c_{t},z_{t+j}))}}\right]
+
+where ztz_{t} represents the user behavioral embedding at timestamp tt derived from the three data modalities, ctc_{t} denotes the embedding aggregated with temporal information by μ\mu, ss is the cosine similarity function, KK is the total time length, and k≪Kk\ll K controls the window size for positive samples.
+
+Additionally, as the paybill and miniprogram browsing records are commonly presented cyclically, we add cyclic regularization in user behavioral sequence encoding (shown in Fig. 2 (b)), enforcing each user’s representation to be close across several time windows measured by KL-divergence. Therefore, the total self-supervised pre-training loss for user behavioral sequence is:
+
+(7)
+
+ℒUB=ℒCL+λc​y​cKL(ct||ct+T)\mathcal{L}_{\text{UB}}=\mathcal{L}_{\text{CL}}+\lambda_{cyc}KL(c_{t}||c_{t+T})
+
+where λ\lambda is the coefficient that controls the strength of the regularization term, KL\operatorname{KL} denotes the KL divergence between the two input vectors, and TT denotes the regularization temporal cycle.
+
+Figure 2. Self-supervised pre-training tasks for user behavioral sequence.
+
+4.2.2. Tabular Encoding
+
+In Alipay application scenarios, structural user data can be collected primarily in the form of tabular data. The key features of this tabular data pertain to account security and fund flows, facilitating transferability across multiple domains, such as risk management or marketing, for user targeting.
+
+To obtain the embedding from the user tabular, we employ transformer-based encoder (denoted as hϕh_{\phi}).
+Specifically, given an input table
+T={Tc​a​t,Tc​o​n​t}T=\{T_{cat},T_{cont}\}, where Tc​a​tT_{cat} represents categorical tabular features and Tc​o​n​tT_{cont} represents continuous features, hϕh_{\phi} processes Tc​a​tT_{cat} similar to (Huang et al., 2020) (encoded with Column Embedding (Huang et al., 2020) and fed into Transformer) while handles Tc​o​n​tT_{cont} by mapping it to another feature item with MLP and also using it as the input to the transformer-based encoder.
+The corresponding embedding e(tab)e^{\text{(tab)}} for user ii can be denoted as:
+
+(8)
+
+ei(tab)=hϕ​(Ti)e^{\text{(tab)}}_{i}=h_{\phi}(T_{i})
+
+To pre-train the encoder,
+two strategies are employed: masked language modeling (MLM)(Kenton and Toutanova, 2019) and replaced token detection (RTD)(Li et al., 2022a).
+For MLM,
+we randomly mask part of the categorical features T~ℳ⊂Tc​a​t\tilde{T}_{\mathcal{M}}\subset T_{cat}. The encoder is trained by minimizing the cross-entropy loss of a multi-class classifier that predicts the original values of the masked features based on the Transformer generated embeddings:
+
+(9)
+
+ℒMLM=∑m∈ℳCE⁡(T~^m,T~m)\mathcal{L}_{\text{MLM}}=\sum_{m\in\mathcal{M}}\operatorname{CE}(\hat{\tilde{T}}_{m},\tilde{T}_{m})
+
+where ℳ\mathcal{M} represents the set of masked feature IDs, CE\operatorname{CE} is the cross entropy loss, T~^m\hat{\tilde{T}}_{m} and T~m\tilde{T}_{m} denote the prediction of masked feature and the ground truth respectively.
+In the RTD approach, the original categorical feature values are replaced with random values from the same feature set. A binary classifier is then trained to predict whether a feature has been replaced, with the loss minimized accordingly, which can be expressed as:
+
+(10)
+
+ℒRTD=∑r∈ℛBCE⁡(T~^r,T~r)\mathcal{L}_{\text{RTD}}=\sum_{r\in\mathcal{R}}\operatorname{BCE}(\hat{\tilde{T}}_{r},\tilde{T}_{r})
+
+where ℛ\mathcal{R} represents the replaced features, BCE\operatorname{BCE} is the binary classification loss, T~^r\hat{\tilde{T}}_{r} is the prediction, and T~r∈{0,1}\tilde{T}_{r}\in\{0,1\} denotes whether the rr-th feature is replaced. Based on the aforementioned tasks and hyperparameters λMLM\lambda_{\text{MLM}} and λRTD\lambda_{\text{RTD}}, the tabular pre-training loss is:
+
+(11)
+
+ℒTab=λM​L​M​ℒMLM+λRTD​ℒRTD\mathcal{L}_{\text{Tab}}=\lambda_{MLM}\mathcal{L}_{\text{MLM}}+\lambda_{\text{RTD}}\mathcal{L}_{{\text{RTD}}}
+
+4.2.3. Text Encoding
+
+At Alipay platform, user searching text can also assist to achieve user understanding.
+Therefore, we utilize a light BERT model, i.e., AlBERT(Lan, 2019) as the encoder fωf_{\omega}, to encode the user ii’s searching text RR, which is pre-trained similar to (Li et al., 2022a). The searching text encoding can be expressed as:
+
+(12)
+
+ei(r)=fω​(Ri)e^{\text{(r)}}_{i}=f_{\omega}(R_{i})
+
+4.3. User-Text Alignment
+
+4.3.1. Attention-based User Feature Fusion
+
+For the multi-modal user representation, the embeddings from different sources are fused using cross-attention (Chen et al., 2021), which is a common feature aggregation approach for multi-modal features. The fused embedding of the user ii can be expressed as :
+
+(13)
+
+eif=CA⁡(ei(𝒱),ei(tab),ei(r))e^{f}_{i}=\operatorname{CA}(e^{(\mathcal{V})}_{i},e^{({\text{tab}})}_{i},e^{(\text{{r}})}_{i})
+
+where CA\operatorname{CA} represents the cross-attention among all data modalities.
+
+4.3.2. Contrastive User-Text Pre-training
+
+To achieve user targeting task with only one sentence input, we develop the user targeting foundation model inspired by CLIP(Radford et al., 2021), which aligns multi-modal features with contrastive learning.
+Specifically, each user’s description text is developed according to Sec. 4.1, which are fed into the LLM encoder fine-tuned with LoRA(Hu et al., 2021) to generate the user text embedding:
+
+(14)
+
+eiq=LLM⁡(ℱ⁡(Bi,t2,Mi,t2,Si,t2))e^{q}_{i}=\operatorname{LLM}(\mathcal{F}(B_{i,t_{2}},M_{i,t_{2}},S_{i,t_{2}}))
+
+where ℱ\mathcal{F} represents the process of generating user description according to the template illustrated in Sec. 4.1.
+
+After obtaining the user and the corresponding encoding of behavior sequence text, we employ contrastive loss Info-NCE (Oord et al., 2018) to align the modalities, i.e., fused user embedding ei,t​1fe^{f}_{i,t1} generated from previous multi-modal user data and text embedding ei,t​2qe^{q}_{i,t2}. The loss is applied to pulling together the representation from positive pairs while pushing apart negative pairs, takes the form as:
+
+(15)
+
+ℒCP=−1B∑i=1B[logexp⁡(s⁡(ei,t1f,ei,t2q))∑j=1Bexp⁡(s⁡(ei,t1f,ej,t2q))]\mathcal{L}_{\text{CP}}=-\frac{1}{B}\sum_{i=1}^{B}\left[\log\frac{\operatorname{exp}({s(e^{f}_{i,t_{1}},e^{q}_{i,t_{2}}))}}{\sum_{j=1}^{B}\operatorname{exp}({s(e^{f}_{i,t_{1}},e^{q}_{j,t_{2}}))}}\right]
+
+where BB means the batch size and ss denotes the cosine similarity function.
+
+4.4. User Targeting
+
+In this section, we introduce the techniques employed to adapt models for user targeting.
+Figure 1 (b, I) illustrates the main user targeting pipeline of our model.
+First, we illustrate the adaptation of our model on target data for zero-shot transfer. Then, we propose a novel prompt tuning method for few-shot user targeting.
+
+4.4.1. Zero-shot Transfer
+
+Once pre-trained, our model can be directly deployed on target datasets without any additional training, i.e., enabling zero-shot inference according to the one-sentence input as depicted in Figure 1 (b, I).
+
+Additionally, to enable our model accessible to language demand from non-experts, we add a module to rewrite the demand, matching it with the template designed during pre-training and enhancing its cognitive ability for user data inside Alipay application.
+Therefore, the module performs as the Query Rewriting. We design a simple two-stage fine-tuning scheme: the first stage is designed to refer to scaling-law to synthesize a multi-round conversation set using multi-source data from Alipay to inject domain knowledge to one LLM (QWEN2-14B(Yang et al., 2024)); then the seconda stage is to mine different people’s circling intentions under <Query - Answers> for fine-tuning.
+
+4.4.2. Few-shot User Targeting via Prompt Tuning
+
+In low-resource scenarios, where only a few user samples (named seed users) exist for the targeting task, we also design an approach for few-shot learning via prompt-tuning, as illustrated in Figure 1 (b, II).
+
+Inspired by previous studies(Zhou et al., 2022b; Zhou et al., 2022a; Zhu et al., 2023), the seed users can be utilized as labels to learn contexts which improves the descriptive ability of the prompt, by adding learnable tokens to the input text.
+In practical user targeting scenarios, some negative samples share the similar behaviors with the ground-truth samples.
+For example, 3C digital repairers may have the similar behaviors compared to 3C digital enthusiasts.
+They can be defined as the hard-negative samples in user targeting task and the mistargeting of them may cause risk in real-world scenarios.
+To handle the hard-negative samples in our few-shot learning process, we introduce the negative samples U−U^{-}, which can obtained from business feedback, into prompt-tuning together with positive seed users U+U^{+}.
+Through the contrastive loss, i.e., triplet loss(Hermans et al., 2017), the learned prompt embedding.
+
+(16)
+
+ℒTri​(ef+,ef−,eq)=∑max⁡(0,‖eq−ef+‖2−‖eq−ef−‖2+α)\mathcal{L}_{\text{Tri}}(e^{f+},e^{f-},e^{q})=\sum\operatorname{max}(0,\|e^{q}-e^{f+}\|^{2}-\|e^{q}-e^{f-}\|^{2}+\alpha)
+
+where ef+e^{f+}, ef−e^{f-} and eqe^{q} denote the embeddings of positive seed users U+U^{+}, negative seed user U−U^{-} and the learnable text embedding, respectively, α\alpha is the threshold to control embedding similarity.
+
+Once trained, the tuned prompt can be used as the input to achieve user targeting via pipeline in Figure 1 (b, I).
+
+5. Experiments
+
+In this section, we begins with the experimental setup, detailing the datasets, baselines, evaluation metrics, and implementation specifics (Section 5.1). Next, we present extensive experiments that demonstrate our model’s effectiveness in user targeting and representation (Section 5.2). Finally, we perform an ablation study to evaluate the effectiveness of each proposed component (Section 5.3).
+
+5.1. Experimental Setups
+
+5.1.1. Datasets
+
+For pre-training the industrial framework of
+user targeting, we employ the real-world industrial dataset, which collects heterogeneous multi-scenario user data on Alipay.
+Specifically, the training dataset 𝒟t​r​a​i​n\mathcal{D}_{train} contains around 500 million pieces of user information (user-text pairs), with each piece organized according to Section 4.1.
+The user targeting test benchmark contains 13 scenarios, covering security risk control, recommendation and marketing domain.
+
+The dataset of each scenario contains 0.3-30 million pieces of user information, which are in the format 𝒟t​e​s​t={(ui,li)}i=1N\mathcal{D}_{test}=\{(u_{i},l_{i})\}_{i=1}^{N},
+as uiu_{i} represents the same user data modal as in training while
+label lil_{i} ranges from {0,1}\{0,1\}, denoting whether the user conducts the operations in the domain, which is annotated according to real-world business scenario.
+For linear probe analysis, each test dataset is divided 1:4, of which the first part is used for linear layer fitting (named fitting part) while the second (named evaluation part) is used for evaluation.
+Table 1 shows the statistics of our training and test dataset.
+
+Table 1. Data statistics for user foundation model pre-training as well as the test benchmarks.
+
+Dataset
+No.
+Domain
+Scenario
+Number(d)
+
+𝒟t​r​a​i​n\mathcal{D}_{train}
+–
+General
+General
+≈500,000,000\approx 500,000,000
+
+#1
+Account Security
+Account Theft Risk
+2,910,925
+
+#2
+Marketing
+APP Click
+334,769
+
+𝒟t​e​s​t\mathcal{D}_{test}
+#3
+Marketing
+APP Activity
+743,828
+
+#4
+Marketing
+Willingness for Phone Renting
+280,302
+
+#5
+Recommendation
+Willingness for Credit Facilities
+6,435,977
+
+5.1.2. Baselines
+
+The following state-of-the-art user behavioral understanding and targeting models are utilized in our comparison experiments.
+
+Table 2. Quantitative comparison on zero-shot user targeting performance on Alipay benchmarks. Accuracy / Precision / Recall are presented.
+
+Methods
+Dt​e​s​t​#​1D_{test}\#1
+Dt​e​s​t​#​2D_{test}\#2
+Dt​e​s​t​#​3D_{test}\#3
+Dt​e​s​t​#​4D_{test}\#4
+Dt​e​s​t​#​5D_{test}\#5
+
+ARALLM(GPT-3.5)
+77.1/69.6/84.7
+87.8/86.7/85.0
+52.5/53.0/56.2
+56.6/50.8/68.8
+64.9/53.3/73.0
+
+ARALLM-ft(ChatGLM2-6B)
+83.8/74.4/91.6
+94.8/90.7/89.0
+58.0/54.8/61.0
+63.6/52.7/71.6
+78.6/65.7/78.8
+
+ARALLM-ft(QWEN2-7B)
+83.2/76.0/91.8
+95.4/91.2/89.0
+57.0/54.5/61.8
+64.9/53.3/73.0
+79.3/68.3/82.1
+
+Ours
+88.6/83.7/94.1
+96.0/92.3/90.0
+61.9/57.6/67.0
+67.6/60.4/76.9
+84.3/77.3/80.0
+
+Table 3. Quantitative comparison on few-shot user targeting. 10 seed users are utilized for all methods. Accuracy / Precision / Recall of user targeting performance are presented.
+
+Model
+Dt​e​s​t​#​1D_{test}\#1
+Dt​e​s​t​#​2D_{test}\#2
+Dt​e​s​t​#​3D_{test}\#3
+Dt​e​s​t​#​4D_{test}\#4
+Dt​e​s​t​#​5D_{test}\#5
+
+U-MLP One4all
+91.0/86.8/93.2
+96.3/94.0/93.1
+77.0/64.5/81.8
+76.6/70.7/83.8
+87.6/72.7/88.8
+
+ARALLM-ft(ChatGLM2-6B)
+87.8/79.0/90.7
+95.6/92.8/90.4
+71.8/62.2/77.0
+69.1/65.3/78.3
+89.1/74.1/90.2
+
+ARALLM-ft(QWEN2-7B)
+88.1/81.6/91.7
+95.7/93.0/90.8
+71.0/60.8/76.2
+71.6/65.7/78.8
+89.9/78.3/91.0
+
+Ours
+95.6/93.8/97.4
+97.1/94.6/93.7
+81.7/71.4/87.1
+84.3/80.0/88.9
+93.0/87.7/95.2
+
+• 
+
+ARALLM(Wang et al., 2024)
+Analogical Reasoning Augmented Large Language Models, which is the LLM-based method and achieves user targeting from one-sentence demand by structurally understanding the input sentence and matching the users representation with the labels.
+Pre-trained as well as Question-Answering fine-tuned models can be used for user targeting.
+Here we employ GPT-3.5(Ouyang et al., 2022) as the pre-trained model, open-source LLMs as the base model for fine-tuning, such as ChatGLM(GLM et al., 2024) and QWEN2(Yang et al., 2024).
+
+• 
+
+U-MLP One4all(Shin et al., 2021). One4all is a general-purpose representation learning through large-scale pre-training, while U-MLP is one of its extended user targeting model which adds MLP user decoder to generate targeted users.
+
+• 
+
+MSDP(Fu et al., 2023)
+Multi-scale Stochastic Distribution Prediction model for learning user behavioral sequence representation, which takes the prediction on user’s behaviors distribution over a period of time as the self-supervision signal.
+
+In addition, TabTransformer trained with RTD & MLM(Huang et al., 2020) tasks is employed as the baseline for tabular modality (tabular encoding model), QWEN2-7B(Yang et al., 2024) is employed as the baseline for text modality (searching text encoding model) for user representation evaluation.
+
+5.1.3. Evaluation Metrics
+
+For User Targeting Task, as in each scenario the task can be treated as binary classification, we employ the Accuracy / Precision / Recall metrics for evaluation.
+For User Representation, linear probe representation analysis is conducted on all annotated datasets, which is evaluated by AUC (Area Under the ROC Curve(Bradley, 1997)) and KS (Kolmogorov-Smirnov(Berger and Zhou, 2014)) metrics.
+
+5.1.4. Implementation Details
+
+The embedding sizes of user representation and text features are set to 1024-dim.
+In Self-Supervised User Pre-training stage, the user behavioral sequences, i.e., paybill, SPM and miniprogram, which are in the form of text, are first encoded with AlBERT(Lan, 2019). Then 6-layer Transformer is used to generate encoding of the series for further pre-training.
+For user tabular information, the similar configuration of TabTransformer is utilized in the tabular encoder.
+In the following User-Text Alignment stage, embeddings from multi-modal user features are fused using 5 cross attention layers.
+To generate the encoding of user text description, QWEN2-1.8B(Yang et al., 2024) is utilized as the LLM encoder, which are tuned with LoRA(Hu et al., 2021) together with user encoding model.
+For both of stages, the optimizer is AdamW, with cosine decay learning rate initialized at 4e-4.
+The model is pre-trained on 16 A100 GPUs (80G), and a single A100 is used for testing (linear probe for user embedding and zero-shot, few-shot user targeting).
+
+5.2. Comparisons
+
+5.2.1. Zero-shot User Targeting
+
+We take user targeting via zero-shot transfer based on one sentence input on the benchmarks.
+
+Experimental Setup.
+Both ARALLM and fine-tuned ARALLM are also employed as the baseline, taking the same sentence prompt as input.
+
+Analysis.
+Quantitative results in Table 2 demonstrate the superiority of our model, as it outperforms baselines 10%/15%/10% at Accuracy/Precision/Recall metrics crossing all domains.
+
+5.2.2. Few-shot User Targeting
+
+We also take few-shot user targeting on the benchmarks.
+
+Experimental Setup.
+Both ARALLM and fine-tuned ARALLM are also employed as the baseline, together with U-MLP One4all model trained with the seed users.
+For all few-shot learning baselines, the number of user samples is kept at 10. To ensure the comparison fairness upon seed user number, our model is trained with 5 positive and 5 negative users (10 total).
+
+Analysis.
+The quantitative results in Table 3 demonstrate the superiority of our model, as our model outperforms the baselines 5%/8%/5% at Accuracy/Precision/Recall metrics crossing all domains.
+
+The visualized results are presented in Figure 3, which exhibit the performance improvement of the few-shot learned embedding intuitively. Also, the proximity to positive samples and distance from hard-negative samples proves the effectiveness of our approach, especially for handling hard-negative users.
+
+Figure 3. 
+Few-shot User Targeting.
+The embeddings of both targeted, untargeted and hard-negative users are visualized with t-SNE, presented in the same coordinate system together with prompt embedding.
+
+5.2.3. User Representation Evaluation
+
+We also evaluate the performance of the pre-trained user representation from both our model and other user modeling baselines.
+
+Experimental Setup
+For representation evaluation, we utilize linear probe analysis, which means employing linear network layers to the user embeddings to fit the fitting part of the dataset and evaluate on the evaluation part.
+
+Analysis
+As shown in Table 4,
+the representation from our user model outperforms other baselines trained by single-modal data (+ 4%/2% than User Behavioral Sequence, + 12%/13% than Tabular data, + 11%/10% than Searching Text).
+The improvement from simple feature fusion via concatenation also demonstrates the effectiveness of our user feature fusion model (attention-based fusion guided by text description).
+Also, Figure 4 shows the visualization of user embeddings, as users from each consuming scenario presented as one color, demonstrating the user representation capabilities of our model.
+
+Figure 4. t-SNE visualization of user representations.
+Every color represents users with different attributes
+(here denoting the outcomes of each user).
+
+5.3. Ablation Studies
+
+We conduct ablation studies on user data modal, feature fusion module and the user-text alignment method.
+
+Table 4. Linear probe results. AUC/KS metrics on Alipay user targeting benchmarks are presented.
+
+Methods
+Data Modal
+Dt​e​s​t​#​1D_{test}\#1
+Dt​e​s​t​#​2D_{test}\#2
+Dt​e​s​t​#​3D_{test}\#3
+Dt​e​s​t​#​4D_{test}\#4
+Dt​e​s​t​#​5D_{test}\#5
+
+U-MLP One4all
+User Behavioral Sequence
+85.5 / 60.2
+86.8 / 61.7
+83.3 / 56.4
+93.3 / 69.6
+94.6 / 78.9
+
+MSDP
+User Behavioral Sequence
+86.4 / 60.6
+86.7 / 61.2
+84.6 / 58.0
+92.5 / 69.5
+95.7 / 83.3
+
+TabTransformer-MLM&RTD
+Tabular
+77.9 / 49.9
+78.5 / 57.3
+74.6 / 53.0
+82.5 / 69.9
+85.8 / 71.1
+
+QWEN2-7B
+Text
+78.7 / 52.9
+78.9 / 57.6
+72.7 / 44.7
+88.6 / 61.3
+88.6 / 73.0
+
+Concatenation
+Multi-source Heterogeneous
+86.6 / 61.0
+87.5 / 62.3
+85.7 / 60.2
+93.7 / 70.6
+96.1 / 86.4
+
+Ours
+Multi-source Heterogeneous
+89.3 / 62.7
+90.7 / 65.9
+88.7 / 61.5
+95.2 / 73.9
+98.9 / 90.7
+
+Table 5. Ablation experiments on zero-shot user targeting over Alipay benchmarks.
+Different data sources and feature fusion module in pre-training are ablated in the experiment.
+Accuracy / Precision / Recall of user targeting are presented.
+
+Methods
+Dt​e​s​t​#​1D_{test}\#1
+Dt​e​s​t​#​2D_{test}\#2
+Dt​e​s​t​#​3D_{test}\#3
+Dt​e​s​t​#​4D_{test}\#4
+Dt​e​s​t​#​5D_{test}\#5
+
+w/o User Behavioral Sequence
+82.6/75.5/88.0
+89.7/83.8/85.8
+52.6/50.5/56.9
+58.7/52.9/65.0
+76.7/65.6/74.7
+
+w/o Tabular
+84.3/79.3/90.0
+91.3/88.1/86.5
+55.0/55.9/63.3
+63.3/59.4/85.7
+93.5/90.1/89.7
+
+w/o Search Text
+83.6/78.7/89.7
+90.2/87.7/86.4
+54.4/53.9/62.5
+60.2/56.4/68.6
+79.9/71.2/77.8
+
+w/o Attention-based Fusion
+87.3/81.6/93.5
+93.7/89.5/88.8
+58.7/56.3/64.7
+64.3/58.3/72.7
+83.9/75.9/79.6
+
+Full
+88.6/83.7/94.1
+96.0/92.3/90.0
+61.9/57.6/67.0
+67.6/60.4/76.9
+84.3/77.3/80.0
+
+5.3.1. Pre-training Data Modal
+
+To verify the effect of
+the multi-source pre-training data, we conduct the comparison between the model trained without different data modal and the full model.
+Comparison between Table 5 row 1-3 and row 5 shows the effectiveness of all data sources for pre-training our foundation model, while the user behavioral sequence plays the most significant role in user understanding, leading to over 6%/8%/6% Accuracy/Precison/Recall.
+
+5.3.2. Attention-based Feature Fusion
+
+The effect of feature fusion module in our user-text alignment stage is also evaluated.
+
+Experimental Setup.
+We employ the feature concatenation instead of the attention-based fusion module to fuse multi-modal user features as comparison.
+
+Analysis.
+As shown in 4-th row of Table 5, the absence of attention-based multi-modal user feature fusion will lead to a performance decrease of ∼\sim 1%/2%/1% Accuracy/Precison/Recall.
+
+6. Conclusion
+
+In this paper, we propose an industrial framework Found for transferable and predictive user targeting.
+Our model takes one-sentence form demand as input and achieve user understanding with heterogeneous multi-scenario data, enabling it to select targeted user among candidates.
+The framework is pre-trained in a two-stage strategy, where the first Self-Supervised User Modeling Stage is built to generate user representation from multi-modal user data, and the second User-Text Alignment Stage is built for fusing multi-modal user features and align user embedding with corresponding language representation for user targeting.
+Additionally, to enhance the model predictive ability, the user-text pair for
+our framework pre-training is also designed, as the text is obtained via from future use behaviors while user representation is generated from pervious information.
+With the pre-trained framework, zero-shot transfer and few-shot user targeting via prompt-tuning are designed to achieve user targeting.
+On real-world benchmarks, our model outperforms baselines in cross-domain scenarios, which demonstrates the superiority of our model.
+Additionally, in real-world application, our model exhibits superior performance compared with other industrial frameworks.
+Since 2024, Found is deployed in the user selection platform of Alipay for numerous domains, obtaining an improvement for different user understanding scenarios. For example, improving 30% CTR for "Used Car Selling Preferences" users and 13.2% CTR for "Video Watching in Alipay" users.
+
+Acknowledgements.
+
+This work was supported by the National Key Research and Development Plan of China (2023YFB4502305), and Ant Group through Ant Research Intern Program.
+We acknowledge that the datasets are only used for academic research, and do not represent any real business situation. They are desensitized and encrypted, do not contain any Personal Identifiable Information and were destroyed after the experiments. Adequate data protection was carried out during the experiment to prevent the risk of data copy leakage.
+
+References
+
+Bang et al. (2023)
+
+Yejin Bang, Samuel Cahyawijaya, Nayeon Lee, Wenliang Dai, Dan Su, Bryan Wilie, Holy Lovenia, Ziwei Ji, Tiezheng Yu, Willy Chung, et al. 2023.
+
+A multitask, multilingual, multimodal evaluation of chatgpt on reasoning, hallucination, and interactivity.
+
+arXiv preprint arXiv:2302.04023 (2023).
+
+Berger and Zhou (2014)
+
+Vance W Berger and YanYan Zhou. 2014.
+
+Kolmogorov–smirnov test: Overview.
+
+Wiley statsref: Statistics reference online (2014).
+
+Bradley (1997)
+
+Andrew P Bradley. 1997.
+
+The use of the area under the ROC curve in the evaluation of machine learning algorithms.
+
+Pattern recognition 30, 7 (1997), 1145–1159.
+
+Brannon et al. (2023)
+
+William Brannon, Suyash Fulay, Hang Jiang, Wonjune Kang, Brandon Roy, Jad Kabbara, and Deb Roy. 2023.
+
+Congrat: Self-supervised contrastive pretraining for joint graph and text embeddings.
+
+arXiv preprint arXiv:2305.14321 (2023).
+
+Chaffey and Ellis-Chadwick (2019)
+
+Dave Chaffey and Fiona Ellis-Chadwick. 2019.
+
+Digital marketing.
+
+Pearson uk.
+
+Chen et al. (2021)
+
+Chun-Fu Richard Chen, Quanfu Fan, and Rameswar Panda. 2021.
+
+Crossvit: Cross-attention multi-scale vision transformer for image classification. In Proceedings of the IEEE/CVF international conference on computer vision. 357–366.
+
+Cho (2014)
+
+Kyunghyun Cho. 2014.
+
+Learning phrase representations using RNN encoder-decoder for statistical machine translation.
+
+arXiv preprint arXiv:1406.1078 (2014).
+
+Fu et al. (2023)
+
+Chilin Fu, Weichang Wu, Xiaolu Zhang, Jun Hu, Jing Wang, and Jun Zhou. 2023.
+
+Robust user behavioral sequence representation via multi-scale stochastic distribution prediction. In Proceedings of the 32nd ACM International Conference on Information and Knowledge Management. 4567–4573.
+
+GLM et al. (2024)
+
+Team GLM, Aohan Zeng, Bin Xu, Bowen Wang, Chenhui Zhang, Da Yin, Diego Rojas, Guanyu Feng, Hanlin Zhao, Hanyu Lai, Hao Yu, Hongning Wang, Jiadai Sun, Jiajie Zhang, Jiale Cheng, Jiayi Gui, Jie Tang, Jing Zhang, Juanzi Li, Lei Zhao, Lindong Wu, Lucen Zhong, Mingdao Liu, Minlie Huang, Peng Zhang, Qinkai Zheng, Rui Lu, Shuaiqi Duan, Shudan Zhang, Shulin Cao, Shuxun Yang, Weng Lam Tam, Wenyi Zhao,
+Xiao Liu, Xiao Xia, Xiaohan Zhang, Xiaotao Gu, Xin Lv, Xinghan Liu, Xinyi Liu, Xinyue Yang, Xixuan Song, Xunkai Zhang, Yifan An, Yifan Xu, Yilin Niu, Yuantao Yang, Yueyan Li, Yushi Bai, Yuxiao Dong, Zehan Qi, Zhaoyu Wang, Zhen Yang, Zhengxiao Du, Zhenyu Hou, and Zihan Wang. 2024.
+
+ChatGLM: A Family of Large Language Models from GLM-130B to GLM-4 All Tools.
+
+arXiv:2406.12793
+
+Gu et al. (2021)
+
+Jie Gu, Feng Wang, Qinghui Sun, Zhiquan Ye, Xiaoxiao Xu, Jingmin Chen, and Jun Zhang. 2021.
+
+Exploiting behavioral consistence for universal user representation. In Proceedings of the AAAI Conference on Artificial Intelligence, Vol. 35. 4063–4071.
+
+Hermans et al. (2017)
+
+Alexander Hermans, Lucas Beyer, and Bastian Leibe. 2017.
+
+In defense of the triplet loss for person re-identification.
+
+arXiv preprint arXiv:1703.07737 (2017).
+
+Hu et al. (2021)
+
+Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and Weizhu Chen. 2021.
+
+Lora: Low-rank adaptation of large language models.
+
+arXiv preprint arXiv:2106.09685 (2021).
+
+Huang et al. (2020)
+
+Xin Huang, Ashish Khetan, Milan Cvitkovic, and Zohar Karnin. 2020.
+
+Tabtransformer: Tabular data modeling using contextual embeddings.
+
+arXiv preprint arXiv:2012.06678 (2020).
+
+Jia et al. (2021)
+
+Chao Jia, Yinfei Yang, Ye Xia, Yi-Ting Chen, Zarana Parekh, Hieu Pham, Quoc Le, Yun-Hsuan Sung, Zhen Li, and Tom Duerig. 2021.
+
+Scaling up visual and vision-language representation learning with noisy text supervision. In International conference on machine learning. PMLR, 4904–4916.
+
+Kenton and Toutanova (2019)
+
+Jacob Devlin Ming-Wei Chang Kenton and Lee Kristina Toutanova. 2019.
+
+BERT: Pre-training of Deep Bidirectional Transformers for Language Understanding. In Proc. of AACL.
+
+Ko et al. (2022)
+
+Hyeyoung Ko, Suyeon Lee, Yoonseo Park, and Anna Choi. 2022.
+
+A survey of recommendation systems: recommendation models, techniques, and application fields.
+
+Electronics 11, 1 (2022), 141.
+
+Lan (2019)
+
+Z Lan. 2019.
+
+Albert: A lite bert for self-supervised learning of language representations.
+
+arXiv preprint arXiv:1909.11942 (2019).
+
+Li et al. (2023)
+
+Junnan Li, Dongxu Li, Silvio Savarese, and Steven Hoi. 2023.
+
+Blip-2: Bootstrapping language-image pre-training with frozen image encoders and large language models. In International conference on machine learning. PMLR, 19730–19742.
+
+Li et al. (2022b)
+
+Junnan Li, Dongxu Li, Caiming Xiong, and Steven Hoi. 2022b.
+
+Blip: Bootstrapping language-image pre-training for unified vision-language understanding and generation. In International conference on machine learning. PMLR, 12888–12900.
+
+Li et al. (2022a)
+
+Zicheng Li, Shoushan Li, and Guodong Zhou. 2022a.
+
+Pre-trained token-replaced detection model as few-shot learner.
+
+arXiv preprint arXiv:2203.03235 (2022).
+
+Liu et al. (2024)
+
+Haotian Liu, Chunyuan Li, Qingyang Wu, and Yong Jae Lee. 2024.
+
+Visual instruction tuning.
+
+Advances in neural information processing systems 36 (2024).
+
+Liu et al. (2023)
+
+Kang Liu, Feng Xue, Dan Guo, Peijie Sun, Shengsheng Qian, and Richang Hong. 2023.
+
+Multimodal graph contrastive learning for multimedia-based recommendation.
+
+IEEE Transactions on Multimedia 25 (2023), 9343–9355.
+
+Liu et al. (2022)
+
+Zhuang Liu, Yunpu Ma, Matthias Schubert, Yuanxin Ouyang, and Zhang Xiong. 2022.
+
+Multi-modal contrastive pre-training for recommendation. In Proceedings of the 2022 International Conference on Multimedia Retrieval. 99–108.
+
+Milana and Ashta (2021)
+
+Carlo Milana and Arvind Ashta. 2021.
+
+Artificial intelligence techniques in finance and financial markets: a survey of the literature.
+
+Strategic Change 30, 3 (2021), 189–209.
+
+Ni et al. (2018)
+
+Yabo Ni, Dan Ou, Shichen Liu, Xiang Li, Wenwu Ou, Anxiang Zeng, and Luo Si. 2018.
+
+Perceive your users in depth: Learning universal user representations from multiple e-commerce tasks. In Proceedings of the 24th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 596–605.
+
+Nikzad-Khasmakhi et al. (2019)
+
+Narjes Nikzad-Khasmakhi, MA Balafar, and M Reza Feizi-Derakhshi. 2019.
+
+The state-of-the-art in expert recommendation systems.
+
+Engineering Applications of Artificial Intelligence 82 (2019), 126–147.
+
+Oord et al. (2018)
+
+Aaron van den Oord, Yazhe Li, and Oriol Vinyals. 2018.
+
+Representation learning with contrastive predictive coding.
+
+arXiv preprint arXiv:1807.03748 (2018).
+
+Ouyang et al. (2022)
+
+Long Ouyang, Jeffrey Wu, Xu Jiang, Diogo Almeida, Carroll Wainwright, Pamela Mishkin, Chong Zhang, Sandhini Agarwal, Katarina Slama, Alex Ray, et al. 2022.
+
+Training language models to follow instructions with human feedback.
+
+Advances in neural information processing systems 35 (2022), 27730–27744.
+
+Radford et al. (2021)
+
+Alec Radford, Jong Wook Kim, Chris Hallacy, Aditya Ramesh, Gabriel Goh, Sandhini Agarwal, Girish Sastry, Amanda Askell, Pamela Mishkin, Jack Clark, et al. 2021.
+
+Learning transferable visual models from natural language supervision. In International conference on machine learning. PMLR, 8748–8763.
+
+Shin et al. (2021)
+
+Kyuyong Shin, Hanock Kwak, Kyung-Min Kim, Minkyu Kim, Young-Jin Park, Jisu Jeong, and Seungjae Jung. 2021.
+
+One4all user representation for recommender systems in e-commerce.
+
+arXiv preprint arXiv:2106.00573 (2021).
+
+Simester et al. (2020)
+
+Duncan Simester, Artem Timoshenko, and Spyros I Zoumpoulis. 2020.
+
+Targeting prospective customers: Robustness of machine-learning methods to typical data challenges.
+
+Management Science 66, 6 (2020), 2495–2522.
+
+Sun et al. (2023)
+
+Kai Sun, Yifan Ethan Xu, Hanwen Zha, Yue Liu, and Xin Luna Dong. 2023.
+
+Head-to-tail: How knowledgeable are large language models (llm)? AKA will llms replace knowledge graphs?
+
+arXiv preprint arXiv:2308.10168 (2023).
+
+Vaswani (2017)
+
+A Vaswani. 2017.
+
+Attention is all you need.
+
+Advances in Neural Information Processing Systems (2017).
+
+Wang et al. (2024)
+
+Junjie Wang, Dan Yang, Binbin Hu, Yue Shen, Wen Zhang, and Jinjie Gu. 2024.
+
+Know Your Needs Better: Towards Structured Understanding of Marketer Demands with Analogical Reasoning Augmented LLMs. In Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining. 5860–5871.
+
+Wang et al. (2023)
+
+Xiao Wang, Guangyao Chen, Guangwu Qian, Pengcheng Gao, Xiao-Yong Wei, Yaowei Wang, Yonghong Tian, and Wen Gao. 2023.
+
+Large-scale multi-modal pre-trained models: A comprehensive survey.
+
+Machine Intelligence Research 20, 4 (2023), 447–482.
+
+Wei et al. (2023)
+
+Wei Wei, Chao Huang, Lianghao Xia, and Chuxu Zhang. 2023.
+
+Multi-modal self-supervised learning for recommendation. In Proceedings of the ACM Web Conference 2023. 790–800.
+
+Wen and Fang (2023)
+
+Zhihao Wen and Yuan Fang. 2023.
+
+Augmenting low-resource text classification with graph-grounded pre-training and prompting. In Proceedings of the 46th International ACM SIGIR Conference on Research and Development in Information Retrieval. 506–516.
+
+Yang et al. (2024)
+
+An Yang, Baosong Yang, Binyuan Hui, Bo Zheng, Bowen Yu, Chang Zhou, Chengpeng Li, Chengyuan Li, Dayiheng Liu, Fei Huang, et al. 2024.
+
+Qwen2 technical report.
+
+arXiv preprint arXiv:2407.10671 (2024).
+
+Yuan et al. (2020)
+
+Fajie Yuan, Xiangnan He, Alexandros Karatzoglou, and Liguang Zhang. 2020.
+
+Parameter-efficient transfer from sequential behaviors for user modeling and recommendation. In Proceedings of the 43rd International ACM SIGIR conference on research and development in Information Retrieval. 1469–1478.
+
+Zhang et al. (2020)
+
+Junqi Zhang, Bing Bai, Ye Lin, Jian Liang, Kun Bai, and Fei Wang. 2020.
+
+General-purpose user embeddings based on mobile app usage. In Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2831–2840.
+
+Zhou et al. (2022a)
+
+Kaiyang Zhou, Jingkang Yang, Chen Change Loy, and Ziwei Liu. 2022a.
+
+Conditional prompt learning for vision-language models. In Proceedings of the IEEE/CVF conference on computer vision and pattern recognition. 16816–16825.
+
+Zhou et al. (2022b)
+
+Kaiyang Zhou, Jingkang Yang, Chen Change Loy, and Ziwei Liu. 2022b.
+
+Learning to prompt for vision-language models.
+
+International Journal of Computer Vision 130, 9 (2022), 2337–2348.
+
+Zhu et al. (2023)
+
+Beier Zhu, Yulei Niu, Yucheng Han, Yue Wu, and Hanwang Zhang. 2023.
+
+Prompt-aligned gradient for prompt tuning. In Proceedings of the IEEE/CVF International Conference on Computer Vision. 15659–15669.
+
+Zhu et al. (2024)
+
+Yun Zhu, Haizhou Shi, Xiaotang Wang, Yongchao Liu, Yaoke Wang, Boci Peng, Chuntao Hong, and Siliang Tang. 2024.
+
+GraphCLIP: Enhancing Transferability in Graph Foundation Models for Text-Attributed Graphs.
+
+arXiv preprint arXiv:2410.10329 (2024).
+
+Appendix A Additional Model Details
+
+A.1. Self-Supervised User Modeling
+
+For User Behavioral Sequence Pre-training, the time span for each window represents one week.
+The behavioral sequence length is 9, divided into 5 (fed into the time-aware autoregressive model) and 4 (used as the future behaviors for contrastive learning).
+λc​y​c\lambda_{cyc} is set at 0.1.
+The user behavioral sequence pre-training takes ∼\sim 40 hours on 8 A100 GPUs for model convergence.
+
+Figure 5. The architecture of our tabular encoder.
+
+For Tabular Pre-training, the architecture of the transformer-based encoder is shown in Fig. 5, as the categorical features Tc​a​tT_{cat} are encoded with Column Embedding(Huang et al., 2020) and continuous features Tc​o​n​tT_{cont} are encoded with MLP,
+which are both fed into the transformer blocks.
+Followed by mean pooling operation among all features, tabular embedding e(tab)e^{\text{(tab)}} for each user is generated. In our model, transformer block number NN is selected as 4 and feature dimension dd is 1024.
+To achieve the unsupervised pre-training, MLM and RTD tasks are performed.
+For MLM task, given a tabular input with categorical features Tc​a​t={T1,T2,⋯T𝒞}T_{cat}=\{T_{1},T_{2},\cdot\cdot\cdot T_{\mathcal{C}}\}, we randomly select k%k\% features from index 1 to 𝒞\mathcal{C} and mask them as missing. By minimizing the objective that tries to predict the original features of the masked features, from the embedding outputted from the top-layer Transformer, MLM is conducted.
+Here the selection rate kk is 30.
+For RTD task, the original feature is replaced by a random value of that feature and the loss is designed to minimize for a binary classifier that tries to predict whether or not the feature has been replaced.
+It can be noticed that different binary classifiers are defined for each column rather than a shared one, as each column has its own Column Embedding.
+In our tabular pre-training process, λM​L​M\lambda_{MLM} is set at 0.6 and λM​L​M\lambda_{MLM} is 0.4.
+The tabular pre-training takes ∼\sim 50 hours on 8 A100 GPUs for model convergence.
+
+A.2. User-Text Alignment
+
+After pre-training the user encoder, multi-modal features are fused and further aligned with text features generated from the future user behavior to form the user targeting system.
+
+In multi-modal feature fusion, similar strategy based on cross-attention in previous works (Chen et al., 2021) is performed in our model, transferring from conventional image-text data modality to our behavior-tabular-text modal.
+The dimension for each modal and the fused feature is 1024.
+And for further user-text alignment,
+pre-trained multi-modal encoder followed with feature fusion module is the user encoder, while LLM with LoRA fine-tuning module is utilized as the text encoder.
+
+The embedding of the user information and future text are generated from the previous-seven and next-two time windows, respectively. The time span is identical to User Behavioral Sequence Pre-training in A.1, which means the user feature is generated by the multi-modal user data from the first 7 weeks and further aligned with text which is based on the template in 4.1 from the following 2 weeks using the contrastive learning.
+The user-text alignment takes ∼\sim 70 hours on 16 A100 GPUs for model convergence.
+
+Appendix B Additional Experimental Results
+
+We present additional zero-shot user targeting results (measured by Precision on the validation dataset) across different real-world advertising application scenarios in Alipay.
+Fig 6 illustrates that our foundation model outperforms the previous model significantly.
+
+Figure 6. Zero-shot user targeting results in different real-world advertising application scenarios.
+
+Appendix C Limitations and Future Work
+
+Though achieving high performance in user targeting and user modeling, there are still some limitations in our model:
+
+1. Though showing fantastic capability at Alipay platform, our model’s generalizability to other platforms or industrial scenarios is not fully tested.
+
+2. The training cost remains high though our two-stage strategy releases the requirement compared to the from-scratch strategy.
+
+Therefore, our future work will focus on the following:
+
+1. Enhancing the model transferability across platforms. We plan to achieve this by enhancing the model’s ability for processing multi-modal user features (such as images, videos, knowledge graph, etc) and improving the model scalability for more data.
+
+2. Reducing the time consumption for the foundation model pre-training.
+
+Experimental support, please
+view the build logs
+for errors. Generated by
+
+L
+A
+T
+E
+
+xml
+
+.
+
+Instructions for reporting errors
+
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+
+Click the "Report Issue" (
+
+) button, located in the page header.
+
+Tip: You can select the relevant text first, to include it in your report.
+
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+
+Major funding support from
+

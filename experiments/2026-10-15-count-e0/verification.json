@@ -1,0 +1,29 @@
+{
+  "status": "independent_artifact_checks_passed",
+  "models_replayed": 30,
+  "raw_metric_rows_verified": 60,
+  "sweep_rows_and_intervals_verified": 1200,
+  "bootstrap_context_vectors_replayed": 300,
+  "equal_bytes_at_each_budget": {
+    "64": 513454,
+    "256": 524974,
+    "1024": 571054
+  },
+  "ungrouped_prediction_matches_previous_probe_exactly": true,
+  "max_absolute_errors": {
+    "prediction": 0.0,
+    "group_probability": 0.0,
+    "aggregate": 0.0,
+    "sweep": 0.0,
+    "raw": 2.220446049250313e-16,
+    "bootstrap": 1.8318679906315083e-15
+  },
+  "primary_gate_recomputed": false,
+  "scientific_limits": [
+    "Native label rule mismatch remains unresolved.",
+    "Supported-cohort all-context bootstrap retains only 545/1000 resamples because rare contexts disappear; these conditional intervals are not dependable coverage estimates.",
+    "One optimization seed and capped, limited-iteration heuristic; no global-optimum guarantee.",
+    "Existing test period is exploratory; no neural or deployment robustness validation."
+  ],
+  "elapsed_seconds": 5.504967699998815
+}

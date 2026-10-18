@@ -1,0 +1,8 @@
+{
+  "stage": "after_label_integrity_audit_before_any_baseline_fit",
+  "reason": "Published native long_view labels do not exactly match the documented play/duration rule. Zero video durations explain most mismatches; positive-duration discrepancies remain unexplained.",
+  "unchanged": ["Use native long_view as the target", "all date splits", "no current feedback as predictor", "validation-only model selection", "do not remove rows based on label agreement"],
+  "change": "Record duration-rule disagreement as a failed documentation-consistency check instead of stopping the exploratory native-label probe.",
+  "additional_reporting": "Report zero-duration counts and a duration-positive sensitivity subset, which depends on a pre-outcome field rather than the label.",
+  "claim_limit": "Results concern the native binary feedback label; exact operational long-view semantics are not fully verified. This amendment is exploratory, not a prospective confirmatory protocol."
+}

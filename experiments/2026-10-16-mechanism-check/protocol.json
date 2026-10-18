@@ -1,0 +1,46 @@
+{
+  "recorded_utc": "2026-10-16T07:38:06.278048+00:00",
+  "status": "exploratory_validation_only_research_spike",
+  "authorization": "User: okay do it, after the bounded mechanism-check plan.",
+  "resource_scope": "Local CPU only; two-hour investigation cap, no dependency changes, downloads, external writes, GPU, Kaggle or NVIDIA calls.",
+  "source_cache_sha256": "413845cf5ed49a3c67d011fbf93183dfd069af8de6a99d2a39740617e761d16b",
+  "previous_E0_results_sha256": "988192a2cce160ebaf8936b84b878381141ba8c7571b7e4de01bc3aead830133",
+  "reused_sources": {
+    "D:\\web_2\\experiments\\2026-10-15-count-e0\\run_e0.py": "2cbc2baf907aa7f6183054ca32d2398d68069f2babc0e17037421a067260370e",
+    "D:\\web_2\\experiments\\2026-10-15-count-e0\\e0_math.py": "ed3bc0618a36e7c7d9a0678679dfaba77a3cc3f53c9750eb554b22b6d5bc4d24"
+  },
+  "native_label_rule_consistency": false,
+  "data": "Existing quarantine and UTC chronology; native long_view. Only train and validation arrays accessed; existing standard/random tests not evaluated.",
+  "context_pair": [
+    0,
+    1
+  ],
+  "pair_selection": "Maximize count of training users with >=20 records in both interfaces; stable lexical tie break; no outcomes used.",
+  "users_with_20_in_both_before_split": 1284,
+  "training_split": "Seed 20261016 random disjoint halves A/B at event level, probability .5. A defines profiles and pairings. B fits all paired predictors and checks profile repeatability. Not a claim of statistical independence of temporally correlated events.",
+  "eligible_users": "At least 20 records per selected context in full train and at least 8 in each context in each of A and B. Counts only.",
+  "profile": "Alpha=10 smoothing toward A context rate. Contrast k_u=logit(p_A(u,a))-logit(p_A(u,b)); marginal component m_u=.5*(logit(p_A(u,a))+logit(p_A(u,b))). Overall user logit uses all A contexts.",
+  "matching": "Greedy blocks of four users, seeds 11/29/47. Every block: max-min overall A user logit <=.5, max-min marginal component <=.5, full-train counts in each selected context differ by <=2x. Nearest standardized covariates; all selection uses A outcomes and train counts.",
+  "pairing": "Three exhaustive perfect pairings in each block. Select low/high using A mean squared pair contrast difference, stable first tie break. Neutral reference is expected loss across the three uniform random pairings, not an ensemble probability.",
+  "fit": "B counts only; alpha=10 and residual weight=1 for every predictor. Common B video/context probabilities. Pair tables use all 15 contexts; evaluate selected two contexts only. Two users per group; identical mapping/table bytes for high, low and all three random-pairing outcomes.",
+  "evaluation": "Validation only, matched users and selected context pair. Primary per-event log loss on this fixed cohort; secondary equal-context mean. This is not pure causal preference identification.",
+  "prediction": "sigmoid(logit(p_B(video,context)) + logit(p_B(group,context)) - logit(p_B(context)))",
+  "references": [
+    "individual B user/context counts",
+    "three exhaustive uniform-random pairing outcomes"
+  ],
+  "adjustment": "All six possible pairs per block; weighted within-block linear regression of validation excess loss on A squared contextual contrast, controlling squared marginal and overall-logit differences, activity mismatch, mean activity, mean marginal component, and A video-set Jaccard overlap. Weights=validation events. Descriptive association, not a causal estimator.",
+  "uncertainty": "1000 paired block-cluster bootstrap replicates, seed 20261016; user-cluster sensitivity for predictor contrasts. Models fixed. No time-generalization or confirmatory claim.",
+  "primary_seed": 11,
+  "primary_gate": {
+    "support": ">=50 matched blocks and >=1000 validation events",
+    "reliable_context_difference": "High-minus-low B squared contrast difference has positive adjusted one-sided lower bound.",
+    "extra_sharing_damage": "High-minus-low validation log loss >=.001 and positive adjusted lower bound.",
+    "useful_grouping": "Neutral-minus-low validation log loss >=.001 and positive adjusted lower bound.",
+    "adjusted_association": "Contextual-disagreement coefficient has positive adjusted lower bound after stated controls.",
+    "bounds": "Bonferroni .05/4 one-sided bootstrap bounds for the four effects; .001 log-loss margin is an analyst-set development threshold.",
+    "replication": "At least two of three pairing seeds show positive B repeatability, high-minus-low loss and neutral-minus-low loss; seeds reuse data and are not independent experiments."
+  },
+  "optimizer_check": "Original full-train profiles, B=64/256, frequency and lambda=.3, three common initializations. Extend same heuristic to max100 rounds; save round12 and final models; validation only. No accepted proposal is heuristic stalling, not certified stationarity.",
+  "interpretation": "GO permits only a narrowed mechanism study and novelty screen. Failure closes this current compression proposal rather than authorizing further tuning. No SRS rescue, paper readiness, neural superiority or novel mathematical claim."
+}

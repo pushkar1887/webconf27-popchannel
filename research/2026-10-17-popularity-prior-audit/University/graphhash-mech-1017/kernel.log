@@ -1,0 +1,12 @@
+[{"stream_name":"stdout","time":57.081551646,"data":"{\"event\": \"clustering_ready\", \"version\": \"0.32.1\", \"artifact\": \"scikit_network-0.32.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\", \"mode\": \"source_rebuild\"}\n"}
+,{"stream_name":"stdout","time":62.542059794,"data":"{\"event\": \"data_ready\", \"dataset\": \"Gowalla\", \"users\": 29858, \"items\": 40981, \"user_id_max\": 29857, \"item_id_max\": 40980, \"interactions\": 1027370, \"split_counts\": [821896, 102737, 102737], \"file_sha256\": {\"train\": \"6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8\", \"val\": \"18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc\", \"test\": \"d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa\"}, \"user_buckets\": 5792, \"item_buckets\": 5806, \"compressed_parameters\": 742272, \"full_parameters\": 4533696}\n"}
+,{"stream_name":"stdout","time":66.429379686,"data":"{\"event\": \"mech\", \"name\": \"Full_DAU\", \"spearman_norm_vs_count\": 0.8149569731787857, \"test_raw_dot\": {\"recall\": 0.1789506497615332, \"ndcg\": 0.11520974262589014}}\n"}
+,{"stream_name":"stdout","time":68.714125179,"data":"{\"event\": \"mech\", \"name\": \"GH_DAU\", \"spearman_norm_vs_count\": 0.2702293164074907, \"test_raw_dot\": {\"recall\": 0.07532547309332825, \"ndcg\": 0.04014800184134465}}\n"}
+,{"stream_name":"stdout","time":84.720030302,"data":"{\"event\": \"mech\", \"name\": \"GH_BPR\", \"spearman_norm_vs_count\": 0.054098892464624036, \"test_raw_dot\": {\"recall\": 0.09342327632462041, \"ndcg\": 0.05493752790774439}, \"best_beta\": 0.5, \"test_best_rawdot\": {\"recall\": 0.11238817682921337, \"ndcg\": 0.06948579453134453}}\n"}
+,{"stream_name":"stderr","time":90.488578914,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":90.488610728,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":90.811284126,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":90.811329389,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":91.62453659,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":92.667673895,"data":"[NbConvertApp] Writing 316241 bytes to __results__.html\n"}
+]

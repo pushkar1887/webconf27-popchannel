@@ -1,0 +1,274 @@
+{
+  "receipt": {
+    "repo": "ZzYUuuu/SUAU",
+    "sha": "d1062bd7fedc137894dcd02bf846dd1e1261aec7",
+    "candidates": [
+      "README.md",
+      "SUAU-main/utility/__pycache__/losses.cpython-38.pyc",
+      "SUAU-main/utility/losses.py"
+    ]
+  },
+  "tree": {
+    "sha": "d1062bd7fedc137894dcd02bf846dd1e1261aec7",
+    "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/d1062bd7fedc137894dcd02bf846dd1e1261aec7",
+    "tree": [
+      {
+        "path": "LICENSE",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64",
+        "size": 11357,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/261eeb9e9f8b2b4b0d119366dda99c6fd7d35c64"
+      },
+      {
+        "path": "README.md",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "943271e4e24ebd23629f506f8a63bdc1b1c0310f",
+        "size": 666,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/943271e4e24ebd23629f506f8a63bdc1b1c0310f"
+      },
+      {
+        "path": "SUAU-main",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "8bd82f15f0ca1daff17eb380d28e96acd216cc82",
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/8bd82f15f0ca1daff17eb380d28e96acd216cc82"
+      },
+      {
+        "path": "SUAU-main/dataset",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "d0fb11703d8faf5ce8cc156eeda217430213b6de",
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/d0fb11703d8faf5ce8cc156eeda217430213b6de"
+      },
+      {
+        "path": "SUAU-main/dataset/amazon-book",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "f23e54a7f240c59d0c8262cbac90ac237301fba8",
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/f23e54a7f240c59d0c8262cbac90ac237301fba8"
+      },
+      {
+        "path": "SUAU-main/dataset/amazon-book/pre_Adj.npz",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "506d570876d9762f1ce03f49bb3aae14c034f6e7",
+        "size": 22760343,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/506d570876d9762f1ce03f49bb3aae14c034f6e7"
+      },
+      {
+        "path": "SUAU-main/dataset/amazon-book/test.txt",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "90f9190abf5e51bedbbc926804245820257344c6",
+        "size": 3848631,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/90f9190abf5e51bedbbc926804245820257344c6"
+      },
+      {
+        "path": "SUAU-main/dataset/amazon-book/train.txt",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "8a8382743b1c1e61d1ab086412372b9201685bc9",
+        "size": 14125667,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/8a8382743b1c1e61d1ab086412372b9201685bc9"
+      },
+      {
+        "path": "SUAU-main/dataset/tmall",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "3392bfe64d9ac2208240709688695e7897cb24c6",
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/3392bfe64d9ac2208240709688695e7897cb24c6"
+      },
+      {
+        "path": "SUAU-main/dataset/tmall/pre_Adj.npz",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "f6ae7c18b31dccf00f664cb6e23e3b9acf39be2e",
+        "size": 22172636,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/f6ae7c18b31dccf00f664cb6e23e3b9acf39be2e"
+      },
+      {
+        "path": "SUAU-main/dataset/tmall/test.txt",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "70e6878a7618359cdef2a4d6cf9146b3bf4874d9",
+        "size": 1982791,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/70e6878a7618359cdef2a4d6cf9146b3bf4874d9"
+      },
+      {
+        "path": "SUAU-main/dataset/tmall/train.txt",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "71183ce9da9fa3d0fb70621e59124465f257fd51",
+        "size": 12985608,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/71183ce9da9fa3d0fb70621e59124465f257fd51"
+      },
+      {
+        "path": "SUAU-main/dataset/yelp2018",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "6b69f4d95abe74414735ee30d4d3ebd05ff35539",
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/6b69f4d95abe74414735ee30d4d3ebd05ff35539"
+      },
+      {
+        "path": "SUAU-main/dataset/yelp2018/pre_Adj.npz",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "4d4eb20aeab0d74b4d25f8b289a75006231bce03",
+        "size": 11700084,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/4d4eb20aeab0d74b4d25f8b289a75006231bce03"
+      },
+      {
+        "path": "SUAU-main/dataset/yelp2018/test.txt",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "30dfbc3437b27b74cb2970b435a5ec93ad9f2468",
+        "size": 1986152,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/30dfbc3437b27b74cb2970b435a5ec93ad9f2468"
+      },
+      {
+        "path": "SUAU-main/dataset/yelp2018/train.txt",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "cda12361055ba448ae4bd1070f6000c16dea8f22",
+        "size": 6904880,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/cda12361055ba448ae4bd1070f6000c16dea8f22"
+      },
+      {
+        "path": "SUAU-main/main.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "a87f2f8be2a96d2b3145f791b6aca9b1a44063cf",
+        "size": 2584,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/a87f2f8be2a96d2b3145f791b6aca9b1a44063cf"
+      },
+      {
+        "path": "SUAU-main/model",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "2fc8f468f1fc29442e7ab9d683283491863e55ac",
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/2fc8f468f1fc29442e7ab9d683283491863e55ac"
+      },
+      {
+        "path": "SUAU-main/model/SUAU.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "30fa01d5b0225b726232b05a3b071611fb6db3fa",
+        "size": 8221,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/30fa01d5b0225b726232b05a3b071611fb6db3fa"
+      },
+      {
+        "path": "SUAU-main/utility",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "4edd0886e016069ff91ef19731871a4291701896",
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/4edd0886e016069ff91ef19731871a4291701896"
+      },
+      {
+        "path": "SUAU-main/utility/__pycache__",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "0441e457fb39752fe63736bf3196db3cbb978c60",
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/trees/0441e457fb39752fe63736bf3196db3cbb978c60"
+      },
+      {
+        "path": "SUAU-main/utility/__pycache__/data_loader.cpython-38.pyc",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "888e2b70b5c24c8804a9d5d4b84bb969e402ca1d",
+        "size": 6847,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/888e2b70b5c24c8804a9d5d4b84bb969e402ca1d"
+      },
+      {
+        "path": "SUAU-main/utility/__pycache__/losses.cpython-38.pyc",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "ce73f02ce01bea25c542c1dfe7511d2e3468037a",
+        "size": 867,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/ce73f02ce01bea25c542c1dfe7511d2e3468037a"
+      },
+      {
+        "path": "SUAU-main/utility/__pycache__/parser.cpython-38.pyc",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "859beb39d05577724b81690bee32c943e4fffe5b",
+        "size": 1825,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/859beb39d05577724b81690bee32c943e4fffe5b"
+      },
+      {
+        "path": "SUAU-main/utility/__pycache__/tester.cpython-38.pyc",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "d9a9719da8092906aba4a9f936969b5e4b890eda",
+        "size": 5779,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/d9a9719da8092906aba4a9f936969b5e4b890eda"
+      },
+      {
+        "path": "SUAU-main/utility/__pycache__/tools.cpython-38.pyc",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "63ea742cc78a6b67a9944ab64b89a109fe948692",
+        "size": 2051,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/63ea742cc78a6b67a9944ab64b89a109fe948692"
+      },
+      {
+        "path": "SUAU-main/utility/__pycache__/trainer.cpython-38.pyc",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "64b96c9f6567fa225b627e87359ac64d657885d8",
+        "size": 4099,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/64b96c9f6567fa225b627e87359ac64d657885d8"
+      },
+      {
+        "path": "SUAU-main/utility/data_loader.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "6ae9a433cd69ce26c706baac20842f6cc4604b5f",
+        "size": 11585,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/6ae9a433cd69ce26c706baac20842f6cc4604b5f"
+      },
+      {
+        "path": "SUAU-main/utility/losses.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "6afc27dda19d6dbf097da6ba37814af4d37582d2",
+        "size": 1007,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/6afc27dda19d6dbf097da6ba37814af4d37582d2"
+      },
+      {
+        "path": "SUAU-main/utility/parser.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "ae177851bfc80066934813564a21d4a877f43346",
+        "size": 2242,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/ae177851bfc80066934813564a21d4a877f43346"
+      },
+      {
+        "path": "SUAU-main/utility/tester.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "ca5dbf66ca4c991f75936f6a0fa04519aeff3168",
+        "size": 8585,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/ca5dbf66ca4c991f75936f6a0fa04519aeff3168"
+      },
+      {
+        "path": "SUAU-main/utility/tools.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "2fc7b94ad0351f64317e40b91f33d981726eb71d",
+        "size": 1817,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/2fc7b94ad0351f64317e40b91f33d981726eb71d"
+      },
+      {
+        "path": "SUAU-main/utility/trainer.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "594fbae05a8403e7274c848beddb9833c3a799e4",
+        "size": 8216,
+        "url": "https://api.github.com/repos/ZzYUuuu/SUAU/git/blobs/594fbae05a8403e7274c848beddb9833c3a799e4"
+      }
+    ],
+    "truncated": false
+  }
+}

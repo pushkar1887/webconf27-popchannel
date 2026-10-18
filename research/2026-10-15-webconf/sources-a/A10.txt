@@ -1,0 +1,2286 @@
+https://arxiv.org/html/2412.17245
+
+
+GraphHash: Graph Clustering Enables Parameter Efficiency in Recommender Systems
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+Submit in GitHub
+
+arXiv is now an independent nonprofit!
+Learn more
+×
+
+Back to arXiv
+
+Why HTML?
+
+Report Issue
+
+Back to Abstract
+
+Download PDF
+
+Abstract.
+
+1 Introduction
+
+2 Related Work
+
+Hashing Techniques in RecSys
+
+Graph Clustering
+
+Graph Learning Beyond Message-Passing
+
+3 Method: GraphHash
+
+3.1 Embedding in Deep RecSys
+
+3.2 Modularity-based Graph Clustering
+
+3.3 GraphHash
+
+3.4 Why Modularity? A Random Walk View
+
+4 Research Questions
+
+5 Evaluation of GraphHash’s Effectiveness
+
+5.1 Experimental Setup
+
+5.1.1 Backbones33
+3
+
+More results on additional backbones can be found in .
+
+5.1.2 Baselines
+
+5.1.3 Additional experimental results
+
+5.2 Performance Comparison (RQ1)
+
+5.2.1 Performance in retrieval task
+
+5.2.2 Performance in CTR task
+
+5.2.3 The impact of collisions on retrieval vs. CTR performance
+
+5.3 User Subgroup Evaluation (RQ2)
+
+6 Method Analysis
+
+6.1 The Impact of Training Objective (RQ3)
+
+6.2 The Impact of Backbone GNN’s Depth (RQ4)
+
+6.3 Analysis of Embedding Smoothness
+
+6.4 The Impact of Clustering Objective (RQ5)
+
+6.4.1 Modularity-based clustering at varying resolution
+
+6.4.2 Other types of clustering objective
+
+7 Conclusion
+
+References
+
+A Proof of 
+
+Note
+
+B Datasets
+
+Data Splitting
+
+Preprocessing
+
+C Experimental Setup
+
+Hyperparameters
+
+Optimizer
+
+Early Stopping
+
+Compute
+
+D Additional Experimental Results
+
+D.1 The Impact of Training Objective
+
+D.2 The Impact of Backbone GNN’s Depth
+
+D.3 The Impact of Clustering Objective
+
+D.3.1 Modularity-based clustering at varying resolution.
+
+D.3.2 Other types of clustering objective.
+
+D.4 Item Subgroup Evaluation
+
+D.5 Additional Backbones
+
+D.5.1 Retrieval
+
+D.5.2 CTR
+
+D.6 Additional Datasets
+
+D.7 Additional Baselines
+
+D.8 Results on Sparser Graphs
+
+License: arXiv.org perpetual non-exclusive license
+
+arXiv:2412.17245v2 [cs.IR] 08 Feb 2025
+
+GraphHash: Graph Clustering Enables Parameter Efficiency in Recommender Systems
+
+DOI: XXXXXXX.XXXXXXXISBN: 978-1-4503-XXXX-X/18/06
+
+Xinyi Wu1∗ Donald Loveland2∗ Runjin Chen3∗  Yozen Liu4 Xin Chen4  Leonardo Neves4
+ Ali Jadbabaie1  Clark Mingxuan Ju4  Neil Shah4  Tong Zhao4 
+1MIT  2UMich  3UT Austin  4Snap Inc.
+xinyiwu@mit.edu {yliu2,xin.chen,lneves,mju,nshah,tong}@snap.com
+
+2025
+
+Abstract.
+
+Deep recommender systems rely heavily on large embedding tables to handle high-cardinality categorical features such as user/item identifiers, and face significant memory constraints at scale. To tackle this challenge, hashing techniques are often employed to map multiple entities to the same embedding and thus reduce the size of the embedding tables. Concurrently, graph-based collaborative signals have emerged as powerful tools in recommender systems, yet their potential for optimizing embedding table reduction remains unexplored. This paper introduces GraphHash, the first graph-based approach that leverages modularity-based bipartite graph clustering on user-item interaction graphs to reduce embedding table sizes. We demonstrate that the modularity objective has a theoretical connection to message-passing, which provides a foundation for our method. By employing fast clustering algorithms, GraphHash serves as a computationally efficient proxy for message-passing during preprocessing and a plug-and-play graph-based alternative to traditional ID hashing. Extensive experiments show that GraphHash substantially outperforms diverse hashing baselines on both retrieval and click-through-rate prediction tasks. In particular, GraphHash achieves on average a 101.52% improvement in recall when reducing the embedding table size by more than 75%, highlighting the value of graph-based collaborative information for model reduction. Our code is available at https://github.com/snap-research/GraphHash.
+
+Keywords: 
+Recommender Systems, Efficiency, Hashing Trick, Graph ML
+
+1. Introduction
+
+The explosive growth of online content has made deep recommender systems (RecSys) essential for content discovery, product suggestions, and targeted advertising in vast digital ecosystems (57, 6, 1). Large-scale deep RecSys face a critical challenge: their embedding tables, which map each unique value of categorical features like user and item identifiers (IDs) to a dense vector, consume vast amounts of memory due to the high cardinality of these categorical features (19, 55, 31, 38, 23, 37, 12). For example, with more than 3 billion monthly active users worldwide, a single user embedding table for
+a recommendation model at Meta can easily consume hundreds
+of GB of memory (23). This increased memory footprint raises hardware requirements and training costs, potentially limiting model deployability and scalability (23, 12, 19, 55).
+
+To address such a challenge, a common solution is the "hashing trick"—assigning IDs to a smaller number of buckets, effectively reducing the embedding table size by having different users or items share the same embedding (50, 45, 55, 19, 12, 37). A commonly used hashing function in practice is the modulo operation, which assigns entities to buckets solely based on their IDs. While this approach reduces the number of rows in embedding tables, it also introduces collisions by forcing dissimilar entities to share the same embedding, leading to significant degradation in model performance (55, 37, 19). To improve this baseline random hashing, researchers have considered applying the double hashing technique to mitigate collisions, as well as incorporating features and the frequency information (55, 19, 45, 37, 12).
+
+While existing embedding table reduction in RecSys has mostly relied on ID-based or feature-based hashing techniques (55, 31, 45, 19, 12, 37), the field has simultaneously witnessed the rise of collaborative information derived from user-item interactions as a powerful tool. This trend has evolved from classical collaborative filtering to state-of-the-art graph learning approaches (49, 27, 47, 30), highlighting the power of relational data in enhancing recommendation quality. Despite this parallel development, the potential of leveraging collaborative signals for optimizing user/item bucket assignments in model reduction remains largely unexplored. Among various forms of collaborative information, graph representations of user-item interactions have proven particularly effective in recent recommender models. Conventional methods for incorporating this graph information typically rely on message-passing, where embeddings are computed by iteratively aggregating and transforming the embeddings of neighboring nodes. This approach effectively captures the rich structural information inherent in user-item interaction graphs, leading to remarkable improvements in recommendation quality. However, message-passing on large-scale graphs involves operations on massive (sparse) matrices, which increase computational requirements and pose challenges for deployment in industry settings where both recommendation quality and efficiency are critical considerations (56, 22, 24, 16, 58, 17).
+
+The above observations motivate the following critical question:
+
+How can we leverage graph information to design hashing functions for embedding table reduction, offering a more efficient alternative to traditional message-passing?
+
+In this paper, we propose GraphHash, a novel approach that leverages modularity-based bipartite graph clustering (4) on the user-item interaction graph to reduce the number of rows in embedding tables. Unlike traditional hash functions, GraphHash clusters the user-item interaction bipartite graph to group "similar" entities based on their interaction patterns, thus generating user/item bucket assignments that better align with the structure of the data when reducing embedding tables.
+Our choice of modularity-based bipartite graph clustering is motivated by two key factors: first, we demonstrate that based on a random walk interpretation of the modularity maximization objective (4),  GraphHash can be regarded as a coarser yet more efficient way to perform the smoothing over the embeddings offered by message-passing, providing a solid foundation for our method.
+Second, the broad availability of efficient modularity optimization algorithms, such as the Louvain method (5) that employs local greedy heuristics, enables GraphHash to scale effectively to large-scale user-item interaction graphs.
+As a result, our approach provides a computationally efficient and easily implementable solution for model reduction in large-scale recommender systems by leveraging the user-item interaction graph.
+
+Despite its simplicity in implementation (Algorithm 1), GraphHash achieves substantial performance improvements. It introduces a novel way of utilizing graph information during preprocessing, serving as a scalable and practical alternative to message-passing. This makes GraphHash particularly advantageous for industrial applications where computational and parameter efficiency, combined with ease of implementation, are crucial.
+
+Our contributions can be summarized as follows:
+
+• 
+
+Theoretically, we demonstrate that modularity-based clustering offers a coarser yet more efficient alternative to the smoothing effect of message-passing on embeddings.
+
+• 
+
+Building on this theoretical insight, we introduce GraphHash, the first graph-based method to effectively utilize the user-item interaction graph for reducing embedding table size. Our approach employs modularity-based bipartite graph clustering, tailored for scalability in large graphs, and acts as a simple, plug-and-play solution for ID hashing in recommender systems. This combination of efficiency and ease of implementation makes GraphHash a practical and powerful tool for improving RecSys performance.
+
+• 
+
+We conduct extensive evaluations against diverse hashing baselines, showing GraphHash’s superior performance in both retrieval and click-through-rate (CTR) prediction tasks. On average, with fewer parameters, GraphHash outperforms the strongest baseline by 101.52% in recall and 88.33% in NDCG for retrieval, while achieving a 2.9% improvement in LogLoss and a 0.2% gain in AUC for CTR.
+
+• 
+
+Through comprehensive ablation studies across a wide range of experimental settings, we empirically validate our theoretical insights and reveal key findings on the robustness and sensitivity of different design choices in our approach. These results highlight the adaptability and reliability of GraphHash across varying conditions, paving the way for future optimization and refinement in graph-based model reduction.
+
+2. Related Work
+
+Hashing Techniques in RecSys
+
+Embedding tables, where each row stores the embedding for a user or item, require substantial memory due to the vast number of entities in online platforms. A simple yet effective way to reduce the size of these tables is through the "hashing trick," which randomly hashes unique IDs into a smaller set of values using operations like modulo (50). Although this approach inevitably leads to collisions, its simplicity has made it widely used in practice. To mitigate collisions, methods such as double hashing and incorporating frequency information have been shown to be important for enhancing model performance (55, 19). Nonetheless, most prior reduction techniques have focused on ID- or feature-based heuristics, overlooking the user-item interaction information. In this work, we introduce the first graph-based approach for embedding table reduction, integrating interaction information with efficient bipartite graph clustering.
+
+Graph Clustering
+
+Graph clustering is a fundamental technique for dimensionality reduction and has been applied in numerous real-world tasks, including more recent ones such as mining higher-order relational data (53), and retrieval-augmented generation in large language models (15). Common approaches include spectral clustering (14, 41), local graph clustering (2), and flow-based clustering (44). Among these, modularity maximization stands out for its unique ability to identify community structures by optimizing a measure that compares the density of edges within clusters to a null model (35, 4, 40). Known for its computational efficiency thanks to efficient algorithms such as Louvain, modularity maximization has been successfully employed to cluster web-scale graphs (5). In addition to scalability, its strong connection to dynamical processes on graphs (40, 35) makes it particularly suitable for recommendation systems, where large-scale and sparse user-item interaction graphs are common. This connection forms the theoretical backbone of GraphHash, enabling it to effectively harness user-item interaction patterns in sparse graph settings while ensuring scalability and robustness.
+
+Graph Learning Beyond Message-Passing
+
+Graph learning has emerged as a powerful framework for processing relational data (54, 33, 46), with most models following the message-passing paradigm (20), under which node embeddings are computed by recursively aggregating information from all neighboring nodes. However, such a way of integrating the graph in the forward pass also introduces practical challenges, such as scalability with large graphs and oversmoothing, where increasing model
+depth soon leads to degrading performance (42, 51). These challenges drive the need for alternative graph learning paradigms. Broadly, existing graph learning methods can be categorized
+by their use of graphs during preprocessing, training, or inference (58). In RecSys, traditional collaborative filtering and GNN-based methods use the graph during training (49, 27, 34), while recent methods like TAG-CF leverage it during test-time inference. (30). Our approach, GraphHash, introduces a novel use of graph structure during preprocessing.
+
+Figure 1. Overview of GraphHash. By employing fast graph clustering algorithms,
+GraphHash serves as a computationally efficient proxy for message-passing during preprocessing and a plug-and-play graph-based
+alternative to traditional ID hashing, working seamlessly with any architectural backbone that utilizes embedding tables. 
+
+3. Method: GraphHash
+
+In this section, we present the road map leading to our proposed method, GraphHash. Section 3.1 provides an overview of representation learning in RecSys, where recommendations are generated by interacting user and item embeddings, capturing the essential relationships between entities. This background highlights how bipartite graph structures naturally emerge from user-item interactions in tasks such as retrieval and CTR prediction. Building on this foundation, Section 3.2 introduces modularity-based graph clustering, the cornerstone of our approach, which identifies groups of similar entities based on interaction patterns. Section 3.3 then delves into the detailed formulation of GraphHash and its variant, DoubleGraphHash. Finally, Section 3.4 explores the theoretical connection between the modularity maximization objective and message-passing techniques, providing deeper theoretical insights into the mechanics underlying GraphHash.
+
+3.1. Embedding in Deep RecSys
+
+Recommendations are generated by “interacting” user and item embeddings, typically through computing the dot product between corresponding rows of the user and item embedding matrices (19). In deep RecSys, these embeddings are learned representations that map high-dimensional data—such as user preferences or item characteristics—into lower-dimensional vectors, capturing the essential relationships between users and items. These representations are stored in embedding tables, with separate tables for users and items.
+
+The embeddings play a central role in two key tasks: retrieval and click-through rate (CTR) prediction. For retrieval, the system suggests relevant items by comparing the similarity between user and item embeddings, while CTR prediction estimates the likelihood of user engagement with a specific item. Both tasks rely heavily on modeling user-item interactions, often represented as a bipartite graph, where users and items form the nodes, and interactions such as clicks, purchases, or ratings form the edges (49, 27, 47).
+
+With the huge number of entities in online platforms, embedding tables modern recommender systems can easily take hundreds of GB of memory footprint. While commonly adopted hashing tricks (19, 55) can effectively reduce the number of rows, the undesired collisions would negatively affect the recommendation accuracy.
+Therefore, aside from mitigating collisions by mapping entities to a larger set (55), another effective solution would be to map “similar” entities—those with similar interaction patterns—into the same embedding (19). Graph clustering, which effectively groups entities based on their interaction patterns, can help achieve this, reducing the impact of collisions while preserving recommendation quality.
+
+3.2. Modularity-based Graph Clustering
+
+To implement our clustering approach, we rely on modularity, a widely used objective for graph clustering (40, 35, 4, 5, 44, 13). Modularity-based clustering groups similar entities based on the density of their connections, ensuring that densely connected entities share the same embedding. Specifically, for clustering the user-item bipartite graph, we adopt the modularity definition for bipartite graphs proposed in (4):
+given the set of users 𝒰⊂ℕ\mathcal{U}\subset\mathbb{N} and set of items ℐ⊂ℕ\mathcal{I}\subset\mathbb{N}, the adjacency matrix A∈ℝ|𝒰|×|ℐ|A\in\mathbb{R}^{|\mathcal{U}|\times|\mathcal{I}|} of the user-item bipartite graph 𝒢⁡(𝒰,ℐ,ℰ)\mathcal{G}(\mathcal{U},\mathcal{I},\mathcal{E}), which encodes the set of user-item interaction pairs ℰ\mathcal{E}, is defined as
+
+Au​i={1(u,i)∈ℰ0o​t​h​e​r​w​i​s​e.A_{ui}=\begin{cases}1&(u,i)\in\mathcal{E}\\
+0&otherwise\,.\end{cases}
+
+Then modularity of a cluster assignements 𝒫\mathcal{P} for the bipartite graph 𝒢\mathcal{G} is defined as
+
+Q=1m​∑𝒞∈𝒫∑u,i∈𝒞(Au​i−ku​dim),Q=\frac{1}{m}\sum_{\mathcal{C}\in\mathcal{P}}\sum_{u,i\in\mathcal{C}}\left(A_{ui}-\frac{k_{u}d_{i}}{m}\right)\,,
+
+where m=|ℰ|m=|\mathcal{E}| is the number of edges in 𝒢\mathcal{G}, ku=∑jAu​jk_{u}=\sum_{j}A_{uj} is the degree of user uu, and di=∑jAj​id_{i}=\sum_{j}A_{ji} is the degree of item ii. The optimal cluster assignments 𝒫∗\mathcal{P}^{*} in terms of modularity is then found by maximizing QQ.
+
+Directly optimizing modularity is NP-hard (8). In practice, optimal partitions can be found by modularity optimization algorithms. One of the most popular and state-of-the-art modularity optimization method is the Louvain method (5), which is based on greedy heuristics and enables efficient clustering even on graphs with billions of nodes (5).11
+1
+
+In the implementation of our method, we make use of the function provided in the scikit-network library (7). Denote the algorithm as 𝒜\mathcal{A}, then the clustering assignment of node xx is given by 𝒜⁡(x)\mathcal{A}(x).
+
+Algorithm 1 Example GraphHash implementation with Louvain
+
+⬇
+
+"""␣ID␣hashing␣"""
+
+louvain = Louvain(resolution=resolution)
+
+louvain.fit(train_data, force_bipartite=True)
+
+user_hashed_id = map_to_consec_int(louvain.labels_row_)
+
+item_hashed_id = map_to_consec_int(louvain.labels_col_)
+
+"""␣build␣model␣with␣hashed␣user/item␣ID␣vocab␣"""
+
+user_vocab = np.unique(user_clusters)
+
+item_vocab = np.unique(user_clusters)
+
+model = MFRetriever(user_vocab, item_vocab, emb_dim)
+
+"""␣model␣training␣"""
+
+for user_id, item_id in train_data:
+
+pos_score = model(user_hashed_id[user_id],
+
+item_hashed_id[item_id])
+
+… # negative sampling, BPR loss, etc
+
+3.3. GraphHash
+
+With the clustering assignments obtained through modularity-based graph clustering, we can now extend this approach to define the hashing mechanism of GraphHash. Given the set of users 𝒰⊂ℕ\mathcal{U}\subset\mathbb{N} and items ℐ⊂ℕ\mathcal{I}\subset\mathbb{N}, a hash function ℋ\mathcal{H} assigns these IDs to a smaller set of buckets, ℬ⊂ℕ\mathcal{B}\subset\mathbb{N}. In this setup, users or items within the same bucket will share the same embedding in the corresponding embedding table.
+
+The clustering assignments provided by the modularity optimization algorithm 𝒜\mathcal{A} offer a natural way to define these bucket assignments. By leveraging the dense connections between users and items—reflecting similar behaviors or preferences—we can improve recommendation quality while maintaining the memory budget. Formally, the bucket assignments are derived from the cluster assignments 𝒜⁡(𝒰)\mathcal{A}(\mathcal{U}) and 𝒜⁡(ℐ)\mathcal{A}(\mathcal{I}). To ensure consistent and ordered assignments, a relabeling function ℓ\ell maps the clusters to consecutive integers based on the order of their appearance in 𝒜⁡(𝒰)\mathcal{A}(\mathcal{U}) and 𝒜⁡(ℐ)\mathcal{A}(\mathcal{I}). GraphHash can then be defined as:
+
+(1)
+
+GraphHash(x)=ℓ(𝒜(x)),∀x∈𝒰,ℐ.\texttt{GraphHash}(x)=\ell(\mathcal{A}(x)),\quad\forall x\in\mathcal{U},\mathcal{I}.
+
+Algorithm 1 gives an example pseudocode for implementing GraphHash with the Louvain algorithm on a matrix factorization retriever. This approach requires minimal changes to existing code and can be easily integrated in a plug-and-play manner into any recommender model that uses embedding tables.
+
+While graph clustering differs from traditional hash functions in various ways, one key property of regular hash functions that GraphHash shares is that given the user-item interaction graph, it is deterministic when 𝒜\mathcal{A} is the Louvain algorithm:
+
+Proposition 3.1.
+
+Given 𝒢⁡(𝒰,ℐ,ℰ)\mathcal{G}(\mathcal{U},\mathcal{I},\mathcal{E}), where 𝒰,ℐ\mathcal{U},\mathcal{I} are finite subsets of ℕ\mathbb{N}, and 𝒜\mathcal{A} is the Louvain algorithm. Then GraphHash​(⋅):𝒰,ℐ→{1,2,…,|𝒫∗|}\texttt{GraphHash}(\cdot):\mathcal{U},\mathcal{I}\to\{1,2,...,|\mathcal{P}^{*}|\} is a deterministic function.
+
+The proof can be found in Appendix A. As such, one advantage of GraphHash is that it behaves like a regular hash function, making it easy to integrate with existing techniques such as double hashing, which was proposed to reduce the collision rate between embeddings of different entities during hashing (55). By using a regular random hash function ℋ\mathcal{H} and GraphHash, we derive a natural variant of our method to improve collision mitigation, which we referred as DoubleGraphHash:
+
+(2)
+
+DoubleGraphHash(x)=(ℋ(x),GraphHash(x)),∀x∈𝒰,ℐ.\texttt{DoubleGraphHash}(x)=(\mathcal{H}(x),\texttt{GraphHash}(x)),\forall x\in\mathcal{U},\mathcal{I}.
+
+Similarly as discussed in (55), the combination of ℋ\mathcal{H} and GraphHash can be viewed
+as an approximation of a hashing into a set of larger cardinality to mitigate collisions between embeddings of different entities when reducing the number of rows in a embedding table.
+
+3.4. Why Modularity? A Random Walk View
+
+While various graph clustering methods exist, the use of modularity-based graph clustering as an alternative to hashing has a fundamental, albeit implicit, connection with message-passing techniques that have proven effective in RecSys models (49, 27). The link becomes apparent when considering the random walk interpretation of modularity (35, 13): under modularity, an optimal clustering assignment is one where a random walker is the most likely to remain within its starting cluster compared to chance. Based on this criterion, modularity can be rewritten in the following expressions:
+
+Q=∑𝒞∈𝒫∑u,i∈𝒞(Au​idi​dim−ku​dim2)=∑𝒞∈𝒫∑u,i∈𝒞(Ai​uku​kum−ku​dim2).Q=\sum_{\mathcal{C}\in\mathcal{P}}\sum_{u,i\in\mathcal{C}}\left(\frac{A_{ui}}{d_{i}}\frac{d_{i}}{m}-\frac{k_{u}d_{i}}{m^{2}}\right)=\sum_{\mathcal{C}\in\mathcal{P}}\sum_{u,i\in\mathcal{C}}\left(\frac{A_{iu}}{k_{u}}\frac{k_{u}}{m}-\frac{k_{u}d_{i}}{m^{2}}\right).
+
+Essentially, modularity QQ computes the probability of starting in a cluster 𝒞\mathcal{C}, and still being in a cluster 𝒞\mathcal{C} after one step of unbiased random walk minus the probability that two independent random walkers are in 𝒞\mathcal{C}, evaluated at large-time asymptotic.
+
+On the other hand, one iteration of message-passing can be written as
+
+(3)
+
+X′𝒰=D𝒰−1/2ADℐ−1/2Xℐ,X′ℐ=Dℐ−1/2A⊤D𝒰−1/2X𝒰,X^{\prime}_{\mathcal{U}}=D_{\mathcal{U}}^{-1/2}AD_{\mathcal{I}}^{-1/2}X_{\mathcal{I}},\qquad X^{\prime}_{\mathcal{I}}=D_{\mathcal{I}}^{-1/2}A^{\top}D_{\mathcal{U}}^{-1/2}X_{\mathcal{U}}\,,
+
+where X𝒰X_{\mathcal{U}}, XℐX_{\mathcal{I}} are the user and item embeddings, respectively, and D𝒰D_{\mathcal{U}}, DℐD_{\mathcal{I}} are the diagonal degree matrices for users and items, respectively. This operation essentially recursively smoothes a node’s embedding with the embeddings of its neighboring nodes (52, 27). From a random walk perspective, one can directly interpret message-passing in (3) as a random walker starting from each root node, then update the root node’s embedding with the embeddings of other nodes in the reachable neighborhood, weighted by the corresponding unbiased random walk transition probabilities D−1​AD^{-1}A (up to a left and right matrix transformation at both ends): X′=D1/2(D−1A)D−1/2XX^{\prime}=D^{1/2}(D^{-1}A)D^{-1/2}X. However, a natural question to pose for the message-passing process is: when should the random walker stop, i.e., which neighbors should each node use for smoothing? The number of message-passing layers in a model directly affects the smoothness of the embeddings, which in turn impacts downstream task performance. Yet message-passing methods such as LightGCN treat it as a hyperparameter requiring manual tuning on a case-by-case basis to achieve optimal results (27).
+
+Under this random walk interpretation of modularity, GraphHash can be seen as a coarser but more efficient way to perform smoothing over the graph, similar to iterative message-passing. There are two key differences: 1) rather than being set as a hyperparameter, the random walk’s stopping point is now automatically determined by maximizing modularity so that the probability of staying in the starting cluster is maximized; 2) GraphHash fully smooths node embeddings within the same cluster, while message-passing gradually smooths embeddings through the iterative process in (3). Although this approach sacrifices some granularity in node embeddings compared to iterative message-passing, this trade-off allows for greater computational efficiency: GraphHash simplifies the process by fully smoothing node embeddings within the same cluster in a single step, rather than iteratively computing them over multiple layers.
+
+4. Research Questions
+
+We are interested in investigating the following aspects of GraphHash:
+
+RQ1 
+
+How does hashing based on the graph information compared with pure ID-based or feature-based hashing methods?
+
+RQ2 
+
+Is the graph information more beneficial to power or tail users?
+
+RQ3 
+
+How would the training objective affect the model performance with hashing?
+
+RQ4 
+
+How would hashing based on the graph information help if the backbone model also uses the graph information?
+
+RQ5 
+
+How would different graph clustering objectives affect the model performance?
+
+5. Evaluation of GraphHash’s Effectiveness
+
+In this section, we validate the effectiveness of our proposed GraphHash, and answer RQ1 and RQ2 above.
+
+5.1. Experimental Setup
+
+We benchmark all hashing methods for embedding table reduction on two key recommendation tasks: context-free top-k retrieval and context-aware click-through-rate (CTR) prediction. Here, context-free means that models do not use any additional feature information other than the IDs of users or items, whereas context-aware models utilize complimentary contextual features in addition to the user or item IDs (45). Due to the nature of our method, we select publicly available datasets where user ID and item ID are explicitly available. Namely, Gowalla (11), Yelp2018 and AmazonBook (26) for retrieval, and Frappe (3), MovieLens-1M, and MovieLens-20M (25) for CTR. Further details on datasets are provided in Appendix B.
+
+5.1.1. Backbones22
+2
+
+More results on additional backbones can be found in Section D.5.
+
+We use matrix factorization (MF) (34), Neural Matrix Factorization (NeuMF) (28), LightGCN (27), and MF+DirectAU (DAU) loss (47) as backbones for the retrieval task, where the first three are trained with the Bayesian Personalized Ranking (BPR) loss (43); we use WideDeep (9), DLRM (39), and DCNv2 (48), all trained with binary cross entropy loss (LogLoss) for the CTR task.
+
+5.1.2. Baselines
+
+We evaluate GraphHash against the following baseline hashing methods:
+
+• 
+
+Random: we apply modulo operation to IDs.
+
+• 
+
+Frequency (55, 19): we allocate half the number of buckets to individual users/items with the highest frequencies in the training data, and apply random hashing to the rest.
+
+• 
+
+Double (55): we apply two hash functions to IDs and generate two hash codes for each entity and sum the corresponding entries in the embedding table up as the embedding for the entity.
+
+• 
+
+Double frequency (55): similar to frequency, we allocate half the number of buckets to individual users/items that have the highest frequencies in the training data. We then apply double hashing to the rest of the entities.
+
+• 
+
+LSH: we apply locally sensitive hashing (LSH) to user/item features, if features are available.
+
+• 
+
+LSH-structure: we treat one-hop neighbor patterns in the user-item interaction graph as the features (𝒜\mathcal{A} as the feature matrix for users and 𝒜⊤\mathcal{A}^{\top} as the feature matrix for items) and apply LSH hashing. This can been seen as an alternative way to use the graph structure for user/item bucket assignments.
+
+For reference, we also include the results of models without hashing (full).
+
+We implemented all the backbones, baselines, and our approaches with PyTorch. For a fair comparison, all the
+implementations were identical across all models except for the hashing component and the resulting embedding table. More details on the experimental setup and training can be found in Appendix C.
+
+5.1.3. Additional experimental results
+
+To further validate the effectiveness and robustness of our method, additional experimental results are provided in the appendix on 1) model performance in retrieving popular vs. unpopular items; 2) additional backbone: iALS (29) for retrieval and DeepFM (21) for CTR; 3) additional dataset, Pinterest (18); 4) additional baseline LEGCF (36), which is a GNN-specific method; 5) results on sparser graphs. See Section D.4-Section D.8 for details.
+
+Table 1. Benchmark performance on the top-20 item retrieval task (values in percentage). The best performance is highlighted in bold, with the second best underlined. Our method substantially outperforms the strongest baseline, achieving on average a 101.52% improvement in Recall@20 and an 88.33% improvement in NDCG@20. Note that we deliberately control the number of rows in the embedding tables of GraphHash to be smaller than all the baselines, while keeping the rest of backbone models identical, to emphasize the point that GraphHash obtains improvements even with shorter embedding tables.
+
+Gowalla
+Yelp2018
+AmazonBook
+
+# params
+Recall@20 (↑\uparrow)
+NDCG@20 (↑\uparrow)
+# params
+Recall@20 (↑\uparrow)
+NDCG@20 (↑\uparrow)
+# params
+Recall@20 (↑\uparrow)
+NDCG@20 (↑\uparrow)
+
+MF
+full
+4.534M
+15.617±\pm0.133
+9.661±\pm0.096
+4.462M
+7.779±\pm0.069
+4.951±\pm0.036
+9.231M
+7.711±\pm0.197
+4.951±\pm0.111
+
+random
+0.744M
+0.766±\pm0.019
+0.382±\pm0.017
+0.977M
+0.546±\pm0.012
+0.315±\pm0.012
+1.258M
+0.185±\pm0.007
+0.113±\pm0.005
+
+double
+0.744M
+2.618±\pm0.086
+1.604 ±\pm0.073
+0.977M
+1.355±\pm0.111
+0.850±\pm0.034
+1.258M
+0.767±\pm0.027
+0.525±\pm0.017
+
+frequency
+0.744M
+3.679±\pm0.043
+2.429±\pm0.016
+0.977M
+2.401±\pm0.034
+1.624±\pm0.020
+1.258M
+1.287±\pm0.020
+0.918±\pm0.013
+
+double frequency
+0.744M
+3.888 ±\pm0.055
+2.532±\pm0.041
+0.977M
+2.478±\pm0.032
+1.665±\pm0.027
+1.258M
+1.311±\pm0.023
+0.919±\pm0.021
+
+LSH-structure
+1.049M
+1.106±\pm0.054
+0.617 ±\pm0.035
+1.049M
+0.729±\pm0.038
+0.460 ±\pm0.018
+2.097M
+0.452±\pm0.033
+0.290±\pm0.024
+
+GraphHash (ours)
+0.742M
+9.300±\pm0.064
+5.512±\pm0.019
+0.976M
+3.699 ±\pm0.077
+2.325±\pm0.040
+1.255M
+3.970±\pm0.045
+2.667±\pm0.037
+
+NeuMF
+full
+9.084M
+13.305±\pm0.104
+8.096±\pm0.076
+8.940M
+6.260±\pm0.088
+3.805±\pm0.062
+18.480M
+6.452±\pm0.163
+4.098±\pm0.109
+
+random
+1.505M
+0.926±\pm0.022
+0.437±\pm0.011
+1.971M
+0.594±\pm0.037
+0.334±\pm0.023
+2.533M
+0.203±\pm0.019
+0.131±\pm0.013
+
+double
+1.505M
+4.718±\pm0.239
+2.934±\pm0.169
+1.971M
+2.945±\pm0.082
+1.777±\pm0.060
+2.533M
+1.316±\pm0.036
+0.815±\pm0.036
+
+frequency
+1.505M
+3.518±\pm0.027
+2.256±\pm0.027
+1.971M
+2.269±\pm0.051
+1.472±\pm0.037
+2.533M
+1.187±\pm0.029
+0.821±\pm0.062
+
+double frequency
+1.505M
+4.477±\pm0.079
+2.719±\pm0.140
+1.971M
+2.941±\pm0.176
+1.753±\pm0.101
+2.533M
+1.415±\pm0.031
+0.926±\pm0.028
+
+LSH-structure
+2.114M
+1.098±\pm0.121
+0.608±\pm0.093
+2.114M
+0.648±\pm0.127
+0.399±\pm0.097
+4.211M
+0.445±\pm0.032
+0.289±\pm0.020
+
+GraphHash (ours)
+1.501M
+7.886±\pm0.084
+4.565±\pm0.054
+1.970M
+3.150±\pm0.084
+1.969±\pm0.051
+2.527M
+3.842±\pm0.049
+2.477±\pm0.028
+
+LightGCN
+full
+4.534M
+18.321±\pm0.348
+11.534±\pm0.096
+4.462M
+8.889±\pm0.079
+5.549±\pm0.048
+9.231M
+8.471±\pm0.342
+5.501±\pm0.236
+
+random
+0.744M
+9.214±\pm0.033
+5.909±\pm0.022
+0.977M
+4.894±\pm0.017
+3.114±\pm0.010
+1.258M
+2.485±\pm0.074
+1.704±\pm0.047
+
+double
+0.744M
+9.277±\pm0.140
+6.012±\pm0.071
+0.977M
+5.305±\pm0.103
+3.359±\pm0.080
+1.258M
+2.410±\pm0.039
+1.662±\pm0.022
+
+frequency
+0.744M
+8.574±\pm0.017
+5.480±\pm0.019
+0.977M
+4.931±\pm0.031
+3.142±\pm0.017
+1.258M
+2.184±\pm0.021
+1.497±\pm0.013
+
+double frequency
+0.744M
+9.880±\pm0.199
+6.414±\pm0.135
+0.977M
+5.987±\pm0.030
+3.855±\pm0.030
+1.258M
+2.783±\pm0.027
+1.869±\pm0.018
+
+LSH-structure
+1.049M
+9.780±\pm0.041
+6.291±\pm0.060
+1.049M
+4.789±\pm0.034
+3.025±\pm0.031
+2.097M
+3.279±\pm0.048
+2.199±\pm0.020
+
+GraphHash (ours)
+0.742M
+15.325±\pm0.127
+9.658±\pm0.054
+0.976M
+6.244±\pm0.088
+3.882±\pm0.054
+1.255M
+7.261±\pm0.034
+5.033±\pm0.023
+
+MF + DAU
+full
+4.534M
+17.984±\pm0.055
+11.633±\pm0.020
+4.462M
+11.081±\pm0.021
+7.207±\pm0.013
+9.231M
+10.264±\pm0.025
+6.899±\pm0.015
+
+random
+0.744M
+0.478±\pm0.031
+0.260±\pm0.016
+0.977M
+0.429±\pm0.008
+0.255±\pm0.007
+1.258M
+0.159±\pm0.003
+0.100±\pm0.003
+
+double
+0.744M
+0.551±\pm0.051
+0.362±\pm0.032
+0.977M
+0.401±\pm0.017
+0.263±\pm0.014
+1.258M
+0.188±\pm0.010
+0.124±\pm0.008
+
+frequency
+0.744M
+1.487±\pm0.007
+1.305±\pm0.015
+0.977M
+1.107±\pm0.019
+0.980±\pm0.021
+1.258M
+0.797±\pm0.013
+0.758±\pm0.016
+
+double frequency
+0.744M
+3.440±\pm0.121
+2.677±\pm0.074
+0.977M
+2.536±\pm0.033
+1.903±\pm0.025
+1.258M
+1.466±\pm0.026
+1.218±\pm0.028
+
+LSH-struc
+1.049M
+0.809±\pm0.007
+0.433±\pm0.013
+1.049M
+0.419±\pm0.025
+0.252±\pm0.010
+2.097M
+0.390±\pm0.018
+0.236±\pm0.009
+
+GraphHash (ours)
+0.742M
+7.660±\pm0.136
+4.148±\pm0.096
+0.976M
+2.458±\pm0.049
+1.414±\pm0.033
+1.255M
+4.602±\pm0.012
+3.107±\pm0.010
+
+Figure 2. Performance breakdown of the retrieval task by test user frequency in the training data. Frequency information tends to benefit power users, regardless of the backbone model. In contrast, GraphHash achieves balanced performance across all user groups, closely mirroring the trend of the full model.
+
+5.2. Performance Comparison (RQ1)
+
+5.2.1. Performance in retrieval task
+
+Table 1 reports the mean and standard deviation of the standard retrieval evaluation metrics, Recall@20 and NDCG@20 (in percentage), over 5 independent runs using the best hyperparameters. We see that our proposed method GraphHash achieves the best performance across datasets and backbones, and the improvements over the strongest baseline are substantial, with an average of 101.52%101.52\% increase in Recall@20 and 88.33%88.33\% in NDCG@20.
+
+The only exception occurs in the Yelp2018 dataset when employing MF+DirectAU loss as the backbone, where our method slightly underperforms compared to double frequency hashing. Notably, all hashing methods exhibit a significant performance drop when transitioning from BPR loss to DirectAU loss. We conduct a thorough examination of this phenomenon in Section 6.1, where we present a detailed ablation study on the DirectAU loss function and its impact on the model performance.
+
+5.2.2. Performance in CTR task
+
+Table 2 reports the mean and standard deviation of the standard CTR evaluation metrics, LogLoss and AUC (Area Under the ROC
+Curve), over 5 independent runs using the best hyperparameters. Unlike the case for the retrieval task, our proposed method GraphHash does not perform as ideal. We then further consider a variant of our method, DoubleGraphHash in (2), which combines GraphHash with another random hashing function based on the double hashing technique (55) to mitigate collisions. We see that DoubleGraphHash achieves much better performance than GraphHash on CTR tasks and in fact, the best performance across datasets and backbones.
+
+5.2.3. The impact of collisions on retrieval vs. CTR performance
+
+Comparing the results for retrieval and CTR tasks, we make the following observations: 1) GraphHash performs the best in the retrieval task but falls short in the CTR task; 2) DoubleGraphHash, which incorporates double hashing, is the top performer for the CTR task; and 3) while double hashing methods underperform in the retrieval task, they are much stronger baselines for CTR. These findings suggest that pure user-item interaction information is more directly beneficial for retrieval, where collision is less of an issue. In contrast, for the CTR task, collision avoidance techniques are essential for improving performance.
+
+Table 2. Benchmark performance on the CTR task. The best performance is highlighted in bold, with
+the second best underlined. On average, DoubleGraphHash reduces LogLoss by 0.008 and improves AUC by 0.002. Note that in high-precision tasks such as CTR prediction, even small improvements can lead to substantial performance enhancements and significant business gains at scale (48, 9).
+
+Frappe
+MovieLens-1M
+MovieLens-20M
+
+# params
+LogLoss (↓\downarrow)
+AUC (↑\uparrow)
+# params
+LogLoss (↓\downarrow)
+AUC (↑\uparrow)
+# params
+LogLoss (↓\downarrow)
+AUC (↑\uparrow)
+
+WideDeep
+full
+0.509M
+0.248±\pm0.012
+0.980±\pm0.001
+0.695M
+0.317±\pm0.002
+0.896±\pm0.001
+5.267M
+0.321±\pm0.000
+0.895 ±\pm0.000
+
+random
+0.221M
+0.352±\pm0.008
+0.928±\pm0.000
+0.118M
+0.372±\pm0.002
+0.850±\pm0.000
+0.744M
+0.342±\pm0.001
+0.878±\pm0.000
+
+double
+0.221M
+0.478±\pm0.140
+0.968±\pm0.001
+0.118M
+0.359±\pm0.000
+0.860±\pm0.002
+0.744M
+0.340±\pm0.001
+0.880±\pm0.000
+
+frequency
+0.221M
+0.283±\pm0.005
+0.956±\pm0.001
+0.118M
+0.382±\pm0.002
+0.842±\pm0.002
+0.744M
+0.342±\pm0.001
+0.878±\pm0.001
+
+double frequency
+0.221M
+0.356±\pm0.055
+0.970±\pm0.001
+0.118M
+0.365±\pm0.003
+0.855±\pm0.002
+0.744M
+0.339±\pm0.000
+0.880±\pm0.000
+
+LSH
+-
+-
+-
+0.141M
+0.481±\pm0.000
+0.704±\pm0.001
+0.793M
+0.446±\pm0.000
+0.767±\pm0.000
+
+LSH-structure
+0.252M
+0.342±\pm0.028
+0.932±\pm0.008
+0.141M
+0.376±\pm0.002
+0.849±\pm0.001
+1.094M
+0.349±\pm0.002
+0.872±\pm0.002
+
+GraphHash (ours)
+0.218M
+0.286±\pm0.009
+0.949±\pm0.001
+0.115M
+0.384±\pm0.001
+0.841±\pm0.001
+0.744M
+0.345±\pm0.001
+0.875±\pm0.000
+
+DoubleGraphHash (ours)
+0.218M
+0.265±\pm0.060
+0.972±\pm0.001
+0.115M
+0.358±\pm0.001
+0.861±\pm0.001
+0.744M
+0.337±\pm0.001
+0.881±\pm0.001
+
+DLRM
+full
+0.443M
+0.194±\pm0.022
+0.982±\pm0.001
+0.725M
+0.322±\pm0.002
+0.894±\pm0.001
+5.258M
+0.321±\pm0.001
+0.893±\pm0.001
+
+random
+0.155M
+0.351±\pm0.009
+0.929±\pm0.002
+0.148M
+0.373±\pm0.001
+0.848±\pm0.001
+0.735M
+0.345±\pm0.001
+0.876±\pm0.001
+
+double
+0.155M
+0.246±\pm0.029
+0.970±\pm0.001
+0.148M
+0.363±\pm0.002
+0.858±\pm0.001
+0.735M
+0.341±\pm0.001
+0.879±\pm0.001
+
+frequency
+0.155M
+0.270±\pm0.011
+0.956±\pm0.000
+0.148M
+0.381±\pm0.001
+0.841±\pm0.001
+0.735M
+0.341±\pm0.001
+0.878±\pm0.000
+
+double frequency
+0.155M
+0.291±\pm0.021
+0.969±\pm0.001
+0.148M
+0.375±\pm0.006
+0.848±\pm0.004
+0.735M
+0.343±\pm0.000
+0.876±\pm0.000
+
+LSH
+-
+-
+-
+0.171M
+0.481±\pm0.001
+0.704±\pm0.001
+0.784M
+0.448±\pm0.000
+0.764±\pm0.001
+
+LSH-structure
+0.186M
+0.358±\pm0.022
+0.928±\pm0.007
+0.171M
+0.384±\pm0.007
+0.840±\pm0.005
+1.085M
+0.352±\pm0.001
+0.869±\pm0.001
+
+GraphHash (ours)
+0.152M
+0.278±\pm0.003
+0.950±\pm0.001
+0.145M
+0.383±\pm0.002
+0.840±\pm0.001
+0.735M
+0.347±\pm0.001
+0.873±\pm0.001
+
+DoubleGraphHash (ours)
+0.152M
+0.231±\pm0.011
+0.973±\pm0.001
+0.145M
+0.361±\pm0.002
+0.860±\pm0.001
+0.735M
+0.339±\pm0.000
+0.880±\pm0.000
+
+DCNv2
+full
+1.289M
+0.144±\pm0.017
+0.981±\pm0.002
+0.746M
+0.310±\pm0.001
+0.900±\pm0.001
+5.290M
+0.322±\pm0.001
+0.894±\pm0.001
+
+random
+1.001M
+0.320±\pm0.004
+0.930±\pm0.001
+0.169M
+0.366±\pm0.001
+0.855±\pm0.001
+0.767M
+0.338±\pm0.000
+0.881±\pm0.000
+
+double
+1.001M
+0.217±\pm0.008
+0.968±\pm0.001
+0.169M
+0.358±\pm0.001
+0.862±\pm0.001
+0.767M
+0.338±\pm0.001
+0.882±\pm0.001
+
+frequency
+1.001M
+0.241±\pm0.003
+0.956±\pm0.000
+0.169M
+0.375±\pm0.000
+0.846±\pm0.001
+0.767M
+0.337±\pm0.000
+0.881±\pm0.000
+
+double frequency
+1.001M
+0.223±\pm0.016
+0.968±\pm0.002
+0.169M
+0.361±\pm0.001
+0.860±\pm0.001
+0.767M
+0.337±\pm0.000
+0.881±\pm0.000
+
+LSH
+-
+-
+-
+0.190M
+0.480±\pm0.000
+0.704±\pm0.000
+0.817M
+0.443±\pm0.000
+0.772±\pm0.000
+
+LSH-structure
+1.032M
+0.367±\pm0.016
+0.928±\pm0.002
+0.192M
+0.368±\pm0.003
+0.852±\pm0.003
+1.117M
+0.346±\pm0.001
+0.875±\pm0.001
+
+GraphHash (ours)
+0.998M
+0.263±\pm0.001
+0.951±\pm0.001
+0.166M
+0.380±\pm0.001
+0.843±\pm0.000
+0.767M
+0.343±\pm0.001
+0.877±\pm0.001
+
+DoubleGraphHash (ours)
+0.998M
+0.194±\pm0.003
+0.972±\pm0.001
+0.166M
+0.356±\pm0.001
+0.864±\pm0.000
+0.767M
+0.337±\pm0.000
+0.882±\pm0.000
+
+Figure 3. Performance breakdown of the CTR task by user frequency in training data. All methods tend to perform better for clicks generated by power users, and DoubleGraphHash, which obtains the best overall performance, also works better for clicks generated by power users than for those generated by tail users.
+
+5.3. User Subgroup Evaluation (RQ2)
+
+Next, we examine model performance across different user groups, categorized by their frequency percentile in the training data. For the retrieval task,
+we aggregate the metrics within each degree subgroup. For the CTR task, we divide the clicks in the test set based on the user subgroup that generated the click.
+Figures 2 and 3 showcase the results for the retrieval and CTR tasks, respectively.
+
+For the retrieval task, incorporating frequency information generally benefits power users, regardless of the backbone model used. In contrast, GraphHash achieves more balanced performance across all user groups, closely resembling the trend of models without hashing. For the CTR task, all methods, including those without hashing, tend to perform better for clicks generated by power users. Notably, DoubleGraphHash, which delivers the best overall performance, also performs better for power users than for tail users. These observations suggest the fundamental differences between the retrieval and CTR tasks. Nevertheless, the user-item interaction graph benefits model performance in both tasks, with different variants of the method optimizing for their specific characteristics.
+
+6. Method Analysis
+
+In this section, we conduct further ablation studies investigating various aspects of our approach, providing deeper insights into its function, robustness and adaptability across different scenarios.
+
+6.1. The Impact of Training Objective (RQ3)
+
+For the retrieval task, we have considered two popular loss functions when training the backbone MF model: the BPR loss and the DirectAU loss. As shown in Table 1, while DirectAU performs better on MF models without hashing, the performance drops significantly for all hashing-based methods when switching from BPR to DirectAU. This finding aligns with recent results in the literature, suggesting that DirectAU may not be compatible with hashing-based methods (45).
+
+Figure 4. Impact of the uniformity term γ\gamma in DirectAU on model performance. While the full model and GraphHash are robust to changes in γ\gamma, double frequency hashing shows a sweet spot, suggesting GraphHash enhances robustness to γ\gamma in hashing methods.
+
+To further investigate this phenomenon, we conduct an additional set of experiments with varying values of γ\gamma in [0.25,0.5,1,2,5][0.25,0.5,1,2,5]44
+4
+
+The same range considered in the original DirectAU paper (47)., the strength of the uniformity term in the DirectAU loss, and compare the model performance without hashing, with double frequency hashing (the strongest baseline), and with GraphHash in terms of Recall@20 on Gowalla and Yelp2018. The results in Figure 4 show that while both the model without hashing and GraphHash are quite robust to changes in γ\gamma, there exists a specific sweet spot for the value of γ\gamma under double frequency hashing. The corresponding results in NDCG@20 can be found in Appendix D and exhibit similar trends. This indicates that although hashing methods may generally be less compatible with DirectAU than with BPR (Table 1), GraphHash, by leveraging graph information, is more robust to the choice of γ\gamma.
+
+6.2. The Impact of Backbone GNN’s Depth (RQ4)
+
+Figure 5. The impact of LightGCN’s depth on the performance of different hashing methods. GraphHash consistently outperforms random hashing. In particular, GraphHash without any additional message-passing layers, performs roughly equal to random hashing with one or two message-passing layers, where the performance in the latter model can be sorely attributed to pure message-passing.
+
+Given the theoretical connection between modularity-based graph clustering and message-passing discussed in Section 3.4, we empirically study the impact of the depth of the backbone GNN, specifically LightGCN here, on the performance of GraphHash. We vary the depth of the LightGCN backbone model and the resulting performance without hashing, with random hashing, and with GraphHash in terms of Recall@20 on Gowalla and Yelp2018 are presented in Figure 5. The corresponding results in NDCG@20 can be found in Appendix D, which show similar trends. We see that while all these three methods’ performance improve with the increasing backbone depth, it tends to saturate after 3-4 layers, aligning with the observation in the original LightGCN paper (27). Yet GraphHash consistently outperforms random hashing at all depth levels and is able to recover roughly a similar percentage of the model performance without hashing at each depth. Most interestingly,  GraphHash without any additional message-passing layers, performs roughly equal to random hashing with 11 or 22 message-passing layers, where the performance in the latter model can be sorely attributed to message-passing. This is in line with our theory that GraphHash can be seen as a coarser but more efficient way to achieve a similar smoothing effect to message-passing, at the alternative cost of performing graph clustering during preprocessing.
+
+6.3. Analysis of Embedding Smoothness
+
+The smoothing effect of message-passing has been identified to be helpful for node level tasks (52) and particularly for the effectiveness of LightGCN in retrieval (27). From the smoothing perspective, there are two key differences between GraphHash and message-passing: 1) in GNNs such as LightGCN, the number of message-passing layers is a hyperparameter that requires manual tuning (49, 27), whereas the modularity maximization objective in GraphHash automatically find the best neighborhood for each node to perform smoothing. 2) In GNNs, smoothing is done through iteratively applying message-passing, whereas in GraphHash, once the optimal neighborhood is found for each node, embeddings are smoothed to be identical within each neighborhood.
+
+We further investigate whether the user/item clusters found by GraphHash, in which the embeddings of different users/items would be fully smoothed, corresponds to good candidates found by learning when the model has enough capacity, i.e. without hashing. Here, we measure the average within cluster smoothness, normalized by the number of entities in each cluster, for a cluster assignment 𝒞\mathcal{C} on user embeddings X𝒰X_{\mathcal{U}} by
+
+𝒮⁡(X𝒰,𝒞)=1|𝒰|​∑u∈𝒰∑u′∈𝒞⁡(u)‖Xu−Xu′‖22|𝒞⁡(u)|,\scriptsize\mathcal{S}(X_{\mathcal{U}},\mathcal{C})=\frac{1}{|\mathcal{U}|}\sum_{u\in\mathcal{U}}\sum_{u^{\prime}\in\mathcal{C}(u)}\frac{\|X_{u}-X_{u^{\prime}}\|_{2}^{2}}{|\mathcal{C}(u)|}\,,
+
+and similarly for item embeddings XℐX_{\mathcal{I}} by 𝒮⁡(Xℐ,𝒞)\mathcal{S}(X_{\mathcal{I}},\mathcal{C}).
+
+Table 3. Average within cluster smoothness found by learning in full models without hashing. Compared to the 2-hop neighborhood for each node, GraphHash finds a better candidate neighborhood to perform complete smoothing.
+
+Gowalla
+Yelp2018
+
+𝒮⁡(X𝒰,𝒞)\mathcal{S}(X_{\mathcal{U}},\mathcal{C})
+𝒮⁡(Xℐ,𝒞)\mathcal{S}(X_{\mathcal{I}},\mathcal{C})
+𝒮⁡(X𝒰,𝒞)\mathcal{S}(X_{\mathcal{U}},\mathcal{C})
+𝒮⁡(Xℐ,𝒞)\mathcal{S}(X_{\mathcal{I}},\mathcal{C})
+
+MF
+2-hop
+15.046
+12.345
+3.987
+3.718
+
+GraphHash
+8.324
+7.628
+1.848
+1.592
+
+LightGCN
+2-hop
+70.653
+46.458
+86.977
+68.900
+
+GraphHash
+35.462
+28.080
+49.712
+42.2439
+
+We compare the cluster assignments 𝒞\mathcal{C} given by GraphHash, against the two-hop neighborhood for each node, which corresponds to the neighborhoods for smoothing when applying two message-passing layers. The results computed on the embeddings of MF and LightGCN without hashing on Gowalla and Yelp2018 are shown in Table 3. We make the following two observations: 1)  GraphHash indeed finds a better candidate neighborhood to perform complete smoothing, as compared to the 2-hop neighborhood for each node. This also makes sense as message-passing would not completely smooth the embeddings within the 2-hop neighborhood for each node. 2) Compared to the ones in MF, the embeddings in LightGCN are less smooth, since message-passing would perform further smoothing over them.
+
+6.4. The Impact of Clustering Objective (RQ5)
+
+As discussed in Section 3.4, the choice of the modularity objective for clustering is based on its theoretical connection to message-passing and its computational efficiency in practice. In this section, we study how the clustering objective affects the model performance in terms of accuracy and efficiency.
+
+6.4.1. Modularity-based clustering at varying resolution
+
+In Section 3.4, we see that the modularity objective has a one-step random walk interpretation and a generalized modularity extends this to varying walk lengths (35, 13). Such a generalized objective in practice is achieved through a resolution hyperparameter in the Louvain algorithm (Algorithm 1) (5), which essentially controls the length of the random walk. Higher resolution values correspond to shorter random walks, resulting in more clusters, smaller cluster sizes, and thus larger embedding tables. Table 4 shows the retrieval task performance of GraphHash under different resolution values, along with a comparison to double frequency hashing (the strongest baseline).
+
+From Table 4 we can observe that GraphHash consistently outperforms double frequency hashing at all resolution levels for the retrieval task. Moreover, while increasing resolution (and thus embedding table size) improves performance for both GraphHash and the baseline with the MF backbone, the resolution value has little effect when using GraphHash with the LightGCN backbone, unlike double frequency hashing which is more sensitive. A similar set of experiments for the CTR task can be found in Appendix D, where DoubleGraphHash consistently outperforms double frequency hashing across different resolution levels.
+
+Table 4. Impact of resolution in modularity clustering objective on model performance in retrieval. GraphHash consistently outperforms double frequency hashing across all resolution levels considered.
+
+resolution
+GraphHash
+double frequency
+
+# param
+Recall (↑\uparrow)
+NDCG (↑\uparrow)
+# param
+Recall (↑\uparrow)
+NDCG (↑\uparrow)
+
+MF
+50
+0.212M
+7.296
+3.798
+0.216M
+3.064
+1.809
+
+100
+0.432M
+8.894
+4.908
+0.436M
+3.253
+2.045
+
+200
+0.742M
+9.393
+5.448
+0.744M
+3.927
+2.544
+
+400
+1.140M
+9.733
+6.032
+1.140M
+4.521
+2.964
+
+LightGCN
+50
+0.212M
+15.365
+9.766
+0.216M
+5.105
+3.453
+
+100
+0.432M
+15.783
+9.950
+0.436M
+7.131
+4.678
+
+200
+0.742M
+15.388
+9.661
+0.744M
+10.069
+6.509
+
+400
+1.140M
+15.289
+9.531
+1.140M
+11.698
+7.563
+
+6.4.2. Other types of clustering objective
+
+We also compare to other types of bipartite graph clustering methods, such as the spectral bipartite graph co-clustering proposed in (14)55
+5
+
+We use the implementation provided in the scikit-learn library.. The results are presented in Table 5 for the retrieval task on Gowalla. We see that while the spectral co-clustering method slightly outperforms GraphHash in retrieval, the cost is at the clustering time, where spectral co-clustering requires >170x more time on Gowalla, making it inefficient, if not non-applicable to large-scale graphs. A similar set of experimental results for the CTR task, can be
+found in Appendix D, where DoubleGraphHash outperforms its spectral variant where the graph clustering component is replaced with spectral co-clustering, in addition to requiring much less clustering time.
+
+Table 5. Impact of the type of clustering objective on model performance in retrieval. While spectral co-clustering slightly outperforms GraphHash, it requires >170x more time.
+
+Gowalla
+
+time
+# param
+Recall (↑\uparrow)
+NDCG (↑\uparrow)
+
+MF
+spectral
+332.062s
+0.545M
+9.622
+5.762
+
+GraphHash
+1.928s
+0.542M
+9.144
+5.273
+
+LightGCN
+spectral
+332.062s
+0.545M
+13.088
+8.0913
+
+GraphHash
+1.928s
+0.542M
+13.105
+8.0731
+
+7. Conclusion
+
+In this paper, we introduce GraphHash, a novel embedding table reduction method utilizing modularity-based bipartite graph clustering to generate user/item bucket assignments. GraphHash is an efficient alternative to message-passing by using the graph during preprocessing. Empirical evaluation shows the superior performance of GraphHash and its variant in both retrieval and CTR tasks, as well as the robustness of its design choices under various settings. Building upon the promising results of this new graph-based approach, future work could explore how to incorporate the frequency information with graph clustering to better leverage this crucial information (55, 19), and how to adapt GraphHash to the OOV setting (45).
+
+References
+
+(1)
+
+Aggarwal, C. C.
+
+Recommender Systems.
+
+Springer, 2016.
+
+(2)
+
+Andersen, R., Graham, F. C., and Lang, K. J.
+
+Local graph partitioning using pagerank vectors.
+
+2006 47th Annual IEEE Symposium on Foundations of Computer Science (FOCS’06) (2006), 475–486.
+
+(3)
+
+Baltrunas, L., Church, K., Karatzoglou, A., and Oliver, N.
+
+Frappe: Understanding the usage and perception of mobile app recommendations in-the-wild.
+
+ArXiv abs/1505.03014 (2015).
+
+(4)
+
+Barber, M. J.
+
+Modularity and community detection in bipartite networks.
+
+Physical Review E 76, 6 (2007), 066102.
+
+(5)
+
+Blondel, V. D., Guillaume, J.-L., Lambiotte, R., and Lefebvre, E.
+
+Fast unfolding of communities in large networks.
+
+Journal of Statistical Mechanics: Theory and Experiment 2008 (2008), P10008.
+
+(6)
+
+Bobadilla, J., Ortega, F., Hernando, A., and Gutiérrez, A.
+
+Recommender systems survey.
+
+Knowl. Based Syst. (2013).
+
+(7)
+
+Bonald, T., de Lara, N., Lutz, Q., and Charpentier, B.
+
+Scikit-network: Graph analysis in python.
+
+Journal of Machine Learning Research 21, 185 (2020), 1–6.
+
+(8)
+
+Brandes, U., Delling, D., Gaertler, M., Goerke, R., Hoefer, M., Nikoloski, Z., and Wagner, D.
+
+Maximizing modularity is hard.
+
+ArXiv physics/0608255 (2006).
+
+(9)
+
+Cheng, H.-T., Koc, L., Harmsen, J., Shaked, T., Chandra, T., Aradhye, H. B., Anderson, G., Corrado, G. S., Chai, W., Ispir, M., Anil, R., Haque, Z., Hong, L., Jain, V., Liu, X., and Shah, H.
+
+Wide & deep learning for recommender systems.
+
+Proceedings of the 1st Workshop on Deep Learning for Recommender Systems (2016).
+
+(10)
+
+Cheng, W., Shen, Y., and Huang, L.
+
+Adaptive factorization network: Learning adaptive-order feature interactions.
+
+In AAAI (2020).
+
+(11)
+
+Cho, E., Myers, S. A., and Leskovec, J.
+
+Friendship and mobility: user movement in location-based social networks.
+
+In Knowledge Discovery and Data Mining (2011).
+
+(12)
+
+Coleman, B., Kang, W.-C., Fahrbach, M., Wang, R., Hong, L., Chi, E. H., and Cheng, D. Z.
+
+Unified embedding: Battle-tested feature representations for web-scale ml systems.
+
+In NeurIPS (2023).
+
+(13)
+
+Delvenne, J.-C., Yaliraki, S. N., and Barahona, M.
+
+Stability of graph communities across time scales.
+
+Proceedings of the National Academy of Sciences (2008).
+
+(14)
+
+Dhillon, I. S.
+
+Co-clustering documents and words using bipartite spectral graph partitioning.
+
+In KDD (2001).
+
+(15)
+
+Edge, D., Trinh, H., Cheng, N., Bradley, J., Chao, A., Mody, A., Truitt, S., and Larson, J.
+
+From local to global: A graph rag approach to query-focused summarization.
+
+ArXiv abs/2404.16130 (2024).
+
+(16)
+
+Fey, M., Lenssen, J. E., Weichert, F., and Leskovec, J.
+
+Gnnautoscale: Scalable and expressive graph neural networks via historical embeddings.
+
+In International conference on machine learning (2021), PMLR, pp. 3294–3304.
+
+(17)
+
+Gao, C., Zheng, Y., Li, N., Li, Y., Qin, Y., Piao, J., Quan, Y., Chang, J., Jin, D., He, X., and Li, Y.
+
+A survey of graph neural networks for recommender systems: Challenges, methods, and directions.
+
+ACM Transactions on Recommender Systems (2021).
+
+(18)
+
+Geng, X., Zhang, H., Bian, J., and Chua, T.-S.
+
+Learning image and user features for recommendation in social networks.
+
+In ICCV (2015).
+
+(19)
+
+Ghaemmaghami, B., Ozdal, M., Komuravelli, R., Korchev, D., Mudigere, D., Nair, K., and Naumov, M.
+
+Learning to collide: Recommendation system model compression with learned hash functions.
+
+ArXiv abs/2203.15837 (2022).
+
+(20)
+
+Gilmer, J., Schoenholz, S. S., Riley, P. F., Vinyals, O., and Dahl, G. E.
+
+Neural message passing for quantum chemistry.
+
+In ICML (2017).
+
+(21)
+
+Guo, H., Tang, R., Ye, Y., Li, Z., and He, X.
+
+Deepfm: A factorization-machine based neural network for ctr prediction.
+
+ArXiv abs/1703.04247 (2017).
+
+(22)
+
+Guo, Z., Shiao, W., Zhang, S., Liu, Y., Chawla, N. V., Shah, N., and Zhao, T.
+
+Linkless link prediction via relational distillation.
+
+In International Conference on Machine Learning (2023), PMLR, pp. 12012–12033.
+
+(23)
+
+Gupta, U., Wang, X., Naumov, M., Wu, C.-J., Reagen, B., Brooks, D. M., Cottel, B., Hazelwood, K. M., Jia, B., Lee, H.-H. S., Malevich, A., Mudigere, D., Smelyanskiy, M., Xiong, L., and Zhang, X.
+
+The architectural implications of facebook’s dnn-based personalized recommendation.
+
+2020 IEEE International Symposium on High Performance Computer Architecture (HPCA).
+
+(24)
+
+Han, X., Zhao, T., Liu, Y., Hu, X., and Shah, N.
+
+Mlpinit: Embarrassingly simple gnn training acceleration with mlp initialization.
+
+arXiv preprint arXiv:2210.00102 (2022).
+
+(25)
+
+Harper, F. M., Konstan, J. A., and A., J.
+
+The movielens datasets: History and context.
+
+ACM Trans. Interact. Intell. Syst. 5 (2016), 19:1–19:19.
+
+(26)
+
+He, R., and McAuley, J.
+
+Ups and downs: Modeling the visual evolution of fashion trends with one-class collaborative filtering.
+
+In WWW (2016).
+
+(27)
+
+He, X., Deng, K., Wang, X., Li, Y., Zhang, Y., and Wang, M.
+
+Lightgcn: Simplifying and powering graph convolution network for recommendation.
+
+In Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval (2020).
+
+(28)
+
+He, X., Liao, L., Zhang, H., Nie, L., Hu, X., and Chua, T.-S.
+
+Neural collaborative filtering, 2017.
+
+(29)
+
+Hu, Y., Koren, Y., and Volinsky, C.
+
+Collaborative filtering for implicit feedback datasets.
+
+In ICDM (2008).
+
+(30)
+
+Ju, M., Shiao, W., Guo, Z., Ye, Y., Liu, Y., Shah, N., and Zhao, T.
+
+How does message passing improve collaborative filtering?
+
+In NeurIPS (2024).
+
+(31)
+
+Kang, W.-C., Cheng, D. Z., Yao, T., Yi, X., Chen, T.-L., Hong, L., and Chi, E. H.
+
+Learning to embed categorical features without embedding tables for recommendation.
+
+In Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery & Data Mining (2020).
+
+(32)
+
+Kingma, D. P., and Ba, J.
+
+Adam: A method for stochastic optimization.
+
+CoRR abs/1412.6980 (2014).
+
+(33)
+
+Kipf, T. N., and Welling, M.
+
+Semi-supervised classification with graph convolutional networks.
+
+In ICLR (2017).
+
+(34)
+
+Koren, Y., Bell, R. M., and Volinsky, C.
+
+Matrix factorization techniques for recommender systems.
+
+Computer 42 (2009).
+
+(35)
+
+Lambiotte, R., Delvenne, J.-C., and Barahona, M.
+
+Laplacian dynamics and multiscale modular structure in networks.
+
+arXiv preprint arXiv:0812.1770 (2008).
+
+(36)
+
+Liang, X., Chen, T., zhen Cui, L., Wang, Y., Wang, M., and Yin, H.
+
+Lightweight embeddings for graph collaborative filtering.
+
+In SIGIR (2024).
+
+(37)
+
+Liu, Z.-P., Zou, L., Zou, X., Wang, C., Zhang, B., Tang, D., Zhu, B., Zhu, Y., Wu, P., Wang, K., and Cheng, Y.
+
+Monolith: Real time recommendation system with collisionless embedding table.
+
+ArXiv (2022).
+
+(38)
+
+Naumov, M., Kim, J., Mudigere, D., Sridharan, S., Wang, X., Zhao, W., Yilmaz, S., Kim, C., Yuen, H., Ozdal, M., Nair, K., Gao, I., Su, B.-Y., Yang, J., and Smelyanskiy, M.
+
+Deep learning training in facebook data centers: Design of scale-up and scale-out systems.
+
+ArXiv abs/2003.09518 (2020).
+
+(39)
+
+Naumov, M., Mudigere, D., Shi, H. M., Huang, J., Sundaraman, N., Park, J., Wang, X., Gupta, U., Wu, C., Azzolini, A. G., Dzhulgakov, D., Mallevich, A., Cherniavskii, I., Lu, Y., Krishnamoorthi, R., Yu, A., Kondratenko, V., Pereira, S., Chen, X., Chen, W., Rao, V., Jia, B., Xiong, L., and Smelyanskiy, M.
+
+Deep learning recommendation model for personalization and recommendation systems.
+
+CoRR abs/1906.00091 (2019).
+
+(40)
+
+Newman, M. E. J.
+
+Modularity and community structure in networks.
+
+Proceedings of the National Academy of Sciences of the United States of America 103 23 (2006), 8577–82.
+
+(41)
+
+Ng, A., Jordan, M. I., and Weiss, Y.
+
+On spectral clustering: Analysis and an algorithm.
+
+In NeurIPS (2001).
+
+(42)
+
+Oono, K., and Suzuki, T.
+
+Graph neural networks exponentially lose expressive power for node classification.
+
+In ICLR (2020).
+
+(43)
+
+Rendle, S., Freudenthaler, C., Gantner, Z., and Schmidt-Thieme, L.
+
+Bpr: Bayesian personalized ranking from implicit feedback.
+
+In UAI (2009).
+
+(44)
+
+Rosvall, M., and Bergstrom, C. T.
+
+Maps of random walks on complex networks reveal community structure.
+
+Proceedings of the National Academy of Sciences (2007).
+
+(45)
+
+Shiao, W., Ju, M., Guo, Z., Chen, X., Papalexakis, E. E., Zhao, T., Shah, N., and Liu, Y.
+
+Improving out-of-vocabulary handling in recommendation systems.
+
+ArXiv abs/2403.18280 (2024).
+
+(46)
+
+Veličković, P., Cucurull, G., Casanova, A., Romero, A., Liò, P., and Bengio, Y.
+
+Graph attention networks.
+
+In ICLR (2018).
+
+(47)
+
+Wang, C., Yu, Y., Ma, W., Zhang, M., Chen, C., Liu, Y., and Ma, S.
+
+Towards representation alignment and uniformity in collaborative filtering.
+
+In Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining (2022).
+
+(48)
+
+Wang, R., Shivanna, R., Cheng, D. Z., Jain, S., Lin, D., Hong, L., and Chi, E. H.
+
+Dcn v2: Improved deep & cross network and practical lessons for web-scale learning to rank systems.
+
+In Proceedings of the Web Conference (2021).
+
+(49)
+
+Wang, X., He, X., Wang, M., Feng, F., and Chua, T.-S.
+
+Neural graph collaborative filtering.
+
+In Proceedings of the 42nd International ACM SIGIR Conference on Research and Development in Information Retrieval (2019).
+
+(50)
+
+Weinberger, K. Q., Dasgupta, A., Attenberg, J., Langford, J., and Smola, A.
+
+Feature hashing for large scale multitask learning.
+
+In International Conference on Machine Learning (2009).
+
+(51)
+
+Wu, X., Ajorlou, A., Wu, Z., and Jadbabaie, A.
+
+Demystifying oversmoothing in attention-based graph neural networks.
+
+In NeurIPS (2023).
+
+(52)
+
+Wu, X., Chen, Z., Wang, W., and Jadbabaie, A.
+
+A non-asymptotic analysis of oversmoothing in graph neural networks.
+
+In ICLR (2023).
+
+(53)
+
+Wu, X., Sarker, A., and Jadbabaie, A.
+
+Link partitioning on simplicial complexes using higher-order laplacians.
+
+In 2022 IEEE International Conference on Data Mining (ICDM) (2022), pp. 1239–1244.
+
+(54)
+
+Xu, K., Hu, W., Leskovec, J., and Jegelka, S.
+
+How powerful are graph neural networks?
+
+In ICLR (2019).
+
+(55)
+
+Zhang, C., Liu, Y., Xie, Y., Ktena, S. I., Tejani, A., Gupta, A., Myana, P. K., Dilipkumar, D., Paul, S., Ihara, I., Upadhyaya, P., Huszár, F., and Shi, W.
+
+Model size reduction using frequency based double hashing for recommender systems.
+
+In Proceedings of the 14th ACM Conference on Recommender Systems (2020).
+
+(56)
+
+Zhang, S., Liu, Y., Sun, Y., and Shah, N.
+
+Graph-less neural networks: Teaching old mlps new tricks via distillation.
+
+International Conference on Learning Representations (2022).
+
+(57)
+
+Zhang, S., Yao, L., Sun, A., and Tay, Y.
+
+Deep learning based recommender system: A survey and new perspectives.
+
+ACM Computing Surveys (2019).
+
+(58)
+
+Zhao, T., Shah, N., and Ghazizadeh, E.
+
+Learning from graphs beyond message passing neural networks.
+
+In Tiny Papers @ ICLR (2024).
+
+Appendix A Proof of Proposition 3.1
+
+Proof.
+
+Note that given a graph, the procedures in the Louvain algorithm (5) iterate through the nodes in the order by their indices and thus outputs deterministic clusters (the randomness in its actual implementation in scikit-network, exactly comes from shuffling the node indices at the beginning). Then by putting the users/item cluster assignments in order indexed by their unique IDs, the relabelling function ℓ\ell guarantees that GraphHash is a deterministic function.
+∎
+
+Note
+
+Empirically, we observe that the cluster assignments given by the Louvain algorithm are quite stable even with different random seeds.
+
+Appendix B Datasets
+
+In this section, we provide detailed description for datasets used in the experiments.
+
+Data Splitting
+
+For the context-free top-k retrieval task, we consider the following three datasets: Gowalla (11), Yelp2018 and AmazonBook (26). For each dataset, we adopt a random split of 80%/10%/10%80\%/10\%/10\% for training, validation and testing (30). For the context-aware CTR task, we consider the following three datasets: Frappe (3), MovieLens-1M and MovieLens-20M (25). For Frappe, we use the split provided in RecZoo66
+6
+
+https://github.com/reczoo/Datasets, where the data are divided into 70%/20%/10%70\%/20\%/10\% for training, validation and testing (10). For MovieLens-1M and MovieLens-20M, we adopt a random split of 80%/10%/10%80\%/10\%/10\% (48).
+
+Preprocessing
+
+To avoid out-of-vocabulary (OOV) IDs, which is outside the scope of this work, we preprocess each dataset to satisfy the transductive setting where all users and items in the validation and test sets appear during training. For MovieLens-20M, we use the movie’s genres and the user’s top-1515 tags as the feature information. To make MovieLens-1M and MovieLens-20M suitable for the CTR task, we follow the procedures in (48) such that all the ratings smaller than 3 are
+normalized to be 0s, all the ratings greater than 3 to be 1s, and rating 3s are removed.
+
+Table 6 and Table 7 summarize the statistics of each dataset used in the retrieval tasks and CTR tasks, respectively.
+
+Table 6. Datasets used in the retrieval task
+
+Dataset
+#\# Users
+#\# Items
+#\# Interactions
+
+Gowalla
+29,858
+49,981
+1,027,370
+
+Yelp2018
+31,668
+38,048
+1,561,406
+
+AmazonBook
+52,643
+91,599
+2,984,108
+
+Table 7. Datasets used in the CTR task
+
+Dataset
+#\# Users
+#\# Items
+#\# Features
+#\# Interactions
+
+Frappe
+954
+4,082
+8
+288,609
+
+MovieLens-1M
+6,040
+3,641
+48
+738,983
+
+MovieLens-20M
+138,484
+24,689
+35
+15,709,070
+
+Appendix C Experimental Setup
+
+Hyperparameters
+
+Following (27), we set the embedding dimension to be 6464 for all the datasets except MovieLens-20M, in which case the embedding dimension is 3232 instead. For MF, we use full batch size and for all the other backbone methods, we use a batch size of 10241024 on all the datasets other than MovieLens-20M, where we set the batch size to be 3276832768 to speed up training. For each set of experiments, we perform a grid search in the following ranges:
+
+• 
+
+learning rate: {1​e−2,5​e−3,1​e−3}\{1e^{-2},5e^{-3},1e^{-3}\}
+
+• 
+
+weight decay: {1​e−4,1​e−6,1​e−8}\{1e^{-4},1e^{-6},1e^{-8}\}
+
+Optimizer
+
+We use the Adam optimizer (32).
+
+Early Stopping
+
+We use patience of 5050 epochs for the retrieval tasks and 55 epochs for the CTR tasks.
+
+Compute
+
+We run each experiment using a single NVIDIA
+Volta V100 GPU with 32GB RAM.
+
+Appendix D Additional Experimental Results
+
+D.1. The Impact of Training Objective
+
+We conduct an additional set of experiments with varying values of γ\gamma in [0.25,0.5,1,2,5][0.25,0.5,1,2,5], the strength of the uniformity term in the DirectAU loss, and compare the model performance without hashing, with double frequency hashing (the strongest baseline) and with GraphHash in terms of NDCG@20 on Gowalla and Yelp2018. The results, presented in Figure 6, show that while both the model without hashing and GraphHash are quite robust to changes in γ\gamma, there exists a specific sweet spot for the value of γ\gamma under double frequency hashing.
+
+Figure 6. The impact of the strength of uniformity term γ\gamma in DirectAU on the model performance. While the model without hashing (full) and GraphHash are quite robust to γ\gamma, there exists a sweet spot in the value of γ\gamma for double frequency hashing. This suggests that although hashing methods in general might not be as compatible with DirectAU as with BPR (Table 1), GraphHash makes hashing more robust to the choice of γ\gamma.
+
+D.2. The Impact of Backbone GNN’s Depth
+
+We vary the depth of the LightGCN backbone model and the result-
+ing performance without hashing, with
+random hashing, and with GraphHash in terms of NDCG@20 on Gowalla and Yelp2018 are shown in Figure 7. The trends are similar to the ones in Figure 5.
+
+Figure 7. The impact of LightGCN’s depth on the performance of different hashing methods. GraphHash consistently outperforms random hashing. Without additional message-passing layers, GraphHash performs similarly to random hashing with one or two message-passing layers, where the latter’s performance is due to pure message-passing.
+
+D.3. The Impact of Clustering Objective 
+
+D.3.1. Modularity-based clustering at varying resolution.
+
+The performance of DoubleGraphHash for the CTR task under different resolution values are shown in Table 8. For comparison, we also report the performance of double frequency hashing (the strongest baseline), for which the backbone models have roughly similar but strictly larger size compared to the one used for DoubleGraphHash.
+
+Table 8. Impact of resolution in modality clustering objectives on model performance in CTR task. DoubleGraphHash consistently outperforms double frequency hashing across various resolutions and corresponding embedding table reduction levels.
+
+resolution
+DoubleGraphHash
+double frequency
+
+# param
+LogLoss (↓\downarrow)
+AUC (↑\uparrow)
+# param
+LogLoss (↓\downarrow)
+AUC (↑\uparrow)
+
+DLRM
+3
+0.140M
+0.215
+0.971
+0.144M
+0.263
+0.968
+
+5
+0.152M
+0.222
+0.972
+0.155M
+0.296
+0.969
+
+10
+0.171M
+0.259
+0.975
+0.174M
+0.306
+0.972
+
+20
+0.186M
+0.208
+0.972
+0.188M
+0.293
+0.973
+
+DCNv2
+3
+0.986M
+0.194
+0.972
+0.989M
+0.219
+0.966
+
+5
+0.998M
+0.194
+0.972
+1.001M
+0.208
+0.970
+
+10
+1.017M
+0.188
+0.972
+1.020M
+0.208
+0.972
+
+20
+1.032M
+0.187
+0.972
+1.034M
+0.201
+0.971
+
+In Table 8, we observe that for the CTR task, DoubleGraphHash consistently outperforms double frequency hashing across different resolution levels, similar to the case for the retrieval task reported in Table 4 in the main text.
+
+D.3.2. Other types of clustering objective.
+
+We compare the results obtained under modularity-based clustering to spectral bipartite graph co-clustering proposed in (14). The results are presented in Table 9 for the CTR task on Frappe. DoubleGraphHash outperforms its spectral variant, where the clustering component is replaced with spectral co-clustering, while only requiring less than 1/9 of the clustering time of the latter.
+
+Table 9. Impact of different types of clustering objectives on model performance in CTR task. DoubleGraphHash outperforms its spectral variant, in addition to only requiring <1/9 clustering time.
+
+Frappe
+
+time
+# param
+LogLoss (↓\downarrow)
+AUC (↑\uparrow)
+
+DLRM
+double spectral
+4.367s
+0.155M
+0.269
+0.970
+
+DoubleGraphHash
+0.482s
+0.152M
+0.222
+0.972
+
+DCNv2
+double spectral
+4.367s
+1.001M
+0.208
+0.968
+
+DoubleGraphHash
+0.482s
+0.998M
+0.194
+0.972
+
+D.4. Item Subgroup Evaluation
+
+In addition to the subgroup evaluation from the user perspective (Section 5.3), in this section, we examine model performance from the item perspective. Specifically, we calculated the average degree of retrieved items (here, item degree means how many users have interacted with the item in the training set) on Gowalla, and the results against the strongest baseline, double graph hashing, are reported in Table 10.
+
+In Table 10, we see that from the item perspective, frequency-based methods such as double frequency hashing still tend to bias towards popular items in retrieval. GraphHash, on the other hand, maintains a better balance by retrieving both popular and unpopular items, offering superior accuracy while promoting more diverse results.
+
+Table 10. The average degree of retrieved items on Gowalla.
+
+MF
+LightGCN
+
+full
+267.922
+186.386
+
+double frequency
+722.994
+266.775
+
+GraphHash
+195.174
+201.898
+
+D.5. Additional Backbones
+
+One critical advantage of GraphHash is its plug-and-play design, making it working seamlessly with diverse backbones.
+
+D.5.1. Retrieval
+
+We further evaluate GraphHash with iALS (29) as the backbone, comparing its performance on the retrieval task against the strongest baseline, double frequency hashing, and the results are shown in Table 11.
+
+Table 11. Retrieval performance comparison with double frequency hashing on Gowalla and Yelp2018 using iALS as the backbone.
+
+Gowalla
+Yelp2018
+
+Recall(↑\uparrow)
+NDCG(↑\uparrow)
+Recall(↑\uparrow)
+NDCG(↑\uparrow)
+
+full
+10.681
+5.609
+4.660
+2.655
+
+double frequency
+2.315
+1.301
+1.437
+0.862
+
+GraphHash
+7.451
+4.045
+2.463
+1.491
+
+D.5.2. CTR
+
+We further evaluate GraphHash with DeepFM (21) as the backbone, comparing its performance with the baselines on the CTR task, and the results are shown in Table 12.
+
+Table 12. CTR performance comparison on MovieLens1M and Frappe using DeepFM as the backbone.
+
+MovieLens1M
+Frappe
+
+Logloss(↓\downarrow)
+AUC(↑\uparrow)
+Logloss(↓\downarrow)
+AUC(↑\uparrow)
+
+full
+0.344
+0.883
+0.243
+0.973
+
+double
+0.370
+0.850
+14.506
+0.788
+
+double frequency
+0.371
+0.851
+11.603
+0.832
+
+GraphHash
+0.386
+0.838
+0.304
+0.938
+
+DoubleGraphHash
+0.364
+0.857
+0.247
+0.960
+
+These additional results align with Table 1 and Table 2 and further validate the consistent improvements achieved by GraphHash, highlighting its robustness and adaptability.
+
+D.6. Additional Datasets
+
+Table 13. Summary statistics about Pinterest
+
+Dataset
+#\# Users
+#\# Items
+#\# Interactions
+
+Pinterest
+55,187
+9,916
+1,500,809
+
+We further evaluate GraphHash on the Pinterest dataset (18) (we adopt a random split of
+80%/10%/10% for training, validation and testing), comparing its performance on the retrieval task against the strongest baseline, double frequency hashing:
+
+Table 14. Performance Comparison on Pinterest.
+
+MF
+LightGCN
+
+Recall(↑\uparrow)
+NDCG(↑\uparrow)
+Recall(↑\uparrow)
+NDCG(↑\uparrow)
+
+full
+4.326
+3.527
+4.567
+3.667
+
+double frequency
+1.007
+0.824
+2.926
+2.281
+
+GraphHash
+2.815
+2.165
+3.747
+2.922
+
+These additional results align with Table 1 and further validate the consistent improvements achieved by GraphHash, highlighting its robustness and adaptability.
+
+D.7. Additional Baselines
+
+We include LEGCF77
+7
+
+https://github.com/xurong-liang/LEGCF as an additional baseline for the LightGCN backbone (as the baseline is a GNN-specific method) on retrieval:
+
+Table 15. Performance Comparison with LEGCF on Gowalla and Yelp2018.
+
+Gowalla
+Yelp2018
+
+#Params
+Recall(↑\uparrow)
+NDCG(↑\uparrow)
+#Params
+Recall(↑\uparrow)
+NDCG(↑\uparrow)
+
+LEGCF
+0.774M
+14.03
+7.149
+1.03M
+5.382
+3.023
+
+GraphHash
+0.742M
+15.388
+9.664
+0.976M
+6.308
+3.881
+
+On average, GraphHash outperforms LEGCF by 13.44% in recall and 31.78% in NDCG. In addition to the better performances, GraphHash is also backbone-agnostic, working seamlessly with non-GNN backbones.
+
+D.8. Results on Sparser Graphs
+
+Sparsity is a common characteristic of real-world graphs. The used datasets in our work are highly sparse with sparsity levels of 99.92%/99.87%/99.94% on Gowalla/Yelp2018/AmazonBook, respectively. To further verify the performance of GraphHash on even sparser graphs, we conduct an additional set of experiments that only use 25%/50% of the training data on Gowalla and test on the same test set.
+
+Table 16. Performance Comparison with different training ratios for MF and LightGCN.
+
+Train Ratio
+
+MF
+LightGCN
+
+Recall(↑\uparrow)
+NDCG(↑\uparrow)
+Recall(↑\uparrow)
+NDCG(↑\uparrow)
+
+25%
+double freq
+1.862
+0.991
+2.523
+1.483
+
+GraphHash
+4.251
+2.400
+6.260
+3.863
+
+50%
+double freq
+1.767
+1.108
+4.192
+2.718
+
+GraphHash
+5.249
+2.887
+9.840
+5.807
+
+In Table 16, we can observe that GraphHash still consistently outperforms the strongest baseline, double frequency hashing, across different training ratios, aligning with the results reported in Table 1. When the data/graph is extremely sparse, all recommendation models will suffer from the lack of training data and our results underscore the robustness of GraphHash even in extremely sparse settings. Our method is designed to effectively leverage the limited interactions available in sparse graphs by fully utilizing graph clustering in hashing to preserve meaningful structure and minimize information loss. This capability allows GraphHash to maintain strong performance despite the challenges posed by sparse user-item interaction graphs.
+
+Experimental support, please
+view the build logs
+for errors. Generated by
+
+L
+A
+T
+E
+
+xml
+
+.
+
+Instructions for reporting errors
+
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+
+Click the "Report Issue" (
+
+) button, located in the page header.
+
+Tip: You can select the relevant text first, to include it in your report.
+
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+
+Major funding support from
+

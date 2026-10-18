@@ -1,0 +1,40 @@
+{
+ "slug": "pc-s2a-1017",
+ "state": "complete",
+ "started": "2026-10-17T13:07:10+00:00",
+ "ended": "2026-10-17T13:58:18+00:00",
+ "device_count": 2,
+ "mode": "parallel_2gpu",
+ "inputs": {},
+ "jobs": {
+  "gowalla__mf__graphhash__directau__s0": {
+   "run_id": "gowalla__mf__graphhash__directau__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 180 --epochs 200 --lr 0.01 --wd 1e-8 --seeds 0 --run-id gowalla__mf__graphhash__directau__s0",
+   "state": "done",
+   "started": "2026-10-17T13:08:14+00:00",
+   "ended": "2026-10-17T13:46:13+00:00",
+   "duration_s": 2279.1,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash__directau__s0.log"
+  },
+  "gowalla__mf__graphhash__directau__s0-initmatch": {
+   "run_id": "gowalla__mf__graphhash__directau__s0-initmatch",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 180 --epochs 200 --lr 0.01 --wd 1e-8 --init-match --seeds 0 --run-id gowalla__mf__graphhash__directau__s0-initmatch",
+   "state": "done",
+   "started": "2026-10-17T13:08:14+00:00",
+   "ended": "2026-10-17T13:58:18+00:00",
+   "duration_s": 3004.5,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash__directau__s0-initmatch.log"
+  }
+ },
+ "errors": [],
+ "prepare_exit_code": 0,
+ "n_jobs": 2,
+ "n_failed": 0,
+ "failed_run_ids": []
+}

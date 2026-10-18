@@ -1,0 +1,64 @@
+{
+ "slug": "pc-s3a-1017",
+ "state": "complete",
+ "started": "2026-10-17T18:22:38+00:00",
+ "ended": "2026-10-17T20:55:28+00:00",
+ "device_count": 2,
+ "mode": "parallel_2gpu",
+ "inputs": {},
+ "jobs": {
+  "amazonbook__mf__graphhash__directau__s0": {
+   "run_id": "amazonbook__mf__graphhash__directau__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset AmazonBook --method GraphHash --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 300 --epochs 150 --lr 0.001 --wd 1e-08 --seeds 0 --run-id amazonbook__mf__graphhash__directau__s0",
+   "state": "done",
+   "started": "2026-10-17T18:23:45+00:00",
+   "ended": "2026-10-17T20:28:27+00:00",
+   "duration_s": 7482.7,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__graphhash__directau__s0.log"
+  },
+  "amazonbook__mf__random__directau__s0": {
+   "run_id": "amazonbook__mf__random__directau__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset AmazonBook --method Random --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 300 --epochs 150 --lr 0.001 --wd 1e-06 --seeds 0 --run-id amazonbook__mf__random__directau__s0",
+   "state": "done",
+   "started": "2026-10-17T18:23:45+00:00",
+   "ended": "2026-10-17T19:31:05+00:00",
+   "duration_s": 4040.8,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__random__directau__s0.log"
+  },
+  "gowalla__mf__dfreq__directau__s0": {
+   "run_id": "gowalla__mf__dfreq__directau__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method DoubleFreq --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 180 --epochs 200 --lr 0.005 --wd 1e-06 --seeds 0 --run-id gowalla__mf__dfreq__directau__s0",
+   "state": "done",
+   "started": "2026-10-17T19:31:05+00:00",
+   "ended": "2026-10-17T20:23:06+00:00",
+   "duration_s": 3120.4,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__dfreq__directau__s0.log"
+  },
+  "gowalla__mf__random__directau__s0": {
+   "run_id": "gowalla__mf__random__directau__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method Random --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 180 --epochs 200 --lr 0.01 --wd 1e-06 --seeds 0 --run-id gowalla__mf__random__directau__s0",
+   "state": "done",
+   "started": "2026-10-17T20:28:27+00:00",
+   "ended": "2026-10-17T20:55:28+00:00",
+   "duration_s": 1620.4,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__random__directau__s0.log"
+  }
+ },
+ "errors": [],
+ "prepare_exit_code": 0,
+ "n_jobs": 4,
+ "n_failed": 0,
+ "failed_run_ids": []
+}

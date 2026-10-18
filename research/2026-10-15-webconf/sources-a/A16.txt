@@ -1,0 +1,1205 @@
+https://arxiv.org/html/2502.00792
+
+
+RTBAgent: A LLM-based Agent System for Real-Time Bidding
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+Submit in GitHub
+
+arXiv is now an independent nonprofit!
+Learn more
+×
+
+Back to arXiv
+
+Why HTML?
+
+Report Issue
+
+Back to Abstract
+
+Download PDF
+
+Abstract.
+
+1 Introduction
+
+2 Related Work
+
+2.1 LLM-based Agent Systems
+
+2.2 Bidding Optimization in RTB
+
+3 Proposed Method
+
+3.1 Preliminaries
+
+3.1.1 Problem Formulation
+
+3.1.2 Our Solution Paradigm
+
+3.2 Overall Framework
+
+3.3 Environment
+
+3.4 Components of Agent
+
+3.4.1 Profile
+
+3.4.2 Tools
+
+3.4.3 Actions
+
+3.4.4 Memories
+
+3.5 Workflow of RTBAgent
+
+3.5.1 Information Gathering
+
+3.5.2 Two-Step Decision-Making
+
+3.5.3 Daily Reflection
+
+4 Experiments
+
+4.1 Datasets
+
+4.2 Evaluation Procedure
+
+4.3 Implementation Details
+
+4.4 Overall Comparison
+
+4.5 Ablation Study
+
+4.6 Visualization and Analysis of Performance
+
+4.7 Discussion of Reasoning Costs and Benefits
+
+5 Conclusions
+
+6 Limitations
+
+7 Acknowledgments
+
+References
+
+8 appendix
+
+8.1 Partial Display of Prompt Template for RTBAgent
+
+License: arXiv.org perpetual non-exclusive license
+
+arXiv:2502.00792v1 [cs.AI] 02 Feb 2025
+
+RTBAgent: A LLM-based Agent System for Real-Time Bidding
+
+Conference: Companion Proceedings of the ACM Web Conference 2025; April 28-May 2, 2025; Sydney, NSW, AustraliaCompanion Proceedings of the ACM Web Conference 2025 (WWW Companion ’25), April 28-May 2, 2025, Sydney, NSW, AustraliaDOI: 10.1145/3701716.3715259ISBN: 979-8-4007-1331-6/25/04CCS: Computing methodologies Artificial intelligence
+
+Leng Cai
+
+Note: Both authors contributed equally to this research.
+
+email: caileng1923@gmail.com
+
+Affiliation: South China University of Technology, Guangzhou, China
+
+, 
+Junxuan He
+
+email: hejunxuan30@gmail.com
+
+Affiliation: Shanghai University, Shanghai, China
+
+, 
+Yikai Li
+
+email: ykli82086@gmail.com
+
+Affiliation: South China University of Technology, Guangzhou, China
+
+, 
+Junjie Liang
+
+email: 19jjliang22@gmail.com
+
+Affiliation: South China University of Technology, Guangzhou, China
+
+, 
+Yuanping Lin
+
+email: linyuanping@pazhoulab.cn
+
+Affiliation: Pazhou Lab, Guangzhou, China
+
+, 
+Ziming Quan
+
+email: dragonquan1112@gmail.com
+
+Affiliation: South China University of Technology, Guangzhou, China
+
+, 
+Yawen Zeng
+
+email: yawenzeng11@gmail.com
+
+Note: Corresponding author.
+
+Affiliation: ByteDance, Beijing, China
+
+and 
+Jin Xu
+
+email: jinxu@scut.edu.cn
+
+Affiliation: South China University of Technology, Pazhou Lab, Guangzhou, China
+
+© acmlicensed
+
+Abstract.
+
+Real-Time Bidding (RTB) enables advertisers to place competitive bids on impression opportunities instantaneously, striving for cost-effectiveness in a highly competitive landscape. Although RTB has widely benefited from the utilization of technologies such as deep learning and reinforcement learning, the reliability of related methods often encounters challenges due to the discrepancies between online and offline environments and the rapid fluctuations of online bidding. To handle these challenges, RTBAgent is proposed as the first RTB agent system based on large language models (LLMs), which synchronizes real competitive advertising bidding environments and obtains bidding prices through an integrated decision-making process. Specifically, obtaining reasoning ability through LLMs, RTBAgent is further tailored to be more professional for RTB via involved auxiliary modules, i.e., click-through rate estimation model, expert strategy knowledge, and daily reflection. In addition, we propose a two-step decision-making process and multi-memory retrieval mechanism, which enables RTBAgent to review historical decisions and transaction records and subsequently make decisions more adaptive to market changes in real-time bidding. Empirical testing with real advertising datasets demonstrates that RTBAgent significantly enhances profitability. The RTBAgent code will be publicly accessible at: https://github.com/CaiLeng/RTBAgent.
+
+Method
+Scheme
+Tools
+Adaptability
+Explainability
+
+Rule-based Methods
+Hyperparameter Tuning
+✗
+✗
+✗
+
+RL-based Models
+Model Training
+✗
+✓
+✗
+
+Chat with LLMs
+LLM API
+✗
+✗
+✓
+
+RTBAgent (ours)
+Integrated Intelligence
+✓
+✓
+✓
+
+Table 1. Discussion of three RTB decision methods: Rule-based Methods, RL-based Models, Chat withs LLMs, and our RTBAgent.
+
+Figure 1. The workflow of our RTBAgent, which is equipped with 4 tools, 3 types of memory, two-step decision-making to execute actions and output bidding prices.
+
+Keywords: 
+Real-Time Bidding, Bid Optimization, Large Language Models, Bidding Agents
+
+1. Introduction
+
+The prominence of online advertising within the broader advertising industry is well-established, serving as a pivotal channel for reaching consumers in the digital era. In 2022, the digital advertising industry in the United States achieved a historic milestone, with total revenue exceeding $200 billion. Programmatic advertising revenue grew by 10.5% year-on-year, reaching $109.4 billion, underscoring its expanding significance in the digital landscape (IAB and PwC, 2023). A notable advancement in online display advertising has been Real-Time Bidding (RTB), which enables the real-time buying and selling of ad impressions during a user’s visit. RTB’s main advantage is its ability to automate and scale the purchasing process by aggregating extensive inventory from various publishers (Wang et al., 2017). It allows for precise targeting of individual users based on real-time behavior, marking a significant shift in digital marketing strategies.
+
+A key challenge within RTB is the development of effective bidding strategies for advertisers. An optimal bidding strategy should promote products to targeted users without disrupting their experience and enhance revenue for publishers. As illustrated in Table 1, traditional rule-based bidding strategies are often too rigid and need to adapt to the dynamic nature of the market. While reinforcement learning (RL) approaches (Ding and Dong, 2020) offer better adaptability, they face issues such as the need for extensive training data, difficulties in achieving training convergence, and a lack of interpretability in decision-making, which affects their applicability, trustworthiness, and stability. Consequently, there is a need for more advanced machine-learning models in the RTB domain.
+
+Recent advancements in artificial intelligence, mainly through large language models (LLMs), have introduced innovative solutions to various fields, including knowledge-based question answering (Zhang et al., 2023; Chen et al., 2023; Zhou et al., 2024; Liu et al., 2023; Pan and Zeng, 2023). However, advertising bidding tasks possess unique competitive characteristics that require heightened awareness and dynamic adjustment. While useful as assistants for bidding and answering, basic LLMs face limitations when directly applied to advertising bidding scenarios. LLM-based agent systems have recently gained attention for their ability to emulate human-like behavior and decision-making. For example, research from Stanford University (Park et al., 2023) demonstrates how intelligent agent systems can effectively plan and execute complex tasks.
+
+Our paper introduces RTBAgent, a novel agent framework designed to address the challenges of competitive advertising bidding environments. RTBAgent is equipped with 4 tools, 3 types of memory, and a two-step decision-making process to execute actions. As outlined in Figure 1, it simulates real-world advertising agency scenarios and enhances real-time bidding tasks through tools such as CTR predictors and various bidding strategies, integrating expert knowledge with insights into impression value and market conditions. RTBAgent features a versatile multi-memory retrieval system that updates and focuses on relevant data, minimizing noise and adapting swiftly to market dynamics. Its two-step decision-making approach enables it to determine optimal bidding prices in real-time. It has been proven that RTBAgent can increase profitability and has great flexibility in LLM selection. Furthermore, RTBAgent stands out in interpretability, providing transparent insights into its decision-making process, which is a significant advantage over conventional methods that often operate as black boxes. With these capabilities, RTBAgent enables more informed and strategically advantageous decisions, helping advertisers achieve better return on investment in highly competitive markets. The combination of high performance and transparency of RTBAgent can not only be superior to traditional models in effect but also provide a new perspective for the interpretable research of bidding tasks in the field of computational advertising.
+
+Our contributions are summarized as follows:
+
+• 
+
+To our knowledge, our research proposes the first bidding agency system based on LLMs, aimed at solving the bidding optimization problem in online display advertising under budget constraints.
+
+• 
+
+We innovatively propose a two-step decision-making method for RTB, integrating CTR estimation model, expert strategy knowledge, multi-memory retrieval system, and daily reflection to dynamically adjust bidding strategies to cope with the real-time changing market environment.
+
+• 
+
+Extensive experiments validate that our framework performs exceptionally well across all metrics, achieving a significant overall return.
+
+2. Related Work
+
+2.1. LLM-based Agent Systems
+
+LLMs are making significant strides towards achieving Artificial General Intelligence (AGI) by enhancing the capabilities of intelligent agents. These models improve autonomy, responsiveness, and social interaction skills, enabling agents to handle complex tasks such as natural language processing, knowledge integration, information retention, logical reasoning, and strategic planning. Recent developments in intelligent agent frameworks, such as AutoGPT (Yang et al., 2023) and Metagpt (Hong et al., 2023), have advanced multi-agent collaboration by incorporating standardized operating procedures (SOPs). These frameworks facilitate research by streamlining agent system integration (Huang et al., 2023; Gur et al., 2023; Xu et al., 2024; Li et al., 2024; Zhang et al., 2024). For instance, EduAgent (Xu et al., 2024) integrates cognitive science principles to guide LLMs, enhancing their ability to model and understand diverse learning behaviors and outcomes. Additionally, Agent Hospital (Li et al., 2024) utilizes a large-scale language model to simulate hospital environments, enabling medical agents to adapt and improve their treatment strategies through interactive learning.
+
+2.2. Bidding Optimization in RTB
+
+RTB has been a critical focus in online advertising (Wang and Yuan, 2015), aiming to maximize the value of ad placements within a given budget. Traditional methods employ static parameters (Perlich et al., 2012; Yu et al., 2017; Yu and Neely, 2020) to optimize revenue, often using historical bid data to set bidding parameters.  (Yu and Neely, 2020) use linear programming to address these optimization problems. Such methods usually fall short in dynamic bidding environments. Researchers have increasingly framed RTB as a sequential decision problem to overcome these limitations, applying RL techniques to enhance automated bidding strategies (Cai et al., 2017; Zhao et al., 2018; Wu et al., 2018; He et al., 2021). DRLB (Wu et al., 2018) approaches budget-constrained bidding as a Markov decision process, offering a model-free RL framework for optimization. USCB (He et al., 2021) introduces an RL method that dynamically adjusts parameters for optimal performance, improving convergence rates through recursive optimization. Despite these advancements, RL faces challenges such as training complexity and interpretability, indicating a need for more robust machine learning models in RTB strategies.
+
+3. Proposed Method
+
+3.1. Preliminaries
+
+3.1.1. Problem Formulation
+
+RTB offers various pricing schemes catering to diverse advertiser needs within the online advertising ecosystem. In a second-price auction (Roughgarden, 2010), the advertiser pays the second-highest bid, denoted as cic_{i}, for the privilege of displaying their ad after winning the bid with bib_{i} as the highest bidding price. Our study focuses exclusively on the scenario within a second-price auction mechanism. It aims to maximize the achieved objective value under a given budget, as this is the most common business requirement in the industry. W.l.o.g., we consider clicks to be our primary aim value, although other key performance indicators (KPIs), such as conversions, can also be adopted. Thus, the advertiser’s strategic challenge is to maximize the cumulative value of clicks, subject to budget constraints. Let NN represent the total number of ad impression opportunities during a specific time period, such as one day, with each impression opportunity indexed by ii. The optimization problem can be mathematically expressed as follows:
+
+(1)
+
+max\displaystyle\max
+∑i=1⋯Nwi⋅vi\displaystyle\sum_{i=1\cdots N}w_{i}\cdot v_{i}
+
+s.t.\displaystyle\text{ s.t. }
+∑i=1⋯Nwi⋅ci≤B,\displaystyle\sum_{i=1\cdots N}w_{i}\cdot c_{i}\leq B,
+
+where viv_{i}, cic_{i} represent the value, cost of impression ii respectively. wiw_{i} is a binary value indicating winning or losing the impression ii. BB is the total bidding budget. Zhang et al. (2016) proves that in a second-price auction, the optimal bid is a function of a scaling factor λ\lambda, which governs the bid price bib_{i} as:
+
+(2)
+
+bi=λ⋅vi.\displaystyle b_{i}={\lambda}\cdot{v_{i}}.
+
+Unfortunately, all participating bidders are dynamic, and the auction environment is usually highly non-stationary, which make λ\lambda difficult to be determined naively. Thus, the key of our method is to dynamically adjust λ\lambda to adapt to the ever-changing market environment.
+
+3.1.2. Our Solution Paradigm
+
+RTB can be viewed as a series of random events where each bid is influenced by uncertain factors (Amin et al., 2012). To address this, we model the RTB scenario using a Markov Decision Process (MDP), a mathematical framework that captures the decision-making process involving probabilistic state transitions. This MDP is characterized by a set of states 𝒮\mathcal{S} that represent the advertising status of a campaign and an action space 𝒜\mathcal{A} including the adjustment parameter ata_{t} of the feasible bidding factor λ\lambda. At each time step t∈{1,⋯,T}t\in\{1,\cdots,T\}, the agent performs actions at∈𝒜a_{t}\in\mathcal{A} based on the current state st∈𝒮s_{t}\in\mathcal{S} to update λ\lambda according to its policy π:𝒮↦𝒜\pi:\mathcal{S}\mapsto\mathcal{A}. The state then transitions to a new state according to the transition dynamics 𝒯:𝒮×𝒜↦Ω⁡(𝒮)\mathcal{T}:\mathcal{S}\times\mathcal{A}\mapsto\Omega(\mathcal{S}), where ×\times represents cartesian product and Ω⁡(𝒮)\Omega(\mathcal{S}) is a set of probability and distributions over 𝒮\mathcal{S}. The environment provides an immediate reward to the agent based on a function of the current state and the agent’s actions, denoted as rt:𝒮×𝒜↦ℛ⊆ℝr_{t}:\mathcal{S}\times\mathcal{A}\mapsto\mathcal{R}\subseteq\mathbb{R}, where ℝ\mathbb{R} is a reward space.
+
+To this end, the objective is to discover a policy π\pi that links states to actions, intending to maximize the total discounted reward within a set time frame, all while considering budget limitations. The policy π∗\pi^{*} that we seek is the one that maximizes the expected cumulative reward, as shown in Eq.(3):
+
+(3)
+
+πθ∗=arg⁡maxπθ​𝔼πθ​[∑i=0Tγi​rt+i∣st=s].\displaystyle\pi_{\theta}^{*}=\arg\max_{\pi_{\theta}}\mathbb{E_{\pi_{\theta}}}\left[\sum_{i=0}^{T}\gamma^{i}r_{t+i}\mid s_{t}=s\right].
+
+We extend this optimization challenge to our RTBAgent, where the policy πθ∗\pi_{\theta}^{*} is defined as:
+
+(4)
+
+πθ∗=argmaxπθ𝔼πθ[∑i=0Tγirt+i∣st=s,ρt=ρ],\displaystyle\pi_{\theta}^{*}=\arg\max_{\pi_{\theta}}\mathbb{E}_{\pi_{\theta}}\left[\sum_{i=0}^{T}\gamma^{i}r_{t+i}\mid s_{t}=s,\rho_{t}=\rho\right],
+
+where ρ⁡(⋅)\rho(\cdot) is a specialized module that encapsulates beneficial internal reasoning processes and the action policy for the RTBAgent is given by:
+
+(5)
+
+πRTBAgent​(at∣st,ρt)=G⁡(st,ρt)\displaystyle\pi_{\text{RTBAgent}}\left(a_{t}\mid s_{t},\rho_{t}\right)=G\left(s_{t},\rho_{t}\right)
+
+ρt=ρ⁡(st,Fts​u​m,Ftt​o​o​l,Fti​n​s,Fta​c​t,Ftr​e​f),\displaystyle\rho_{t}=\rho\left(s_{t},F_{{t}}^{sum},F_{{t}}^{tool},F_{{t}}^{ins},F_{{t}}^{act},F_{{t}}^{ref}\right),
+
+where G⁡(⋅)G(\cdot) is a operation parsing function used to perform compatible formal operations in the environment. The RTBAgent, powered by LLMs, refines the inference information ρt\rho_{t} to include various operations, i.e., the summary of memories Fts​u​mF_{{t}}^{sum}, tools Ftt​o​o​lF_{{t}}^{tool}, insights Fti​n​sF_{{t}}^{ins}, actions Fta​c​tF_{{t}}^{act} and reflections Ftr​e​fF_{{t}}^{ref}, which will be explained specifically later.
+
+Due to the inherent limitations of LLMs, such as the lack of dominance in continuous value output and insensitivity to numbers, our research refines the operation based on the basic factor λb​a​s​e\lambda_{base} obtained from expert bidding strategies. The optimal scaling factor λt\lambda_{t} at each time step tt is determined through the adjustment action ata_{t} provided by the strategy π\pi, i.e., λt=λb​a​s​e⋅(1+at)\lambda_{t}=\lambda_{base}\cdot(1+a_{t}). Integrating these operations allows the RTBAgent to continuously interact with the bidding environment during training, driving it towards the optimization goal as expressed in the following equation:
+
+(6)
+
+πRTBAgent∗=argmaxπ𝔼π[∑i=0Tγirt+i∣st=s,ρt=ρ]\displaystyle\pi_{\text{RTBAgent}}^{*}=\arg\max_{\pi}\mathbb{E}_{\pi}\left[\sum_{i=0}^{T}\gamma^{i}r_{t+i}\mid s_{t}=s,\rho_{t}=\rho\right]
+
+s.t. ​π​(at∣st,ρt)=G⁡(st,ρt)​w​i​t​h​E​q.(5)​∀t,\displaystyle\text{s.t. }\pi(a_{t}\mid s_{t},\rho_{t})=G\left(s_{t},\rho_{t}\right)\kern 4.62497ptwith\kern 4.62497ptEq.(5)\kern 4.62497pt\forall t,
+
+where the reward of RTBAgent comes from the comprehensive information of decision results and self-reflection, achieving self alignment(Yuan et al., 2024). This approach ensures that RTBAgent’s actions are meticulously aligned with the policy that delivers the highest expected return on bids, taking into account the current state and decision insights at each juncture.
+
+3.2. Overall Framework
+
+The RTBAgent framework, as shown in Figure 1, mirrors the operational structure of a real-world bidding firm. It integrates a comprehensive set of bidding analysis tools ℋ\mathcal{H}, alongside a well-defined profile, action set 𝒜\mathcal{A}, and memory set ℳ\mathcal{M}. The RTBAgent is guided by a configuration file that imbues it with the acumen of a bidding specialist, grounded in a context crafted for its role. It leverages bidding analysis tools to meticulously evaluate the potential value of ad impression requests, drawing on current bidding conditions and request data to proffer expert-guided bidding strategies. The memory module is designed to offer a robust, multi-dimensional retrieval system. It segments and updates information incrementally, ensuring the agent has access to accurate and relevant data. Additionally, the RTBAgent features a reflection module that it uses for regular decision reviews, thereby cultivating valuable insights for enhancing subsequent actions. Central to the RTBAgent is the action module, which employs a two-step decision-making process to formulate and execute well-considered actions. This process is pivotal for determining the optimal bidding price, ensuring that the agent’s actions are strategically aligned with the goal of achieving the highest return on investment in the bidding process.
+
+3.3. Environment
+
+The dynamics of a bidding environment are characterized by the continuous emergence of new data following each round of bidding, which is a concrete representation of the current state sts_{t}. This data encompasses a variety of metrics, such as the current volume of bids, historical success rates in securing bids, prevailing market prices, the average cost per bid, the total budget allocated for bidding, and the remaining budget. These elements are crucial as they provide a comprehensive snapshot of the bidding landscape at any given time. Including such detailed environmental information is instrumental for the RTBAgent’s decision-making process. It allows the system to not only assess the immediate bidding scenario but also to anticipate and adapt to potential shifts in the market dynamics. This real-time analysis and understanding of the bidding environment are essential for the RTBAgent to make informed and strategic decisions.
+
+3.4. Components of Agent
+
+3.4.1. Profile
+
+To help LLMs understand the bidding process, we define the profile of our RTBAgent as follows,
+
+You are a senior data analyst specializing in in-depth research and strategy development in the field of real-time bidding (RTB) advertising placement. You use advanced data analysis tools and algorithms to guide advertisers to gain an advantage in fierce market competition…
+
+by presenting the problem background, its own role, and action goals in the form of text, it can better perform the reasoning process for specific tasks.
+
+3.4.2. Tools
+
+We incorporate a various tool set ℋ\mathcal{H} for RTBAgent, including a click-through rate (CTR) prediction model and bidding decision strategies. We use Factorization Machines (FM)(Rendle, 2010) as the CTR prediction model, which is widely used and can estimate the value for each impression stream. A separate CTR prediction model is trained for each advertiser within this framework. Additionally, we use a series of rule-based strategies to complement expert knowledge, including MCPC (Lee et al., 2018), LIN (Perlich et al., 2012), and LP (Dantzig, 2002), which will be further discussed in the 4.4. Overall Comparison section. These methods are widely used in the industry, based on prior knowledge, and demonstrate high referential value in an offline environment. It is important to note that in the bidding decision-making process, we only need to base our decision on one of the bidding decision models to assist in the decision-making.
+
+3.4.3. Actions
+
+Due to the uncontrollable and unreliable nature of generative LLMs in predicting consecutive bidding prices, we suggest changing this process to allow the LLMs to predict an adjustment factor. Specifically, we define a adjustment space with an observation range from -0.5 to 0.5. This enables the RTBAgent to adjust the expert knowledge suggested decisions based on the current state and historical decisions in order to better adapt to the dynamic environment.
+
+3.4.4. Memories
+
+In the RTBAgent, we design three types of memory: environment memory ℳe​n​v\mathcal{M}^{env}, bidding memory ℳb​i​d\mathcal{M}^{bid}, and reflection memory ℳr​e​f\mathcal{M}^{ref}, where {ℳe​n​v,ℳb​i​d,ℳr​e​f}⊂ℳ\{\mathcal{M}^{env},\mathcal{M}^{bid},\mathcal{M}^{ref}\}\subset\mathcal{M}. Specifically, ℳe​n​v\mathcal{M}^{env} stores the market environment after each decision, allowing the RTBAgent to refer to historical data to make wiser decisions when facing new bidding opportunities. ℳb​i​d\mathcal{M}^{bid} records the bidding behaviors and reasons in different market environments. By analyzing ℳb​i​d\mathcal{M}^{bid}, the RTBAgent can identify which strategies are more effective in specific situations, optimizing and adjusting future bids. Additionally, ℳb​i​d\mathcal{M}^{bid} can help the RTBAgent recognize potential patterns and trends, such as specific bidding strategies that are more likely to succeed under certain conditions. ℳr​e​f\mathcal{M}^{ref} is the RTBAgent’s self-assessment mechanism, recording the reflection process and results after each decision. ℳr​e​f\mathcal{M}^{ref} enables the RTBAgent can to understand why some decisions did not achieve the expected effects, thus avoiding similar mistakes in the future. The core of ℳr​e​f\mathcal{M}^{ref} lies in continuous learning and improvement, ensuring that the RTBAgent can maintain competitiveness in the ever-changing market environment.
+
+3.5. Workflow of RTBAgent
+
+This section elucidates the operational sequence of the RTBAgent, encompassing three pivotal stages: information gathering, two-step decision-making, and daily reflection.
+
+3.5.1. Information Gathering
+
+At the heart of RTBAgent’s functionality is the aggregation of pertinent data. It should be noted that each action and environmental feedback record will be saved in real time to generate memory. Throughout the bidding process, extensive logs are generated, encompassing decisions, reflections, and environmental contexts. The synthesis of these logs into a summarized memory is pivotal for informed decision-making. The summarized memory at any given time step tt, denoted as Fts​u​mF_{{t}}^{sum}, is formulated by integrating information from bidding, reflective, and environmental memories:
+
+(7)
+
+Fts​u​m=∑i=b​i​d,e​n​v,r​e​fL​L​M​(φs​u​m​(mti)),\displaystyle F_{{t}}^{sum}=\sum_{{i=bid,env,ref}}LLM(\varphi^{{sum}}(m^{i}_{t})),
+
+where ∑\sum{} is a concatenation operation of multiple strings, φs​u​m​(⋅)\varphi^{sum}(\cdot) is a prompt template for information gathering and mti∈ℳim^{i}_{t}\in\mathcal{M}^{i} is the memory for the type ii at time step tt.
+
+Additionally, the RTBAgent leverages a suite of tools, encapsulated within Ftt​o​o​lF_{{t}}^{tool}, to provide foundational insights for two-step decision-making. Central to this are the CTR estimations, represented by VtV_{t}, and strategic bidding recommendations, denoted as λb​a​s​e{\lambda}_{base}. Therefore, the output of the tool can be represented by a pair (VtV_{t}, λb​a​s​e{\lambda}_{base}). Here, Vt={vt1,vt2,⋯,vtdt}V_{t}=\{v_{t}^{1},v_{t}^{2},\cdots,v_{t}^{d_{t}}\} is derived from a trained predictive model, forecasting the potential user engagement by the impression feature vector Xt={xt1,xt2,⋯,xtdt}X_{t}=\{x_{t}^{1},x_{t}^{2},\cdots,x_{t}^{d_{t}}\}, while λb​a​s​e{\lambda}_{base} is algorithmically determined based on historical data, and dtd_{t} is the number of impressions at the current time step tt, and satisfies the following:
+
+(8)
+
+∑t=1Tdt=N,\displaystyle\sum_{t=1}^{T}d_{t}=N,
+
+where NN is the total number of ad impression opportunities during one day.
+
+3.5.2. Two-Step Decision-Making
+
+The RTBAgent’s two-step decision-making process plays a crucial role in its strategic capabilities. The first step involves insight reasoning, represented by Fti​n​sF_{t}^{ins}, and is responsible for analyzing potential decision ranges, including their benefits, drawbacks, possible outcomes, and associated risks. This step can be formulated as follows:
+
+(9)
+
+Fti​n​s=L​L​M​(φi​n​s​(st,Fts​u​m,λb​a​s​e)),\displaystyle F_{t}^{ins}=LLM(\varphi^{{ins}}(s_{t},F_{t}^{sum},{\lambda}_{base})),
+
+where φi​n​s​(⋅)\varphi^{ins}(\cdot) is a prompt template for insight reasoning.
+
+Following the insight reasoning, the action making step, represented by Fta​c​tF_{{t}}^{act}, is where the actual bidding action ata_{t} and its reason r​e​at{rea}_{t} are determined. The output of this step is a binary tuple (at,r​e​at)(a_{t},{rea}_{t}), which is generated by the following representation:
+
+(10)
+
+Fta​c​t=L​L​M​(φa​c​t​(st,Fts​u​m,Fti​n​s,λb​a​s​e)),\displaystyle F_{{t}}^{act}=LLM(\varphi^{{act}}(s_{t},F_{t}^{sum},F_{t}^{ins},{\lambda}_{base})),
+
+where φa​c​t​(⋅)\varphi^{act}(\cdot) is a prompt template for action making. This step is very important as it turns the gathered insights into a specific action. In the context of RTBAgent, this action is deciding on the bidding price for an ad impression. The final bidding price btib^{i}_{t} for the current impression is calculated using the following formula:
+
+(11)
+
+bti=vti⋅λb​a​s​e⋅(1+at),\displaystyle b^{i}_{t}=v^{i}_{t}\cdot{\lambda}_{base}\cdot(1+a_{t}),
+
+where btib^{i}_{t} is the bidding price for the impression opportunity ii at time step tt. This formula reflects the dynamic nature of the bidding process, allowing the agent to adjust its bids in real-time based on current analysis and historical data, thus optimizing its bidding strategy.
+
+3.5.3. Daily Reflection
+
+Post the daily bidding cycle, RTBAgent engages in a process of introspection, encapsulated by Ftr​e​fF_{{t}}^{ref}, to consolidate and reflect upon the day’s decisions and their outcomes. This reflective process is integral to the continuous improvement of the agent’s strategic acumen:
+
+(12)
+
+Ftr​e​f=∑i=b​i​d,e​n​v,r​e​fL​L​M​(φr​e​f​(mti)),\displaystyle F_{{t}}^{ref}=\sum_{{i=bid,env,ref}}LLM(\varphi^{{ref}}(m^{i}_{t})),
+
+where φr​e​f​(⋅)\varphi^{ref}(\cdot) is a prompt template for daily reflection. This cyclical reflection ensures that the agent learns from its experiences, thereby refining its approach for enhanced performance in subsequent bidding endeavors.
+
+The complete RTBAgent full-time bidding framework is provided in Algorithm 1.
+
+Algorithm 1 Workflow of RTBAgent
+
+1:
+
+ Set Tools ℋ\mathcal{H} and initialize Memory ℳ\mathcal{M};
+
+2:
+
+ Set prompt template φs​u​m​(⋅)\varphi^{sum}(\cdot), φi​n​s​(⋅)\varphi^{ins}(\cdot), φa​c​t​(⋅)\varphi^{act}(\cdot), φr​e​f​(⋅)\varphi^{ref}(\cdot);
+
+3:
+
+ Set KK as the number of duration days;
+
+4:
+
+ Set TT as the number of time steps for each day;
+
+5:
+
+ Set budget list Bl​i​s​tB_{list} = {B1,B2,…,Bk}\{B_{1},B_{2},\dotsc,B_{k}\}
+
+6:
+
+ for k=1k=1 to KK do
+
+7:
+
+  Obtain allocated budget BkB_{k};
+
+8:
+
+  for t=1t=1 to TT do
+
+9:
+
+   Observe state sts_{t};
+
+10:
+
+   Obtain impression feature vector XtX_{t};
+
+11:
+
+   Obtain gathered information Fts​u​mF^{sum}_{t} via Eq.(7);
+
+12:
+
+   Use HH to obtain λb​a​s​e\lambda_{base} and value estimation VtV_{t} ;
+
+13:
+
+   Obtain insight reasoning result Fti​n​sF^{ins}_{t} via Eq.(9);
+
+14:
+
+   Obtain action making result Fta​c​tF^{act}_{t} via Eq.(10);
+
+15:
+
+   Get action ata_{t} and reason r​e​at{rea}_{t} from Fta​c​tF^{act}_{t};
+
+16:
+
+   Bid each impression via Eq.(11);
+
+17:
+
+   Store sts_{t}, Fts​u​mF^{sum}_{t} and Fta​c​tF^{act}_{t} to ℳ\mathcal{M};
+
+18:
+
+   if t==Tt==T then
+
+19:
+
+    Obtain daily reflection Ftr​e​fF^{ref}_{t} via Eq.(12);
+
+20:
+
+    Store Ftr​e​fF^{ref}_{t} to ℳ\mathcal{M};
+
+21:
+
+   end if
+
+22:
+
+  end for
+
+23:
+
+ end for
+
+4. Experiments
+
+4.1. Datasets
+
+We conduct a detailed study on the performance of RTBAgent using the iPinYou dataset (Liao et al., 2014). The iPinYou dataset is provided by iPinYou Corporation, a prominent e-commerce advertising technology company in China. The dataset includes real-time bidding advertising data over a 10-day period in 2013, covering nine different advertising campaigns. Specifically, it contains 19.5 million ad displays, 14,790 clicks, and a total advertising cost of 16,000 RMB. These data not only portray the market environment, but also provide a complete path of user response from the advertisers’ perspective. The records in the dataset are organized with each line representing three types of information: auction and ad features, auction winning price, and user click feedback on ad displays. Additionally, all monetary values are in RMB, corresponding to the cost-per-thousand-impressions (CPM) pricing model. The test data is derived from the final three days of each campaign, while the remaining data is used for training, as reported by the data publisher (Liao et al., 2014).
+
+4.2. Evaluation Procedure
+
+In our study, we specifically focus on the number of clicks as the KPI for evaluation. For each advertising campaign, we allocate the budget on a daily basis and divide each day into 24 time steps, representing each hour. The bidding model iterates the test dataset using the same CTR estimator. For each bidding request, the strategy generates a bid price that does not exceed the current budget. If this bid price is equal to or higher than the market price, the advertiser wins the auction, incurs the market price as a cost, and gains user clicks as a reward. Then, the remaining auction quantity and budget are updated. In order to prevent a situation where the budget is too high, and all bids are won, the budget limit cannot exceed the total historical cost of the test data. To examine the performance of bidding strategies under different budget constraints, we evaluate using three different budgets: 1/2, 1/8, and 1/32 of the total budget.
+
+Table 2. Performance comparison of all methods in terms of actual click counts under different budgets.
+
+Model
+1/2
+1/8
+1/32
+
+MCPC
+1,779
+989
+298
+
+LIN
+2,200
+1,202
+744
+
+LP
+2,211
+1,182
+765
+
+ORTB
+2,222
+1,192
+746
+
+RLB
+2,223
+1,227
+741
+
+DRLB
+2,264
+1,231
+778
+
+USCB
+2,268
+1,227
+762
+
+DiffBid
+2,275
+1,235
+793
+
+RTBAgent(ours)
+2,281
+1,240
+795
+
+4.3. Implementation Details
+
+We utilize a single NVIDIA RTX A6000 GPU to train the RL model in our benchmark tests to ensure consistency in the training environment. All comparison schemes employed FM for CTR estimation. The FM model includes a linear layer for mapping features to the output space, a bias term for baseline prediction adjustment, and a feature embedding layer for capturing feature interactions. Finally, the sigmoid function converts the output into a probability form to predict the likelihood of user clicks. During the testing phase, the derivation of basic factor λb​a​s​e\lambda_{base} by RTBAgent, based on expert strategies, is exclusively derived from the train set.
+
+Table 3. The improvement in click counts brought by different expert strategies, among which the use of LLMs is Llama-3-8B-Instruct. The number in parentheses represents the performance improvement (%) compared to the corresponding expert strategy. 
+
+Budget
+MCPC+
+LIN+
+LP+
+
+1/2
+1,796 (+0.96%)
+2,216 (+0.73%)
+2,265 (+2.44%)
+
+1/8
+1,070 (+8.19%)
+1,223 (+1.75%)
+1,252 (+5.92%)
+
+1/32
+336 (+12.75%)
+783 (+5.24%)
+796 (+4.05%)
+
+4.4. Overall Comparison
+
+To verify the effectiveness of our model on real-world dataset, we compare it with the following competitive methods.
+
+MCPC determines the maximum effective cost-per-click(CPC) for each advertising campaign by dividing the cost by the number of clicks in the training data, using this value as a parameter for bidding.
+
+LIN is a linear bidding method where the bid value is linearly proportional to the estimated CTR θe\theta_{e}. The bid for a single impression is formalized as b0θ0​θe\frac{b_{0}}{\theta_{0}}\theta_{e}, where θ0\theta_{0} is the average CTR in the train set, and b0b_{0} is an adjustment parameter. The optimal parameter combination b0θ0\frac{b_{0}}{\theta_{0}} is selected for the bidding process.
+
+LP models the problem as a linear programming issue. It directly solves for optimal offline parameters based on historical data to maximize the objective and uses these parameters for bidding.
+
+ORTB (Zhang et al., 2014) regards RTB as a functional optimization problem and derives a bidding function.
+
+RLB (Cai et al., 2017) uses a model-based RL method to maximize the total value of winning impressions within budget constraints.
+
+DRLB utilizes the Deep Q-Network algorithm to train the optimal action strategy.
+
+USCB abstracts the core requirements of constrained bidding. It employs more efficient strategy search methods to achieve accelerated convergence.
+
+DiffBid(Guo et al., 2024) leverages generative diffusion modeling to generate optimal bidding trajectories based on return correlations. According to (Guo et al., 2024), we use USCB to generate training data for its non interactive learning through bidding activities.
+
+Table 4. The impact of using different LLMs in terms of actual click counts under different budgets, with the expert strategy used being LP. The numbers in parentheses indicate the increase in clicks compared to LP.
+
+LLMs
+1/2
+1/8
+1/32
+
+GPT-3.5-Turbo-1106
+2,281 (+70)
+1,240 (+58)
+795 (+30)
+
+Glm-4-Air
+2,242 (+31)
+1,208 (+26)
+776 (+11)
+
+GPT-4o mini
+2,255 (+44)
+1,241 (+59)
+788 (+23)
+
+Llama-3-8B-Instruct
+2,265 (+54)
+1,252 (+70)
+796 (+31)
+
+ 
+Baichuan3-Turbo
+2,258 (+47)
+1,224 (+42)
+782 (+17)
+
+Yi-large
+2,220 (+9)
+1,245 (+63)
+792 (+27)
+
+In our comparative analysis of performance on the iPinYou dataset under various budget scenarios, RTBAgent consistently outperformed conventional bidding methods and RL approaches, as shown in Table 2. RTBAgent significantly improved the key metric of click number compared to traditional methods such as MCPC, LIN, LP, and ORTB. These traditional methods underperformed in budget management, primarily due to their lack of flexibility in adapting to market volatility, often resulting in early budget depletion. In contrast, RTBAgent’s advanced multi-memory retrieval system and two-step decision-making process allow for dynamic adjustments in bidding strategies, optimizing budget usage and enhancing advertising campaign effectiveness. When compared with RL models like RLB, DRLB and USCB, RTBAgent demonstrated superior adaptability and stability. Although model-based RL methods are generally well-suited to dynamic environments, they showed inconsistent performance under varying budget constraints, suggesting challenges in model training and strategic refinement.
+
+Overall, the comprehensive evaluation metrics confirm RTBAgent’s outstanding performance, validating its effectiveness in advertising bidding and underscoring its robustness across different budgetary conditions.
+
+Figure 2. An example of RTBAgent using LLMs to assist reasoning process.
+
+4.5. Ablation Study
+
+In Table 3, we introduce three models, MCPC+, LIN+, and LP+, to demonstrate the performance enhancement achieved by RTBAgent with three expert strategies. Specifically, MCPC+, LIN+, and LP+ correspond to RTBAgent based on three different expert strategies, respectively: MCPC, LIN, and LP. Regardless of which method is used, the performance of RTBAgent on the test set consistently improved based on the original performance. It is observed that the stronger the expert strategy performance provided, the better the final results.
+
+As shown in Figure 3, LP consumed too much budget in the early stages and did not anticipate the benefits of spending the budget in the later stages. On the contrary, LP+ can better control the expenditure of the budget, allowing for the purchase of high-quality clicks with a surplus budget in the second half of the process. In addition, LP+’s CPC has always been lower than the expert strategy throughout the process to ensure that more clicks are obtained within the specified budget. This suggests that RTBAgent effectively utilizes the guidance knowledge of expert strategies, leading to enhanced performance through insight into the environment and interaction.
+
+Table 5. Validation of the expert strategy and two-step decision-making effectiveness under different budgets, in which the expert strategy is LP, and the use of LLMs is Llama-3-8B-Instruct.
+
+Strategy
+Insight
+Action
+1/2
+1/8
+1/32
+
+✓
+1,796
+634
+227
+
+✓
+
+✓
+2,194
+1,186
+779
+
+✓
+✓
+✓
+2,265
+1,252
+796
+
+The performance of RTBAgent, utilizing distinct scale base models for real-time bidding tasks, is examined in Table 4. Comparative analysis reveals that RTBAgent consistently surpasses alternative strategies across all budget allocation ratios. This indicates RTBAgent’s superior performance regardless of model scale, from larger, more capable models to smaller, more efficient ones. The agent demonstrates adaptability and scalability, capable of dynamically adapting to the model size in response to business requirements and resource limitations, thus achieving the best bidding outcomes.
+
+Figure 3. Comparison of the remaining budget and CPC between FP+ and FP at each step for advertiser 1458 on June 13th, 2013. The use of LLMs is Llama3-8B-Instruct.
+
+In Table 5, we analyze the effectiveness of expert strategies and two-step decision-making (including insight reasoning and action making). Specifically, the action directly utilizes output optimal scaling factor by LLMs for situations without expert strategy. By comparing rows one and two of Table 5, we can find that incorporating expert knowledge boosts model performance by utilizing historical market information. Furthermore, row three highlights the superiority of a two-step decision-making model over direct action approaches regarding click count increases, emphasizing the value of detailed market analysis and flexible bidding strategies.
+
+4.6. Visualization and Analysis of Performance
+
+Figure 2 demonstrates how RTBAgent utilizes LLMs to enhance its reasoning process during real-time bidding, specifically for advertiser 2997 on the last step of October 27th, 2013. The figure illustrates the core workflow, starting with information gathering, where RTBAgent analyzes historical bidding data, identifying that a reasonable increase in the bidding factor has effectively improved visibility and click volume. This data analysis is the foundation for the next stage, a two-step decision-making process. In the first step, RTBAgent performs insight reasoning by analyzing current market conditions and historical data to extract strategic insights, such as recommending a 0.15 adjustment to the bid factor based on past performance. In the second step, RTBAgent translates these insights into actionable decisions by adjusting the bid price, aiming to optimize performance while maintaining stability. After each bidding cycle, RTBAgent engages in daily reflection, where it evaluates the outcomes of its decisions, compares expected results with actual performance, and updates its strategy accordingly. This iterative process allows RTBAgent to continuously improve its bidding approach, adapting to market dynamics and making more informed, strategic decisions in future cycles. The visualization in Figure 2, along with the data presented in Table 5, underscores RTBAgent’s capability to refine the decision-making process in RTB scenarios. The detailed analysis of a single hour for advertiser 2997 on October 27th, 2013, demonstrates RTBAgent’s ability to learn from daily operations and continuously improve its bidding strategies.
+
+Furthermore, we invited 10 experts in the advertising field to rate the generated decisions and reasons on three levels: -1, 0, and 1. Finally, RTBAgent received a positive rating of 97%, indicating that the proposed RTBAgent’s output is convincing enough.
+
+4.7. Discussion of Reasoning Costs and Benefits
+
+In advertising bidding systems, methods that rely on RL or rules are typically triggered at longer intervals, such as every 15 minutes or more. Despite the inference time for LLMs being slightly longer than these traditional methods, it is still adequate to satisfy the typical latency requirements of advertising services in practice. As shown in Table 4, our framework outperforms other baselines when using LLMs of various scales, ranging from big to small, whether they are open-source LLMs or closed-source LLMs. This performance advantage allows advertisers to select the LLMs that best fit their deployment needs, reducing the concern over inference cost. Additionally, as demonstrated in Figure 2, our framework delivers not only reliable results but also provides data-driven insights and decision-making rationale, which is invaluable for operations teams when assessing the effectiveness of advertising campaigns and refining future strategies. Consequently, our proposed solution not only fulfills the fundamental requirements for inference time and cost but also generates direct economic benefits and indirect operational advantages.
+
+5. Conclusions
+
+In this paper, we introduce RTBAgent, an effective agent that first utilizes LLMs to enhance advertising auctions in RTB. Specifically, we innovatively propose a two-step decision-making process that integrates CTR estimation model, expert strategy knowledge, multi-memory retrieval system, and self-reflection, providing accurate simulation and real-time decision support for bidding scenarios. The extensive experimental results confirm that RTBAgent exhibits better adaptability and interpretability than traditional rule-based and RL methods in highly dynamic and unstable bidding environments. Our work contributes to developing a novel paradigm that attempts to explore the application of LLM-based integrated intelligence in RTB and spark related discussions. In future research, in order to better fit the competitiveness of the online advertising market, we will focus on studying the application of multi-agent systems based on LLMs in RTB. It can be foreseen that multi-agent systems will become more complex and effective.
+
+6. Limitations
+
+Our approach does have some limitations. Firstly, while LLM-based methods have achieved improvements in effectiveness, the response time of LLM-based bidding systems is not as swift as desired. Employing models with smaller parameter sizes, such as 1B or 3B, appears to be a promising direction. Secondly, current LLMs have not yet encompassed a richer set of bidding knowledge. Utilizing strategies like RAG might lead to greater enhancements, which is on our agenda for the future. Thirdly, we have deployed this system into a real-world advertising bidding environment, and we plan to disclose the revenue in the future.
+
+7. Acknowledgments
+
+This work is supported in part by the National Natural Science Foundation of China (62372187), in part by the National Key Research and Development Program of China (2022YFC3601005) and in part by the Guangdong Provincial Key Laboratory of Human Digital Twin (2022B1212010004).
+
+References
+
+Amin et al. (2012)
+
+Kareem Amin, Michael Kearns, Peter Key, and Anton Schwaighofer. 2012.
+
+Budget optimization for sponsored search: Censored learning in mdps.
+
+arXiv preprint arXiv:1210.4847 (2012).
+
+Cai et al. (2017)
+
+Han Cai, Kan Ren, Weinan Zhang, Kleanthis Malialis, Jun Wang, Yong Yu, and Defeng Guo. 2017.
+
+Real-time bidding by reinforcement learning in display advertising. In Proceedings of the tenth ACM international conference on web search and data mining. 661–670.
+
+Chen et al. (2023)
+
+Yirong Chen, Xiaofen Xing, Jingkai Lin, Huimin Zheng, Zhenyu Wang, Qi Liu, and Xiangmin Xu. 2023.
+
+Soulchat: Improving llms’ empathy, listening, and comfort abilities through fine-tuning with multi-turn empathy conversations. In Findings of the Association for Computational Linguistics: EMNLP 2023. 1170–1183.
+
+Dantzig (2002)
+
+George B Dantzig. 2002.
+
+Linear programming.
+
+Operations research 50, 1 (2002), 42–47.
+
+Ding and Dong (2020)
+
+Zihan Ding and Hao Dong. 2020.
+
+Challenges of reinforcement learning.
+
+Deep Reinforcement Learning: Fundamentals, Research and Applications (2020), 249–272.
+
+Guo et al. (2024)
+
+Jiayan Guo, Yusen Huo, Zhilin Zhang, Tianyu Wang, Chuan Yu, Jian Xu, Bo Zheng, and Yan Zhang. 2024.
+
+Generative Auto-bidding via Conditional Diffusion Modeling. In Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining (Barcelona, Spain) (KDD ’24). Association for Computing Machinery, New York, NY, USA, 5038–5049.
+
+https://doi.org/10.1145/3637528.3671526
+
+Gur et al. (2023)
+
+Izzeddin Gur, Hiroki Furuta, Austin Huang, Mustafa Safdari, Yutaka Matsuo, Douglas Eck, and Aleksandra Faust. 2023.
+
+A real-world webagent with planning, long context understanding, and program synthesis.
+
+arXiv preprint arXiv:2307.12856 (2023).
+
+He et al. (2021)
+
+Yue He, Xiujun Chen, Di Wu, Junwei Pan, Qing Tan, Chuan Yu, Jian Xu, and Xiaoqiang Zhu. 2021.
+
+A unified solution to constrained bidding in online display advertising. In Proceedings of the 27th ACM SIGKDD Conference on Knowledge Discovery & Data Mining. 2993–3001.
+
+Hong et al. (2023)
+
+Sirui Hong, Xiawu Zheng, Jonathan Chen, Yuheng Cheng, Jinlin Wang, Ceyao Zhang, Zili Wang, Steven Ka Shing Yau, Zijuan Lin, Liyang Zhou, et al. 2023.
+
+Metagpt: Meta programming for multi-agent collaborative framework.
+
+arXiv preprint arXiv:2308.00352 (2023).
+
+Huang et al. (2023)
+
+Dong Huang, Qingwen Bu, Jie M Zhang, Michael Luck, and Heming Cui. 2023.
+
+Agentcoder: Multi-agent-based code generation with iterative testing and optimisation.
+
+arXiv preprint arXiv:2312.13010 (2023).
+
+IAB and PwC (2023)
+
+IAB and PwC. 2023.
+
+Internet Advertising Revenue Report 2022. In Interactive Advertising Bureau and PwC. IAB and PwC, 1–31.
+
+https://www.iab.com/wp-content/uploads/2023/04/IAB_PwC_Internet_Advertising_Revenue_Report_2022.pdf
+
+Lee et al. (2018)
+
+Kuang-chih Lee, Burkay Birant Orten, Ali Dasdan, and Wentong Li. 2018.
+
+Estimating conversion rate in display advertising from past performance data.
+
+US Patent 10,037,543.
+
+Li et al. (2024)
+
+Junkai Li, Siyu Wang, Meng Zhang, Weitao Li, Yunghwei Lai, Xinhui Kang, Weizhi Ma, and Yang Liu. 2024.
+
+Agent hospital: A simulacrum of hospital with evolvable medical agents.
+
+arXiv preprint arXiv:2405.02957 (2024).
+
+Liao et al. (2014)
+
+Hairen Liao, Lingxiao Peng, Zhenchuan Liu, and Xuehua Shen. 2014.
+
+iPinYou global rtb bidding algorithm competition dataset. In Proceedings of the Eighth International Workshop on Data Mining for Online Advertising. 1–6.
+
+Liu et al. (2023)
+
+Xiao-Yang Liu, Guoxuan Wang, and Daochen Zha. 2023.
+
+Fingpt: Democratizing internet-scale data for financial large language models.
+
+arXiv preprint arXiv:2307.10485 (2023).
+
+Pan and Zeng (2023)
+
+Keyu Pan and Yawen Zeng. 2023.
+
+Do LLMs Possess a Personality? Making the MBTI Test an Amazing Evaluation for Large Language Models.
+
+arXiv:2307.16180 [cs.CL]
+
+Park et al. (2023)
+
+Joon Sung Park, Joseph O’Brien, Carrie Jun Cai, Meredith Ringel Morris, Percy Liang, and Michael S Bernstein. 2023.
+
+Generative agents: Interactive simulacra of human behavior. In Proceedings of the 36th annual acm symposium on user interface software and technology. 1–22.
+
+Perlich et al. (2012)
+
+Claudia Perlich, Brian Dalessandro, Rod Hook, Ori Stitelman, Troy Raeder, and Foster Provost. 2012.
+
+Bid optimizing and inventory scoring in targeted online advertising. In Proceedings of the 18th ACM SIGKDD international conference on Knowledge discovery and data mining. 804–812.
+
+Rendle (2010)
+
+Steffen Rendle. 2010.
+
+Factorization machines. In 2010 IEEE International conference on data mining. IEEE, 995–1000.
+
+Roughgarden (2010)
+
+Tim Roughgarden. 2010.
+
+Algorithmic game theory.
+
+Commun. ACM 53, 7 (2010), 78–86.
+
+Wang and Yuan (2015)
+
+Jun Wang and Shuai Yuan. 2015.
+
+Real-time bidding: A new frontier of computational advertising research. In Proceedings of the Eighth ACM International Conference on Web Search and Data Mining. 415–416.
+
+Wang et al. (2017)
+
+Jun Wang, Weinan Zhang, Shuai Yuan, et al. 2017.
+
+Display advertising with real-time bidding (RTB) and behavioural targeting.
+
+Foundations and Trends® in Information Retrieval 11, 4-5 (2017), 297–435.
+
+Wu et al. (2018)
+
+Di Wu, Xiujun Chen, Xun Yang, Hao Wang, Qing Tan, Xiaoxun Zhang, Jian Xu, and Kun Gai. 2018.
+
+Budget constrained bidding by model-free reinforcement learning in display advertising. In Proceedings of the 27th ACM International Conference on Information and Knowledge Management. 1443–1451.
+
+Xu et al. (2024)
+
+Songlin Xu, Xinyu Zhang, and Lianhui Qin. 2024.
+
+EduAgent: Generative Student Agents in Learning.
+
+arXiv preprint arXiv:2404.07963 (2024).
+
+Yang et al. (2023)
+
+Hui Yang, Sifu Yue, and Yunzhong He. 2023.
+
+Auto-gpt for online decision making: Benchmarks and additional opinions.
+
+arXiv preprint arXiv:2306.02224 (2023).
+
+Yu et al. (2017)
+
+Hao Yu, Michael Neely, and Xiaohan Wei. 2017.
+
+Online convex optimization with stochastic constraints.
+
+Advances in Neural Information Processing Systems 30 (2017).
+
+Yu and Neely (2020)
+
+Hao Yu and Michael J Neely. 2020.
+
+A low complexity algorithm with O⁡(T)O(\sqrt{T}) regret and O⁡(1)O(1) constraint violations for online convex optimization with long term constraints.
+
+Journal of Machine Learning Research 21, 1 (2020), 1–24.
+
+Yuan et al. (2024)
+
+Weizhe Yuan, Richard Yuanzhe Pang, Kyunghyun Cho, Sainbayar Sukhbaatar, Jing Xu, and Jason Weston. 2024.
+
+Self-rewarding language models.
+
+arXiv preprint arXiv:2401.10020 (2024).
+
+Zhang et al. (2023)
+
+Hongbo Zhang, Junying Chen, Feng Jiang, Fei Yu, Zhihong Chen, Jianquan Li, Guiming Chen, Xiangbo Wu, Zhiyi Zhang, Qingying Xiao, et al. 2023.
+
+Huatuogpt, towards taming language model to be a doctor.
+
+arXiv preprint arXiv:2305.15075 (2023).
+
+Zhang et al. (2016)
+
+Weinan Zhang, Kan Ren, and Jun Wang. 2016.
+
+Optimal real-time bidding frameworks discussion.
+
+arXiv preprint arXiv:1602.01007 (2016).
+
+Zhang et al. (2014)
+
+Weinan Zhang, Shuai Yuan, and Jun Wang. 2014.
+
+Optimal real-time bidding for display advertising. In Proceedings of the 20th ACM SIGKDD international conference on Knowledge discovery and data mining. 1077–1086.
+
+Zhang et al. (2024)
+
+Wentao Zhang, Lingxuan Zhao, Haochong Xia, Shuo Sun, Jiaze Sun, Molei Qin, Xinyi Li, Yuqing Zhao, Yilei Zhao, Xinyu Cai, et al. 2024.
+
+FinAgent: A Multimodal Foundation Agent for Financial Trading: Tool-Augmented, Diversified, and Generalist.
+
+arXiv preprint arXiv:2402.18485 (2024).
+
+Zhao et al. (2018)
+
+Jun Zhao, Guang Qiu, Ziyu Guan, Wei Zhao, and Xiaofei He. 2018.
+
+Deep reinforcement learning for sponsored search real-time bidding. In Proceedings of the 24th ACM SIGKDD international conference on knowledge discovery & data mining. 1021–1030.
+
+Zhou et al. (2024)
+
+Zhi Zhou, Jiang-Xin Shi, Peng-Xiao Song, Xiao-Wen Yang, Yi-Xuan Jin, Lan-Zhe Guo, and Yu-Feng Li. 2024.
+
+LawGPT: A Chinese Legal Knowledge-Enhanced Large Language Model.
+
+arXiv preprint arXiv:2406.04614 (2024).
+
+8. appendix
+
+8.1. Partial Display of Prompt Template for RTBAgent
+
+Due to space limitations, only a portion of the prompt templates for RTBAgent is displayed. We will organize and publish the remaining codes and prompt templates soon.
+
+Profile Definition Template of Insight Reasoning.
+
+⬇
+
+1
+
+"""
+
+2
+
+# YOUR ROLE
+
+3
+
+- You are a senior data analyst specializing in in-depth research and strategy development in the field of real-time bidding (RTB) advertising placement.
+
+4
+
+- You use advanced data analysis tools and algorithms to guide advertisers to gain an advantage in fierce market competition.
+
+5
+
+- Your goal is to maximize the number of clicks through data analysis and algorithm adjustments given the budget for the day.
+
+6
+
+- You need to regularly adjust the bidding factor based on historical decision-making, current environmental conditions, and algorithmic bidding recommendations.
+
+7
+
+8
+
+# CONTEXT
+
+9
+
+{history}
+
+10
+
+11
+
+# THE REFERENCE GIVEN BY THE BIDDING ALGORITHM FOR ADVERTISER
+
+12
+
+{bidding_reference}
+
+13
+
+# ENVIRONMENT STATUS
+
+14
+
+{environment_status}
+
+15
+
+# NOW YOUR ACTION IS
+
+16
+
+The bidding factor for this period = the bidding factor given by the algorithm * (1+adjustment)
+
+17
+
+Now, you need to analyze the advantages and disadvantages of each "adjustment range" based on historical decisions, current environmental conditions, and algorithm suggestions.
+
+18
+
+The selection space for "adjustment range" is from {{[-0.5,-0.4), [-0.4,-0.3), [-0.3,-0.2), [-0.2,-0.1), [-0.1,0.0), [0.0,0.1), [0.1,0.2), [0.2,0.3), [0.3,0.4), [0.4,0.5]}}.
+
+19
+
+While making your analysis, consider the following:
+
+20
+
+1. **Historical Performance**: Adjustments that have previously optimized budget usage and improved click volume without significantly impacting the win rate are valuable.
+
+21
+
+2. **Exploration of New Adjustments**: Exploring new adjustment ranges, especially positive adjustments range like [0.0,0.1), [0.1,0.2), and [0.2,0.3), can potentially uncover more effective strategies. Increasing the bid may improve visibility and click volume, particularly in competitive environments.
+
+22
+
+3. **Balancing Stability and Innovation**: Strive to balance between maintaining strategies that have shown consistent performance and exploring new adjustments. A mix of historical strategy and new exploration, with a focus on positive adjustments, could provide a balanced approach to ensure cost efficiency, maximize clicks, and adapt to market changes.
+
+23
+
+Please output a JSON in the following format for all analyses:
+
+24
+
+“‘json
+
+25
+
+{{
+
+26
+
+"adjustment range for [-0.5,-0.4)": str = xx,
+
+27
+
+"adjustment range for [-0.4,-0.3)": str = xx,
+
+28
+
+"adjustment range for [-0.3,-0.2)": str = xx,
+
+29
+
+"adjustment range for [-0.2,-0.1)": str = xx,
+
+30
+
+"adjustment range for [-0.1,0.0)": str = xx,
+
+31
+
+"adjustment range for [0.0,0.1)": str = xx,
+
+32
+
+"adjustment range for [0.1,0.2)": str = xx,
+
+33
+
+"adjustment range for [0.2,0.3)": str = xx,
+
+34
+
+"adjustment range for [0.3,0.4)": str = xx,
+
+35
+
+"adjustment range for [0.4,0.5]": str = xx
+
+36
+
+}}
+
+37
+
+"""
+
+Profile Definition Template of History Bidding Summary.
+
+⬇
+
+1
+
+"""
+
+2
+
+You are an advanced history summary tool specializing in big data insights. Your task is to analyze recent trends and evaluate the effectiveness of decision-making behaviors over the selected time window.
+
+3
+
+Please summarize the following information with a focus on recent changes, highlighting any new patterns, shifts, or significant deviations from past behavior. Pay particular attention to the current environment information provided at the end of this document. Use concise language to ensure the summary is clear and actionable.
+
+4
+
+Summarize and return the output strictly in the following JSON format, without any additional text or explanations:
+
+5
+
+“‘json
+
+6
+
+{{
+
+7
+
+"summary": str = xx
+
+8
+
+}}
+
+9
+
+“‘
+
+10
+
+"""
+
+Experimental support, please
+view the build logs
+for errors. Generated by
+
+L
+A
+T
+E
+
+xml
+
+.
+
+Instructions for reporting errors
+
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+
+Click the "Report Issue" (
+
+) button, located in the page header.
+
+Tip: You can select the relevant text first, to include it in your report.
+
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+
+Major funding support from
+

@@ -1,0 +1,15 @@
+{"event": "start", "run_id": "amazonbook__mf__graphhash__directau__s0-legacy41", "dataset": "AmazonBook", "method": "GraphHash", "base": "cos", "mapping_source": "stored", "device": "cuda", "mapping_items_sha256": "6b62ddde92ca4dd8b86d7d2c717855645855ba09e81f2d84c96e76d5b1c9a1b5"}
+{"event": "progress", "tag": "val", "split": "val", "users": 512, "of": 50355, "cells": 58, "seconds": 2.4}
+{"event": "progress", "tag": "val", "split": "val", "users": 10752, "of": 50355, "cells": 58, "seconds": 46.7}
+{"event": "progress", "tag": "val", "split": "val", "users": 20992, "of": 50355, "cells": 58, "seconds": 90.8}
+{"event": "progress", "tag": "val", "split": "val", "users": 31232, "of": 50355, "cells": 58, "seconds": 134.9}
+{"event": "progress", "tag": "val", "split": "val", "users": 41472, "of": 50355, "cells": 58, "seconds": 179.0}
+{"event": "run_done", "tag": "val", "split": "val", "cells": 58, "users": 50355, "seconds": 217.8}
+{"event": "selected", "beta_star": 0.1, "beta_legacy_cos": 0.1, "beta_legacy_raw": 0.5, "beta_full_prior": 0.1, "beta_other_prior": 0.5, "beta_mu": 0.1, "beta_eps": 0.1}
+{"event": "progress", "tag": "test", "split": "test", "users": 512, "of": 50407, "cells": 76, "seconds": 4.0}
+{"event": "progress", "tag": "test", "split": "test", "users": 10752, "of": 50407, "cells": 76, "seconds": 82.2}
+{"event": "progress", "tag": "test", "split": "test", "users": 20992, "of": 50407, "cells": 76, "seconds": 160.3}
+{"event": "progress", "tag": "test", "split": "test", "users": 31232, "of": 50407, "cells": 76, "seconds": 238.4}
+{"event": "progress", "tag": "test", "split": "test", "users": 41472, "of": 50407, "cells": 76, "seconds": 316.5}
+{"event": "run_done", "tag": "test", "split": "test", "cells": 76, "users": 50407, "seconds": 385.3}
+{"event": "done", "out": "/kaggle/working/controls/amazonbook__mf__graphhash__directau__s0-legacy41/controls.json"}

@@ -1,0 +1,3266 @@
+[
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 0.1,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0015576073024795396,
+    "tilted_penalty_growth": 0.0016148212155671032,
+    "growth_advantage": -0.0031724285180466426,
+    "frequency_growth_95_ci": [
+      -0.008237689180503409,
+      0.005536768390314799
+    ],
+    "growth_advantage_95_ci": [
+      -0.00787683629708503,
+      0.0013157969146532246
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00022707052999901864,
+    "in_mix_difference_95_ci": [
+      -0.0006420454279541262,
+      0.0001470725288219132
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008687525578497623,
+    "one_sided_adjusted_lower_growth_advantage": -0.008325178835628297,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0001781648668693126,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 0.1,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.017362742507375746,
+    "tilted_penalty_growth": 0.01795304930929023,
+    "growth_advantage": -0.03531579181666598,
+    "frequency_growth_95_ci": [
+      -0.03248704613286228,
+      0.0011931383884389198
+    ],
+    "growth_advantage_95_ci": [
+      -0.08366599488454826,
+      -0.00032324817540056245
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00022707052999901864,
+    "in_mix_difference_95_ci": [
+      -0.0006420454279541262,
+      0.0001470725288219132
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.03361223999082883,
+    "one_sided_adjusted_lower_growth_advantage": -0.08743610320611069,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0001781648668693126,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 0.1,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.0005676712086988577,
+    "tilted_penalty_growth": -0.0007142767265853694,
+    "growth_advantage": 0.001281947935284227,
+    "frequency_growth_95_ci": [
+      -0.0018765811505223862,
+      0.003337704966174807
+    ],
+    "growth_advantage_95_ci": [
+      -0.0007404158965422531,
+      0.0036585967164950786
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00022966162553884233,
+    "in_mix_difference_95_ci": [
+      -0.0006470752548511117,
+      0.00014971461387149306
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0020058918457001793,
+    "one_sided_adjusted_lower_growth_advantage": -0.0009099891306197368,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00017929384017722986,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 0.1,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": 0.010077346316677817,
+    "tilted_penalty_growth": 0.0045864035942666925,
+    "growth_advantage": 0.005490942722411124,
+    "frequency_growth_95_ci": [
+      -0.0007352165669647429,
+      0.021542438297625324
+    ],
+    "growth_advantage_95_ci": [
+      -0.0026903182438293614,
+      0.015109495633654406
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00022966162553884233,
+    "in_mix_difference_95_ci": [
+      -0.0006470752548511117,
+      0.00014971461387149306
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0012218164476043396,
+    "one_sided_adjusted_lower_growth_advantage": -0.003435866060904987,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00017929384017722986,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 0.3,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0015576073024795396,
+    "tilted_penalty_growth": -0.0006782177070816225,
+    "growth_advantage": -0.0008793895953979171,
+    "frequency_growth_95_ci": [
+      -0.008237689180503409,
+      0.005536768390314799
+    ],
+    "growth_advantage_95_ci": [
+      -0.006588929210305837,
+      0.008146028256027713
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0003728389541651665,
+    "in_mix_difference_95_ci": [
+      -0.0007363416191507171,
+      -1.2457866946664642e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008687525578497623,
+    "one_sided_adjusted_lower_growth_advantage": -0.007097818394945704,
+    "one_sided_adjusted_upper_in_mix_difference": 5.982395989123974e-06,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 0.3,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.017362742507375746,
+    "tilted_penalty_growth": -0.014856855973119884,
+    "growth_advantage": -0.0025058865342558623,
+    "frequency_growth_95_ci": [
+      -0.03248704613286228,
+      0.0011931383884389198
+    ],
+    "growth_advantage_95_ci": [
+      -0.020688173722652328,
+      0.019437221424217003
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0003728389541651665,
+    "in_mix_difference_95_ci": [
+      -0.0007363416191507171,
+      -1.2457866946664642e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.03361223999082883,
+    "one_sided_adjusted_lower_growth_advantage": -0.021807658225786467,
+    "one_sided_adjusted_upper_in_mix_difference": 5.982395989123974e-06,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 0.3,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.0005676712086988577,
+    "tilted_penalty_growth": 0.0002251370254794118,
+    "growth_advantage": 0.00034253418321944593,
+    "frequency_growth_95_ci": [
+      -0.0018765811505223862,
+      0.003337704966174807
+    ],
+    "growth_advantage_95_ci": [
+      -0.0012512757489300625,
+      0.00201286664811492
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.000368991090992793,
+    "in_mix_difference_95_ci": [
+      -0.0007324690171930701,
+      -4.86095974157368e-06
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0020058918457001793,
+    "one_sided_adjusted_lower_growth_advantage": -0.0014085538484181032,
+    "one_sided_adjusted_upper_in_mix_difference": 2.072898589006284e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 0.3,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": 0.010077346316677817,
+    "tilted_penalty_growth": 0.008301825840608694,
+    "growth_advantage": 0.0017755204760691225,
+    "frequency_growth_95_ci": [
+      -0.0007352165669647429,
+      0.021542438297625324
+    ],
+    "growth_advantage_95_ci": [
+      -0.00411150274610808,
+      0.008497892628503654
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.000368991090992793,
+    "in_mix_difference_95_ci": [
+      -0.0007324690171930701,
+      -4.86095974157368e-06
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0012218164476043396,
+    "one_sided_adjusted_lower_growth_advantage": -0.004419575443777849,
+    "one_sided_adjusted_upper_in_mix_difference": 2.072898589006284e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 1.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0015576073024795396,
+    "tilted_penalty_growth": -0.001228523002789271,
+    "growth_advantage": -0.0003290842996902686,
+    "frequency_growth_95_ci": [
+      -0.008237689180503409,
+      0.005536768390314799
+    ],
+    "growth_advantage_95_ci": [
+      -0.002825107242816461,
+      0.0024404481218544116
+    ],
+    "tilted_minus_frequency_at_gamma0": -5.300583177976126e-05,
+    "in_mix_difference_95_ci": [
+      -0.0003470214263002126,
+      0.00027180882011336807
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008687525578497623,
+    "one_sided_adjusted_lower_growth_advantage": -0.0029369508796134,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00029318008434425097,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 1.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.017362742507375746,
+    "tilted_penalty_growth": -0.020202022421138884,
+    "growth_advantage": 0.002839279913763138,
+    "frequency_growth_95_ci": [
+      -0.03248704613286228,
+      0.0011931383884389198
+    ],
+    "growth_advantage_95_ci": [
+      -0.00027737521352180127,
+      0.01030138713325924
+    ],
+    "tilted_minus_frequency_at_gamma0": -5.300583177976126e-05,
+    "in_mix_difference_95_ci": [
+      -0.0003470214263002126,
+      0.00027180882011336807
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.03361223999082883,
+    "one_sided_adjusted_lower_growth_advantage": -0.0003074488002525487,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00029318008434425097,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 1.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.0005676712086988577,
+    "tilted_penalty_growth": 0.0001381975450611408,
+    "growth_advantage": 0.0004294736636377169,
+    "frequency_growth_95_ci": [
+      -0.0018765811505223862,
+      0.003337704966174807
+    ],
+    "growth_advantage_95_ci": [
+      -0.001352144580608653,
+      0.0024216676798501915
+    ],
+    "tilted_minus_frequency_at_gamma0": -4.8879011027694814e-05,
+    "in_mix_difference_95_ci": [
+      -0.0003412819869672338,
+      0.00028018287748492535
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0020058918457001793,
+    "one_sided_adjusted_lower_growth_advantage": -0.001459356485788863,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00029799522792824465,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 1.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": 0.010077346316677817,
+    "tilted_penalty_growth": 0.006897573639647429,
+    "growth_advantage": 0.0031797726770303875,
+    "frequency_growth_95_ci": [
+      -0.0007352165669647429,
+      0.021542438297625324
+    ],
+    "growth_advantage_95_ci": [
+      -0.0036266385735077788,
+      0.011377320607051036
+    ],
+    "tilted_minus_frequency_at_gamma0": -4.8879011027694814e-05,
+    "in_mix_difference_95_ci": [
+      -0.0003412819869672338,
+      0.00028018287748492535
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0012218164476043396,
+    "one_sided_adjusted_lower_growth_advantage": -0.0043240623762762585,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00029799522792824465,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 3.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0015576073024795396,
+    "tilted_penalty_growth": -0.00023363474432993176,
+    "growth_advantage": -0.0013239725581496078,
+    "frequency_growth_95_ci": [
+      -0.008237689180503409,
+      0.005536768390314799
+    ],
+    "growth_advantage_95_ci": [
+      -0.003231600128067886,
+      0.0005076006754355727
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0002122110214707476,
+    "in_mix_difference_95_ci": [
+      -0.00043473639754629045,
+      2.166356855580331e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008687525578497623,
+    "one_sided_adjusted_lower_growth_advantage": -0.003470734220035547,
+    "one_sided_adjusted_upper_in_mix_difference": 4.1170053311219047e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 3.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.017362742507375746,
+    "tilted_penalty_growth": -0.017150531485904997,
+    "growth_advantage": -0.00021221102147074913,
+    "frequency_growth_95_ci": [
+      -0.03248704613286228,
+      0.0011931383884389198
+    ],
+    "growth_advantage_95_ci": [
+      -0.0004347363975462914,
+      2.166356855580692e-05
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0002122110214707476,
+    "in_mix_difference_95_ci": [
+      -0.00043473639754629045,
+      2.166356855580331e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.03361223999082883,
+    "one_sided_adjusted_lower_growth_advantage": -0.00046082180321646294,
+    "one_sided_adjusted_upper_in_mix_difference": 4.1170053311219047e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 3.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.0005676712086988577,
+    "tilted_penalty_growth": -0.0001913141251523023,
+    "growth_advantage": 0.00075898533385116,
+    "frequency_growth_95_ci": [
+      -0.0018765811505223862,
+      0.003337704966174807
+    ],
+    "growth_advantage_95_ci": [
+      -0.0007095485664780031,
+      0.0025625461647276683
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0002120280225180566,
+    "in_mix_difference_95_ci": [
+      -0.00043992078053842833,
+      2.4256168048849846e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0020058918457001793,
+    "one_sided_adjusted_lower_growth_advantage": -0.0008476642486727979,
+    "one_sided_adjusted_upper_in_mix_difference": 4.679593565351089e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 64,
+    "lambda": 3.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": 0.010077346316677817,
+    "tilted_penalty_growth": 0.007623672951798737,
+    "growth_advantage": 0.00245367336487908,
+    "frequency_growth_95_ci": [
+      -0.0007352165669647429,
+      0.021542438297625324
+    ],
+    "growth_advantage_95_ci": [
+      -0.005040427689055291,
+      0.011437079049913916
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0002120280225180566,
+    "in_mix_difference_95_ci": [
+      -0.00043992078053842833,
+      2.4256168048849846e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0012218164476043396,
+    "one_sided_adjusted_lower_growth_advantage": -0.00549769983271289,
+    "one_sided_adjusted_upper_in_mix_difference": 4.679593565351089e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 0.1,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.004329620843141178,
+    "tilted_penalty_growth": -0.004094987532767492,
+    "growth_advantage": -0.00023463331037368567,
+    "frequency_growth_95_ci": [
+      -0.008208287487654968,
+      -0.0007844897662658725
+    ],
+    "growth_advantage_95_ci": [
+      -0.0030574302065713567,
+      0.0023340050256040715
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00019471979978664757,
+    "in_mix_difference_95_ci": [
+      -0.00047460986044721914,
+      4.5547257997833e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008581640571222706,
+    "one_sided_adjusted_lower_growth_advantage": -0.0032440379165496608,
+    "one_sided_adjusted_upper_in_mix_difference": 6.213295736644027e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 0.1,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.012167718665704211,
+    "tilted_penalty_growth": -0.011972998865917565,
+    "growth_advantage": -0.00019471979978664608,
+    "frequency_growth_95_ci": [
+      -0.019432645321700016,
+      -0.00881554086254243
+    ],
+    "growth_advantage_95_ci": [
+      -0.00047460986044721903,
+      4.554725799783116e-05
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00019471979978664757,
+    "in_mix_difference_95_ci": [
+      -0.00047460986044721914,
+      4.5547257997833e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.02046916393686021,
+    "one_sided_adjusted_lower_growth_advantage": -0.0004895902536951016,
+    "one_sided_adjusted_upper_in_mix_difference": 6.213295736644027e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 0.1,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0018091845051993556,
+    "tilted_penalty_growth": -0.0016696811283683354,
+    "growth_advantage": -0.0001395033768310202,
+    "frequency_growth_95_ci": [
+      -0.003721615334572378,
+      0.00028584871557902546
+    ],
+    "growth_advantage_95_ci": [
+      -0.0014449311526880965,
+      0.001030176361171146
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00019594705597411196,
+    "in_mix_difference_95_ci": [
+      -0.0004765431497375597,
+      5.060498523662557e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.003899714908799921,
+    "one_sided_adjusted_lower_growth_advantage": -0.0015833121113626673,
+    "one_sided_adjusted_upper_in_mix_difference": 6.17509708369675e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 0.1,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.003140921756219159,
+    "tilted_penalty_growth": -0.0008843292181032782,
+    "growth_advantage": -0.002256592538115881,
+    "frequency_growth_95_ci": [
+      -0.010526340904011064,
+      0.004733951404754515
+    ],
+    "growth_advantage_95_ci": [
+      -0.008573681648970724,
+      0.002964313282946477
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00019594705597411196,
+    "in_mix_difference_95_ci": [
+      -0.0004765431497375597,
+      5.060498523662557e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.011080020482528371,
+    "one_sided_adjusted_lower_growth_advantage": -0.009150146707096065,
+    "one_sided_adjusted_upper_in_mix_difference": 6.17509708369675e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 0.3,
+    "sweep": "all_flatten",
+    "primary": true,
+    "frequency_penalty_growth": -0.004329620843141178,
+    "tilted_penalty_growth": -0.006105425562450511,
+    "growth_advantage": 0.0017758047193093332,
+    "frequency_growth_95_ci": [
+      -0.008208287487654968,
+      -0.0007844897662658725
+    ],
+    "growth_advantage_95_ci": [
+      -0.0015949635830454507,
+      0.004742767606835147
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0002630385450330146,
+    "in_mix_difference_95_ci": [
+      -0.0005472477063439941,
+      3.609647351930079e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008581640571222706,
+    "one_sided_adjusted_lower_growth_advantage": -0.0017896713642144813,
+    "one_sided_adjusted_upper_in_mix_difference": 5.6312522714735075e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "fixed primary gate"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 0.3,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.012167718665704211,
+    "tilted_penalty_growth": -0.009012394375128295,
+    "growth_advantage": -0.0031553242905759168,
+    "frequency_growth_95_ci": [
+      -0.019432645321700016,
+      -0.00881554086254243
+    ],
+    "growth_advantage_95_ci": [
+      -0.010702185439642777,
+      -4.420710940652775e-05
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0002630385450330146,
+    "in_mix_difference_95_ci": [
+      -0.0005472477063439941,
+      3.609647351930079e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.02046916393686021,
+    "one_sided_adjusted_lower_growth_advantage": -0.011343074157568649,
+    "one_sided_adjusted_upper_in_mix_difference": 5.6312522714735075e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 0.3,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0018091845051993556,
+    "tilted_penalty_growth": -0.0027136853307914324,
+    "growth_advantage": 0.0009045008255920768,
+    "frequency_growth_95_ci": [
+      -0.003721615334572378,
+      0.00028584871557902546
+    ],
+    "growth_advantage_95_ci": [
+      -0.00030872465058760155,
+      0.002106785207146878
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00026093912947898826,
+    "in_mix_difference_95_ci": [
+      -0.0005510635416840406,
+      3.4392193306034386e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.003899714908799921,
+    "one_sided_adjusted_lower_growth_advantage": -0.000390336181361931,
+    "one_sided_adjusted_upper_in_mix_difference": 6.387644794045016e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 0.3,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.003140921756219159,
+    "tilted_penalty_growth": -0.005205276513607993,
+    "growth_advantage": 0.002064354757388834,
+    "frequency_growth_95_ci": [
+      -0.010526340904011064,
+      0.004733951404754515
+    ],
+    "growth_advantage_95_ci": [
+      -0.002702198534581292,
+      0.007086862911879526
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00026093912947898826,
+    "in_mix_difference_95_ci": [
+      -0.0005510635416840406,
+      3.4392193306034386e-05
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.011080020482528371,
+    "one_sided_adjusted_lower_growth_advantage": -0.0030907222586595805,
+    "one_sided_adjusted_upper_in_mix_difference": 6.387644794045016e-05,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 1.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.004329620843141178,
+    "tilted_penalty_growth": -0.00410292068315719,
+    "growth_advantage": -0.00022670015998398768,
+    "frequency_growth_95_ci": [
+      -0.008208287487654968,
+      -0.0007844897662658725
+    ],
+    "growth_advantage_95_ci": [
+      -0.002624573845777906,
+      0.002139097357832861
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0001211190143496634,
+    "in_mix_difference_95_ci": [
+      -0.0003847629157226872,
+      0.00017533559760450924
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008581640571222706,
+    "one_sided_adjusted_lower_growth_advantage": -0.0028359319549156763,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00020000619724078,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 1.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.012167718665704211,
+    "tilted_penalty_growth": -0.004388805347562671,
+    "growth_advantage": -0.00777891331814154,
+    "frequency_growth_95_ci": [
+      -0.019432645321700016,
+      -0.00881554086254243
+    ],
+    "growth_advantage_95_ci": [
+      -0.02218514832371332,
+      -5.4729267151358e-07
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0001211190143496634,
+    "in_mix_difference_95_ci": [
+      -0.0003847629157226872,
+      0.00017533559760450924
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.02046916393686021,
+    "one_sided_adjusted_lower_growth_advantage": -0.023497632288223734,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00020000619724078,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 1.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0018091845051993556,
+    "tilted_penalty_growth": -0.001291082543358202,
+    "growth_advantage": -0.0005181019618411536,
+    "frequency_growth_95_ci": [
+      -0.003721615334572378,
+      0.00028584871557902546
+    ],
+    "growth_advantage_95_ci": [
+      -0.0016194468242286802,
+      0.0005746248595957251
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00012413756021103803,
+    "in_mix_difference_95_ci": [
+      -0.0003955601662257731,
+      0.00017958516440294206
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.003899714908799921,
+    "one_sided_adjusted_lower_growth_advantage": -0.0016632729542819262,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00019912655716076115,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 1.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.003140921756219159,
+    "tilted_penalty_growth": -0.0005518342747057332,
+    "growth_advantage": -0.002589087481513426,
+    "frequency_growth_95_ci": [
+      -0.010526340904011064,
+      0.004733951404754515
+    ],
+    "growth_advantage_95_ci": [
+      -0.007194874941570445,
+      0.001494249352376793
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00012413756021103803,
+    "in_mix_difference_95_ci": [
+      -0.0003955601662257731,
+      0.00017958516440294206
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.011080020482528371,
+    "one_sided_adjusted_lower_growth_advantage": -0.007727620968735078,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00019912655716076115,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 3.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.004329620843141178,
+    "tilted_penalty_growth": -0.0048068639895468895,
+    "growth_advantage": 0.0004772431464057118,
+    "frequency_growth_95_ci": [
+      -0.008208287487654968,
+      -0.0007844897662658725
+    ],
+    "growth_advantage_95_ci": [
+      -0.0026756880875406608,
+      0.0031958580716654685
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0001870644950208545,
+    "in_mix_difference_95_ci": [
+      -0.00047743618875165577,
+      0.00010576642354752555
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008581640571222706,
+    "one_sided_adjusted_lower_growth_advantage": -0.002810565346640086,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00013130008654918738,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 3.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.012167718665704211,
+    "tilted_penalty_growth": -0.009088368425140459,
+    "growth_advantage": -0.0030793502405637527,
+    "frequency_growth_95_ci": [
+      -0.019432645321700016,
+      -0.00881554086254243
+    ],
+    "growth_advantage_95_ci": [
+      -0.010496793518276747,
+      4.002024584495321e-05
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0001870644950208545,
+    "in_mix_difference_95_ci": [
+      -0.00047743618875165577,
+      0.00010576642354752555
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.02046916393686021,
+    "one_sided_adjusted_lower_growth_advantage": -0.011356395207340338,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00013130008654918738,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 3.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0018091845051993556,
+    "tilted_penalty_growth": -0.0028524798473485444,
+    "growth_advantage": 0.0010432953421491888,
+    "frequency_growth_95_ci": [
+      -0.003721615334572378,
+      0.00028584871557902546
+    ],
+    "growth_advantage_95_ci": [
+      -0.0001022173047402191,
+      0.0021125996269731246
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00018619166992557876,
+    "in_mix_difference_95_ci": [
+      -0.00047809855121666247,
+      0.00010480201198156375
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.003899714908799921,
+    "one_sided_adjusted_lower_growth_advantage": -0.00019305858374176399,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0001385675128808887,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 256,
+    "lambda": 3.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.003140921756219159,
+    "tilted_penalty_growth": -0.005512533320572909,
+    "growth_advantage": 0.0023716115643537504,
+    "frequency_growth_95_ci": [
+      -0.010526340904011064,
+      0.004733951404754515
+    ],
+    "growth_advantage_95_ci": [
+      -0.000585171845182489,
+      0.00569322296336339
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00018619166992557876,
+    "in_mix_difference_95_ci": [
+      -0.00047809855121666247,
+      0.00010480201198156375
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.011080020482528371,
+    "one_sided_adjusted_lower_growth_advantage": -0.00082879833512933,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0001385675128808887,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 0.1,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0065878406162675675,
+    "tilted_penalty_growth": -0.008662140890262815,
+    "growth_advantage": 0.0020743002739952478,
+    "frequency_growth_95_ci": [
+      -0.008843383813432094,
+      -0.004319098638801508
+    ],
+    "growth_advantage_95_ci": [
+      -8.835540559576923e-05,
+      0.004478799131251722
+    ],
+    "tilted_minus_frequency_at_gamma0": -3.800916228128093e-05,
+    "in_mix_difference_95_ci": [
+      -0.00031966928080250475,
+      0.00025120746807398217
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008988662288310948,
+    "one_sided_adjusted_lower_growth_advantage": -0.0002991806973468863,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0002709228939755667,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 0.1,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.009537615623377006,
+    "tilted_penalty_growth": -0.012391892206638628,
+    "growth_advantage": 0.0028542765832616224,
+    "frequency_growth_95_ci": [
+      -0.01017941762539229,
+      -0.008910992996483898
+    ],
+    "growth_advantage_95_ci": [
+      -0.00025376656144066246,
+      0.010077651925057426
+    ],
+    "tilted_minus_frequency_at_gamma0": -3.800916228128093e-05,
+    "in_mix_difference_95_ci": [
+      -0.00031966928080250475,
+      0.00025120746807398217
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.01021975927053109,
+    "one_sided_adjusted_lower_growth_advantage": -0.00027340725084029833,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0002709228939755667,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 0.1,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.002297625786449917,
+    "tilted_penalty_growth": -0.0028126197079948404,
+    "growth_advantage": 0.0005149939215449233,
+    "frequency_growth_95_ci": [
+      -0.003505500695906184,
+      -0.001013793512402558
+    ],
+    "growth_advantage_95_ci": [
+      -0.0005098408519603461,
+      0.001711945491065239
+    ],
+    "tilted_minus_frequency_at_gamma0": -2.9185082249577337e-05,
+    "in_mix_difference_95_ci": [
+      -0.00031055636316265,
+      0.0002620275854472733
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0035828713945640135,
+    "one_sided_adjusted_lower_growth_advantage": -0.0005711366210312874,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0002837081777492374,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 0.1,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.0059609016483537485,
+    "tilted_penalty_growth": -0.009281271409486135,
+    "growth_advantage": 0.0033203697611323864,
+    "frequency_growth_95_ci": [
+      -0.009461040175481977,
+      -0.0020215321716932494
+    ],
+    "growth_advantage_95_ci": [
+      -0.0007893071084414254,
+      0.008213229660288446
+    ],
+    "tilted_minus_frequency_at_gamma0": -2.9185082249577337e-05,
+    "in_mix_difference_95_ci": [
+      -0.00031055636316265,
+      0.0002620275854472733
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.009597021890942236,
+    "one_sided_adjusted_lower_growth_advantage": -0.0010130628729631906,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0002837081777492374,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 0.3,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0065878406162675675,
+    "tilted_penalty_growth": -0.0070612034015436346,
+    "growth_advantage": 0.000473362785276067,
+    "frequency_growth_95_ci": [
+      -0.008843383813432094,
+      -0.004319098638801508
+    ],
+    "growth_advantage_95_ci": [
+      -0.0016635862146070456,
+      0.0028855013343277412
+    ],
+    "tilted_minus_frequency_at_gamma0": -5.5326083893856914e-05,
+    "in_mix_difference_95_ci": [
+      -0.0003523523864797164,
+      0.00023572122175299895
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008988662288310948,
+    "one_sided_adjusted_lower_growth_advantage": -0.0019034067653255708,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00026581721374803984,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 0.3,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.009537615623377006,
+    "tilted_penalty_growth": -0.009482289539483149,
+    "growth_advantage": -5.532608389385678e-05,
+    "frequency_growth_95_ci": [
+      -0.01017941762539229,
+      -0.008910992996483898
+    ],
+    "growth_advantage_95_ci": [
+      -0.0003523523864797152,
+      0.00023572122175299727
+    ],
+    "tilted_minus_frequency_at_gamma0": -5.5326083893856914e-05,
+    "in_mix_difference_95_ci": [
+      -0.0003523523864797164,
+      0.00023572122175299895
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.01021975927053109,
+    "one_sided_adjusted_lower_growth_advantage": -0.00038740813848437956,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00026581721374803984,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 0.3,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.002297625786449917,
+    "tilted_penalty_growth": -0.002448383130589438,
+    "growth_advantage": 0.00015075734413952076,
+    "frequency_growth_95_ci": [
+      -0.003505500695906184,
+      -0.001013793512402558
+    ],
+    "growth_advantage_95_ci": [
+      -0.0010750555862641391,
+      0.0013817228489529762
+    ],
+    "tilted_minus_frequency_at_gamma0": -5.879650508897022e-05,
+    "in_mix_difference_95_ci": [
+      -0.0003570157550513323,
+      0.0002397031371962891
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0035828713945640135,
+    "one_sided_adjusted_lower_growth_advantage": -0.0011289155323262975,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00026928917294273617,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 0.3,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.0059609016483537485,
+    "tilted_penalty_growth": -0.0059923178579237135,
+    "growth_advantage": 3.141620956996494e-05,
+    "frequency_growth_95_ci": [
+      -0.009461040175481977,
+      -0.0020215321716932494
+    ],
+    "growth_advantage_95_ci": [
+      -0.0045853094166150256,
+      0.0054133980419137535
+    ],
+    "tilted_minus_frequency_at_gamma0": -5.879650508897022e-05,
+    "in_mix_difference_95_ci": [
+      -0.0003570157550513323,
+      0.0002397031371962891
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.009597021890942236,
+    "one_sided_adjusted_lower_growth_advantage": -0.004828484943836417,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00026928917294273617,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 1.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0065878406162675675,
+    "tilted_penalty_growth": -0.007093071924909364,
+    "growth_advantage": 0.0005052313086417962,
+    "frequency_growth_95_ci": [
+      -0.008843383813432094,
+      -0.004319098638801508
+    ],
+    "growth_advantage_95_ci": [
+      -0.0012763538670241387,
+      0.00252740050351234
+    ],
+    "tilted_minus_frequency_at_gamma0": 0.00020097982744323305,
+    "in_mix_difference_95_ci": [
+      -0.00010049280448735482,
+      0.0005063976820758344
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008988662288310948,
+    "one_sided_adjusted_lower_growth_advantage": -0.0013710418781599863,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005427491828991219,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 1.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.009537615623377006,
+    "tilted_penalty_growth": -0.012630881196363141,
+    "growth_advantage": 0.0030932655729861355,
+    "frequency_growth_95_ci": [
+      -0.01017941762539229,
+      -0.008910992996483898
+    ],
+    "growth_advantage_95_ci": [
+      -3.572270504867839e-05,
+      0.010245356913639998
+    ],
+    "tilted_minus_frequency_at_gamma0": 0.00020097982744323305,
+    "in_mix_difference_95_ci": [
+      -0.00010049280448735482,
+      0.0005063976820758344
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.01021975927053109,
+    "one_sided_adjusted_lower_growth_advantage": -6.873423381422197e-05,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005427491828991219,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 1.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.002297625786449917,
+    "tilted_penalty_growth": -0.00218245347795938,
+    "growth_advantage": -0.00011517230849053713,
+    "frequency_growth_95_ci": [
+      -0.003505500695906184,
+      -0.001013793512402558
+    ],
+    "growth_advantage_95_ci": [
+      -0.0011174402154246798,
+      0.0008330027418580964
+    ],
+    "tilted_minus_frequency_at_gamma0": 0.0001997988578907772,
+    "in_mix_difference_95_ci": [
+      -0.00010353514182781986,
+      0.0005036787793838641
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0035828713945640135,
+    "one_sided_adjusted_lower_growth_advantage": -0.0011977828250537778,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005463357313425011,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 1.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.0059609016483537485,
+    "tilted_penalty_growth": -0.007516592312178189,
+    "growth_advantage": 0.00155569066382444,
+    "frequency_growth_95_ci": [
+      -0.009461040175481977,
+      -0.0020215321716932494
+    ],
+    "growth_advantage_95_ci": [
+      -0.001284484306882009,
+      0.004433983744628046
+    ],
+    "tilted_minus_frequency_at_gamma0": 0.0001997988578907772,
+    "in_mix_difference_95_ci": [
+      -0.00010353514182781986,
+      0.0005036787793838641
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.009597021890942236,
+    "one_sided_adjusted_lower_growth_advantage": -0.0015499846794393604,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005463357313425011,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 3.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.0065878406162675675,
+    "tilted_penalty_growth": -0.007768809115960851,
+    "growth_advantage": 0.0011809684996932834,
+    "frequency_growth_95_ci": [
+      -0.008843383813432094,
+      -0.004319098638801508
+    ],
+    "growth_advantage_95_ci": [
+      -0.0010530281956599571,
+      0.003531977042276077
+    ],
+    "tilted_minus_frequency_at_gamma0": -2.88027578175967e-05,
+    "in_mix_difference_95_ci": [
+      -0.00027649435718654034,
+      0.00023018329492118165
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008988662288310948,
+    "one_sided_adjusted_lower_growth_advantage": -0.0011781843907291017,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0002523208920712055,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 3.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.009537615623377006,
+    "tilted_penalty_growth": -0.009508812865559414,
+    "growth_advantage": -2.8802757817591312e-05,
+    "frequency_growth_95_ci": [
+      -0.01017941762539229,
+      -0.008910992996483898
+    ],
+    "growth_advantage_95_ci": [
+      -0.0002764943571865419,
+      0.0002301832949211843
+    ],
+    "tilted_minus_frequency_at_gamma0": -2.88027578175967e-05,
+    "in_mix_difference_95_ci": [
+      -0.00027649435718654034,
+      0.00023018329492118165
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.01021975927053109,
+    "one_sided_adjusted_lower_growth_advantage": -0.00030163715975662476,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0002523208920712055,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 3.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.002297625786449917,
+    "tilted_penalty_growth": -0.0027916110768811467,
+    "growth_advantage": 0.0004939852904312296,
+    "frequency_growth_95_ci": [
+      -0.003505500695906184,
+      -0.001013793512402558
+    ],
+    "growth_advantage_95_ci": [
+      -0.0004041422046738046,
+      0.0014022531510318912
+    ],
+    "tilted_minus_frequency_at_gamma0": -2.5040714758224267e-05,
+    "in_mix_difference_95_ci": [
+      -0.0002710300553741992,
+      0.00023587226483844648
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0035828713945640135,
+    "one_sided_adjusted_lower_growth_advantage": -0.000471762049479721,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0002563375812918017,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "all",
+    "budget": 1024,
+    "lambda": 3.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.0059609016483537485,
+    "tilted_penalty_growth": -0.007408989877522284,
+    "growth_advantage": 0.0014480882291685359,
+    "frequency_growth_95_ci": [
+      -0.009461040175481977,
+      -0.0020215321716932494
+    ],
+    "growth_advantage_95_ci": [
+      -0.0024807943342275455,
+      0.005403681450541031
+    ],
+    "tilted_minus_frequency_at_gamma0": -2.5040714758224267e-05,
+    "in_mix_difference_95_ci": [
+      -0.0002710300553741992,
+      0.00023587226483844648
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.009597021890942236,
+    "one_sided_adjusted_lower_growth_advantage": -0.00284609923037477,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0002563375812918017,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 0.1,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.004469857292718496,
+    "tilted_penalty_growth": -0.00043049784580223176,
+    "growth_advantage": 0.004900355138520727,
+    "frequency_growth_95_ci": [
+      -0.00488728898869706,
+      0.012256247757856891
+    ],
+    "growth_advantage_95_ci": [
+      -0.00035256533495892355,
+      0.009405571396638484
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0007866503745886584,
+    "in_mix_difference_95_ci": [
+      -0.0017319738305347717,
+      0.0001209708244649032
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.005168220158888477,
+    "one_sided_adjusted_lower_growth_advantage": -0.0005848037674739888,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0001805952957083286,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 0.1,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.0068533125639365115,
+    "tilted_penalty_growth": -0.006066662189347852,
+    "growth_advantage": -0.0007866503745886594,
+    "frequency_growth_95_ci": [
+      -0.00817837111203862,
+      -0.005433428311472574
+    ],
+    "growth_advantage_95_ci": [
+      -0.0017319738305347724,
+      0.00012097082446490287
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0007866503745886584,
+    "in_mix_difference_95_ci": [
+      -0.0017319738305347717,
+      0.0001209708244649032
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008264365543703401,
+    "one_sided_adjusted_lower_growth_advantage": -0.001784796201916592,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0001805952957083286,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 0.1,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.005973073076577058,
+    "tilted_penalty_growth": 0.002281431525238297,
+    "growth_advantage": 0.003691641551338761,
+    "frequency_growth_95_ci": [
+      0.00041433763851375264,
+      0.012076524865497255
+    ],
+    "growth_advantage_95_ci": [
+      -0.000862383742460215,
+      0.009116098885290184
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0007833995930062218,
+    "in_mix_difference_95_ci": [
+      -0.0017432265237744752,
+      0.0001917499563266292
+    ],
+    "one_sided_adjusted_lower_frequency_growth": 2.0055347993790563e-05,
+    "one_sided_adjusted_lower_growth_advantage": -0.001101251752304468,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00030100273256923095,
+    "conditions_pass": [
+      true,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 0.1,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": 0.021939851481620136,
+    "tilted_penalty_growth": 0.006048624433464239,
+    "growth_advantage": 0.015891227048155897,
+    "frequency_growth_95_ci": [
+      0.0010337608117036458,
+      0.04714740049192184
+    ],
+    "growth_advantage_95_ci": [
+      -0.0002652061246466269,
+      0.03851855015626033
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0007833995930062218,
+    "in_mix_difference_95_ci": [
+      -0.0017432265237744752,
+      0.0001917499563266292
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0015158143522690684,
+    "one_sided_adjusted_lower_growth_advantage": -0.0013341398071036407,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00030100273256923095,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 0.3,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.004469857292718496,
+    "tilted_penalty_growth": 0.008509906687010604,
+    "growth_advantage": -0.004040049394292108,
+    "frequency_growth_95_ci": [
+      -0.00488728898869706,
+      0.012256247757856891
+    ],
+    "growth_advantage_95_ci": [
+      -0.011002838766777866,
+      0.006406664175533448
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0009687821227812277,
+    "in_mix_difference_95_ci": [
+      -0.0018432467387806649,
+      -0.00018961244159147443
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.005168220158888477,
+    "one_sided_adjusted_lower_growth_advantage": -0.011688368761967513,
+    "one_sided_adjusted_upper_in_mix_difference": -0.00012890137503735317,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 0.3,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.0068533125639365115,
+    "tilted_penalty_growth": -0.005884530441155282,
+    "growth_advantage": -0.0009687821227812293,
+    "frequency_growth_95_ci": [
+      -0.00817837111203862,
+      -0.005433428311472574
+    ],
+    "growth_advantage_95_ci": [
+      -0.0018432467387806642,
+      -0.00018961244159147468
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0009687821227812277,
+    "in_mix_difference_95_ci": [
+      -0.0018432467387806649,
+      -0.00018961244159147443
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008264365543703401,
+    "one_sided_adjusted_lower_growth_advantage": -0.0018819405781610806,
+    "one_sided_adjusted_upper_in_mix_difference": -0.00012890137503735317,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 0.3,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.005973073076577058,
+    "tilted_penalty_growth": 0.006191733510122423,
+    "growth_advantage": -0.00021866043354536527,
+    "frequency_growth_95_ci": [
+      0.00041433763851375264,
+      0.012076524865497255
+    ],
+    "growth_advantage_95_ci": [
+      -0.0032963889087719517,
+      0.0024847899226542506
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0009894053144118063,
+    "in_mix_difference_95_ci": [
+      -0.0017772788205018528,
+      -0.00011476303618507257
+    ],
+    "one_sided_adjusted_lower_frequency_growth": 2.0055347993790563e-05,
+    "one_sided_adjusted_lower_growth_advantage": -0.0035709026516723887,
+    "one_sided_adjusted_upper_in_mix_difference": 2.510904007809515e-07,
+    "conditions_pass": [
+      true,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 0.3,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": 0.021939851481620136,
+    "tilted_penalty_growth": 0.020679415699552645,
+    "growth_advantage": 0.0012604357820674914,
+    "frequency_growth_95_ci": [
+      0.0010337608117036458,
+      0.04714740049192184
+    ],
+    "growth_advantage_95_ci": [
+      -0.004711384256681886,
+      0.008401172490393892
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0009894053144118063,
+    "in_mix_difference_95_ci": [
+      -0.0017772788205018528,
+      -0.00011476303618507257
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0015158143522690684,
+    "one_sided_adjusted_lower_growth_advantage": -0.005050400416966188,
+    "one_sided_adjusted_upper_in_mix_difference": 2.510904007809515e-07,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 1.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.004469857292718496,
+    "tilted_penalty_growth": 0.00032931754937493593,
+    "growth_advantage": 0.00414053974334356,
+    "frequency_growth_95_ci": [
+      -0.00488728898869706,
+      0.012256247757856891
+    ],
+    "growth_advantage_95_ci": [
+      -0.0013912610216950567,
+      0.009891666765043836
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0003811623808627971,
+    "in_mix_difference_95_ci": [
+      -0.001085720717238023,
+      0.00032177091493822954
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.005168220158888477,
+    "one_sided_adjusted_lower_growth_advantage": -0.0015796679561844227,
+    "one_sided_adjusted_upper_in_mix_difference": 0.000410726158250862,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 1.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.0068533125639365115,
+    "tilted_penalty_growth": -0.0064721501830737145,
+    "growth_advantage": -0.000381162380862797,
+    "frequency_growth_95_ci": [
+      -0.00817837111203862,
+      -0.005433428311472574
+    ],
+    "growth_advantage_95_ci": [
+      -0.0010857207172380236,
+      0.00032177091493822987
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0003811623808627971,
+    "in_mix_difference_95_ci": [
+      -0.001085720717238023,
+      0.00032177091493822954
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008264365543703401,
+    "one_sided_adjusted_lower_growth_advantage": -0.0011433933902226805,
+    "one_sided_adjusted_upper_in_mix_difference": 0.000410726158250862,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 1.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.005973073076577058,
+    "tilted_penalty_growth": 0.007921107374890516,
+    "growth_advantage": -0.0019480342983134585,
+    "frequency_growth_95_ci": [
+      0.00041433763851375264,
+      0.012076524865497255
+    ],
+    "growth_advantage_95_ci": [
+      -0.0049092561576286305,
+      0.000726565226578193
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0003685665401508305,
+    "in_mix_difference_95_ci": [
+      -0.00107134440832477,
+      0.0004079847696832872
+    ],
+    "one_sided_adjusted_lower_frequency_growth": 2.0055347993790563e-05,
+    "one_sided_adjusted_lower_growth_advantage": -0.005245740320596462,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00048153324179389456,
+    "conditions_pass": [
+      true,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 1.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": 0.021939851481620136,
+    "tilted_penalty_growth": 0.02627958723199422,
+    "growth_advantage": -0.004339735750374083,
+    "frequency_growth_95_ci": [
+      0.0010337608117036458,
+      0.04714740049192184
+    ],
+    "growth_advantage_95_ci": [
+      -0.014758138782195292,
+      0.0019523880319018525
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0003685665401508305,
+    "in_mix_difference_95_ci": [
+      -0.00107134440832477,
+      0.0004079847696832872
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0015158143522690684,
+    "one_sided_adjusted_lower_growth_advantage": -0.015490207014770059,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00048153324179389456,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 3.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.004469857292718496,
+    "tilted_penalty_growth": 0.005831450579591432,
+    "growth_advantage": -0.0013615932868729363,
+    "frequency_growth_95_ci": [
+      -0.00488728898869706,
+      0.012256247757856891
+    ],
+    "growth_advantage_95_ci": [
+      -0.005100405092353821,
+      0.0030407480225489135
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0006849944650576524,
+    "in_mix_difference_95_ci": [
+      -0.0011923131326707853,
+      -0.00018263235357143134
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.005168220158888477,
+    "one_sided_adjusted_lower_growth_advantage": -0.005355822407012583,
+    "one_sided_adjusted_upper_in_mix_difference": -0.00015146625339493183,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 3.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.0068533125639365115,
+    "tilted_penalty_growth": -0.006168318098878859,
+    "growth_advantage": -0.0006849944650576525,
+    "frequency_growth_95_ci": [
+      -0.00817837111203862,
+      -0.005433428311472574
+    ],
+    "growth_advantage_95_ci": [
+      -0.0011923131326707858,
+      -0.00018263235357143142
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0006849944650576524,
+    "in_mix_difference_95_ci": [
+      -0.0011923131326707853,
+      -0.00018263235357143134
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.008264365543703401,
+    "one_sided_adjusted_lower_growth_advantage": -0.0012395399350039302,
+    "one_sided_adjusted_upper_in_mix_difference": -0.00015146625339493183,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 3.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.005973073076577058,
+    "tilted_penalty_growth": 0.0063120187371398725,
+    "growth_advantage": -0.00033894566056281474,
+    "frequency_growth_95_ci": [
+      0.00041433763851375264,
+      0.012076524865497255
+    ],
+    "growth_advantage_95_ci": [
+      -0.002647958804083902,
+      0.0016954689458700272
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0006892836425471597,
+    "in_mix_difference_95_ci": [
+      -0.0011817171929121623,
+      -0.00017939151028488527
+    ],
+    "one_sided_adjusted_lower_frequency_growth": 2.0055347993790563e-05,
+    "one_sided_adjusted_lower_growth_advantage": -0.0028832460631022824,
+    "one_sided_adjusted_upper_in_mix_difference": -0.00014932022632161579,
+    "conditions_pass": [
+      true,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 64,
+    "lambda": 3.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": 0.021939851481620136,
+    "tilted_penalty_growth": 0.025106399703812718,
+    "growth_advantage": -0.003166548222192582,
+    "frequency_growth_95_ci": [
+      0.0010337608117036458,
+      0.04714740049192184
+    ],
+    "growth_advantage_95_ci": [
+      -0.013926777247210467,
+      0.005882708936245876
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0006892836425471597,
+    "in_mix_difference_95_ci": [
+      -0.0011817171929121623,
+      -0.00017939151028488527
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0015158143522690684,
+    "one_sided_adjusted_lower_growth_advantage": -0.015269326974916517,
+    "one_sided_adjusted_upper_in_mix_difference": -0.00014932022632161579,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 0.1,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.0030843949181941993,
+    "tilted_penalty_growth": 0.0018449698424909335,
+    "growth_advantage": 0.0012394250757032659,
+    "frequency_growth_95_ci": [
+      -0.006277877172400739,
+      0.009875330166803456
+    ],
+    "growth_advantage_95_ci": [
+      -0.004700827518422213,
+      0.007883020353138568
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00044229596776190435,
+    "in_mix_difference_95_ci": [
+      -0.001139301610611919,
+      0.00025321592653191764
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.007267802096030437,
+    "one_sided_adjusted_lower_growth_advantage": -0.005049915226358806,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00027591158450735316,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 0.1,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.006202781742592601,
+    "tilted_penalty_growth": -0.005760485774830697,
+    "growth_advantage": -0.00044229596776190414,
+    "frequency_growth_95_ci": [
+      -0.00742434061942336,
+      -0.00493316705859992
+    ],
+    "growth_advantage_95_ci": [
+      -0.0011393016106119192,
+      0.00025321592653191737
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00044229596776190435,
+    "in_mix_difference_95_ci": [
+      -0.001139301610611919,
+      0.00025321592653191764
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0075127886043777365,
+    "one_sided_adjusted_lower_growth_advantage": -0.0011741716675747055,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00027591158450735316,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 0.1,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.00030531219400857284,
+    "tilted_penalty_growth": 0.0004449914263460282,
+    "growth_advantage": -0.00013967923233745535,
+    "frequency_growth_95_ci": [
+      -0.0032723820643590644,
+      0.004333604201419008
+    ],
+    "growth_advantage_95_ci": [
+      -0.0027988879630428845,
+      0.0021939530374585773
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00044014161289954406,
+    "in_mix_difference_95_ci": [
+      -0.0011245122881668272,
+      0.00025114656209673173
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0035506466005499147,
+    "one_sided_adjusted_lower_growth_advantage": -0.0031090518907133328,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00031942337526313523,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 0.1,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.000414327455343636,
+    "tilted_penalty_growth": 0.003978616048793444,
+    "growth_advantage": -0.00439294350413708,
+    "frequency_growth_95_ci": [
+      -0.014553066492193878,
+      0.014272519539364337
+    ],
+    "growth_advantage_95_ci": [
+      -0.017041977621085985,
+      0.005763001004374547
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00044014161289954406,
+    "in_mix_difference_95_ci": [
+      -0.0011245122881668272,
+      0.00025114656209673173
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.01610371380029468,
+    "one_sided_adjusted_lower_growth_advantage": -0.017533447050752538,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00031942337526313523,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 0.3,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.0030843949181941993,
+    "tilted_penalty_growth": -0.0033743948340540517,
+    "growth_advantage": 0.006458789752248251,
+    "frequency_growth_95_ci": [
+      -0.006277877172400739,
+      0.009875330166803456
+    ],
+    "growth_advantage_95_ci": [
+      -0.0006512088725298424,
+      0.01237107519487814
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00039652899733021244,
+    "in_mix_difference_95_ci": [
+      -0.001079139781737784,
+      0.0002627695554791796
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.007267802096030437,
+    "one_sided_adjusted_lower_growth_advantage": -0.0012296734351390222,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0003457636698281653,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 0.3,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.006202781742592601,
+    "tilted_penalty_growth": -0.005806252745262391,
+    "growth_advantage": -0.0003965289973302099,
+    "frequency_growth_95_ci": [
+      -0.00742434061942336,
+      -0.00493316705859992
+    ],
+    "growth_advantage_95_ci": [
+      -0.0010791397817377835,
+      0.00026276955547917973
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00039652899733021244,
+    "in_mix_difference_95_ci": [
+      -0.001079139781737784,
+      0.0002627695554791796
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0075127886043777365,
+    "one_sided_adjusted_lower_growth_advantage": -0.0011337034650086672,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0003457636698281653,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 0.3,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.00030531219400857284,
+    "tilted_penalty_growth": -0.0010633720960956752,
+    "growth_advantage": 0.0013686842901042481,
+    "frequency_growth_95_ci": [
+      -0.0032723820643590644,
+      0.004333604201419008
+    ],
+    "growth_advantage_95_ci": [
+      -0.0007611314579686144,
+      0.00391333592391732
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00036982250773813947,
+    "in_mix_difference_95_ci": [
+      -0.0010706126422010702,
+      0.00030245461342155456
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0035506466005499147,
+    "one_sided_adjusted_lower_growth_advantage": -0.0008825956356896072,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00036211280454415053,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 0.3,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.000414327455343636,
+    "tilted_penalty_growth": -0.0039717367152379,
+    "growth_advantage": 0.003557409259894264,
+    "frequency_growth_95_ci": [
+      -0.014553066492193878,
+      0.014272519539364337
+    ],
+    "growth_advantage_95_ci": [
+      -0.003283124506074513,
+      0.011914995157828658
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00036982250773813947,
+    "in_mix_difference_95_ci": [
+      -0.0010706126422010702,
+      0.00030245461342155456
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.01610371380029468,
+    "one_sided_adjusted_lower_growth_advantage": -0.003974098653108164,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00036211280454415053,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 1.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.0030843949181941993,
+    "tilted_penalty_growth": 0.0031133570740892054,
+    "growth_advantage": -2.8962155895006104e-05,
+    "frequency_growth_95_ci": [
+      -0.006277877172400739,
+      0.009875330166803456
+    ],
+    "growth_advantage_95_ci": [
+      -0.0051982756360605875,
+      0.006350567266954621
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0004262663821936038,
+    "in_mix_difference_95_ci": [
+      -0.0010903412027598188,
+      0.0003135045883167915
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.007267802096030437,
+    "one_sided_adjusted_lower_growth_advantage": -0.005520622717628974,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00036452672252808483,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 1.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.006202781742592601,
+    "tilted_penalty_growth": -0.005776515360398998,
+    "growth_advantage": -0.00042626638219360295,
+    "frequency_growth_95_ci": [
+      -0.00742434061942336,
+      -0.00493316705859992
+    ],
+    "growth_advantage_95_ci": [
+      -0.0010903412027598175,
+      0.00031350458831679105
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0004262663821936038,
+    "in_mix_difference_95_ci": [
+      -0.0010903412027598188,
+      0.0003135045883167915
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0075127886043777365,
+    "one_sided_adjusted_lower_growth_advantage": -0.0011339625749709932,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00036452672252808483,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 1.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.00030531219400857284,
+    "tilted_penalty_growth": 0.0009643086425317161,
+    "growth_advantage": -0.0006589964485231432,
+    "frequency_growth_95_ci": [
+      -0.0032723820643590644,
+      0.004333604201419008
+    ],
+    "growth_advantage_95_ci": [
+      -0.003801038415387256,
+      0.0020660652445712155
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0004272202935603669,
+    "in_mix_difference_95_ci": [
+      -0.0011389088304892393,
+      0.0003319380429518863
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0035506466005499147,
+    "one_sided_adjusted_lower_growth_advantage": -0.004034346494622303,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00038907238951445245,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 1.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.000414327455343636,
+    "tilted_penalty_growth": 0.007099819504584214,
+    "growth_advantage": -0.00751414695992785,
+    "frequency_growth_95_ci": [
+      -0.014553066492193878,
+      0.014272519539364337
+    ],
+    "growth_advantage_95_ci": [
+      -0.021473652000289348,
+      0.0025833641067756477
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.0004272202935603669,
+    "in_mix_difference_95_ci": [
+      -0.0011389088304892393,
+      0.0003319380429518863
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.01610371380029468,
+    "one_sided_adjusted_lower_growth_advantage": -0.02276122703276571,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00038907238951445245,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 3.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.0030843949181941993,
+    "tilted_penalty_growth": -0.0019800464291692766,
+    "growth_advantage": 0.005064441347363476,
+    "frequency_growth_95_ci": [
+      -0.006277877172400739,
+      0.009875330166803456
+    ],
+    "growth_advantage_95_ci": [
+      -0.0025164127537161585,
+      0.011110130216168307
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00013318932821305783,
+    "in_mix_difference_95_ci": [
+      -0.00081484088641602,
+      0.0005028742795101563
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.007267802096030437,
+    "one_sided_adjusted_lower_growth_advantage": -0.0029029309269429206,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005602083305451506,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 3.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.006202781742592601,
+    "tilted_penalty_growth": -0.006069592414379545,
+    "growth_advantage": -0.00013318932821305626,
+    "frequency_growth_95_ci": [
+      -0.00742434061942336,
+      -0.00493316705859992
+    ],
+    "growth_advantage_95_ci": [
+      -0.0008148408864160194,
+      0.0005028742795101565
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00013318932821305783,
+    "in_mix_difference_95_ci": [
+      -0.00081484088641602,
+      0.0005028742795101563
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0075127886043777365,
+    "one_sided_adjusted_lower_growth_advantage": -0.0009213730413419899,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005602083305451506,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 3.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.00030531219400857284,
+    "tilted_penalty_growth": -0.0007755174470936313,
+    "growth_advantage": 0.001080829641102204,
+    "frequency_growth_95_ci": [
+      -0.0032723820643590644,
+      0.004333604201419008
+    ],
+    "growth_advantage_95_ci": [
+      -0.0011405116779922,
+      0.003558179312105539
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00011448354425821516,
+    "in_mix_difference_95_ci": [
+      -0.0007816184761300108,
+      0.0005627560656877449
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0035506466005499147,
+    "one_sided_adjusted_lower_growth_advantage": -0.0012433069106036218,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0006114875726674162,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 256,
+    "lambda": 3.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.000414327455343636,
+    "tilted_penalty_growth": -0.003989332955383531,
+    "growth_advantage": 0.003575005500039895,
+    "frequency_growth_95_ci": [
+      -0.014553066492193878,
+      0.014272519539364337
+    ],
+    "growth_advantage_95_ci": [
+      -0.0035903492397053953,
+      0.012112852295569894
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00011448354425821516,
+    "in_mix_difference_95_ci": [
+      -0.0007816184761300108,
+      0.0005627560656877449
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.01610371380029468,
+    "one_sided_adjusted_lower_growth_advantage": -0.0042783318254373814,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0006114875726674162,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 0.1,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.00013756554289209215,
+    "tilted_penalty_growth": -0.006345995604741617,
+    "growth_advantage": 0.00648356114763371,
+    "frequency_growth_95_ci": [
+      -0.003068473905023846,
+      0.0032805217149514225
+    ],
+    "growth_advantage_95_ci": [
+      0.0019383846230451788,
+      0.011467083007720058
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00022337863055110296,
+    "in_mix_difference_95_ci": [
+      -0.0008919944501797187,
+      0.00044093630630840817
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.003160541213675606,
+    "one_sided_adjusted_lower_growth_advantage": 0.0016957563063351255,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005298475182519874,
+    "conditions_pass": [
+      false,
+      true,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 0.1,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.005862988646668405,
+    "tilted_penalty_growth": -0.0056396100161173034,
+    "growth_advantage": -0.00022337863055110155,
+    "frequency_growth_95_ci": [
+      -0.006908992126881225,
+      -0.004740557080759059
+    ],
+    "growth_advantage_95_ci": [
+      -0.0008919944501797195,
+      0.0004409363063084083
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00022337863055110296,
+    "in_mix_difference_95_ci": [
+      -0.0008919944501797187,
+      0.00044093630630840817
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.007007177237428792,
+    "one_sided_adjusted_lower_growth_advantage": -0.000928567960818471,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005298475182519874,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 0.1,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.00014513172897556877,
+    "tilted_penalty_growth": -0.0010307743949716224,
+    "growth_advantage": 0.0008856426659960536,
+    "frequency_growth_95_ci": [
+      -0.0022206917854357792,
+      0.002010894964391246
+    ],
+    "growth_advantage_95_ci": [
+      -0.002437071582072934,
+      0.004150369490924745
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00019848832781754497,
+    "in_mix_difference_95_ci": [
+      -0.000818753597640964,
+      0.00048717394062442506
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.002351384812665141,
+    "one_sided_adjusted_lower_growth_advantage": -0.002622244940630403,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005463182434537994,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 0.1,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.001562667361819041,
+    "tilted_penalty_growth": -0.011216033044827801,
+    "growth_advantage": 0.009653365683008761,
+    "frequency_growth_95_ci": [
+      -0.00635554269467948,
+      0.0040050997497107135
+    ],
+    "growth_advantage_95_ci": [
+      -0.0022407880804510786,
+      0.024525693701600834
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00019848832781754497,
+    "in_mix_difference_95_ci": [
+      -0.000818753597640964,
+      0.00048717394062442506
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0067131822456532545,
+    "one_sided_adjusted_lower_growth_advantage": -0.002945068044294904,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0005463182434537994,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 0.3,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.00013756554289209215,
+    "tilted_penalty_growth": -0.0035171094933202866,
+    "growth_advantage": 0.0036546750362123786,
+    "frequency_growth_95_ci": [
+      -0.003068473905023846,
+      0.0032805217149514225
+    ],
+    "growth_advantage_95_ci": [
+      -0.0012948798215695963,
+      0.010403043027053239
+    ],
+    "tilted_minus_frequency_at_gamma0": 3.107833376469811e-05,
+    "in_mix_difference_95_ci": [
+      -0.0006329150291577324,
+      0.0007187023911893112
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.003160541213675606,
+    "one_sided_adjusted_lower_growth_advantage": -0.001593753765352203,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0007710671048563509,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 0.3,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.005862988646668405,
+    "tilted_penalty_growth": -0.0058940669804331035,
+    "growth_advantage": 3.1078333764698526e-05,
+    "frequency_growth_95_ci": [
+      -0.006908992126881225,
+      -0.004740557080759059
+    ],
+    "growth_advantage_95_ci": [
+      -0.0006329150291577337,
+      0.0007187023911893105
+    ],
+    "tilted_minus_frequency_at_gamma0": 3.107833376469811e-05,
+    "in_mix_difference_95_ci": [
+      -0.0006329150291577324,
+      0.0007187023911893112
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.007007177237428792,
+    "one_sided_adjusted_lower_growth_advantage": -0.0006898703113011999,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0007710671048563509,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 0.3,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.00014513172897556877,
+    "tilted_penalty_growth": -0.00014058442670244318,
+    "growth_advantage": -4.547302273125593e-06,
+    "frequency_growth_95_ci": [
+      -0.0022206917854357792,
+      0.002010894964391246
+    ],
+    "growth_advantage_95_ci": [
+      -0.003714892147603751,
+      0.00342958604004682
+    ],
+    "tilted_minus_frequency_at_gamma0": 3.4821223059202644e-05,
+    "in_mix_difference_95_ci": [
+      -0.0006195636465491329,
+      0.0007892234898102054
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.002351384812665141,
+    "one_sided_adjusted_lower_growth_advantage": -0.00390906961711955,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0008471856101978483,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 0.3,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.001562667361819041,
+    "tilted_penalty_growth": -0.005117363309885221,
+    "growth_advantage": 0.0035546959480661803,
+    "frequency_growth_95_ci": [
+      -0.00635554269467948,
+      0.0040050997497107135
+    ],
+    "growth_advantage_95_ci": [
+      -0.00899605457501088,
+      0.018226865896840527
+    ],
+    "tilted_minus_frequency_at_gamma0": 3.4821223059202644e-05,
+    "in_mix_difference_95_ci": [
+      -0.0006195636465491329,
+      0.0007892234898102054
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0067131822456532545,
+    "one_sided_adjusted_lower_growth_advantage": -0.009872536177409973,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0008471856101978483,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 1.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.00013756554289209215,
+    "tilted_penalty_growth": -0.0035230626284115957,
+    "growth_advantage": 0.003660628171303688,
+    "frequency_growth_95_ci": [
+      -0.003068473905023846,
+      0.0032805217149514225
+    ],
+    "growth_advantage_95_ci": [
+      -0.000691348535950376,
+      0.009064380867018836
+    ],
+    "tilted_minus_frequency_at_gamma0": 0.00047744621408247947,
+    "in_mix_difference_95_ci": [
+      -0.0002091372367486289,
+      0.0011450889985942345
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.003160541213675606,
+    "one_sided_adjusted_lower_growth_advantage": -0.001129751383519102,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0011971029095500477,
+    "conditions_pass": [
+      false,
+      false,
+      false
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 1.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.005862988646668405,
+    "tilted_penalty_growth": -0.006340434860750885,
+    "growth_advantage": 0.00047744621408248034,
+    "frequency_growth_95_ci": [
+      -0.006908992126881225,
+      -0.004740557080759059
+    ],
+    "growth_advantage_95_ci": [
+      -0.00020913723674862786,
+      0.0011450889985942347
+    ],
+    "tilted_minus_frequency_at_gamma0": 0.00047744621408247947,
+    "in_mix_difference_95_ci": [
+      -0.0002091372367486289,
+      0.0011450889985942345
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.007007177237428792,
+    "one_sided_adjusted_lower_growth_advantage": -0.00023945600958613818,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0011971029095500477,
+    "conditions_pass": [
+      false,
+      false,
+      false
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 1.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.00014513172897556877,
+    "tilted_penalty_growth": 0.0004264774224760913,
+    "growth_advantage": -0.0005716091514516601,
+    "frequency_growth_95_ci": [
+      -0.0022206917854357792,
+      0.002010894964391246
+    ],
+    "growth_advantage_95_ci": [
+      -0.003331670793566331,
+      0.0018661854135341041
+    ],
+    "tilted_minus_frequency_at_gamma0": 0.00048556174951103507,
+    "in_mix_difference_95_ci": [
+      -0.00021968235077268053,
+      0.0012191833682506888
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.002351384812665141,
+    "one_sided_adjusted_lower_growth_advantage": -0.0035480601420212446,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0013080951786460695,
+    "conditions_pass": [
+      false,
+      false,
+      false
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 1.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.001562667361819041,
+    "tilted_penalty_growth": -0.0036907859183646996,
+    "growth_advantage": 0.0021281185565456585,
+    "frequency_growth_95_ci": [
+      -0.00635554269467948,
+      0.0040050997497107135
+    ],
+    "growth_advantage_95_ci": [
+      -0.005189466731397108,
+      0.01001302374040166
+    ],
+    "tilted_minus_frequency_at_gamma0": 0.00048556174951103507,
+    "in_mix_difference_95_ci": [
+      -0.00021968235077268053,
+      0.0012191833682506888
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0067131822456532545,
+    "one_sided_adjusted_lower_growth_advantage": -0.0058995771908635,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0013080951786460695,
+    "conditions_pass": [
+      false,
+      false,
+      false
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 3.0,
+    "sweep": "all_flatten",
+    "primary": false,
+    "frequency_penalty_growth": 0.00013756554289209215,
+    "tilted_penalty_growth": -0.0017812303518324102,
+    "growth_advantage": 0.0019187958947245024,
+    "frequency_growth_95_ci": [
+      -0.003068473905023846,
+      0.0032805217149514225
+    ],
+    "growth_advantage_95_ci": [
+      -0.0009953319980749472,
+      0.006489377288913972
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00018445871983094957,
+    "in_mix_difference_95_ci": [
+      -0.0007250422358674324,
+      0.0004267517354867874
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.003160541213675606,
+    "one_sided_adjusted_lower_growth_advantage": -0.001131054091000079,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00046820956305569574,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 3.0,
+    "sweep": "all_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.005862988646668405,
+    "tilted_penalty_growth": -0.005678529926837456,
+    "growth_advantage": -0.00018445871983094938,
+    "frequency_growth_95_ci": [
+      -0.006908992126881225,
+      -0.004740557080759059
+    ],
+    "growth_advantage_95_ci": [
+      -0.0007250422358674334,
+      0.00042675173548678677
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00018445871983094957,
+    "in_mix_difference_95_ci": [
+      -0.0007250422358674324,
+      0.0004267517354867874
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.007007177237428792,
+    "one_sided_adjusted_lower_growth_advantage": -0.0007424690199437519,
+    "one_sided_adjusted_upper_in_mix_difference": 0.00046820956305569574,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 545,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 3.0,
+    "sweep": "qualified_flatten",
+    "primary": false,
+    "frequency_penalty_growth": -0.00014513172897556877,
+    "tilted_penalty_growth": -0.00010914626762191688,
+    "growth_advantage": -3.5985461353651885e-05,
+    "frequency_growth_95_ci": [
+      -0.0022206917854357792,
+      0.002010894964391246
+    ],
+    "growth_advantage_95_ci": [
+      -0.0020124954101443464,
+      0.0022065155220131706
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00017644645188375757,
+    "in_mix_difference_95_ci": [
+      -0.0007261091677168141,
+      0.0004617966788480908
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.002351384812665141,
+    "one_sided_adjusted_lower_growth_advantage": -0.002166167803104946,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0004898311927689643,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  },
+  {
+    "cohort": "supported",
+    "budget": 1024,
+    "lambda": 3.0,
+    "sweep": "qualified_target_rarest",
+    "primary": false,
+    "frequency_penalty_growth": -0.001562667361819041,
+    "tilted_penalty_growth": -0.002750980393988797,
+    "growth_advantage": 0.0011883130321697559,
+    "frequency_growth_95_ci": [
+      -0.00635554269467948,
+      0.0040050997497107135
+    ],
+    "growth_advantage_95_ci": [
+      -0.007667627763131523,
+      0.011707787938822482
+    ],
+    "tilted_minus_frequency_at_gamma0": -0.00017644645188375757,
+    "in_mix_difference_95_ci": [
+      -0.0007261091677168141,
+      0.0004617966788480908
+    ],
+    "one_sided_adjusted_lower_frequency_growth": -0.0067131822456532545,
+    "one_sided_adjusted_lower_growth_advantage": -0.008261191622681133,
+    "one_sided_adjusted_upper_in_mix_difference": 0.0004898311927689643,
+    "conditions_pass": [
+      false,
+      false,
+      true
+    ],
+    "gate_pass": false,
+    "valid_growth_bootstrap_replicates": 1000,
+    "scope": "exploratory grid diagnostic; not multiplicity-adjusted across grid"
+  }
+]

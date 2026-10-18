@@ -1,0 +1,22 @@
+[{"stream_name":"stdout","time":10.49623328,"data":"{\n"}
+,{"stream_name":"stdout","time":10.496285437,"data":"  \"cuda_available\": true,\n"}
+,{"stream_name":"stdout","time":10.496290203,"data":"  \"torch_version\": \"2.11.0+cu128\",\n"}
+,{"stream_name":"stdout","time":10.496292925,"data":"  \"gpu\": \"Tesla T4\",\n"}
+,{"stream_name":"stdout","time":10.496295351,"data":"  \"modules\": {\n"}
+,{"stream_name":"stdout","time":10.496297777,"data":"    \"sknetwork\": false,\n"}
+,{"stream_name":"stdout","time":10.496300133,"data":"    \"numpy\": true,\n"}
+,{"stream_name":"stdout","time":10.496302473,"data":"    \"scipy\": true,\n"}
+,{"stream_name":"stdout","time":10.496304763,"data":"    \"hydra\": false,\n"}
+,{"stream_name":"stdout","time":10.496307103,"data":"    \"omegaconf\": true,\n"}
+,{"stream_name":"stdout","time":10.496309455,"data":"    \"wandb\": true,\n"}
+,{"stream_name":"stdout","time":10.496311789,"data":"    \"h5py\": true,\n"}
+,{"stream_name":"stdout","time":10.496315701,"data":"    \"requests\": true\n"}
+,{"stream_name":"stdout","time":10.49631817,"data":"  }\n"}
+,{"stream_name":"stdout","time":10.496320358,"data":"}\n"}
+,{"stream_name":"stderr","time":15.847968549,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":15.848000454,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":16.169724301,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":16.169754608,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":17.008337464,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":18.144257949,"data":"[NbConvertApp] Writing 275640 bytes to __results__.html\n"}
+]

@@ -1,0 +1,140 @@
+{
+  "scope": "OFFLINE preparation only; no Kaggle calls or submissions",
+  "new_jobs": 25,
+  "requested_potential_jobs": 26,
+  "skipped_valid": [],
+  "omitted": [
+    {
+      "id": "C3",
+      "reason": "unsupported: existing dau_bias is the old cos+b loss, without learned beta*logpop or the C3 residual optimizer group"
+    }
+  ],
+  "gpu_lists": [
+    {
+      "session": "pc-s3a-1017",
+      "account": "account-3",
+      "gpu": 0,
+      "jobs": [
+        "amazonbook__mf__graphhash__directau__s0",
+        "gowalla__mf__random__directau__s0"
+      ],
+      "estimated_minutes": 365.0,
+      "budget_minutes": 500.0
+    },
+    {
+      "session": "pc-s3a-1017",
+      "account": "account-3",
+      "gpu": 1,
+      "jobs": [
+        "amazonbook__mf__random__directau__s0",
+        "gowalla__mf__dfreq__directau__s0"
+      ],
+      "estimated_minutes": 365.0,
+      "budget_minutes": 500.0
+    },
+    {
+      "session": "pc-s3b-1017",
+      "account": "account-3",
+      "gpu": 0,
+      "jobs": [
+        "gowalla__mf__graphhash__directau__s1",
+        "amazonbook__mf__dfreq__directau__s0",
+        "amazonbook__mf__full__bpr__s0"
+      ],
+      "estimated_minutes": 379.0,
+      "budget_minutes": 600.0
+    },
+    {
+      "session": "pc-s3b-1017",
+      "account": "account-3",
+      "gpu": 1,
+      "jobs": [
+        "gowalla__mf__graphhash__directau__s2",
+        "amazonbook__mf__graphhash__directau__s0-initmatch"
+      ],
+      "estimated_minutes": 358.0,
+      "budget_minutes": 500.0
+    },
+    {
+      "session": "pc-s3c-1017",
+      "account": "account-4",
+      "gpu": 0,
+      "jobs": [
+        "gowalla__mf__full__bpr__s0-long",
+        "yelp2018__mf__random__bpr__s0",
+        "amazonbook__mf__full__directau__s0"
+      ],
+      "estimated_minutes": 401.0,
+      "budget_minutes": 510.0
+    },
+    {
+      "session": "pc-s3c-1017",
+      "account": "account-4",
+      "gpu": 1,
+      "jobs": [
+        "gowalla__mf__graphhash__bpr__s0-p500",
+        "gowalla__mf__graphhash__bpr__s1",
+        "gowalla__mf__graphhash__bpr__s2",
+        "yelp2018__mf__dfreq__directau__s0",
+        "amazonbook__mf__dfreq__bpr__s0"
+      ],
+      "estimated_minutes": 183.0,
+      "budget_minutes": 590.0
+    },
+    {
+      "session": "pc-s3d-1017",
+      "account": "account-4",
+      "gpu": 0,
+      "jobs": [
+        "gowalla__mf__full__directau__s0",
+        "gowalla__mf__dfreq__bpr__s0",
+        "amazonbook__mf__random__bpr__s0",
+        "gowalla__mf__full__directau__s0-wd0"
+      ],
+      "estimated_minutes": 382.0,
+      "budget_minutes": 580.0
+    },
+    {
+      "session": "pc-s3d-1017",
+      "account": "account-4",
+      "gpu": 1,
+      "jobs": [
+        "yelp2018__mf__random__directau__s0",
+        "gowalla__mf__random__bpr__s0",
+        "yelp2018__mf__dfreq__bpr__s0",
+        "gowalla__mf__full__directau__s0-wd1e-4"
+      ],
+      "estimated_minutes": 332.0,
+      "budget_minutes": 580.0
+    }
+  ],
+  "overhead_reserve_per_job_minutes": 10.0,
+  "estimate_limit_minutes": 540.0,
+  "budget_limit_minutes": 660.0,
+  "rulings": [
+    "Use the existing non-Git shared workspace; no repository migration or new dependency.",
+    "Follow the exact human-approved hand-off roster; do not silently replace it with the earlier advisory core-only list.",
+    "D7 weight decays 0 and 1e-4 are the hand-off's explicit interventions, not accidental deviations from PLAN 7.2.",
+    "The five authorized AmazonBook DirectAU jobs use per-job cap300 and max150; assume the full cap plus reserve, without asserting convergence.",
+    "Final Gowalla BPR seeds use s0-p500/s1/s2 with identical patience500; legacy patience100 seed0 remains a pilot.",
+    "A2 uses plain Full Xavier initialization; --init-match is only for the compressed I-runs.",
+    "C3 is omitted rather than substituting the scientifically different old dau_bias implementation."
+  ],
+  "prereg_edited_by_builder": false,
+  "submissions": 0,
+  "plan_sha256": "446623be4d1ab65e148e733a1f4f029cd8d399310a1a8422e776ce82126b9e93",
+  "prereg_sha256": "a3c1b585f8f3b1f3e5c4bd7033c799345955999ffc406313980b939909775392",
+  "runner_sha256": "3fe6421564350eda5f0ccf82123d394a65a9582bc06255541bee27ca142a214b",
+  "prereg_before_registration_sha256": "be704ebe0632dd7aa4ab1b42ec69502bb2d1f421ebcfc0939aa8d8ba8b140de4",
+  "registration": {
+    "registered_at_ist": "2026-10-17 22:38 IST",
+    "snapshot_path": "D:\\web_2\\webconf27-popchannel\\results\\snapshots\\PREREG_20261017-2238.txt",
+    "snapshot_sha256": "a3c1b585f8f3b1f3e5c4bd7033c799345955999ffc406313980b939909775392",
+    "earlier_prereg_bytes_preserved": true,
+    "draft_block_sha256": "1052b969c9c9a8572bee9a9c1f37219a2cfbfd7c1c9a3ecf9bbca2b63326d3e6",
+    "draft_sha256": "0d5993a11327aa7129661801193de4423bf7d92134477cf9f2d2f56131a25745",
+    "sessions_sha256": "12d9616ce695ae376c3f1903db15504aaa39b9ff0ee02231ad8cd785c32d2135",
+    "receipt_path": "D:\\web_2\\webconf27-popchannel\\results\\stage3_registration_receipt.json",
+    "push_authorized": false
+  }
+}

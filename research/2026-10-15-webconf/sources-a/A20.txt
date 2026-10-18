@@ -1,0 +1,804 @@
+https://arxiv.org/html/2510.15308
+
+
+Dimension Mask Layer: Optimizing Embedding Efficiency for Scalable ID-based Models
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+Submit in GitHub
+
+arXiv is now an independent nonprofit!
+Learn more
+×
+
+Back to arXiv
+
+Why HTML?
+
+Report Issue
+
+Back to Abstract
+
+Download PDF
+
+Abstract.
+
+1 Introduction
+
+2 Related Work
+
+3 Dimension Mask Layer Algorithm
+
+3.1 Basic Concept
+
+3.2 Implementation Details
+
+3.2.1 Dynamic Control of effective_dim
+
+3.2.2 Application of the mask value
+
+3.2.3 Hyperparameters
+
+3.2.4 Conversion from mask value(xx) to the Pseudo Random Dropout Multiplier(zz)
+
+3.2.5 Impact of the Hyperparameter α\alpha
+
+4 Experiments and Observations
+
+4.1 Experiment with ShareChat Production Data
+
+4.1.1 Data Context
+
+4.1.2 Baseline
+
+4.1.3 Experiment Setup
+
+4.1.4 Evaluation Metrics
+
+4.1.5 Training and Inference Environment Details
+
+4.1.6 Key Observations and Results
+
+4.2 Experiments with Avazu Dataset
+
+4.2.1 Data Context
+
+4.2.2 Evaluation Metrics
+
+4.2.3 Experiment Setup
+
+4.2.4 Implementation Details
+
+4.2.5 Key Observations and Results
+
+5 Conclusion
+
+6 Future Work
+
+References
+
+License: CC BY 4.0
+
+arXiv:2510.15308v1 [cs.IR] 17 Oct 2025
+
+Dimension Mask Layer: Optimizing Embedding Efficiency for Scalable ID-based Models
+
+Conference: Companion Proceedings of the ACM Web Conference 2025; April 28-May 2, 2025; Sydney, NSW, AustraliaCompanion Proceedings of the ACM Web Conference 2025 (WWW Companion ’25), April 28-May 2, 2025, Sydney, NSW, AustraliaDOI: 10.1145/3701716.3715217ISBN: 979-8-4007-1331-6/2025/04CCS: Computing methodologies Learning latent representationsCCS: Information systems Retrieval models and rankingCCS: Computing methodologies Learning settings
+
+Srijan Saket∗
+
+email: srijanskt@gmail.com
+
+Affiliation: ShareChat, Seattle, USA
+
+, 
+Ikuhiro Ihara∗
+
+email: tsukue@gmail.com
+
+Affiliation: ShareChat, New York, USA
+
+, 
+Vaibhav Sharma
+
+email: sharmavaibhav1729@gmail.com
+
+Affiliation: ShareChat, Bangalore, India
+
+and 
+Danish Kalim
+
+email: danishkalim14@gmail.com
+
+Affiliation: ShareChat, Bangalore, India
+
+© acmlicensed
+
+Abstract.
+
+In modern recommendation systems and social media platforms like Meta, TikTok, and Instagram, large-scale ID-based features often require embedding tables that consume significant memory. Managing these embedding sizes can be challenging, leading to bulky models that are harder to deploy and maintain. In this paper, we introduce a method to automatically determine the optimal embedding size for ID features, significantly reducing the model size while maintaining performance.
+
+Our approach involves defining a custom Keras layer called the dimension mask layer, which sits directly after the embedding lookup. This layer trims the embedding vector by allowing only the first N dimensions to pass through. By doing this, we can reduce the input feature dimension by more than half with minimal or no loss in model performance metrics. This reduction helps cut down the memory footprint of the model and lowers the risk of overfitting due to multicollinearity.
+
+Through offline experiments on public datasets and an online A/B test on a real production dataset, we demonstrate that using a dimension mask layer can shrink the effective embedding dimension by 40-50%, leading to substantial improvements in memory efficiency. This method provides a scalable solution for platforms dealing with a high volume of ID features, optimizing both resource usage and model performance.
+
+Keywords: 
+embedding dimension search, recommendation system, sparse learning, cost optimisation; short video
+
+**footnotetext: Equal Contribution
+
+1. Introduction
+
+In recent years, using embeddings to represent large sets of categories or IDs has become a key part of machine learning models, especially in areas like recommendation systems, natural language processing (NLP), and computer vision (Pan and Ding, 2019; Almeida and Xexéo, 2019; Saket et al., 2024b). To put the scale into perspective, approximately 3.7 billion videos are uploaded daily to YouTube and 23 million to TikTok (TechJury, 2023; Ch, 2024). Music streaming platforms like Spotify offer a library of 100 million songs (Businessofapps, 2024) for users to choose from. Learning meaningful representations for IDs at such a massive scale poses production challenges. Embeddings map categorical variables or words into dense nn-dimensional vectors, making it easier for models to detect patterns from input data. However, determining the optimal size for these embeddings is challenging and often based on guesswork. Too few dimensions can limit the model’s ability to capture important information, while too many can inflate the embedding table size, leading to larger memory footprints. This can result in inefficient training and decreased accuracy due to issues like multicollinearity.
+
+Figure 1. The diagram above illustrates how the dimension mask layer only lets the first N (effective_dim in the diagram) dimensions through, (with some smooth gradation at the end)DML working
+
+This paper introduces the Dimension Mask Layer (DML), a novel approach that adjusts the size of the embeddings automatically during training. Instead of manually deciding the size, DML lets the model find the right size on its own, improving both efficiency and performance. By hiding unnecessary dimensions, DML ensures only the most important information moves through to deeper layers of the network, reducing model complexity and boosting the model’s ability to generalize well.
+
+There are two ways in which embedding sizes can influence model performance and cost. The first is through the total size of the model’s input layer. Reducing the total embedding dimensions decreases the model’s memory footprint. For example, if the feature layer has KK nodes that are fully connected to the next layer with LL input nodes, the model must maintain K×LK\times L learnable weights. Since both KK and LL tend to be large numbers, keeping KK is crucial for overall model efficiency. Removal of redundant inputs also helps reducing the chance of multicollinearity, a problem that can arise when embedding sizes are unnecessarily high, leading to overfitting.
+
+The second factor is the total size of the model’s embedding hash table, which is a function of both embedding sizes and the cardinalities of ID features. In our production setup, for instance, the embedding size of the userID feature alone dictates the model’s binary size. Reducing the embedding size of high-cardinality features, such as userID, is essential for keeping the model size manageable. Although this implementation of DML does not directly address this second aspect, as feature cardinalities are not factored into its optimization, one can still utilize DML by first mnanually constraining the sizes of critical features, and then letting DML to optimize the remaiing embedding sizes, as demonstrated in Section 4.1
+
+2. Related Work
+
+Optimizing the size of embeddings has been a tough problem across different fields including recommendation system, natural language processing and foundational models. Earlier methods for word embeddings like Word2Vec and GloVe (Church, 2017; Pennington et al., 2014) used fixed sizes, and researchers had to rely on trial and error to find the right fit.
+
+Techniques, like Principal Component Analysis (PCA) (Abdi and Williams, 2010) and embedding quantization, have been suggested to handle the issue of embedding size. For instance, recent advancements in embedding quantization (sbe, 2024; Shakir et al., 2024; HeidiSteen, 2024) have shown how reducing embeddings into smaller chunks can help save memory. However, these methods typically compress the embeddings after training, while DML adjusts the size on the go during training, making it more responsive to the model’s needs.
+
+Ginart et al. (Ginart et al., 2021) proposed a method to dynamically adjust embedding dimensions based on the activity of individual items. While this approach offers flexibility, it introduces challenges for industrial systems where real-time training and change in item activity are inevitable, making it hard to maintain consistency in production environments. Shi et al. (Shi et al., 2020) introduced a double hashing technique that combines quotient and remainder based hashing to reduce memory usage while avoiding collisions. Final embeddings is derived by combining representations from two separate embedding tables, using operations such as concatenation, addition, or element-wise multiplication. Although effective, this method requires extensive experimentation to fine-tune parameters, such as the hash function base for each of the different features, to balance memory savings and performance trade-offs.
+
+The Matryoshka Representation Learning (MRL) model (Kusupati et al., 2022) also has some common ground with our approach. MRL builds layered embeddings that gradually get more detailed, learning from rough to fine patterns in a shared structure. Though this is good for learning at different levels, MRL doesn’t adjust the embedding size while training—it sticks to preset sizes. In contrast, the DML adapts the size based on what the model learns during training.
+
+A recent study from TensorFlow on training recommendation systems with dynamic embeddings, TensorFlow Recommender Addons (TFRA), talks about managing size of the embedding table by removing less relevant item embeddings (tensorflow, 2023). It does so by using a feature called restrict(), which gets triggered based on certain user-defined policies. While both TFRA and DML approaches optimize memory and performance, the former addresses table size, and the latter deals with adjusting embedding dimensionality during training.
+
+Newer research shows that the optimal size for embeddings doesn’t just depend on the number of categories but also on how many tasks the model needs to handle and the hidden patterns in the data. For example, GateNet (Huang et al., 2020) introduced a way to manage how much information moves through the layers of a network, which is somewhat similar to how we mask unnecessary dimensions. While GateNet focuses on routing data, the core idea aligns with our goal of filtering out irrelevant dimensions. Another interesting approach called Plug-in Embedding Pruning (PEP) (Liu et al., 2021) prunes embeddings by introducing learnable thresholds for each parameter. During training, these thresholds identify and remove less important parameters by setting them to zero. In contrast, DML adjusts the number of active dimensions for the entire embedding vector, masking unnecessary dimensions as a whole. PEP uses learnable thresholds to enforce sparsity whereas DML relies on a regularization term along with a learnable masking mechanism.
+
+To sum it up, while existing solutions deal with embedding size by using fixed approaches or adjusting them after training, DML offers a flexible, real-time way to adjust embedding dimensions as the model trains. This can lead to better accuracy, less memory use, and removes the need to manually tune embedding sizes.
+
+3. Dimension Mask Layer Algorithm
+
+3.1. Basic Concept
+
+The Dimension Mask Layer (DML) is placed immediately after the embedding lookup during initial training. As illustrated in Figure 1, it allows only the first effective_dim dimensions of the underlying embedding vector to pass through, masking the remaining dimensions. The model’s loss function encourages an increase in effective_dim to leverage more dimensions, while a regularization term encourages to minimize effective_dim. This helps the model strike a balance between efficiency and performance, using only as many dimensions as necessary.
+
+The detailed process is described in Algorithm 1. If there are multiple embeddings in a model, all embedding sizes can be tuned simultaneously by wrapping each embedding with a new instance of DML.
+
+Figure 2. Example output of effective_dim
+
+Figure 2 is an example output of Tensorboard, where each effective_dim converges to an optimal value as the training progresses. At the end of the training run, the DML can be removed, and replaced with the hard-coded dimension size determined by the DML.
+
+3.2. Implementation Details
+
+Algorithm 1 Dimension Mask Layer Algorithm
+
+1:
+
+input_shape∈ℝB×d\text{input\_shape}\in\mathbb{R}^{B\times d}: input shape, where B is the batch size and the d is the original dimension of the input embedding.
+
+2:
+
+initial_effective_dim∈[0,d]\text{initial\_effective\_dim}\in[0,d] : initial value of the effective_dim, where d is the original dimension of the input embedding.
+
+3:
+
+slope∈(0,∞)\text{slope}\in(0,\infty): hyper parameter with a default value of 2.0.
+
+4:
+
+alpha∈(0,∞)\text{alpha}\in(0,\infty): hyper parameter with a default value of 5.0.
+
+5:
+
+regularizer: regularization method with a default of L1​(0.001)\text{L1}(0.001)
+
+6:
+
+7:
+
+Initialize DimensionMaskLayer class with regularizer
+
+8:
+
+9:
+
+procedure build(input_shape)
+
+10:
+
+  original_dim←input_shape​[1]\text{original\_dim}\leftarrow\text{input\_shape}[1]
+
+11:
+
+  scaled_effective_dim←\text{scaled\_effective\_dim}\leftarrow single trainable variable initialized with the value (initial_effective_dim/input_shape\text{initial\_effective\_dim}/\text{input\_shape}), regularized by the specified regularizer.
+
+12:
+
+end procedure
+
+13:
+
+14:
+
+procedure call(𝐢𝐧𝐩𝐮𝐭𝐬\mathbf{inputs})
+
+15:
+
+  x2←max⁡(0,scaled_effective_dim∗original_dim)x_{2}\leftarrow\max(0,\text{scaled\_effective\_dim}*\text{original\_dim})
+
+16:
+
+  x1←x2−slopex_{1}\leftarrow x_{2}-\text{slope}
+
+17:
+
+  𝐱←[0,1,…,(original_dim−1)]\mathbf{x}\leftarrow[0,1,\dots,(\text{original\_dim}-1)]
+
+18:
+
+  𝐦𝐚𝐬𝐤←1x1−x2∗𝐱+x2x2−x1\mathbf{mask}\leftarrow\frac{1}{x_{1}-x_{2}}*\mathbf{x}+\frac{x_{2}}{x_{2}-x_{1}}
+
+19:
+
+  𝐦𝐚𝐬𝐤←max⁡(0,min⁡(1,𝐦𝐚𝐬𝐤))\mathbf{mask}\leftarrow\max(0,\min(1,\mathbf{mask}))
+
+20:
+
+  log the value of x2x_{2} as the current optimal dimension.
+
+21:
+
+  return apply_mask​(𝐢𝐧𝐩𝐮𝐭𝐬,𝐦𝐚𝐬𝐤)\text{apply\_mask}(\mathbf{inputs},\mathbf{mask})
+
+22:
+
+end procedure
+
+23:
+
+24:
+
+procedure apply_mask(𝐢𝐧𝐩𝐮𝐭𝐬,𝐦𝐚𝐬𝐤\mathbf{inputs},\mathbf{mask})
+
+25:
+
+  𝐩𝐬𝐞𝐮𝐝𝐨​_​𝐫𝐚𝐧𝐝𝐨𝐦​_​𝐝𝐫𝐨𝐩𝐨𝐮𝐭←sigmoid​(alpha∗(2.0∗𝐦𝐚𝐬𝐤−random.uniform​(𝐢𝐧𝐩𝐮𝐭​_​𝐬𝐡𝐚𝐩𝐞)−0.5))\mathbf{pseudo\_random\_dropout}\leftarrow\text{sigmoid}(\text{alpha}*(2.0*\mathbf{mask}-\text{random.uniform}(\mathbf{input\_shape})-0.5))
+
+26:
+
+  return 𝐢𝐧𝐩𝐮𝐭𝐬×𝐩𝐬𝐞𝐮𝐝𝐨​_​𝐫𝐚𝐧𝐝𝐨𝐦​_​𝐝𝐫𝐨𝐩𝐨𝐮𝐭\mathbf{inputs}\times\mathbf{pseudo\_random\_dropout}
+
+27:
+
+end procedure
+
+3.2.1. Dynamic Control of effective_dim
+
+In Algorithm 1, effective_dim (∈[0,d]\in[0,d]) is a continuous decimal value, which makes the loss function smooth and differentiable with respect to effective_dim.
+
+The total model loss is the sum of model’s accuracy loss and the regularization loss, where the scaled effective_dim (∈[0,1]\in[0,1]) from all DMLs in the model are incorporated into the regularization term in the form of L​1L1 or L​2L2. (Equatiion 1)
+
+(1)
+
+ℒregularization=∑all instances of DML‖𝑠𝑐𝑎𝑙𝑒𝑑​_​𝑒𝑓𝑓𝑒𝑐𝑡𝑖𝑣𝑒​_​𝑑𝑖𝑚‖\mathcal{L}_{\text{regularization}}=\sum_{\scriptsize\text{all instances of DML}}\|\mathit{scaled\_effective\_dim}\|
+
+(2)
+
+ℒtotal=ℒaccuracy+ℒregularization\mathcal{L}_{\text{total}}=\mathcal{L}_{\text{accuracy}}+\mathcal{L}_{\text{regularization}}
+
+This incentives the model to minimize effective_dim, unless the performance improvement from the use of more dimensions outweighs regularization penalty.
+
+The final value of ⌈effective_dim⌉\lceil\textit{effective\_dim}\rceil at the end of the training is considered the optimal embedding dimension.
+
+3.2.2. Application of the mask value
+
+There is a mask value (∈[0,1]\in[0,1]) for each corresponding dimension of the underlying embedding. This value determines how each dimension of the raw embedding vector is allowed to pass through.
+
+A simplest application would be to multiply the raw embedding vector by the mask vector, which empirically works in most cases. But this allows the model to cancel out the effect of the mask by simply adjusting the weights of connections to downstream nodes. To counter this, DML uses a pseudo-gate function using random values combined with a sigmoid function, similar to dropout(Srivastava et al., 2014).More details in Section 3.2.4
+
+3.2.3. Hyperparameters
+
+Apart from the selection of the regularizer and its weight, there are two additional hyperparameters in Algorithm 1.
+
+• 
+
+slope: Determines how many adjacent dimensions are ramped-up simultaneously. A higher value lets more dimensions to be exposed to back propagation from early on, enabling a smoother transition of effective_dim. The recommended default value is 2.0, meaning that one additional dimension is gradually warmed up alongside its neighboring dimension. See Figure 1 for more details.
+
+• 
+
+alpha: Controls the sensitivity on how the mask value (∈[0,1]\in[0,1]) is translated into a random dropout probability. The recommended default is 5.0. Further details are provided in the later Section 3.2.5
+
+3.2.4. Conversion from mask value(xx) to the Pseudo Random Dropout Multiplier(zz)
+
+As described earlier in Section 3.2.2, the underlying embedding value is not simply multiplied by the mask value. It will instead be multiplied by a pseudo random dropout multiplier zz which is derived as follows:
+
+Let x∈[0,1]x\in[0,1] be the mask value and y∼𝒰⁡(0,1)y\sim\mathcal{U}(0,1) an uniformly distributed random variable. The transformed multiplier zz is defined as:
+
+(3)
+
+z=11+exp(−α×(2x−y−0.5))z=\frac{1}{1+\exp\left(-\alpha\times(2x-y-0.5)\right)}
+
+This is a sigmoid function with stochastic behavior added by the random variable yy. For a smaller value of xx, zz is distributed around lower value ranges near 0, stochastically suppressing the impact of the underlying embedding to the downstream neural network, while not completely blocking it. As xx increases, the distribution of zz shifts toward a higher value range closer to 1, effectively passing through the embedding value most of the time.
+
+Figure 3. Impact of α\alpha on the behavior of Eq 3.
+
+3.2.5. Impact of the Hyperparameter α\alpha
+
+Figure 3 shows how the choice of α\alpha affects the sensitivity of the gate function.
+
+High α\alpha values, such as 10.0 and 20.0 shown in Figure 3, result in the gate being fully closed (value of z pinned at 0.0) when the mask value is low, and fully open when mask value is high. This leads to a flat gradient with respect to the mask (and subsequently, to effective_dim) in these regions, making optimization impossible.
+
+On the other hand, low α\alpha values, such as 0.5 or 2.0 reduces the model’s sensitivity to different mask values, which can result in a slower convergence.
+
+4. Experiments and Observations
+
+We have conducted two experiments for analysis and observations presented in this paper.
+
+• 
+
+The first experiment is in ShareChat ads production environment, where we evaluated the result of DML on production traffic, with the intention of improving cost efficiency without sacrificing accuracy.
+
+• 
+
+The second experiment is on the open-source Avazu dataset, which we use to demonstrate the general utility of DML and to test the effect of different parameter configurations.
+
+4.1. Experiment with ShareChat Production Data
+
+4.1.1. Data Context
+
+Feature Category
+
+Description
+
+User Features
+
+Demographic features: Age, gender, and hashed geographic location. Sampled for uniform distribution.
+Content preference embeddings: Based on user engagement with non-ad content on ShareChat.
+App affinity embeddings: Based on past apps installed by the user on the platform.
+
+Ad Features
+
+Ad categorical features: Characteristics such as ad size and category.
+Ad embedding: Represents the video or image content of the ad.
+
+Interaction Features
+
+Count features: User interactions with ads, advertisers, and categories across time windows.
+
+Label
+
+Click or Install
+
+Data Structure
+
+Each row has a unique ID representing an ad impression, noting if it led to a click or install.
+
+Table 1. Summary of ShareChat Data Features
+
+We used ad impression and engagement data from multiple product surfaces, described in (Saket et al., 2024a). We only considered impressed views, meaning recommendations that were actually seen by the users. We did not apply any sampling for unbiasedness, but note that the data may be biased by the model’s own ranking. The data has 500M–800M data points per day, which translates to approximately ≈9.1​B\approx 9.1\text{B} data points in total. The feature details are summarised in Table 1.
+
+4.1.2. Baseline
+
+The baseline production model is a MTL MMoE model which uses a fixed embedding size of 48 for most ID features, with some exceptions of low cardinality features having smaller sizes. Notably, the embedding size for userID is set to 8. Given its high cardinality (on the order of millions), keeping this particular embedding small is essential for maintaining a manageable model size in production. The sum of all embedding dimensions is 2431, as shown in the first column of Table 2
+
+4.1.3. Experiment Setup
+
+We follow a two-step experimental setup: an offline test followed by an online test.
+
+First, we prepared the treatment model, which is the exact copy of the baseline model but with DML applied to all embeddings except for userID. The embedding size for userID was fixed at 8 for the reasons discussed earlier. The optimal embedding sizes were selected by training a model on 14 days of production data (≈9​B\approx 9\text{B} data points),
+
+We then compared the offline metrics (details in Section 4.1.4) on one day of validation data. The results, as well as hyper parameter configurations and the total embedding dimension count determined by DML, are shown in the second column of Table 2. Additionally, we trained a model with userID embedding size fixed at 4, and another model with userID wrapped by DML, allowing it to also determine the optimal size of userID embedding. The results are shown in the third and forth columns of Table 2, although these two configurations were only for reference and not taken forward to the online test.
+
+In the online setup, both models were evaluated in a budget-aware A/B test (Liu et al., 2020). In a budget-aware A/B test, the ad campaign budget is split equally, with each portion allocated to a randomly selected user group. This ensures that the groups are independent and do not compete for budget allocation.
+
+We implemented the configuration found in the offline experiment above (as in the second column of Table 2), and compared its online performance against the baseline model over a 14-day period, with both models updated daily via incremental training.
+
+Baseline
+Treatment
+
+UserID size
+
+fixed at 4
+
+UserID size
+
+unconstrained
+
+UserID dim
+8
+8
+4
+43
+
+Total dim count
+2431
+1164
+907
+948
+
+(% of Baseline)
+
+47.88%
+37.31%
+39.00%
+
+Hyper parameters
+
+i​n​i​t​i​a​l​_​e​f​f​e​c​t​i​v​e​_​d​i​m=3,s​l​o​p​e=2.0,initial\_effective\_dim=3,slope=2.0,
+
+r​e​g​u​l​a​r​i​z​e​r​_​w​e​i​g​h​t=0.0,α=5.0regularizer\_weight=0.0,\alpha=5.0
+
+Click AUC
+0.8042
+0.8038
+0.8037
+0.8040
+
+Click RCE
+10.66
+10.65
+10.63
+10.63
+
+Install AUC
+0.9158
+0.9395
+0.9173
+0.9176
+
+Install RCE
+16.57
+16.70
+16.47
+16.37
+
+Table 2. Model Comparison across Different UserID Dimension Settings
+
+4.1.4. Evaluation Metrics
+
+Two metrics, Relative Cross Entropy (RCE) (Belli et al., 2020) and Area Under the Curve (AUC), were used for the offline evaluation.
+
+RCE measures the performance of a prediction model as percentage improvement from the naive baseline model, and defined as:
+
+(4)
+
+(CEbaseline−CEpred)×100/CEbaseline(\text{CE}_{\text{baseline}}-\text{CE}_{\text{pred}})\times 100/\text{CE}_{\text{baseline}}
+
+Where CEbaseline\text{CE}_{\text{baseline}} is the average cross entropy (CE) of the naive baseline model, and CEpred\text{CE}_{\text{pred}} is the average CE of the model to be evaluated. AUC is a
+commonly used evaluation metric primarily focused on ranking, while RCE takes both ranking and calibration into account.
+
+In the online setup, we also measured key business metrics such as click through rate, conversion rate, revenue, and user retention.
+
+4.1.5. Training and Inference Environment Details
+
+Both models were trained using 6 workers, each with 6 CPUs, 48 GB memory, and an NVIDIA TESLA T4 accelerator. Three parameter servers (4 CPUs, 48 GB memory) were used.
+
+4.1.6. Key Observations and Results
+
+We have successfully reduced the total embedding dimensions by more than 50% without significant loss in both online and offline metrics.
+
+Additionally, the new model achieved lower online inference costs, with average memory usage reduced by 8.7%8.7\% and average CPU usage by 3.3%3.3\%. Average training time also decreased by 11.1%11.1\%, as shown in Figure 4. However, the overall cost impact is somewhat limited due to: 1. minimum deployment requirements in production systems, which results in a fixed cost during non-peak hours, and 2. the dimension size only affecting the first few layers of the model, with no change to the computational graph in subsequent layers.
+
+One notable observation is that initializing with a minimum effective_dim and a very low regularizer weight (or even without regularization) and letting DML expand effective_dim empirically worked better than starting with a maximum effective_dim and letting DML reduce it. This may be explained by the fact that this setup lets DML incrementally add dimensions one at a time, until additional dimensions no longer provide utility, at which point DML naturally stops increasing effective_dim any further.
+
+Comparison of the performance of the DML Model relative to the Baseline across various key metrics
+
+Figure 4. Relative Percentage Difference Between Baseline and DML Across Key Resource MetricsComparison of the performance of the DML Model relative to the Baseline across various key metrics
+
+(a) Effect of DML for various choices of regulariser and weight
+
+(b) 
+Effect of DML for various baseline embedding dims
+
+Figure 5. Key Observations on Avazu Dataset with Different Parameter Settings…
+
+4.2. Experiments with Avazu Dataset
+
+4.2.1. Data Context
+
+Avazu is a public dataset (Wang and Cukierski, 2014) with 10 days of click-through data for training and 1 day of data for testing. It contains over 40 million rows of ad click data, with features such as id, click (indicating if an ad was clicked), hour (timestamp), device attributes (like device type and connection type), and site or app details. The features are mostly categorical and describe the context in which an ad was displayed, making this dataset well-suited for applying DML.
+
+4.2.2. Evaluation Metrics
+
+Here, we compare RCE and the total embedding dimension size to measure trade-offs between performance and efficiency. We selected RCE as a representative metric for model performance, as we found it to be the most reliable in our past experiments.
+
+4.2.3. Experiment Setup
+
+In each experiment below, we trained multiple models with DML, under varying configurations, comparing the results against the baseline model without DML.
+
+(1) 
+
+Compare the effect of using different regularizers {L​1,L​2L1,L2} and regularizer weights {1​e−2,1​e−3,1​e−4,1​e−51\mathrm{e}{-2},1\mathrm{e}{-3},1\mathrm{e}{-4},1\mathrm{e}{-5}}, with a fixed baseline embedding size of 16.
+
+(2) 
+
+Evaluate the effect of DML on different baseline embedding dimensions {16,32,64,12816,32,64,128}, with regularizer L1, weight 1​e−41\mathrm{e}{-4}.
+
+Other hyperparameters were fixed to
+{ 𝑖𝑛𝑖𝑡𝑖𝑎𝑙​_​𝑒𝑓𝑓𝑒𝑐𝑡𝑖𝑣𝑒​_​𝑑𝑖𝑚=14,s​l​o​p​e=2.0,α=5.0\mathit{initial\_effective\_dim}=14,slope=2.0,\alpha=5.0 } for the treatment model.
+
+4.2.4. Implementation Details
+
+We used a straightforward architecture with two linear layers of 128 and 64 nodes, each followed by ReLU activation. A classification head with sigmoid activation was applied on top of these layers. Training was conducted on a single NVIDIA Tesla T4 GPU. Each categorical feature in the Avazu dataset was bucketised and passed through an embedding lookup. These embeddings were then concatenated to form the input to the aforementioned architecture. For the DML model, we simply wrapped the output of the embedding lookup with DML.
+
+Figure 6. Effect of L1 and L2 Regularizers, weight=1​e−31\mathrm{e}{-3}
+
+4.2.5. Key Observations and Results
+
+Figure 5(a) shows how the choice of the regularizer weight affects the balance between the model’s accuracy and the total embedding size. Higher the weight, smaller the resulting model would be, while sacrificing more accuracy. Use of the L1 regularizer tends to result in a higher number of feature with 0 dimensions compared to L2. Figure 6 shows the difference in resulting dimensions between L1 and L2 regularizers, both with weight=1e-3.
+
+We should also emphasize that with the minimum regularizer weight, DML was able to find a configuration that beats the baseline model in both accuracy and efficiency (top right corner in the graph).
+
+Figure 5(b) shows how the impact of DML changes for different initial baseline embedding sizes. We see here too that DML finds a configuration that outperforms the baseline in both model size and accuracy in all cases.
+
+5. Conclusion
+
+We introduced the Dimension Mask Layer (DML), a method which automatically finds optimal embeddings sizes in a single training run (Section 3.1). This approach has proven effective in a production setting (Section 4.1), and is also adaptable to other general usecases (Section 4.2).
+
+Through carefully crafted offline and online experiments, we have also shown that DML not only achieves both higher accuracy and higher efficiency than the baseline model, but can also be tuned to achieve a tailored balance between accuracy and efficiency suited for specific demands (Section 4.2).
+
+6. Future Work
+
+One potential direction for future work is to extend the Dimension Mask Layer (DML) to serve as a feature importance tool. This can be achieved by applying DML to dense features, treating each feature as a one-dimensional embedding. In this setup, a feature can be considered more important if the corresponding DML’s effective_dim approaches closer to 1, or converges faster toward 1.0. On the other hand, effective_dim approaching closer to 0 would be a sign that the feature is less important. Although we explored this approach with promising results, it is beyond the scope of this paper. One key insight from this experiment though, is the importance of initializing effective_dim to its maximum value and allowing the model some training time before DML is allowed to start reducing the dimensions. This adjustment is crucial in situations where original size of the embedding is very small. In such cases, slope parameter becomes ineffective, resulting in the dimension reduction happening too quickly, causing the model to underestimate feature significance.
+
+Another area of improvement is making DML more feature-aware by incorporating feature-specific attributes such as cardinality or platform importance. These attributes could be baked into the loss function to improve the effectiveness of dimension reduction. Additionally, understanding the trade-offs between reducing the dimension of a feature and considering its cardinality or importance is crucial. Balancing these factors could lead to more efficient models by selectively reducing the complexity of less important features while preserving the value of key ones.
+
+References
+
+sbe (2024)
+
+2024.
+
+Embedding Quantization – Sentence Transformers documentation — sbert.net.
+
+https://sbert.net/examples/applications/embedding-quantization/README.html.
+
+[Accessed 16-11-2024].
+
+Abdi and Williams (2010)
+
+Hervé Abdi and Lynne J Williams. 2010.
+
+Principal component analysis.
+
+Wiley interdisciplinary reviews: computational statistics 2, 4 (2010), 433–459.
+
+Almeida and Xexéo (2019)
+
+Felipe Almeida and Geraldo Xexéo. 2019.
+
+Word embeddings: A survey.
+
+arXiv preprint arXiv:1901.09069 (2019).
+
+Belli et al. (2020)
+
+Luca Belli, Sofia Ira Ktena, Alykhan Tejani, Alexandre Lung-Yut-Fong, Frank Portman, Xiao Zhu, Yuanpu Xie, Akshay Gupta, Michael Bronstein, Amra Delić, et al. 2020.
+
+Privacy-aware recommender systems challenge on twitter’s home timeline.
+
+arXiv preprint arXiv:2004.13715 (2020).
+
+Businessofapps (2024)
+
+Businessofapps. 2024.
+
+Spotify Revenue and Usage Statistics (2024) — businessofapps.com.
+
+https://www.businessofapps.com/data/spotify-statistics/.
+
+[Accessed 15-11-2024].
+
+Ch (2024)
+
+David Ch. 2024.
+
+TikTok Statistics: Revenue & Usage (Updated Oct. 2024) — sendshort.ai.
+
+https://sendshort.ai/statistics/tiktok/.
+
+[Accessed 15-11-2024].
+
+Church (2017)
+
+Kenneth Ward Church. 2017.
+
+Word2Vec.
+
+Natural Language Engineering 23, 1 (2017), 155–162.
+
+Ginart et al. (2021)
+
+Antonio A Ginart, Maxim Naumov, Dheevatsa Mudigere, Jiyan Yang, and James Zou. 2021.
+
+Mixed dimension embeddings with application to memory-efficient recommendation systems. In 2021 IEEE International Symposium on Information Theory (ISIT). IEEE, 2786–2791.
+
+HeidiSteen (2024)
+
+HeidiSteen. 2024.
+
+Reduce vector size - Azure AI Search — learn.microsoft.com.
+
+https://learn.microsoft.com/en-us/azure/search/vector-search-how-to-configure-compression-storage.
+
+[Accessed 16-11-2024].
+
+Huang et al. (2020)
+
+Tongwen Huang, Qingyun She, Zhiqiang Wang, and Junlin Zhang. 2020.
+
+GateNet: gating-enhanced deep network for click-through rate prediction.
+
+arXiv preprint arXiv:2007.03519 (2020).
+
+Kusupati et al. (2022)
+
+Aditya Kusupati, Gantavya Bhatt, Aniket Rege, Matthew Wallingford, Aditya Sinha, Vivek Ramanujan, William Howard-Snyder, Kaifeng Chen, Sham Kakade, Prateek Jain, et al. 2022.
+
+Matryoshka representation learning.
+
+Advances in Neural Information Processing Systems 35 (2022), 30233–30249.
+
+Liu et al. (2020)
+
+Min Liu, Jialiang Mao, and Kang Kang. 2020.
+
+Trustworthy online marketplace experimentation with budget-split design.
+
+arXiv preprint arXiv:2012.08724 (2020).
+
+Liu et al. (2021)
+
+Siyi Liu, Chen Gao, Yihong Chen, Depeng Jin, and Yong Li. 2021.
+
+Learnable embedding sizes for recommender systems.
+
+arXiv preprint arXiv:2101.07577 (2021).
+
+Pan and Ding (2019)
+
+Shimei Pan and Tao Ding. 2019.
+
+Social media-based user embedding: A literature review.
+
+arXiv preprint arXiv:1907.00725 (2019).
+
+Pennington et al. (2014)
+
+Jeffrey Pennington, Richard Socher, and Christopher D Manning. 2014.
+
+Glove: Global vectors for word representation. In Proceedings of the 2014 conference on empirical methods in natural language processing (EMNLP). 1532–1543.
+
+Saket et al. (2024a)
+
+Srijan Saket, Mohit Agarwal, and Rishabh Mehrotra. 2024a.
+
+Crafting Tomorrow: The Influence of Design Choices on Fresh Content in Social Media Recommendation.
+
+arXiv preprint arXiv:2410.15174 (2024).
+
+Saket et al. (2024b)
+
+Srijan Saket, Olivier Jeunen, and Md. Danish Kalim. 2024b.
+
+Monitoring the Evolution of Behavioural Embeddings in Social Media Recommendation. In Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval (Washington DC, USA) (SIGIR ’24). Association for Computing Machinery, New York, NY, USA, 2935–2939.
+
+doi:10.1145/3626772.3661368
+
+Shakir et al. (2024)
+
+Aamir Shakir, Tom Aarsen, and Sean Lee. 2024.
+
+Binary and Scalar Embedding Quantization for Significantly Faster & Cheaper Retrieval.
+
+Hugging Face Blog (2024).
+
+https://huggingface.co/blog/embedding-quantization.
+
+Shi et al. (2020)
+
+Hao-Jun Michael Shi, Dheevatsa Mudigere, Maxim Naumov, and Jiyan Yang. 2020.
+
+Compositional embeddings using complementary partitions for memory-efficient recommendation systems. In Proceedings of the 26th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 165–175.
+
+Srivastava et al. (2014)
+
+Nitish Srivastava, Geoffrey Hinton, Alex Krizhevsky, Ilya Sutskever, and Ruslan Salakhutdinov. 2014.
+
+Dropout: a simple way to prevent neural networks from overfitting.
+
+The journal of machine learning research 15, 1 (2014), 1929–1958.
+
+TechJury (2023)
+
+TechJury. 2023.
+
+How Many Videos are Uploaded on YouTube Every Day? — techjury.net.
+
+https://techjury.net/video/how-many-videos-are-uploaded-to-youtube-a-day/.
+
+[Accessed 15-11-2024].
+
+tensorflow (2023)
+
+tensorflow. 2023.
+
+Training a recommendation model with dynamic embeddings — blog.tensorflow.org.
+
+https://blog.tensorflow.org/2023/04/training-recommendation-model-with-dynamic-embeddings.html.
+
+[Accessed 17-11-2024].
+
+Wang and Cukierski (2014)
+
+Steve Wang and Will Cukierski. 2014.
+
+Click-Through Rate Prediction.
+
+https://kaggle.com/competitions/avazu-ctr-prediction.
+
+Kaggle.
+
+Experimental support, please
+view the build logs
+for errors. Generated by
+
+L
+A
+T
+E
+
+xml
+
+.
+
+Instructions for reporting errors
+
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+
+Click the "Report Issue" (
+
+) button, located in the page header.
+
+Tip: You can select the relevant text first, to include it in your report.
+
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+
+Major funding support from
+

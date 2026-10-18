@@ -1,0 +1,13 @@
+{"event": "data_ready", "dataset": "Gowalla", "users": 29858, "items": 40981, "user_id_max": 29857, "item_id_max": 40980, "interactions": 1027370, "split_counts": [821896, 102737, 102737], "file_sha256": {"train": "6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8", "val": "18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc", "test": "d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa"}, "user_buckets": 5792, "item_buckets": 5806, "compressed_parameters": 742272, "full_parameters": 4533696}
+{"event": "alias_assert_ok", "users_equal": true, "items_equal": true, "other_users_sha256": "afeeb54e6ad9089c93dd5a067289d8246c91c38d8b51b4b2682b93cbf460bb06", "other_items_sha256": "c5bfbc95555bd790f0c7acd7e3cebb042fb1b371d79347bed84953830ebfaa5f", "equal": true}
+{"event": "start", "run_id": "gowalla__mf__graphhash__bpr__s0-legacy", "dataset": "Gowalla", "method": "GraphHash", "base": "raw", "mapping_source": "recomputed_on_gpu_image", "device": "cuda", "mapping_items_sha256": "c5bfbc95555bd790f0c7acd7e3cebb042fb1b371d79347bed84953830ebfaa5f"}
+{"event": "progress", "tag": "val", "split": "val", "users": 512, "of": 25738, "cells": 58, "seconds": 1.2}
+{"event": "progress", "tag": "val", "split": "val", "users": 10752, "of": 25738, "cells": 58, "seconds": 21.3}
+{"event": "progress", "tag": "val", "split": "val", "users": 20992, "of": 25738, "cells": 58, "seconds": 41.6}
+{"event": "run_done", "tag": "val", "split": "val", "cells": 58, "users": 25738, "seconds": 51.3}
+{"event": "selected", "beta_star": 0.5, "beta_legacy_cos": 0.1, "beta_legacy_raw": 0.5, "beta_full_prior": 0.5, "beta_other_prior": 0.1, "beta_mu": 0.05, "beta_eps": 0.5}
+{"event": "progress", "tag": "test", "split": "test", "users": 512, "of": 25789, "cells": 86, "seconds": 2.1}
+{"event": "progress", "tag": "test", "split": "test", "users": 10752, "of": 25789, "cells": 86, "seconds": 42.6}
+{"event": "progress", "tag": "test", "split": "test", "users": 20992, "of": 25789, "cells": 86, "seconds": 83.1}
+{"event": "run_done", "tag": "test", "split": "test", "cells": 86, "users": 25789, "seconds": 102.7}
+{"event": "done", "out": "/kaggle/working/controls/gowalla__mf__graphhash__bpr__s0-legacy/controls.json"}

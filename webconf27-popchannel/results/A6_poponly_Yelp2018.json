@@ -1,0 +1,18 @@
+{
+  "dataset": "Yelp2018",
+  "val": {
+    "recall": 1.61,
+    "ndcg": 0.97
+  },
+  "test": {
+    "recall": 1.68,
+    "ndcg": 1.05
+  },
+  "n_val_users": 30261,
+  "n_test_users": 30304,
+  "split_sizes": {
+    "train": 1249124,
+    "val": 156140,
+    "test": 156142
+  }
+}

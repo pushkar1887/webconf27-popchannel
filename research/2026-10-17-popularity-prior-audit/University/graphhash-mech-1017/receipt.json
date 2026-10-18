@@ -1,0 +1,14 @@
+{
+  "alias": "University",
+  "slug": "graphhash-mech-1017",
+  "status": "COMPLETE",
+  "decoded": [
+    "repro_core.py",
+    "repro_run.py",
+    "mech.py"
+  ],
+  "saved": [
+    "popprior.json"
+  ],
+  "file_count": 424
+}

@@ -1,0 +1,113 @@
+Compiling sknetwork/hierarchy/paris.pyx because it changed.
+Compiling sknetwork/linalg/push.pyx because it changed.
+Compiling sknetwork/linalg/diteration.pyx because it changed.
+Compiling sknetwork/ranking/betweenness.pyx because it changed.
+Compiling sknetwork/classification/vote.pyx because it changed.
+Compiling sknetwork/topology/minheap.pyx because it changed.
+Compiling sknetwork/topology/triangles.pyx because it changed.
+Compiling sknetwork/topology/core.pyx because it changed.
+Compiling sknetwork/topology/weisfeiler_lehman_core.pyx because it changed.
+Compiling sknetwork/topology/cliques.pyx because it changed.
+Compiling sknetwork/clustering/louvain_core.pyx because it changed.
+Compiling sknetwork/clustering/leiden_core.pyx because it changed.
+[ 1/12] Cythonizing sknetwork/classification/vote.pyx
+[ 3/12] Cythonizing sknetwork/clustering/louvain_core.pyx
+[ 5/12] Cythonizing sknetwork/linalg/diteration.pyx
+[ 7/12] Cythonizing sknetwork/ranking/betweenness.pyx
+[ 8/12] Cythonizing sknetwork/topology/cliques.pyx
+[10/12] Cythonizing sknetwork/topology/minheap.pyx
+[ 2/12] Cythonizing sknetwork/clustering/leiden_core.pyx
+[ 4/12] Cythonizing sknetwork/hierarchy/paris.pyx
+[ 6/12] Cythonizing sknetwork/linalg/push.pyx
+[ 9/12] Cythonizing sknetwork/topology/core.pyx
+[11/12] Cythonizing sknetwork/topology/triangles.pyx
+[12/12] Cythonizing sknetwork/topology/weisfeiler_lehman_core.pyx
+running build_ext
+building 'sknetwork.hierarchy.paris' extension
+creating build/temp.linux-x86_64-cpython-313/sknetwork/hierarchy
+building 'sknetwork.linalg.push' extension
+creating build/temp.linux-x86_64-cpython-313/sknetwork/linalg
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/linalg/push.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/linalg/push.o
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/hierarchy/paris.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/hierarchy/paris.o
+creating build/lib.linux-x86_64-cpython-313/sknetwork/linalg
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/linalg/push.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/linalg/push.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.linalg.diteration' extension
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/linalg/diteration.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/linalg/diteration.o
+creating build/lib.linux-x86_64-cpython-313/sknetwork/hierarchy
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/hierarchy/paris.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/hierarchy/paris.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.ranking.betweenness' extension
+creating build/temp.linux-x86_64-cpython-313/sknetwork/ranking
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/ranking/betweenness.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/ranking/betweenness.o
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/linalg/diteration.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/linalg/diteration.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.classification.vote' extension
+creating build/temp.linux-x86_64-cpython-313/sknetwork/classification
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/classification/vote.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/classification/vote.o
+creating build/lib.linux-x86_64-cpython-313/sknetwork/ranking
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/ranking/betweenness.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/ranking/betweenness.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.topology.minheap' extension
+creating build/temp.linux-x86_64-cpython-313/sknetwork/topology
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/topology/minheap.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/topology/minheap.o
+creating build/lib.linux-x86_64-cpython-313/sknetwork/classification
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/classification/vote.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/classification/vote.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.topology.triangles' extension
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/topology/triangles.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/topology/triangles.o
+creating build/lib.linux-x86_64-cpython-313/sknetwork/topology
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/topology/minheap.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/topology/minheap.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.topology.core' extension
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/topology/core.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/topology/core.o
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/topology/triangles.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/topology/triangles.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.topology.weisfeiler_lehman_core' extension
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/topology/weisfeiler_lehman_core.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/topology/weisfeiler_lehman_core.o
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/topology/core.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/topology/core.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.topology.cliques' extension
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/topology/cliques.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/topology/cliques.o
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/topology/weisfeiler_lehman_core.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/topology/weisfeiler_lehman_core.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.clustering.louvain_core' extension
+creating build/temp.linux-x86_64-cpython-313/sknetwork/clustering
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/clustering/louvain_core.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/clustering/louvain_core.o
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/topology/cliques.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/topology/cliques.cpython-313-x86_64-linux-gnu.so
+building 'sknetwork.clustering.leiden_core' extension
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -fPIC -I/usr/local/lib/python3.13/dist-packages/numpy/_core/include -I/usr/include/python3.13 -c sknetwork/clustering/leiden_core.cpp -o build/temp.linux-x86_64-cpython-313/sknetwork/clustering/leiden_core.o
+creating build/lib.linux-x86_64-cpython-313/sknetwork/clustering
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/clustering/louvain_core.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/clustering/louvain_core.cpython-313-x86_64-linux-gnu.so
+x86_64-linux-gnu-g++ -fno-strict-overflow -Wsign-compare -DNDEBUG -g -O2 -Wall -g -fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fstack-protector-strong -fstack-clash-protection -Wformat -Werror=format-security -fcf-protection -g -fwrapv -O2 -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-Bsymbolic-functions -g -fwrapv -O2 build/temp.linux-x86_64-cpython-313/sknetwork/clustering/leiden_core.o -L/usr/lib/x86_64-linux-gnu -o build/lib.linux-x86_64-cpython-313/sknetwork/clustering/leiden_core.cpython-313-x86_64-linux-gnu.so
+copying build/lib.linux-x86_64-cpython-313/sknetwork/hierarchy/paris.cpython-313-x86_64-linux-gnu.so -> sknetwork/hierarchy
+copying build/lib.linux-x86_64-cpython-313/sknetwork/linalg/push.cpython-313-x86_64-linux-gnu.so -> sknetwork/linalg
+copying build/lib.linux-x86_64-cpython-313/sknetwork/linalg/diteration.cpython-313-x86_64-linux-gnu.so -> sknetwork/linalg
+copying build/lib.linux-x86_64-cpython-313/sknetwork/ranking/betweenness.cpython-313-x86_64-linux-gnu.so -> sknetwork/ranking
+copying build/lib.linux-x86_64-cpython-313/sknetwork/classification/vote.cpython-313-x86_64-linux-gnu.so -> sknetwork/classification
+copying build/lib.linux-x86_64-cpython-313/sknetwork/topology/minheap.cpython-313-x86_64-linux-gnu.so -> sknetwork/topology
+copying build/lib.linux-x86_64-cpython-313/sknetwork/topology/triangles.cpython-313-x86_64-linux-gnu.so -> sknetwork/topology
+copying build/lib.linux-x86_64-cpython-313/sknetwork/topology/core.cpython-313-x86_64-linux-gnu.so -> sknetwork/topology
+copying build/lib.linux-x86_64-cpython-313/sknetwork/topology/weisfeiler_lehman_core.cpython-313-x86_64-linux-gnu.so -> sknetwork/topology
+copying build/lib.linux-x86_64-cpython-313/sknetwork/topology/cliques.cpython-313-x86_64-linux-gnu.so -> sknetwork/topology
+copying build/lib.linux-x86_64-cpython-313/sknetwork/clustering/louvain_core.cpython-313-x86_64-linux-gnu.so -> sknetwork/clustering
+copying build/lib.linux-x86_64-cpython-313/sknetwork/clustering/leiden_core.cpython-313-x86_64-linux-gnu.so -> sknetwork/clustering
+In file included from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/ndarraytypes.h:1909,
+                 from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/ndarrayobject.h:12,
+                 from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/arrayobject.h:5,
+                 from sknetwork/hierarchy/paris.cpp:1262:
+/usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/npy_1_7_deprecated_api.h:17:2: warning: #warning "Using deprecated NumPy API, disable it with " "#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+   17 | #warning "Using deprecated NumPy API, disable it with " \
+      |  ^~~~~~~
+In file included from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/ndarraytypes.h:1909,
+                 from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/ndarrayobject.h:12,
+                 from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/arrayobject.h:5,
+                 from sknetwork/linalg/push.cpp:1267:
+/usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/npy_1_7_deprecated_api.h:17:2: warning: #warning "Using deprecated NumPy API, disable it with " "#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+   17 | #warning "Using deprecated NumPy API, disable it with " \
+      |  ^~~~~~~
+In file included from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/ndarraytypes.h:1909,
+                 from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/ndarrayobject.h:12,
+                 from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/arrayobject.h:5,
+                 from sknetwork/topology/core.cpp:1262:
+/usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/npy_1_7_deprecated_api.h:17:2: warning: #warning "Using deprecated NumPy API, disable it with " "#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+   17 | #warning "Using deprecated NumPy API, disable it with " \
+      |  ^~~~~~~
+In file included from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/ndarraytypes.h:1909,
+                 from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/ndarrayobject.h:12,
+                 from /usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/arrayobject.h:5,
+                 from sknetwork/topology/cliques.cpp:1267:
+/usr/local/lib/python3.13/dist-packages/numpy/_core/include/numpy/npy_1_7_deprecated_api.h:17:2: warning: #warning "Using deprecated NumPy API, disable it with " "#define NPY_NO_DEPRECATED_API NPY_1_7_API_VERSION" [-Wcpp]
+   17 | #warning "Using deprecated NumPy API, disable it with " \
+      |  ^~~~~~~

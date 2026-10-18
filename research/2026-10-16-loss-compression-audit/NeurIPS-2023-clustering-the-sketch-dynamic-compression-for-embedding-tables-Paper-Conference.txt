@@ -1,0 +1,1565 @@
+=== PDF PAGE 1 ===
+    ClusteringtheSketch: DynamicCompressionfor
+                                    EmbeddingTables
+
+
+
+
+                   HenryLing-HeiTsang∗                             ThomasDybdahlAhle∗
+                              Meta                                            Meta†
+                 henrylhtsang@meta.com                                Normal Computing
+                                                                       thomas@ahle.dk
+
+                                                  Abstract
+
+          Embedding tablesare usedby machine learningsystems towork with categorical
+          features.  In modern Recommendation Systems, these tables can be very large,
+          necessitating the development of new methods for ﬁtting them in memory, even
+          during training. We suggest Clustered Compositional Embeddings (CCE) which
+          combines clustering-based compression like quantization to codebooks with dy-
+          namicmethodslikeTheHashingTrickandCompositionalEmbeddings[Shietal.,
+          2020].  Experimentally CCE achieves the best of both worlds:  The high com-
+          pressionrateofcodebook-basedquantization,butdynamicallylikehashing-based
+          methods, so it can be used during training. Theoretically, we prove that CCE is
+          guaranteed to converge to the optimal codebook and give a tight bound for the
+          number of iterations required.
+
+1   Introduction
+
+Neuralnetworkscanefﬁcientlyhandlevariousdatatypes,includingcontinuous,sparse,andsequential
+features.  However, categorical features present a unique challenge as they require embedding a
+typically vast vocabulary into a smaller vector space for further calculations. Examples of these
+features include user IDs, post IDs on social networks, video IDs, and IP addresses commonly
+encountered in Recommendation Systems.
+Insomedomainswhereembeddingsareemployed,suchasNaturalLanguageProcessing[Mikolov
+et al., 2013], the vocabulary can be signiﬁcantly reduced by considering “subwords” or “byte pair
+encodings”. In Recommendation Systems like Matrix Factorization or DLRM (see Figure 2) it is
+typically not possible to factorize the vocabulary this way, leading to large embedding tables that
+demandhundredsofgigabytesofGPUmemory[Naumovetal.,2019]. Thisnecessitatessplitting
+models acrossmultiple GPUs, increasing costand creating acommunication bottleneck during both
+training and inference.
+The traditional solution is to hash the IDs down to a manageable size using the Hashing Trick [Wein-
+bergeretal.,2009],acceptingthepossibilitythatunrelatedIDsmaysharethesamerepresentation.
+Excessively aggressive hashing can impair the model’s ability to distinguish its inputs, as it may mix
+up unrelated concepts, ultimately reducing model performance.
+Another option for managing embedding tables is quantization. This typically involves reducing the
+precisionto4or8bitsorusingmulti-dimensionalmethodslikeProductQuantizationandResidual
+VectorQuantization,which rely onclustering(e.g.,K-means)toidentifyrepresentative“codewords”
+for each original ID. (See Gray and Neuhoff [1998] for a survey of quantization methods.)  For
+instance, vectors representing “red”, “orange”, and “blue” may be stored as simply “dark orange”
+and“blue”, withtheﬁrst twoconceptspointing tothesameaverageembedding. SeeSection 1for
+
+   ∗Equal contribution.
+   †Work done mostly at Probability at Meta.
+
+
+37th Conference on Neural Information Processing Systems (NeurIPS 2023).
+
+=== PDF PAGE 2 ===
+                           (a) Single iteration of CCE: (a) Starting from a ran-       (b) CCE for Least Squares: The least squares prob-
+                           dom embedding table, each ID is hashed to a vector          lemistoﬁndthematrixT thatminimizes∥XT−Y∥F.
+                           in eachof 2 small tables. (b) During training, theem-       Tosavespacewemayusecodebookquantization,that
+                           bedding of an ID is taken to be the mean of the two         is factorizeT≈ HM, whereH is a sparse Boolean
+                           referenced code words. (c) After training foran epoch,      matrix, andM is a small dense matrix. If we already
+                           thevectorsforall(orasampleof)theIDsarecomputed              knowT thisiseasytodousingtheK-meansalgorithm,
+                           and clustered. Thisleaves a new small table in which        butifT istoolargetostoreinmemory,wecanﬁndthe
+                           similar IDs are represented by the same vector.  (d)        compressedformdirectlyusingCCE,whichweprove
+                           We can choose to combine the cluster centers with a         ﬁnds the optimalH andM.
+                           newrandomtable(andnewhashfunction),afterwhich               For the plot, we sampled X∈ R104×103 and Y∈
+                           the process can be repeated for an increasingly better      R104×10. We ran CCE and compared it with the opti-
+                           understanding of which ID should be combined.               malsolutionofﬁrstT andthenfactoriseditwitheither
+                                                                                       one or two 1s per row inH.
+                           Figure 1: Clustered Compositional Embeddings is a simple algorithm which you run interspersed
+                           withyournormalmodeltraining,suchaseveryepochofSGD.Whilethetheoreticalbound(andthe
+                           least squares setting shown here) requires a lot of iterations for perfect convergence, in practice we
+                           get substantial gains from running 1-6 iterations.
+
+
+                           an example. Clustering alsoplays a crucial rolein the theoreticalliterature on vector compression
+                           [IndykandWagner,2022]. However,asigniﬁcantdrawbackofthesequantization methodsisthatthe
+                           model is only quantizedafter training, leaving memory utilizationduring training unaffected3
+                           Recentauthorshaveexploredmoreadvancedusesofhashingtoaddressthischallenge: TitoSvenstrup
+                           etal.[2017],Shietal.[2020],Desaietal.[2022],Yinetal.[2021],Kangetal.[2021]. Acommon
+                           themeis toemploy multiplehash functions, enablingfeatures tohave uniquerepresentations, while
+                           still mapping into asmall sharedparameter table. Although thesemethods outperformthe traditional
+                           HashingTrickincertainscenarios,theystillenforcerandomsharingofparametersbetweenunrelated
+                           concepts,introducing substantial noiseintothe subsequentmachinelearningmodel hastoovercome.
+                           Clearly, there is an essential difference between “post-training” compression methods like Product
+                           Quantization which can utilize similarities between concepts and “during training” techniques
+                           based on hashing, which are forced to randomly mix up concepts. This paper’s key contribution
+                           is tobridge that gap: Wepresent a novel compressionapproach we call“Clustered Compositional
+                           Embeddings” (or CCE for short) that combines hashing and clustering while retaining the beneﬁts
+                           of both methods. By continuously interleaving clustering with training, we train recommendation
+900                        modelswithperformancematchingpost-trainingquantization,whileusingaﬁxedparametercount
+                           and computational cost throughout training, matching hashing-based methods.Optimal,1sparse
+                                      Optimal,2sparse
+800                        Inspirit,oureffortcanbelikenedtomethodslikeRigL[Evcietal.,2020],whichdiscoversthewiringCCE
+
+700                        of a sparse neural network during training rather than pruning a dense network post-training. Our
+                           workcanalsobeseenasaformof“OnlineProductQuantization”Xuetal.[2018],thoughpriorwork
+600                            3Reducing the precision to 16-bit ﬂoats is often feasible during training, but this work aims for memory
+500                        reductions much larger than that.
+
+
+400                                                                                  2
+
+300
+    100         101         102          103         104
+                  Cluster+Learniterations
+
+=== PDF PAGE 3 ===
+focused onlyon updating codewords already assignedto theconcept. Our goalis more ambitious:
+Wewant tolearn which concepts to group togetherwithout ever knowingthe “true”embedding for
+the concepts.
+Why is this hard? Imagine you are training your model and at some point decide to use the same
+vector for IDsi andj. For the remaining duration of the training, you can never distinguish the two
+IDs again, and thus any decision you make is permanent. The more you cluster, the smaller your
+table gets. But we are interested in keeping a constant number of parameters throughout training,
+while continuously improving the clustering.
+In summary, our main contributions are:
+
+•  A new dynamic quantization algorithm (CCE) that combines clustering and sketching. Particularly
+  well suited to optimizing the compression of embedding tables in Recommendation Systems.
+•  WeuseCCEtotraintheDeepLearningRecommendationSystem(DLRM)tobaselineperformance
+  withlessthan50%ofthetableparametersrequiredbythepreviousstateoftheart,andawobbling
+  11,000 times fewer parameters than the baseline models without compression.
+•  Using slightlymore parameters,but stillsigniﬁcantly less thanthe baseline,we canalso improve
+  the Binary Cross Entropy by 0.66%. Showing that CCE helps combat overﬁtting problems.
+•  Weprovetheoreticallythataversionofourmethodforthelinearleast-squaresproblemalwayssuc-
+  ceedsinﬁndingtheoptimalembeddingtableinanumberofstepslogarithmicintheapproximation
+  accuracy desired.
+
+An implementation of our methods and related work is available at github.com/thomasahle/cce.
+
+2   BackgroundandRelatedWork
+
+We show how most previous work on table compression can
+be seen in the theoretical framework of linear dimensionality
+reduction. This allows us to generalize many techniques and
+guide our intuition on how to choose the quality and number
+of hash functions in the system.
+Weomitstandardcommonpreprocessingtricks,suchasweight-
+ing entities by frequency, using separate tables and precision
+for common vs uncommon elements, or completely pruning
+rare entities.  We also don’t cover the background of “post-
+training” quantization, but refer to the survey by Gray and
+Neuhoff [1998].
+Theoretical work by Li et al. [2023] suggests “Learning to
+Countsketch”,butthesemethodsrequireaverylargenumberof
+fulltrainingrunsofthe model. Weonlyconsidermethodsthat
+are practical to scale to very large Recommendation Systems.              Figure 2:  Typical Recommenda-
+See also Indyk and Wagner [2022] on metric compression.                   tion System Architecture:   The
+                                                                          DLRMmodelNaumovetal.[2019]
+2.1   EmbeddingTablesasLinearMaps                                         embeds  each  categorical  feature
+                                                                          separatelyandcombinestheresult-
+An embedding table is typically expressed as a tall skinny                ing vectors with pair-wise dot prod-
+matrixT ∈Rd1×d2, where each IDi∈ [d1] is mapped to the                    ucts.  Other architectures use dif-
+i-th row,T[i]. Alternatively,i can be expressed as a one-hot              ferent interaction layers ora single
+row-vectorei∈{0,1}d1 in which caseT[i] =eiT ∈Rd2.                         embeddingtableforallcategorical
+Most previous work in the area of table compression is based              features, but thecentral role of the
+on the idea of sketching:  We introduce a (typically sparse)              embedding table is universal.
+matrixH ∈{0,1}d1×k andadensematrixM ∈Rk×d2,where                          (Picture credit: Nvidia).
+k<<d1,and takeT =HM. Inother words,tocomputeT[i]
+wecompute(eiH)M. SinceH andei arebothsparse,thisrequiresverylittlememoryandtakesonly
+constanttime. ThevectoreiH ∈Rk iscalled“thesketchofi”andM isthe“compressedembedding
+table” that is trained with gradient descent.
+
+
+                                                        3
+
+=== PDF PAGE 4 ===
+In this framework, we can also express most other approaches to training-time table compression.
+Some previous work has focused on the “problem” of avoiding hash collisions, which intuitively
+makes sense as they make the model completely blind to differences in the colliding concepts.
+However, from our experiments, hashing does nearly as wellas said proposed methods, suggesting
+that a different approach is needed. Sketching is a more general way to understand this.
+TheHashingTrick[Weinbergeretal.,2009]isnormallydescribedbyahashfunctionh : [d1]→ [k],
+suchthatiisgiventhevectorM[h(i)],whereM isatablewithjustk<<d1 rows. Alternatively,we
+canthinkofthistrickasmultiplyingei witharandommatrixH ∈{0,1}d1×k whichhasexactlyone
+1 in each row. Then the embedding ofi isM[h(i)] =eiHM, whereHM ∈Rd1×d2.
+HashEmbeddings[Tito Svenstrup etal., 2017] mapeach IDi∈V to thesum of a fewtable rows.
+For example, ifi is mapped to two rows, then its embedding vector isv =M[h1(i)]+M[h2(i)].
+UsingthenotationofH ∈{0,1}m×n,onecancheckthatthiscorrespondstoeachrowhavingexactly
+two 1s. In the paper, the authors also consider weighted combinations, which simply means that the
+non-zero entries ofH can be some real numbers.
+CompositionalEmbeddings (CE or “Quotient Remainder”, Shi et al., 2020), deﬁneh1(i) =⌊i/p⌋
+andh2(i) =i  modp for integerp, and then combinesT[h1(i)] andT[h2(i)] in various ways.
+As mentioned by the authors, this choice is, however, not of great importance, and more general
+hash functionscan also be used, whichallowsfor more ﬂexibility in thesize and number oftables.
+Besides using sums, like Hash Embeddings, the authors propose element-wise multiplication4
+and concatenation. Concatenation [T[h1(i)],T[h2(i)]] can again be described with a matrixH ∈
+{0,1}d1×k whereeachrowhasexactlyone1inthetophalfofH andoneinthebottomhalfofH,as
+wellasablockdiagonalmatrixM. WhilethisrestrictsthevariationsinembeddingmatricesT that
+areallowed,weusuallycompensatebypickingalargerm,sothedifferenceinentropyisnotmuch
+different from Hash Embeddings, and the practical results are very similar as well.
+ROBEembeddings [Desai et al., 2022] are essentially Compositional Embeddings with concatena-
+tion as described above, but add some more ﬂexibility in the indexing from the ability of pieces to
+“wrap around” in the embedding table. In our experiments, ROBE was nearly indistinguishable from
+CEwithconcatenationforlargemodels,thoughitdidgivesomemeasurableimprovementsforvery
+small tables.
+Deep Hashing Embeddings (DHE, Kang et al., 2021) picks 1024 hash functionsh1,...,h1024 :
+[d1]→ [−1,1] and feed the vector (h1(i),...,h1024(i)) into a multi-layer perceptron. While the
+idea of using an MLP to save memory at the cost of larger compute is novel and departs from the
+sketching framework, the ﬁrst hashing step of DHE is just sketching with a dense random matrix
+H ∈ [−1,1]d1×1024. Whilethisislessefﬁcientthanasparsematrix,itcanstillbeappliedefﬁciently
+tosparseinputs,ei,andstoredinsmallamountsofmemory. Indeedinourexperiments,foraﬁxed
+parameter budget, the fewer layers of the MLP, the better DHE performed. This indicates to us that
+the sketching part of DHE is still the most important part.
+TensorTrain [Yin et al., 2021]doesn’t use hashing, but like CE itsplits the input in a deterministic
+waythatcanbegeneralizedtoarandomhashfunctionifsoinclined. Insteadofaddingorconcatenat-
+ing chunks, Tensor Train multiplies them together as matrices, which makes it not strictly a linear
+operation. However, like DHE, the ﬁrst step in reducing the input size is sketching.
+Learning to Collide In recent parallel work, Ghaemmaghami et al. [2022] propose an alternate
+method for learning a clustering based on a low dimensional embedding table.  This is like a
+horizontalsketch,ratherthanavertical,whichunfortunatelymeansthepotentialparametersavingsis
+substantially smaller.
+
+Ourmethodintroducesanovelapproachtodynamiccompressionbyshiftingfromrandomsketching
+to learned sketching. Thisprocess canbe representedaseiHM, whereH is asparsematrix andM
+isasmalldensematrix. ThedistinguishingfactoristhatwederiveH fromthedata,insteadofrelying
+onarandomorﬁxedmatrix. Thisadaptation,boththeoreticallyandempirically,allowslearningthe
+same model using less memory.
+
+
+
+    4While combiningvectors with element-wisemultiplication is not alinear operation, from personal commu-
+nicationwiththeauthors,itisunfortunatelyhardtotrainsuchembeddingsinpractice. Hencewefocusonthe
+two linear variants.
+
+
+                                                        4
+
+=== PDF PAGE 5 ===
+                            (a)  The  Hashing  Trick:       (b)   Hash   Embeddings:        (c) ROBE: Similar to CE         (d)    Deep    Hash    Em-
+                            Also   known   as   Count       Each ID is hashed to two        with concatenation, but in-     beddings:    Computes  a
+                            Sketch, each ID is hashed       rows,  one per table, and       stead  of  using  separate      weighted  sum  of  all  the
+                            to one location in a table      its embedding vector is as-     columns, it uses a contin-      table  entries,  where  the
+                            (herewith1000 rows)and          signed to be the sum of         uousarray from whichthe         weights come from hash-
+                            it is assigned the embed-       those two vectors.   Here,      (in this casedim=4) pieces      ing the input 1000 times
+                            dingvectorstoredatthelo-        we use two separate tables      arepicked. Thepiecesmay         to [−1,1].  The produced
+                            cation. ManyIDsarelikely        unlike  in  Tito  Svenstrup     even overlap.                   (hidden)  vector  is  then
+                            to share the same vector.       et al. [2017].                                                  sent through an MLP for
+                                                                                                                            further reﬁnement.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+4    16        4            (e) CE with concatenation:  In the hashing version44            (f) Clustered CE: We can combine the sum hashing
+                            ofcompositionalembeddings(CE),eachIDishashed                    methodofTitoSvenstrupetal.[2017]withtheconcate-
+                            to a location in each of, say, 4 different tables.  The         nation method of Shi et al. [2020]. Each ID then gets
+                            four vectors storedthere are concatenatedinto theﬁnal           assigned a vector that is the concatenation of smaller
+4   1616       4     500    embeddingvector. Giventhelargenumberofpossible44500             sums. Thisisenhanced withtheclustering idea shown
+ #hidden                    combinations (here10004), it isunlikely that two IDs            in Section 1:  In each of the four blocks, we apply
+                            get assigned the exact same embedding vector, even if           clusteringevery epoch,settingtheresultsinthegreen
+                            they may share each part with some other IDs.                   tables, and replacing the hash functions in the blue
+                                                                                            tables with new random values.
+                            Figure3: Theevolutionofhashing-basedmethodsforembeddingtables. TheHashingTrickand
+     ++          +          Hash Embeddings shown at the top, side by side with an equal amount of parameters.  Next we++1000
+                   100010001000introduce theidea of splittingthe space into multiple concatenated subspaces. This is a classicidea
+                            from product quantization and reminiscent of multi-head attention in transformers. Finally in CCE
+                            we combine both methods in a way that allows iterative improvement using clustering.
+                                                                                          5
+                     500                                500
+      Σ
+                    MLP
+
+=== PDF PAGE 6 ===
+3   SparseandDenseCCE
+
+ThegoalofthissectionistogivethebackgroundofTheorem3.1,whereweprovethatCCEconverges
+totheoptimalassignmentswewouldgetfromtrainingthefullembeddingtableswithouthashingand
+clustering those.
+We can’t hope to prove this in a black box setting, where the recommendation model on top of
+thetablescanbearbitrary,sincetherearepathologicalfunctionswhereonlyafulltablewillwork.
+Instead, wepick asimple linearmodel, where thedata isgivenby amatrixX ∈Rn×d1 and wewant
+to ﬁnd a matrixT that minimizes the sum of squares,∥XT −Y∥2F =∑i,j((XT)i,j−Yi,j)2.
+We give two versions of the algorithm, a sparse method, which is what we build our experimental
+results on; and a dense method which doesn’t use clustering, and replaces the Count Sketch with
+a dense normal distributed random matrix for which we prove optimal convergence.  The dense
+algorithm itself is interesting since it constitutes a novel approximation algorithm for least squares
+regression with lower memory use.
+
+Algorithm1Dense CCE for Least Squares                  Algorithm2Sparse CCE for Least Squares
+Require:X ∈Rn×d1,Y ∈Rn×d2,k∈N                          Require:X ∈Rn×d1,Y ∈Rn×d2,k∈N
+ 1:H0 = 0∈Rd1×2k                                        1:H0 = 0∈Rd1×2k ⊿ Initialize assignments
+ 2:M0 = 0∈R2k×d2                                        2:M0 = 0∈R2k×d2  ⊿ Initialize codebook
+ 3: fori = 0,1,... do                                   3: fori = 0,1,... do
+ 4:   Ti =HiMi                                          4:   Ti =HiMi∈Rd1×d2
+ 5:   N ∼N(0,1)d1×k                                     5:   A = kmeans(Ti)∈{0,1}d1×k
+ 6:   Hi+1 = [Ti|N]                                     6:   C∼ countsketch()∈{−1,0,1}d1×k
+ 7:   Mi+1 = argminM∥XHi+1M−Y∥2F                        7:   Hi+1 = [A|C]∈Rd1×2k
+ 8: endfor                                              8:   Mi+1 = argminM∥XHi+1M−Y∥2F
+                                                        9: endfor
+In the Appendix we show the following theorem guaranteeing the convergence of Algorithm 1:
+Theorem3.1. Assumed1>k>d2 andletT∗∈Rd1×d2 bethematrixthatminimizes∥XT∗−Y∥2F,
+thenTi =HiMi from Algorithm 1 exponentially approaches the optimal loss in the sense
+                       E[∥XTi−Y∥2F]≤ (1−ρ)ik∥XT∗∥2F +∥XT∗−Y∥2F,
+whereρ =∥X∥2−2/∥X∥2F ≈ 1/d1 isthesmallestsingularvalueofX squareddividedbythesumof
+singular values squared.
+
+Wealsoshowhowtomodifythealgorithmtogetanimprovedboundof(1−1/d1)ik byconditioning
+therandompartH bytheeigenspaceofX. Thismeans thatafteri =O(d1k log(1/ε)) iterationswe
+have a1+ε approximation tothe optimal solution. Notethat the standard least squares problem can
+be solvedinO(nd1d2) time, butone iteration ofour algorithm onlytakesO(nkd2) time. Repeating
+itford1/k iterationsisthusnoslowerthanthedefaultalgorithmforthegeneralleastsquaresproblem,
+but uses less memory.
+SomenotesaboutAlgorithm2: Inline4wecomputeHM ∈Rd1×d2 whichmaybeverylarge. (After
+all the main goal of CCE is to avoid storing this full matrix in memory.) Luckily K-means in practice
+works ﬁneon just a sample of the fulldataset, which is whatwe do inthe detailed implementation in
+Section 4.2.
+In line 5, note that K-means normally returns both a set of cluster assignments and cluster centroids.
+Forouralgorithmweonlyneedtheassignments. WewritethoseasthematrixAwhichhasAid,j = 1
+ifid is assignedto clusterj and 0 otherwise. In the Appendix (Figure 5) weshow howA is asparse
+approximation toT’s column space. Using the full, dense column space we’d recover the dense
+algorithm, Algorithm 1.
+In line 6, countsketch() is the distribution of{−1,0,1}d1×k matrices with one non-zero per row.
+A matrixC is sampled based on hash functionshi : [d1]→ [k] andsi : [d1]→{−1,1} such that
+Cj,ℓ =si(j) ifhi(j) =ℓ and 0 otherwise.   5  We see that withA andC sparse,XHM can be
+computed efﬁciently.
+
+   5We can ignore the sign,±1 in most models ifM has mean 0. See Charikar et al. [2002].
+
+
+                                                     6
+
+=== PDF PAGE 7 ===
+                                 (a) Best of 10 Epochs Test Loss on Criteo Kaggle.  We trained DLRM on the Criteo Kaggle dataset with
+                                 differentcompressionalgorithms. Eachof27categoricalfeatureswasgivenitsownembeddingtable,wherewe
+                                 limited the number of parameters in the largest table as shown in the x-axis. Out of 10 epochs, we did early
+                                 stoppingattheminimumvalidationloss,plottingthetestloss. Wedidindependentrepetitionswith3seedseach,
+                                 plotting the min, max and mean testlosses. Binary Cross-Entropy was used as both the training and test loss.
+                                 Wealso evaluatedthe AUC inAppendixG, butthe resultswereindistinguishable. The FullEmbedding Table
+                                 used up to16·107 parameters per table, as each categorical value is mapped to a unique embedding vector.
+                                 This model over-ﬁts immediately if trained for more than 1 epoch, which is why it does poorly compared to
+                                 more parameter-restricted methods. For Clustered Compositional Embeddings we ran clustering once every
+                                 epoch for the ﬁrst6 epochs, unless stopping earlier.Product Quantization, being a post-trainingquantization
+                                 method,isneverabletodobetterthanthebaselinemodelitistrainedon. Wetriedﬁne-tuningthetablesafter
+                                 PQ,butthis approachimmediatelyoverﬁttedand gave terribleresults. Interestinglythissuggests CCEworksas
+                                 a regularization method for PQ.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                    Bestof10epochs
+
+                                                                                                         FullEmbeddingTable
+                                 (b)Kaggledataset,1epoch: Previous work, like Shi                  (c)Terabytedataset,1epoch: Weransimilarexperi-ProductQuantization
+          0.458                  et al. [2020] only trained each method for one epoch,             mentsonCriteoTerabytedataset,whichwasexpensiveDeepHashEmbeddings
+                                 followingDLRM,whichdidthistoavoidover-ﬁtting                      enough that we could only perform one repetition ofTheHashingTrick
+                                 the baselinemodel. To compare with theseresults, we               each algorithm. Like on the Kaggle dataset, runningCEwithConcatenation
+          0.456            Endof1epochEndof1epochranCCEclusteringafter1/4 and1/2 ofanepoch. In     forjust1epochisnotenoughtoshowanimprovement
+0.475                            thissetting,thehashing-basedmethodswerenotable                    in BCE over the baseline, but we are still able to saveCCE(Thispaper)
+                                 to competewith the baselineand productquantization,FullEmbeddingTableFullEmbeddingTablespace. Curiously Product Quantization was basically
+0.1295                           DeepHashEmbeddingsDeepHashEmbeddings
+0.470                            but CCE was able to do slightly better.  Allowing a               no better than sketch-based methods for this dataset,
+0.1290    0.454                  300× parameter reduction.TheHashingTrickProductQuantization       whichmaybeanotherreasonCCEdidn’tperformgreat
+                                 CEwithConcatenationTheHashingTrick                                either.
+0.12850.465                      ProductQuantizationCEwithConcatenation
+          0.452                  Figure 4: CCE also improves models even when trained for just one epoch.  This shows usefulCCE(Thispaper)CCE(Thispaper)
+0.1280
+                                 information is available from clustering even when only parts of the data have been seen.
+0.460
+0.1275
+
+          0.450                                                                                  7
+0.12700.455
+
+
+0.1265
+               103                                     104                                     105                                     106
+     103   104         104   105         105    106      NumberofparametersforLargestTables106
+                NumberofparametersforLargestTablesNumberofparametersforLargestTables
+
+=== PDF PAGE 8 ===
+Table 1: Memory Reduction Rates Across all Datasets. For each algorithm, dataset and epoch
+limit we measured the necessary number of parameters to reach baseline BCE. The compression
+ratios with ranges are estimated using degree 1 and 2 polynomial extrapolation. We can compare
+these results with reported compression rates from Desai et al. [2022] (ROBE) which gets1000×
+withmultiepochtraining;[Yinetal.,2021](TensorTrain)whichreportsa112×reductionat1epoch
+on Kaggle; and Yin et al. [2021] which reports a16× reduction at 1 epoch with “Mixed Dimension
+methods” on Kaggle.
+          Method                               Dataset               Epochs    Embedding Compression
+          CCE (This Paper)              Criteo Kaggle     ≤ 10                             8,500×
+          CE with Concatenation      Criteo Kaggle     ≤ 10                             3,800×
+          The Hashing Trick             Criteo Kaggle     ≤ 10                             4,600×
+          Deep Hash Embeddings    Criteo Kaggle     ≤ 10                             1,300×
+          CCE (This Paper)              Criteo Kaggle              1                                212×
+          CE with Concatenation      Criteo Kaggle              1                      127−155×
+          The Hashing Trick             Criteo Kaggle              1                        78−122×
+          Deep Hash Embeddings    Criteo Kaggle              1                            7−25×
+          CCE (This Paper)              Criteo TB                     1                                101×
+          CE with Concatenation      Criteo TB                     1                          25−48×
+          The Hashing Trick             Criteo TB                     1                          23−32×
+          Deep Hash Embeddings    Criteo TB                     1                              2−6×
+
+
+4   ExperimentsandImplementationDetails
+
+Our primary experimental ﬁnding, illustrated in Table 1 and Figure 4a, indicates that CCE enables
+training a model with Binary Cross Entropy matching a full table baseline, using only a half the
+parameters required by the next best compression method.  Moreover, when allocated optimal
+parameters and trained to convergence, CCE can yield a not insigniﬁcant0.66% lower BCE.
+
+4.1   ExperimentalSetup
+
+In our experiments, we adhered to the setup from the open-source Deep Learning Recommendation
+Model (DLRM) by Naumov et al. [2019], including the choice of optimizer (SGD) and learning
+rate. The model uses both dense and sparse features with an embedding table for each sparse feature.
+We modiﬁed only the embedding table portion of the DLRM code. We used two public click log
+datasets from Criteo: the Kaggle and Terabyte datasets. These datasets comprise 13 dense and 26
+categorical features, with the Kaggle dataset consisting of around 45 million samples over 7 days,
+and the Terabyte dataset containing about 4 billion samples over 24 days.
+We ran the Kaggle dataset experiments on a single A100 GPU. For the Terabyte dataset experiments,
+weranthemontwoA100GPUsusingmodelparallelism. Thiswasdonemainlyformemoryreasons.
+With this setup, training for one epoch on the Kaggle dataset takes around 4 hours, while training for
+oneepochontheTerabytedatasettakesaround4days. Therewasnotabigdifferenceintrainingtime
+between the algorithms we tested. In total we used about 11,000 GPU hours for all the experiments
+across 5 algorithms, 3 seeds, 10 epochs and 9 different parameter counts.
+
+4.2   CCEImplementationDetails
+
+Intheprevioussectionwegavepseudocodefor“SparseCCEforLeastSquares”(Algorithm2). Ina
+general model, an embedding table can be seen as a data-structure with two procedures. Below we
+givepseudo-code for an embedding table with vocabulary[d1] and output dimensiond2, using2kd2
+parameters. The CCE algorithm is applied to each ofc columns, as mentioned in Figure 3f.
+Thevaluec = 4waschosentomatchShietal.[2020],butlargervaluesaregenerallybetter,aslong
+asthehi functionsdon’tbecometooexpensivetostore. SeeAppendixE.Therandomhashfunctions
+h′i areverycheaptostoreusinguniversalhashing. SeeAppendixD.ThenumberofcallstoCluster
+was determined by grid search. See Appendix F for the effect of more or less clustering.
+
+
+                                                           8
+
+=== PDF PAGE 9 ===
+Algorithm3Clustered Compositional Embeddings withc columns and2k rows
+ 1: class CCE:
+ 2:     method Initialize:
+ 3:         fori = 1 tocdo:
+ 4:     hi,h′i← i.i.d.∼ random functions from[d1] to[k]          ⊿H in Algorithm 2
+ 5:     Mi,M′i ←i.i.d.∼N(0,1)k×d2/c
+ 6:
+ 7:     method GetEmbedding(id):
+ 8:         return CONCAT(Mi[hi(id)]+M′i[h′i(id)] fori = 1 toc)
+ 9:
+10:     method Cluster(items):
+11:         fori = 1 tocdo:
+12:     T ←[Mi[hi(id)]+M′i[h′i(id)] forid∈ [d1]]           ⊿ See discussion below
+13:             centroids, assignments← K-MEANS(T)     ⊿ Findk clusters and assignT to them
+14:     hi← assignments
+15:     Mi← centroids
+16:     h′i← random function from[d1] to[k]
+17:     M′i ← 0k×d2/c
+
+Inline 12we likely don’twantto actuallycomputethe embeddingfor everyid inthevocabulary,but
+insteaduseminibatchK-Meanswithoracleaccesstotheembeddingtable. Inpracticewefollowthe
+suggestionfromFAISSK-means[Johnson etal.,2019]andjustsample256k idsfrom[d1] andrun
+K-meansonly forthissubset. The assignmentsfromid tonearest clustercenterare easytocompute
+forthefullvocabularyafterrunningK-means. Theexactnumberofsamplesperclusterdidn’thavea
+big impact on the ﬁnal performance of CCE.
+
+5   Conclusion
+
+We have shown the feasibility of compressing embedding tables at training time using clustering.
+Our method, CCE, outperforms the state of the art on the largest available recommendation data
+sets. Whilethere isstill workto bedone inexpanding ourtheoretical understandingand testingthe
+methodinmoresituations,webelievethisisanexcitingnewparadigmfordynamicsparsityinneural
+networks and recommender systems in particular.
+Previousstudieshavepresenteddivergingviewsregardingthefeasibilityofcompressingembedding
+tables.  Our belief is that Figure 4a, Figure 4b, and Figure 4c shed light on these discrepancies.
+At standard learning rates and with one epoch of training, it’s challenging to make signiﬁcant
+improvementsovertheDLRMbaseline,corroboratingtheﬁndingsofNaumovetal.[2019]. However,
+upontraininguntilconvergence,it’spossibletoachieveparitywiththebaselineusingathousandtimes
+fewerparametersthantypicallyemployed,evenwiththestraightforwardapplicationofthehashing
+trick. Nevertheless,intherealmofpracticalrecommendationsystems,trainingtoconvergenceisn’t
+a common practice. Our experiment, as illustrated in Figure 4a, proposes a potential reason: an
+excessive size of embedding tables may lead to overﬁtting for most methods.  This revelation is
+startling,giventheprevailingbeliefthat“biggerisalwaysbetter”andthatidealscenariosshouldallow
+eachconcepttohaveitsprivateembeddingvectors. Wecontendthattheseexperimentaloutcomes
+highlight the necessity for further research into overﬁtting within DLRM-style models.
+Inthispaperweanalyzedonlytheplainversionsofeachalgorithm. Thereareanumberofpractical
+and theoretical improvements one may add. All methods are naturally compatible with ﬂoat16 and
+ﬂoat8 reduced or mixed precision. The averaging of multiple embeddings may even help smooth
+out some errors. It is also natural to consider pruning the vocabularies. In particular in an ofﬂine
+settingwe mayremoveveryrare values, orgivethem asmallerweight inthe clusteringan averaging.
+However, in an online setting this kind of pruning is harder to do, and it is easier to rely on hash
+collisions and SGD to ignore the unimportant values. In our experiments we used 27 embedding
+tables,oneforeachcategoricalfeature. Anaturalcompressionideaistomapallfeaturestothesame
+embedding table (after making sure values don’t collide between features.) We didn’t experiment
+with this, but it potentiallycould reduce the needfor tuning embeddingtable sizes separately. A later
+paper by Coleman etal. [2023] report good results with thismethod. For things wetried, but didn’t
+work, see Appendix A.
+
+
+                                                       9
+
+=== PDF PAGE 10 ===
+Acknowledgment
+
+We would like to thank Ben Ghaemmaghami from the University of Texas at Austin for fruitful
+discussions of learned hash functions. Thanks to Chunyin Siu for helpful discussions on the conver-
+gence of multi-step CCE. And ﬁnally to Michael Shi, Peter Tang, Summer Deng, Christina You, Erik
+Meijer, and the rest of the Probability group at Meta for helpful discussions of table embeddings and
+earlier versions of this manuscript.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                          10
+
+=== PDF PAGE 11 ===
+References
+Andrew R Barron, Albert Cohen, Wolfgang Dahmen, and Ronald A DeVore. Approximation and
+  learning by greedy algorithms. The annals of statistics, 36(1):64–94, 2008.
+JLawrenceCarterandMarkN Wegman. Universalclasses ofhashfunctions. In Proceedingsofthe
+  ninth annual ACM symposium on Theory of computing, pages 106–112, 1977.
+Moses Charikar, Kevin Chen, and Martin Farach-Colton. Finding frequent items in data streams. In
+  International Colloquium on Automata, Languages, and Programming, pages 693–703. Springer,
+  2002.
+MichaelBCohen,TSJayram,andJelaniNelson. Simpleanalysesofthesparsejohnson-lindenstrauss
+  transform. In 1st Symposium on Simplicity in Algorithms (SOSA 2018). Schloss Dagstuhl-Leibniz-
+  Zentrum fuer Informatik, 2018.
+Benjamin Coleman, Wang-Cheng Kang, Matthew Fahrbach, Ruoxi Wang, Lichan Hong, Ed H Chi,
+  andDerekZhiyuanCheng. Uniﬁedembedding: Battle-testedfeaturerepresentationsforweb-scale
+  ml systems. arXiv preprint arXiv:2305.12102, 2023.
+Aditya Desai, Li Chou, and Anshumali Shrivastava.  Random offset block embedding (robe) for
+  compressed embedding tables in deep learning recommendation systems. Proceedings of Machine
+  Learning and Systems, 4:762–778, 2022.
+MartinDietzfelbinger,TorbenHagerup,JyrkiKatajainen,andMarttiPenttonen. A reliable random-
+  ized algorithm for the closest-pair problem. Journal of Algorithms, 25(1):19–51, 1997.
+UtkuEvci, Trevor Gale,JacobMenick, PabloSamuelCastro, andErichElsen. Rigging thelottery:
+  Making alltickets winners. In International Conference on MachineLearning, pages2943–2952.
+  PMLR, 2020.
+BenjaminGhaemmaghami,MustafaOzdal,RakeshKomuravelli,DmitriyKorchev,DheevatsaMudi-
+  gere, Krishnakumar Nair, and Maxim Naumov. Learning to collide: Recommendation system
+  model compression with learned hash functions. arXiv preprint arXiv:2203.15837, 2022.
+RobertM.GrayandDavidL.Neuhoff. Quantization. IEEEtransactionsoninformationtheory,44
+  (6):2325–2383, 1998.
+PiotrIndykandTalWagner. Optimal(euclidean)metric compression. SIAMJournalonComputing,
+  51(3):467–491, 2022.
+Jeff Johnson, Matthijs Douze, and Hervé Jégou. Billion-scale similarity search with GPUs. IEEE
+  Transactions on Big Data, 7(3):535–547, 2019.
+Wang-ChengKang,DerekZhiyuanCheng,TianshengYao,XinyangYi,TingChen,LichanHong,and
+  Ed H Chi. Learning to embed categorical features without embedding tables for recommendation.
+  In Proceedings ofthe27th ACMSIGKDDConferenceonKnowledge Discovery&Data Mining,
+  pages 840–850, 2021.
+Yi Li, Honghao Lin, Simin Liu, Ali Vakilian, and David Woodruff.  Learning the positions in
+  countsketch. In Proceedings of the International Conference on Learning Representations (ICLR),
+  Feb 2023.
+TomasMikolov,KaiChen,GregCorrado,andJeffreyDean. Efﬁcientestimationofwordrepresenta-
+  tions in vector space. arXiv preprint arXiv:1301.3781, 2013.
+Maxim Naumov, Dheevatsa Mudigere, Hao-Jun Michael Shi, Jianyu Huang, Narayanan Sundaraman,
+  Jongsoo Park, Xiaodong Wang, Udit Gupta, Carole-Jean Wu, Alisson G Azzolini, et al. Deep
+  learning recommendation model for personalization and recommendation systems. arXiv preprint
+  arXiv:1906.00091, 2019.
+F.Pedregosa,G.Varoquaux,A.Gramfort,V.Michel,B.Thirion,O.Grisel,M.Blondel,P.Pretten-
+  hofer, R. Weiss, V. Dubourg, J. Vanderplas, A. Passos, D. Cournapeau, M. Brucher, M. Perrot, and
+  E.Duchesnay. Scikit-learn: MachinelearninginPython. JournalofMachineLearningResearch,
+  12:2825–2830, 2011.
+
+
+                                                      11
+
+=== PDF PAGE 12 ===
+Hao-Jun Michael Shi, Dheevatsa Mudigere, Maxim Naumov, and Jiyan Yang.   Compositional
+  embeddings using complementarypartitions for memory-efﬁcient recommendation systems. In
+  Proceedingsofthe26thACMSIGKDDInternationalConferenceonKnowledgeDiscovery&Data
+  Mining, pages 165–175, 2020.
+Dan Tito Svenstrup, Jonas Hansen,and OleWinther. Hashembeddings for efﬁcientword representa-
+  tions. Advances in neural information processing systems, 30, 2017.
+Kilian Weinberger, Anirban Dasgupta, John Langford, Alex Smola, and Josh Attenberg. Feature
+  hashing for large scale multitask learning.   In Proceedings of the 26th annual international
+  conference on machine learning, pages 1113–1120, 2009.
+David P. Woodruff. Sketching as a tool for numerical linear algebra. Found. Trends Theor. Comput.
+  Sci., 10(1-2):1–157, 2014.   doi:  10.1561/0400000060.   URL https://doi.org/10.1561/
+  0400000060.
+Donna Xu, Ivor W Tsang, and Ying Zhang. Online product quantization. IEEE Transactions on
+  Knowledge and Data Engineering, 30(11):2185–2198, 2018.
+Chunxing Yin, Bilge Acun, Xing Liu, and Carole-Jean Wu. Tt-rec: Tensor train compression for
+  deep learning recommendation models. CoRR, abs/2101.11714, 2021. URL https://arxiv.
+  org/abs/2101.11714.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                      12
+
+=== PDF PAGE 13 ===
+Reproducibility
+
+Thebackbonerecommendationmodel,DLRMbyNaumovetal.[2019],hasanopen-sourcePyTorch
+implementation available on Githubwhich includes an implementation ofCE. For CCE you need a
+fast library for K-means. We recommend the open-sourced implementation by Johnson et al. [2019]
+for better performance, but you can also use the implementation in Scikit-learn [Pedregosa et al.,
+2011]. Thebaselineresultshouldbestraightforwardtoreproduceaswecloselyfollowtheinstructions
+provided by Naumov et al. [2019]. For the CE methods, we only need to change two functions in
+thecode: create_emb andapply_emb. We suggestusing aclass foreach CEmethod; seeFigure 3.
+Fortherandomhashfunction,onecoulduseauniversalhashfunctionornumpy.random.randint.
+
+Measuring the Embedding Compression factor    The most important number from our experi-
+mentalsection isthe“Embedding Compression”factorin Table 1. Wemeasurethis bytrainingthe
+modelwithdifferentcapsonof parametersintheembeddingtables(Seee.g. thex-axisinFigure4a.
+E.g. if the Criteo Kaggle dataset has categorical features with vocabularies of sizes10,100 and106,
+wetry e.g. tocap thisat8000, usingafull embeddingtable forthe smallfeatures,and aCCE table
+with8000/16 = 500 rows (since each row has 16 parameters). This corresponds to acompression
+rate of(10+100+106)/(10+100+500)≈ 1639.5. Or if we measure only the compression of
+thelargesttable,106/500 = 2000. Unfortunatelythere’sadiscrepancyinthearticle,whichweonly
+found after the main deadline, that uses the second measure in the introduction (hence the number
+11,000xcompression)whereasFigure4ausestheﬁrstmeasure(andthusthelowernumber8,5000x).
+For the experiments where we only train for 1 epoch, some methods never reach baseline BCE
+within the number of parameters we test.  Hence the Compression Rates we report are based on
+extrapolations. Foreachalgorithmwereportarange,e.g. 127-155xforCEwithConcatenationon
+CriteoKaggle1epoch. Sincethelossgraphstendtobeconvex,theupperbound(155x)isbasedona
+linearinterpolation(beingoptimisticaboutwhenthemethodwillhitbaselineBCE)andthelower
+bound (127x) is based on a quadratic interpolation, which only intersects the baseline at a higher
+parameter count.
+
+K-means   FortheK-meansfromFAISS,weusemax_points_per_centroid=256andniter=50.
+Theﬁrstparametersub-samplesthenumberofpointsto256timesthenumberofclustercentroids(k),
+andistherecommendedrateafterwhich“nobeneﬁtisexpected”accordingtothelibrarymaintainers.
+In practice we predict the right value will depend on the dimensionality of your data, so using the
+splitintolowerdimensionalcolumnsisbeneﬁcial. Forniterweinitiallytriedalargervalue(300),but
+founditdidn’timprovetheﬁnaltestloss. WefoundonKaggleforPQ,niter=50,BCE=0.455540and
+niter=300,BCE=0.455537. ForCCE(singleepoch,singleclusteringathalfanepoch),niter=50gave
+BCE=0.45928 andniter=300gaveBCE=0.45905,soaveryslightimprovement,butnot enoughto
+make up for the extra training time.
+
+Datasets   Forourexperiments,wesub-sampledaneighthoftheTerabytedatasetandpre-hashed
+them using a simple modulus to match the categorical feature limit of the Kaggle dataset. For both
+Kaggle and Terabyte dataset, we partitioned the data from the ﬁnal day into validation and test sets.
+UsingthebenchmarkingsettingoftheDLRM code,theKaggledatasethasaround300,000batches
+while the Terabyte dataset has around 2,000,000 batches.
+
+Earlystopping    Early stopping is used when running the best of 10 epochs on the Kaggle dataset.
+We measure the performance of the model in BCE every 50,000 batches (around one-sixth of one
+epoch)usingthevalidationset. IftheminimumBCEofthepreviousepochislessthantheminimum
+BCE of the current epoch, we early stop.
+
+Deep Hash Embeddings   We follow Kang et al. [2021] in using a ﬁxed-width MLP with Mish
+activation. However, DHE is only described in one version in the paper: 5 layers of 1024 nodes
+per layer. For our experiments, we need to initialize DHE with different parameter budgets. We
+foundthatingeneral,DHEperformsbetterwithfewerlayerswhenthenumberofparametersisﬁxed.
+However,wecannotusejustasinglelayer,sincethatwouldbealinearembeddingtable,notanMLP.
+As a compromise, we ﬁx the number of hidden layers to 2 and set the number of hashes to be the
+same as the dimension of the hidden layers.
+
+
+                                                      13
+
+=== PDF PAGE 14 ===
+Forexample,ifwewereallowedtouse64,000parameterswithanembeddingdimensionof64,then
+by solving a quadraticequation we get that the numberof hashes and the dimension of thehidden
+layers are both 136. This gives us
+     n_hashes·hidden_dim+2∗hidden_dim2+hidden_dim·embedding_dim = 64192
+parameters.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                   14
+
+=== PDF PAGE 15 ===
+A   Whatdidn’twork
+
+Here are the ideas we tried but didn’t work at the end.
+
+Usingmultiplehelpertables It is a natural idea use more than one helper table. However, in our
+          experiments, the effect of having more helper tables is not apparent.
+Circularclustering Based on the CE concat method, the circular clustering method would use
+          information from other columns to do clustering.  However, the resulting index pointer
+          functions are toosimilar to each other, meaning that thismethod is essentially the hashing
+          trick. We further discuss this issue in Appendix H.
+Continuousclustering Weoriginallyenvisionedourmethodsinatightloopbetweentrainingand
+          (re)clustering. It turned out that reducing the number of clusterings didn’t impact perfor-
+          mance,soweeventuallyreduceditallthewaydowntojustone. Inpracticalapplications,
+          withdistributionshiftovertime,doingmoreclusteringsmaystillbeuseful,aswediscussin
+          Section 3.
+Changingthenumberofcolumns In general, increasing the number of columns leads to better
+          results. Howeverthemarginalbeneﬁtsquicklydecrease,andasthenumberofhashfunctions
+          grow, so does the training and inference time. We found that 4 columns / hash-functions
+          was a good spot.
+Residualvectorquantization The CCE methodcombines Product Quantization (PQ)with the CE
+          concat method. We tried combining Residual vector quantization (RVQ) with the Hash
+          Embeddings method from Tito Svenstrup et al. [2017].  This method does not perform
+          signiﬁcantly better than the Hash Embeddings method.
+SeedingwithPQ We ﬁrsttrain afull embedding tablefor oneepoch, andthen doProduct Quantiza-
+          tion (PQ) on the table to obtain the index pointer functions.
+          Wethen usethe indexpointer functionsinstead ofrandom hashfunctions inthe CEconcat
+          method. This method turned out performing badly: The training loss quickly diverges from
+          the test loss after training on just a few batches of data.
+
+Here are some variations of the CCE method:
+
+Earlierclustering WecurrentlyhavetwoversionsoftheCCEmethod: CCEhalf,whereclustering
+          happensatthemiddleoftheﬁrstepoch,andCCE,whereclusteringhappensattheendof
+          theﬁrst epoch. We observe thatwhen wecluster earlier, theresult isslightly worse. Though
+          in our case the CCE half method still outperforms the CE concat method.
+Moreparametersbeforeclustering TheCCEmethodallowsusingtwonumberofparameters,one
+          inStep1wherewefollowtheCEhybridmethodtogetasketch,andoneinStep3wherewe
+          followtheCEconcatmethod. Wethoughtthatbyusingmoreparametersatthebeginning,
+          we would be able to get a better set of index pointer tables.  However, the experiment
+          suggested that the training is faster but the terminal performance is not signiﬁcantly better.
+Smarterinitializationafterclustering InAlgorithm3weinitializeMi withtheclustercentroids
+          from K-means and the “helper table”M′i ← 0. We could instead try to optimizeM′i to
+          match the residuals ofT as well as possible. This could reduce the discontinuity during
+          training more than initializing to zeros.  However, we didn’t see a large effect in either
+          training loss smoothness or the ultimate test score.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                       15
+
+=== PDF PAGE 16 ===
+B   Proofofthemaintheorem
+                        0.417   0.720         1   0   0   0
+                        0.000   0.3020   1   0   00.411   0.648
+                         0.147   0.092            0   0   0   1   0.093   0.324
+                         0.186   0.346     ≈      0   1   0   0     0.204   0.878
+                         0.397   0.539            1   0   0   0     0.147   0.092
+                         0.419   0.685            1   0   0   0
+                         0.204   0.878            0   0   1   0
+Figure 5: K-means as matrix factorization. A central part of the analysis of CCE is the simple
+observation that K-means factors a matrix into a tall sparse matrix and a small dense one. In other
+words, it ﬁnds a sparse approximation the column space of the matrix.
+Let’s remind ourselves of the “Dense CCE algorithm” from Section 3: GivenX ∈ Rn×d1 and
+Y ∈Rn×d2,pickk suchthatn>d1>k>d2. Wewantto solveﬁndamatrixT∗ ofsized1×d2
+suchthat∥XT∗−Y∥F isminimized –theclassical LeastSquares problem. However,wewantto
+use memory less than the typicalnd21. We thus use this algorithm:
+
+DenseCCEAlgorithm:   LetT0 = 0∈Rd1×d2. Fori = 1 tom:
+                           Sample Gi∼N(0,1)d1×(k−d2);
+                         Compute Hi = [Ti−1|Gi]∈Rd1×k
+                                      Mi = arginf
+                                                M   ∥XHiM−Y∥2F ∈Rk×d2.
+                                       Ti =HiMi
+We will now argue thatTm is a good approximation toT∗ in the sense that∥XTm−Y∥2F is not
+much bigger than∥XT∗−Y∥2F.                                                     [Id2  ]
+
+Let’s consider a non-optimal choice ofMi ﬁrst. Suppose we setMi =                M′    whereM′i is chosen
+                                                                                   i
+such that∥HiMi−T∗∥F is minimized. By direct multiplication, we haveHiMi =Ti−1+GiM′i.
+Hence in this case minimizing∥HiMi−T∗∥F is equivalent to ﬁndingM′i at each step such that
+∥GiM′i−(T∗−Ti−1)∥F is minimized.
+Inotherwords,wearetryingtoestimateT∗ with∑iGiM′i,whereeachGi israndomandeachM′i
+isgreedilychosenateachstep. Thisissimilarto,forexample,theapproachesinBarronetal.[2008],
+thoughtheyuseaconcretelistofGi’s. Intheircase,bythetimewehaved1/k suchGi’s,wearejust
+multiplyingX with ad1×d1 random Gaussian matrix, which of course will have full rank, and so
+the concatenatedM matrix can basically ignore it. However, in our case we do a local, not global
+optimization over theMi.
+Recall the theorem:
+TheoremB.0.  GivenX ∈Rn×d1 andY ∈Rn×d2. LetT∗ = argminT∈Rd1×d2∥XT −Y∥2F bean
+optimal solution to the least squares problem. Then
+                   E[∥XTi−Y∥2F        ]≤ (1−ρ)i(k−d2)∥XT∗∥2F +∥XT∗−Y∥2F,
+
+whereρ =∥X∥2−2/∥X∥2F.
+
+Here we use the notation that∥X∥−2 is the smallest singular value ofX.
+CorollaryB.1.  In the setting of the theorem, if all singular values ofX are equal, then
+                                         ]≤e−ik−d2
+                       E[∥XTi−Y∥2F                  d1 ∥XT∗∥2F +∥XT∗−Y∥2F.
+
+Proof of Theorem B.1. Notethat∥X∥2F isthesumofthed1singularvaluessquared:∥X∥2F =∑iσ2i.
+Since all singular values are equal, say toσ ∈ R, then∥X∥2F =d1σ2. Similarly in this setting,
+∥X∥2−2 =σ2 soρ = 1/d1. Using the inequality1−1/d1≤e−1/d1 gives the corollary.
+
+Proof of Theorem B.0. First splitY into thepart that’s in thecolumn space ofX and thepart that’s
+not,Z. We haveY  =XT∗ +Z, whereT∗ = argminT∥XT −Y∥F is the solution to the least
+
+
+                                                     16
+
+=== PDF PAGE 17 ===
+squares problem. By Pythagoras theorem we then have
+         E[∥XTi−Y∥2F]= E[∥XTi−(XT∗+Z)∥2F]= E[∥X(Ti−T∗)∥2F                                 ]+∥Z∥2F,
+
+so it sufﬁces to show
+                            E[∥X(Ti−T∗)∥2F        ]≤ (1−ρ)i(k−d2)∥XT∗∥2F.
+
+
+We will prove the theorem by induction overi. In the casei = 0 we haveTi = 0, soE[∥X(T0−
+T∗)∥2F] = E[∥XT∗∥2F] trivially. Fori≥ 1 we insertTi =HiMi and optimize overM′i:
+                  E[∥X(Ti−T∗)∥2F] = E[∥X(HiMi−T∗)∥2F]
+                                         ≤ E[∥X(Hi[I |M′i]−T∗)∥2F]
+                                         = E[∥X((Ti−1+GiM′i)−T∗)∥2F]
+                                         = E[∥X(GiM′i−(T∗−Ti−1))∥2F].
+                                         = E[E[∥X(GiM′i−(T∗−Ti−1))∥2F |Ti−1]]
+                                         ≤ (1−ρ)k−d2E[∥X(T∗−Ti−1)∥2F]
+                                         ≤ (1−ρ)i(k−d2)∥XT∗∥2F,
+where the last step followed by induction. The critical step here was bounding
+                           EG[infM∥X(GM−T)∥2F]≤ (1−ρ)k−d2∥XT∥2F,
+
+for a ﬁxedT. We will do this in a series of lemmas below.
+
+Weshowthelemmaﬁrstinthe“vectorcase”,correspondingtok = 2,d2 = 1. Thegeneralmatrix
+case follow below, and is mostly a case of induction on the vector case.
+Lemma B.2.  LetX ∈ Rn×d be a matrix with singular valuesσ1 ≥ ··· ≥σd ≥ 0.  Deﬁne
+ρ =σ2d/∑iσ2i, then for anyt∈Rd,
+                                       [                       ]
+                          Eg∼N(0,1)d     infm∈R∥X(gm−t)∥22       ≤ (1−ρ)∥Xt∥22.
+
+
+Proof. Settingm =⟨Xt,Xg⟩/∥Xg∥22 we get
+                        ∥X(gm−t)∥22 =m2∥Xg∥22+∥Xt∥22−2m⟨Xg,Xt⟩                              (1)()
+
+                                          =    1−  ⟨Xt,Xg⟩2∥Xt∥22∥Xg∥22∥Xt∥22.                                        (2)
+
+WeusethesingularvaluedecompositionofX =UΣVT. Sinceg∼N(0,1)d andVT isunitary,we
+haveVTg∼N(0,1)d and hence we can assumeV =I. Then
+                                   ⟨Xt,Xg⟩2
+                                 ∥Xt∥22∥Xg∥22 =  (tTΣUTUΣg)2∥UΣt∥22∥UΣg∥22                                                   (3)
+
+                                                  =   (tTΣ2g)2∥Σt∥22∥Σg∥22                                                         (4)
+
+                                                  =       (∑itiσ2igi)2
+                                                     (∑iσ2it2i)(∑iσ2ig2i),                                          (5)
+
+where Equation (4) follows fromUTU =I in the SVD. We expand the upper sum to get
+                         [      (∑                 ]        [ ∑                       ]
+                      Eg            itiσ2igi)2       = Eg          i,jtitjσ2iσ2jgigj                       (6)
+                           (∑iσ2it2i)(∑iσ2ig2i)               (∑iσ2it2i)(∑iσ2ig2i)
+                                                            [     ∑                   ]
+                                                     = Eg              it2iσ4ig2i       .                          (7)
+                                                              (∑iσ2it2i)(∑iσ2ig2i)
+
+
+                                                      17
+
+=== PDF PAGE 18 ===
+Hereweusethefactthatthegi’saresymmetric,sothecrosstermsofthesumhavemean0. Byscaling,
+we can assume∑iσ2it2i = 1 and deﬁnepi =σ2it2i. Then the sum is just a convex combination:
+                                                          [ σ2ig2i    ]
+                                       (7) =∑piEg           ∑           .                                                   (8)
+                                                i              iσ2ig2i
+
+Sinceσi≥σd andgi’s are IID, by direct comparison we have
+                                        [ σ2ig2i     ]        [ σ2dg2d    ]
+                                     Eg   ∑            ≥ Eg     ∑
+                                             iσ2ig2i               iσ2ig2i
+Hence                                   [ σ2dg2d    ]∑              [ σ2dg2d     ]
+
+                             (7)≥ Eg     ∑                 pi = Eg    ∑            .
+                                            iσ2ig2i     i                iσ2ig2i
+
+It remains to bound
+                                          [ σ2dg2d    ]
+                                      Eg    ∑            ≥ σ2d∑
+                                               iσ2ig2i         iσ2i  =ρ,                                                 (9)
+but this follows from a cute, but rather technical lemma, which we will postpone to the end of this
+section. (Theorem B.4.)
+
+
+It is interesting to notice how the improvement we make each step (that is1−ρ) could be increased
+to1−1/d by pickingG from a distribution other than IID normal.
+IfX =UΣVT, we can also takeg =VΣ−1g′, whereg′∼N(0,1)d1×(k−d2). In that case we get
+     (  ⟨Xt,Xg⟩         )2       (tTVΣ2VTg           )2       ( tTVΣg′         )2         ∥tTVΣ∥22
+   E    ∥Xg∥2∥Xt∥22         = E     ∥Ug′∥2∥Xt∥22         = E     ∥g′∥2∥Xt∥22       =  1d1   ∥Xt∥22   =  1d1.
+
+
+
+So this way werecreate the ideal bound from TheoremB.1. Note that∥X∥2−2
+                                                                                 ∥X∥2F  ≤ 1/d1. Of course it
+comeswith thenegativeside ofhaving tocomputethe SVDofX. But since thisis justa theoretical
+algorithm, it’s still interesting and shows how we would ideally updateTi. See Figure 6 for the effect
+of this change experimentally.
+It’saninterestingproblemhowitmightinspireabetterCCEalgorithm. Somehowwe’dhavetoget
+information about the the SVD ofX into our sparse super-space approximations.
+We now show how to extend the vector case to general matrices.
+Lemma B.3.  LetX ∈ Rn×d1 be a matrix with singular valuesσ1 ≥ ··· ≥σd1 ≥ 0.  Deﬁne
+ρ =σ2d1/∑iσ2i, then for anyT ∈Rn×d2,
+                                    [                                ]
+                  EG∼N(0,1)d1×k          inf                           ≤ (1−ρ)k∥XT∥2F.
+                                      M∈Rk×d2∥X(GM−T)∥2F
+
+
+Proof. The casek = 1,d2 = 1 is proven above in Theorem B.2.
+
+Casek = 1:   We ﬁrst consider the case wherek = 1, butd2 can be any positive integer (at most
+k). LetT = [t1|t2|...|td2] be the columns ofT andM = [m1|m2|...|md2] be the columns ofM.
+Then theith column ofX(GM−T) isX(Gmi−ti), and since the squared Frobenius norm of a
+
+
+                                                       18
+
+=== PDF PAGE 19 ===
+                           Figure6: SVDalignednoiseconvergesfaster. Inthediscussionwementionthatpickingtherandom
+                           noiseinHi asg =VΣ−1g′,whereg′∼N(0,1)d1×(k−d2),can improvethe convergencerate from
+                           (1−ρ)ik to (1− 1/d)ik, which is always better.  In this graph we experimentally compare this
+                           approach (labeled“smart noise”)against theIID gaussian noise(labeled “noise”),and ﬁnd thatthe
+                           smart noise indeedconverges faster – atleast once we get closeto zero noise. The graphis over 40
+                           repetitions whereX is a random rank-10 matrix plus some low magnitude noise.
+                           We also investigate how much we lose in the theorem by only consideringM on the form[I|M′],
+                           rather than ageneralM that could take advantage of lastroundsTi. Theplots labeled “half noise”
+                           and“halfsmartnoise”arelimitedinthisway,whilethetwoothersarenot. Weobservethattheeffect
+                           ofthisismuchlargerinthe“non-smart”case,whichindicatesthattheoptimalnoisedistributionwe
+                           found might accidentally be tailored to our analysis.
+
+
+                           matrix is simply the sum of the squared column l2 norms, we have
+                                                                                      [d2∑                       ]
+                                                       E[∥X(GM−T)∥2F] = E                   ∥X(Gmi−ti)∥22
+                                                                                        i=1
+                                                                                    d2∑                         ]
+                                                                                =       E[∥X(Gmi−ti)∥22
+                                                                                    i=1
+                                                                                    d2∑
+                                                                                ≤       (1−ρ)E[∥Xti∥22]                                       (10)
+                             n=625,d1=125,d2=5,k=25                                 i=1
+0.0175                                                       noise                             [d2∑           ]
+
+                                                             smartnoise         = (1−ρ)E             ∥Xti∥22
+0.0150                                                       halfsmartnoise                      i=1
+                                                             halfnoise          = (1−ρ)E[∥XT∥2F].
+
+0.0125
+                           where in (10) we applied the single vector case.
+0.0100
+                           Casek> 1:   This time, letg1,g2,...,gk be the columns ofG and letmT1,mT2,...,mTk  be the
+0.0075                     rowsofM.
+
+0.0050                     We prove the lemma by induction overk. We already proved the base-casek = 1, so all we need
+                           is the induction step. We use the expansion of the matrix productGM as a sum of outer products
+
+0.0025
+                                                                                   19
+0.0000
+
+          0          5         10         15         20        25         30
+                                Cluster+Learniterations
+
+=== PDF PAGE 20 ===
+                             [            ]
+Figure 7: Expectation, E            x       whenx,y are IID with Exponential (blue) or Chi Square
+                               px+(1−p)y
+distribution (Orange). In both cases the expectation is≥ 1 whenp ≤ 1/2, just as Theorem B.4
+predicts.
+
+
+
+
+GM =∑ki=1gimTi :
+
+                                              X(k∑               )2
+                 E[∥X(GM−T)∥2F] = E                       gimTi −T          
+
+                                                       i=1                 F
+                                              X(           (k∑               ))2
+                                         = E          g1mT1 +         gimTi −T            
+
+                                                                   i=2                   F
+                                                           (              )2
+                                                                 k∑
+                                         ≤ (1−ρ)EX                 gimTi −T                                   (11)
+
+                                                                i=2                 F
+                                         ≤ (1−ρ)kE[∥XT∥2F          ].
+
+
+
+where(11)usedthek = 1caseshownabove,and(12)usedtheinductivehypothesis. Thiscompletes
+the proof for generalk andd2 that we needed for the full theorem.
+
+
+
+B.1   Technicallemmas
+
+It remains to show an interesting lemma used for proving the vector case in Theorem B.2.
+
+Lemma B.4.  Leta1...,an ≥ 0 be IID random variables and assume some valuespi ≥ 0 st.
+∑
+   ipi = 1 andpn≤ 1/n. Then
+
+                                               [ an       ]
+                                            E    ∑          ≥ 1.
+                                                    ipiai
+
+
+
+This completes the original proof withpi =  σ2∑     i
+                                                    jσ2j andai =g2i.
+
+                                                     20
+
+=== PDF PAGE 21 ===
+Proof. Since theai are IID, it doesn’t matter if we permute them. In particular, ifπ is a random
+permutation of{1,...,n−1},
+
+                         [ an      ]        [    [    an              ]]
+                      E   ∑          =Ea     Eπ    pnan+∑                                           (12)
+                             ipiai          [                 ipiaπi      ]
+                                     ≥Ea                  an            ]                           (13)
+                                            [ Eπ[pnan+∑i<npiaπi                 ]
+
+                                     =Ea                     an      ∑                              (14)
+                                            [ pnan+∑i<npi(   1n−1       j<naj)]
+
+                                     =Ea                   an                 ,                                (15)
+                                              pnan+(1−pn)∑               ai
+                                                                   i<n  n−1
+
+where Equation (13) uses Jensen’s inequality on the convex function1/x.
+Now deﬁnea =∑ni=1ai. By permutingan with the other variables, we get:
+
+
+              [                                ]       [                          ]
+          Ea                  an                 =Ea                an                              (16)
+                pnan+(1−pn)∑               ai            pnan+ 1−pn
+                                     i<n  n−1                      n−1 (a−an)
+                                                       [     n∑                        ]
+                                                 =Ea     1                ai                        (17)
+                                                         n  i=1 pnai+ 1−pnn−1 (a−ai)
+                                                       [     n∑                             ]
+                                                 =Ea     1                 ai/a                     (18)
+                                                         n      1−pn
+                                                       [    i=1  n−1 −(1−pn]n−1 −pn)ai/a
+                                                         1   n∑
+                                                 =Ea     n      φ(ai/a)   ,                                     (19)
+                                                            i=1
+
+where
+
+                                   φ(qi) =       qi1−pn
+                                             n−1 −(1−pnn−1 −pn)qi
+
+is convex whenever  1−pn   /(1−pn
+                       n−1     n−1 −pn) =    1−p1−np> 1, which is true when 0 ≤pn< 1/n. That
+means we can use Jensen’s again:
+
+
+                              n∑               (           )      (1   )
+                          1                      1  ∑   ai
+                          n      φ(ai/a)≥φ       n       a    =φ     n   = 1,
+                             i=1                     i
+
+which is what we wanted to show.
+
+
+C   Correspondencebetweentheoryandpractice
+
+
+Theorem 3.1 quite tightly matches the empirical behavior of Algorithm 1 (Dense CCE for
+Least Squares).  In Figure 8, we show the convergence when solving the least squares problem
+argminT||XT −Y||2F using the method.
+
+
+                                                   21
+
+=== PDF PAGE 22 ===
+Figure 8: Convergence ofthe least squaresproblem. We show and compare the convergence of
+theleastsquaremethodsusingdifferentmethods. WefoundthattheconvergenceofTheorem3.1is
+close to that of Algorithm 1.
+
+AsdiscussedinAppendixB,wecanoftenstrengthentheresultfromusingρ(smallestsingularvalue
+/thesquaredFrobeniusnorm)tojustusing1/d1. Thisisbecausethesmallestsingularvalueissue
+only becomes relevant when Y is chosen to exactly align with the worst possible subspace of X. In
+practice this is rarely the case. In the particular case of Figure 8, we choseX andY as iid standard
+normals.
+
+D   Hashing
+
+Ifh : [n] → [m] ands : [n] → {−1,1} are random functions, a Count Sketch is a matrix
+H ∈{0,−1,1}m×n whereHi,j =s(i) ifh(i) =j and 0otherwise. Charikaret al. [2002]showed
+thatifm islargeenough, thematrixH isa dimensionalityreductionin thesensethat thenorm∥x∥2
+of any vector inRn is approximately preserved,∥Hx∥2≈∥x∥2.6
+This gives a simple theoretical way to think about the algorithms above: The learned matrixT′ =
+HTT issimplyalowerdimensionalapproximationtotherealtablethat wewantedtolearn. While
+thetheoreticalresultrequirestherandom“signfunction”s fortheapproximationtobeunbiased,in
+practice thisappears to notbe necessary whendirectly learningT′. Maybebecause the vectorscan
+simply be slightly shifted to debias the result.
+TherearemanystrongtheoreticalresultsonthepropertiesofCountSketches. Forexample,Woodruff
+[2014] showed that they are so called “subspace embeddings” which means the dimensionality
+reductionis“robust”anddoesn’thaveblindspotsthatSGDmayaccidentallywalkinto. However,the
+mostpracticalresultisthatoneonlyneedshtobea“universalhashfunction”alaCarterandWegman
+[1977], which can be as simple and fast as the “multiply shift” hash function by Dietzfelbinger et al.
+[1997].
+IfCountSketchshowsthathashingeachi∈ [n]toasinglerowin[m],wemaywonderwhymethods
+likeHashEmbeddingsuse multiplehashfunctions(orDHE usesmorethanathousand.) Theanswer
+canbeseeninthetheoreticalanalysisofthe“JohnsonLindenstrauss”transformationandinparticular
+the “Sparse Johnson Lindenstrauss” as analyzed by Cohen et al. [2018]. The analysis shows that
+if thedata beinghashed is notvery uniform, itis indeedbetter to usemore thanone hashfunction
+(more than1 non-zero per columninH.) The exact amountdepends on characteristicsin the data
+distribution,butonecanalwaysgetawaywithasparsityofϵwhenlookingfora1+ϵdimensionality
+reduction.  Hence we speculate that DHE could in general replace the 1024 hash functions with
+something more like Hash Embeddings with an MLP on top. Another interesting part of the Cohen
+etal. [2018]analysisisthat oneshouldideallysplit[m] insegments,and haveonehash functioninto
+each segment. This matches the implementations we based our work on below.
+
+
+   6This also implies that inner products are approximately preserved by the dimensionality reduction.
+
+
+                                                      22
+
+=== PDF PAGE 23 ===
+E   Howtostorethehashfunctions
+
+WenotethatunliketherandomhashfunctionsusedinStep1,theindexpointerfunctionsobtained
+fromclusteringtakesspace linearintheamountoftrainingdataoratleastintheID universesize.
+At ﬁrst this may seem like a major downside of our method, and while it isn’t different from the
+indextablesneededafter ProductQuantization,itdeﬁnitelyissomething extra notneededbypurely
+sketching based methods.
+We give three reasons why storing this table is not an issue in practice:
+
+      1.  TheindexpointerfunctionscanbestoredontheCPUratherthantheGPU,sincetheyare
+          usedastheﬁrststepofthemodelbeforethetraining/inferencedatahasbeenmovedfrom
+          the CPU to the GPU. Furthermore the index lookup is typically done faster on CPUs, since
+          it doesn’t involve any dense matrix operations.
+      2.  TheindexpointerscanreplacetheoriginalIDs. Unlessweareworkinginapurelystreaming
+          setting,thetrainingdatahas tobestoredsomewhere. IfIDsare64bitintegers,replacing
+          them with four 16-bit index pointers is net neutral.
+      3.  Somehashingandpruningcanbeusedasaprepossessingstep,reducingtheuniversesize
+          of the IDs and thus the size of the index table needed.
+
+F   DifferentstrategiesforCCE
+
+We include other graphs about CCE in Figure 9. They are all on the Kaggle dataset and were run
+three times. These graphs helped us develop insights on CCE and choose the correct versions for
+Figure 4a and Figure 4b.
+
+G   AUCGraphs
+
+We also evaluate the models using AUC, which is another commonly used metric for gauging the
+effectiveness of a recommendation model. For example, it was used in [Kang et al., 2021]. AUC
+providestheprobabilityofgettingacorrectpredictionwhenevaluatingatestsamplefromabalanced
+dataset. Therefore, a better model is implied by a larger AUC. In this section, we plot the graphs
+again using AUC; see Figure 10 and Figure 11.
+
+H   TableCollapse
+
+Table collapsing was a problem we encountered for the circular clustering method as described in
+Appendix A.Wedescribe theproblem andthe metric weused todetect ithere, sincewe thinkthey
+may be of interest to the community.
+Suppose weare doingk-means clusteringon a tableof3partitions inorder to obtain3index pointer
+functionshcj. These functions can be thought as a table, where the(i,j)-entry is given byhcj(i).
+There are multiple failure modes we have to be aware of. The ﬁrst one is column-wise collapse:
+
+                                                   1    0    0
+                                                   1    1    2
+                                                   1    0    3
+                                                    ... ...  ...
+                                                   1    3    1
+
+In this table the ﬁrst column has collapsed to just one cluster. Because of the wayk-means clustering
+works, this exact case of complete collapse isn’t actually possible, but we mightget arbitrarily low
+entropy as measured byH1, which we deﬁne as follows: For each columnj, its column entropy is
+deﬁned to be the entropy of the probability distributionpj:hcj([n])→ [0,1] deﬁned by
+
+                                         pj(x) = #{i :hcj(i) =x}n     .
+
+
+                                                       23
+
+=== PDF PAGE 24 ===
+                                (a) Kaggle dataset, CCE, best of 10 epoch: We ran                   (b) Kaggle dataset, CCE, Strategy 1: We ran differ-
+                                differentversionsofCCEfor10epochs. Herectmeans                      ent versions of CCE for 1 epoch under the constraint
+                                thenumberofclusteringdone,andcfreferstothenum-                      that allclusterings must ﬁnish beforehalf of an epoch.
+                                berofbatchesbetweenclusterings. Sinceeachepoch                      It turns out that there is a balance between the num-
+                                hasaround300,000 batches,weessentiallyclustered                     ber of clusterings and the ‘quality’ of the clustering,
+                                once every epoch.  The performance increases with                   represented by the number of batches between cluster-
+                                more clustering. Another observation is that asm in-                ings.  We found that CCE ct2 cf75000 performs the
+                                creases, a few lines were merged due to early stopping.             best, which becomes the CCE model in Figure 4b.
+                                We found that CCE ct6 cf300000 performs the best,
+                                which becomes the CCE model in Figure 4a.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                (c)Kaggledataset,CCE,Strategy2: Strategy 2here                      (d) Kaggle dataset, CCE, Strategy 3: This strategy
+                                triestohavealltheclusteringﬁnishby2/3ofanepoch.                     perfectlysummarizesallthepreviousﬁndings. Increas-
+                                Theserunsdidnotperformwell. Itturnedoutthatwe                       ing the number of clusterings in general gives better
+                                needtoletthemodelhavetimetoconvergeafterallthe                      performance;Lettingthemodel‘rest’afterclustering
+                                clusterings.                                                        increasestheperformance;Increasingtheintervalbe-
+                                                                                                    tween clusterings give better result.
+                                                                  Figure 9: Strategies for CCE that gave us insight.
+
+
+
+
+                                Then we deﬁneH1 to be the minimum entropy of the (here3) column-entropies.
+
+                      CCEbestof10epochsStrategy1for1epochStrategy2for1epochStrategy3for1epochThe second failure mode is pairwise collapse:
+
+0.466
+0.4640.457                         FullEmbeddingTableFullEmbeddingTableFullEmbeddingTableFullEmbeddingTable
+0.464
+0.456                              CCEct0CCEct0CCEct1cf150000CCEct1cf300000
+0.464                              CCEct1cf300000CCEct1cf150000CCEct2cf100000CCEct1cf150000 1     0    1
+0.4620.462
+0.455                              CCEct2cf300000CCEct2cf75000CCEct4cf60000CCEct2cf150000   2     2    3
+0.462
+0.460                              CCEct3cf300000CCEct3cf50000CCEct6cf42500CCEct1cf75000    1     0    3
+0.460
+0.454
+0.460                              CCEct4cf300000CCEct4cf37500CCEct2cf75000                 3     1    0
+0.453                              CCEct5cf300000CCEct5cf30000
+0.458
+0.458                                                                                       2     2    1
+0.458                              CCEct6cf300000CCEct6cf25000
+0.452
+0.4560.456
+0.456
+0.451                                                                                            24
+
+
+0.4540.450
+0.4540.454
+
+0.449
+    103103103103      104104104104      105105105105       106106106106
+             NumberofparametersforLargestTablesNumberofparametersforLargestTablesNumberofparametersforLargestTablesNumberofparametersforLargestTables
+
+=== PDF PAGE 25 ===
+                                                                  (a)Kaggledataset,Bestof10epoch,AUC.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                        (b)Kaggledataset,1epoch,AUC.                                 (c)Terabytedataset,1epoch,AUC.
+                                                                  Figure 10: The AUC version of Figure 4.
+
+
+                              In this case the second column is just a permutation of the ﬁrst column. This means the expanded
+                              set of possible vectors is much smaller than we would expect. We can measure pairwise collapse
+                              by computing the entropy ofthe histogram of pairs, where the entropy of the columnpair(j1,j2) is
+                              deﬁned by the column entropy ofhcj1(·)+max(hcj1)hcj2(·). Then we deﬁneH2 to be the minimum)pairs of columns.
+                              of such pair-entropies for all(32
+                              Pairwiseentropycanbetriviallygeneralizedto triple-wiseandsoon. Ifwehavec columnswemay
+                              compute each ofH1,...,Hc. In practiceH1 andH2 may contain all the information we need.
+
+                              H.1   Whatentropiesareexpected?Bestof10epochs
+
+
+
+       0.806                  ThemaximumvalueforH1 islogk,inthecaseofauniformdistributionoverclusters. Themaximum)≈ 2logk. (Note logn is also an upper bound, wheren is the number of
+                       Endof1epochEndof1epochvalue forH2 is log(k2
+
+0.805                         points in the dataset / rows in the table.)
+0.800  0.804
+                              WiththeCEmethodweexpectalltheentropiestobeneartheirmaximum. However,fortheCircular
+0.800  0.802
+0.795                         Clusteringmethodthisisnotthecase! Thatwouldmeanwehaven’tbeenabletoextractanyuseful
+
+0.795                         cluster information from the data.
+
+       0.800
+0.790                         Instead weexpect entropiesclose towhat one getsfrom performingProduct Quantization (PQ)on a
+0.790                         complete dataset. In short:FullEmbeddingTableFullEmbeddingTableFullEmbeddingTable
+       0.798                  CCE(Thispaper)CCE(Thispaper)                       CCE(Thispaper)
+0.785                         CEwithConcatenationProductQuantization             CEwithConcatenation
+0.785
+                              TheHashingTrickCEwithConcatenation                 TheHashingTrick25
+       0.796                                                                     DeepHashEmbeddings
+0.780                         ProductQuantizationTheHashingTrick
+0.780                                                                            ProductQuantization
+                              DeepHashEmbeddingsDeepHashEmbeddings
+
+    103  104103     104   105        105  104106      106                105                            106
+            NumberofparametersforLargestTablesNumberofparametersforLargestTablesNumberofparametersforLargestTables
+
+=== PDF PAGE 26 ===
+                                   (a)Kaggledataset,CCE,bestof10epoch,AUC.                                  (b)Kaggledataset,CCE,Strategy1,AUC.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                       (c)Kaggledataset,CCE,Strategy2,AUC.                                  (d)Kaggledataset,CCE,Strategy3,AUC.
+                                                                         Figure 11: The AUC version of Figure 9.
+
+
+                                         1.Too high entropy: We are just doing CE more slowly.
+                                         2.Too low entropy: We have a table collapse.
+                                         3.Golden midpoint: Whatever entropy normal PQ gets.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                      CCEbestof10epochsStrategy1for1epochStrategy2for1epochStrategy3for1epoch
+
+
+0.806
+0.802
+0.8020.802
+
+0.800
+0.800
+0.800
+0.804
+0.798
+0.798
+0.798                                FullEmbeddingTableFullEmbeddingTable
+0.796                                CCEct0CCEct0
+0.802
+0.796
+0.796                                CCEct1cf300000CCEct1cf150000FullEmbeddingTable
+0.794
+0.794                                CCEct2cf300000CCEct2cf75000FullEmbeddingTableCCEct1cf300000
+0.794
+0.792
+0.800                                CCEct3cf300000CCEct3cf50000CCEct1cf150000CCEct1cf150000
+
+0.792                                CCEct4cf300000CCEct4cf37500CCEct2cf100000CCEct2cf150000
+0.792                                                                                               26
+0.790
+                                     CCEct5cf300000CCEct5cf30000CCEct4cf60000CCEct1cf75000
+0.798
+0.790
+0.788
+0.790                                CCEct6cf300000CCEct6cf25000CCEct6cf42500CCEct2cf75000
+
+
+    103103103103       104104104104       105105105105      106106106106
+             NumberofparametersforLargestTablesNumberofparametersforLargestTablesNumberofparametersforLargestTablesNumberofparametersforLargestTables

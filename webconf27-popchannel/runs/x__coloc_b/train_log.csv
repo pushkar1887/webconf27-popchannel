@@ -1,0 +1,2 @@
+epoch,train_loss,val_recall20,elapsed_s
+1,-2.560107543489259,0.06628920273094258,82.383

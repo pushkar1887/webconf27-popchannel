@@ -1,0 +1,21 @@
+{
+  "alias": "University",
+  "slug": "graphhash-fast-bpr-author-1016",
+  "files": [
+    {
+      "file": "_work/sknetwork_vendor/scikit_network-0.32.1.dist-info/top_level.txt",
+      "bytes": 10,
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "fast_bpr_author.json",
+      "bytes": 20615,
+      "sha256": "2ae285a8c525722e2cce8bec51bbbf963df32bd117da4110ac05c5b81fa16084"
+    }
+  ],
+  "status": {
+    "status": "COMPLETE",
+    "failureMessage": ""
+  },
+  "source_sha256": "74831655f27703763e213e5dad3970b33edfffba59815529e6adfdb4e1013f6b"
+}

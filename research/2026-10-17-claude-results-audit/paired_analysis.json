@@ -1,0 +1,73 @@
+{
+  "paired": [
+    {
+      "seed": 0,
+      "plain_val_pct": 7.460644816702959,
+      "fixed_val_pct": 7.570713470360683,
+      "val_gain_pp": 0.11006865365772445,
+      "plain_test_pct": 7.559249339218558,
+      "fixed_test_pct": 7.5348411201036996,
+      "test_gain_pp": -0.024408219114857577,
+      "plain_seconds": 1145.253474775,
+      "fixed_seconds": 844.58017753
+    },
+    {
+      "seed": 1,
+      "plain_val_pct": 7.471801205741992,
+      "fixed_val_pct": 7.551621803384083,
+      "val_gain_pp": 0.07982059764209126,
+      "plain_test_pct": 7.572057448851405,
+      "fixed_test_pct": 7.652828506031752,
+      "test_gain_pp": 0.08077105718034688,
+      "plain_seconds": 1149.916297327,
+      "fixed_seconds": 846.197975308
+    },
+    {
+      "seed": 2,
+      "plain_val_pct": 7.487947540355414,
+      "fixed_val_pct": 7.520785857132957,
+      "val_gain_pp": 0.0328383167775434,
+      "plain_test_pct": 7.532547309332825,
+      "fixed_test_pct": 7.579670240831963,
+      "test_gain_pp": 0.047122931499138376,
+      "plain_seconds": 1148.234078813,
+      "fixed_seconds": 846.539535508
+    }
+  ],
+  "plain_test_mean_pct": 7.554618032467597,
+  "plain_test_sample_sd_pp": 0.02015811332591759,
+  "fixed_test_mean_pct": 7.589113288989139,
+  "fixed_test_sample_sd_pp": 0.05955782214292126,
+  "mean_val_gain_pp": 0.07424252269245303,
+  "mean_test_gain_pp": 0.03449525652154256,
+  "paired_test_sd_pp": 0.053714650441016455,
+  "paired_test_t95ci_pp": [
+    -0.09893933231081933,
+    0.16792984535390446
+  ],
+  "bpr_test_pct": 9.342327632462041,
+  "bpr_test_ndcg_pct": 5.4937527907744395,
+  "bpr_train_seconds": 93.71902678899994,
+  "bpr_epochs": 430,
+  "bpr_best_epoch": 330,
+  "observed_short_budget_gap_pp": 1.787709599994444,
+  "descriptive_test_recovery_fraction": 0.019295783007290318,
+  "primary_fix_test_seed_wins": 2,
+  "plain_mean_seconds": 1147.8012836383334,
+  "fixed_mean_seconds": 845.772562782,
+  "reported_timer_reduction_fraction": 0.26313676867388935,
+  "cosine_bpr": {
+    "raw_recall": 0.09342327632462041,
+    "raw_ndcg": 0.05493752790774439,
+    "cosine_recall": 0.06082944422849855,
+    "cosine_ndcg": 0.030766184973135702
+  },
+  "cosine_dau_seed2": {
+    "raw_recall": 0.07532547309332825,
+    "raw_ndcg": 0.04014800184134465,
+    "cosine_recall": 0.07545586307218424,
+    "cosine_ndcg": 0.040198777340274106
+  },
+  "cosine_dau_gain_pp": 0.01303899788559909,
+  "cosine_bpr_gain_pp": -3.2593832096121864
+}

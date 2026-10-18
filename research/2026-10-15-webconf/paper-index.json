@@ -1,0 +1,307 @@
+[
+  {
+    "Id": "A01",
+    "Title": "Behavioral Homophily in Social Media via Inverse Reinforcement Learning: A Reddit Case Study",
+    "Read": "F"
+  },
+  {
+    "Id": "A02",
+    "Title": "Responsible Diffusion Models via Constraining Text Embeddings within Safe Regions",
+    "Read": "F"
+  },
+  {
+    "Id": "A03",
+    "Title": "Factorizing Personalized Markov Chains for Next-Basket Recommendation",
+    "Read": "F"
+  },
+  {
+    "Id": "A04",
+    "Title": "HtmlRAG: HTML is Better Than Plain Text for Modeling Retrieved Knowledge in RAG Systems",
+    "Read": "F"
+  },
+  {
+    "Id": "A05",
+    "Title": "TourRank: Utilizing Large Language Models for Documents Ranking with a Tournament-Inspired Strategy",
+    "Read": "F"
+  },
+  {
+    "Id": "A06",
+    "Title": "LLM4Rerank: LLM-based Auto-Reranking Framework for Recommendations",
+    "Read": "F"
+  },
+  {
+    "Id": "A07",
+    "Title": "G-Refer: Graph Retrieval-Augmented Large Language Model for Explainable Recommendation",
+    "Read": "F"
+  },
+  {
+    "Id": "A08",
+    "Title": "PEAR: Position-Embedding-Agnostic Attention Re-weighting Enhances Retrieval-Augmented Generation with Zero Inference Overhead",
+    "Read": "F"
+  },
+  {
+    "Id": "A09",
+    "Title": "MA4DIV: Multi-Agent Reinforcement Learning for Search Result Diversification",
+    "Read": "F"
+  },
+  {
+    "Id": "A10",
+    "Title": "GraphHash: Graph Clustering Enables Parameter Efficiency in Recommender Systems",
+    "Read": "F"
+  },
+  {
+    "Id": "A11",
+    "Title": "ImageScope: Unifying Language-Guided Image Retrieval via Large Multimodal Model Collective Reasoning",
+    "Read": "F"
+  },
+  {
+    "Id": "A12",
+    "Title": "Thematic-LM: A LLM-based Multi-agent System for Large-scale Thematic Analysis",
+    "Read": "P"
+  },
+  {
+    "Id": "A13",
+    "Title": "Unleash LLMs Potential for Sequential Recommendation by Coordinating Dual Dynamic Index Mechanism",
+    "Read": "F"
+  },
+  {
+    "Id": "A14",
+    "Title": "Knowledge Distillation for Enhancing Walmart E-commerce Search Relevance Using Large Language Models",
+    "Read": "F"
+  },
+  {
+    "Id": "A15",
+    "Title": "LREF: A Novel LLM-based Relevance Framework for E-commerce Search",
+    "Read": "F"
+  },
+  {
+    "Id": "A16",
+    "Title": "RTBAgent: A LLM-based Agent System for Real-Time Bidding",
+    "Read": "F"
+  },
+  {
+    "Id": "A17",
+    "Title": "GAS: Generative Auto-bidding with Post-training Search",
+    "Read": "F"
+  },
+  {
+    "Id": "A18",
+    "Title": "Towards Explainable Search Results in E-commerce",
+    "Read": "P"
+  },
+  {
+    "Id": "A19",
+    "Title": "Transferable and Forecastable User Targeting Foundation Model",
+    "Read": "F"
+  },
+  {
+    "Id": "A20",
+    "Title": "Dimension Mask Layer: Optimizing Embedding Efficiency for Scalable ID-based Models",
+    "Read": "F"
+  },
+  {
+    "Id": "A21",
+    "Title": "LLM-powered Multi-agent Framework for Goal-oriented Learning in Intelligent Tutoring System (GenMentor)",
+    "Read": "F"
+  },
+  {
+    "Id": "B01",
+    "Title": "Contextualized Counterspeech: Strategies for Adaptation, Personalization, and Evaluation",
+    "Read": "F"
+  },
+  {
+    "Id": "B02",
+    "Title": "Detecting Linguistic Bias in Government Documents Using Large Language Models",
+    "Read": "F"
+  },
+  {
+    "Id": "B03",
+    "Title": "SPRec: Self-Play to Debias LLM-based Recommendation",
+    "Read": "F"
+  },
+  {
+    "Id": "B04",
+    "Title": "Analyzing User Characteristics of Hate Speech Spreaders on Social Media",
+    "Read": "F"
+  },
+  {
+    "Id": "B05",
+    "Title": "Evaluating Robustness of LLMs on Crisis-Related Microblogs across Events, Information Types, and Linguistic Features",
+    "Read": "F"
+  },
+  {
+    "Id": "B06",
+    "Title": "Unmasking Gender Bias in Recommendation Systems and Enhancing Category-Aware Fairness",
+    "Read": "F"
+  },
+  {
+    "Id": "B07",
+    "Title": "Modality Interactive Mixture-of-Experts for Fake News Detection",
+    "Read": "F"
+  },
+  {
+    "Id": "B08",
+    "Title": "Cross-Modal Transfer from Memes to Videos: Addressing Data Scarcity in Hateful Video Detection",
+    "Read": "F"
+  },
+  {
+    "Id": "B09",
+    "Title": "Before It's Too Late: A State Space Model for the Early Prediction of Misinformation and Disinformation Engagement",
+    "Read": "F"
+  },
+  {
+    "Id": "B10",
+    "Title": "Towards an Inclusive Mobile Web: A Dataset and Framework for Focusability in UI Accessibility",
+    "Read": "F"
+  },
+  {
+    "Id": "B11",
+    "Title": "Empirical Evaluation of Prompting Strategies for Fact Verification Tasks",
+    "Read": "A"
+  },
+  {
+    "Id": "B12",
+    "Title": "LLM Shots: Best Fired at System or User Prompts?",
+    "Read": "F"
+  },
+  {
+    "Id": "B13",
+    "Title": "Leveraging Prompt Engineering with Lightweight Large Language Models to Label and Extract Clinical Information from Radiology Reports",
+    "Read": "A"
+  },
+  {
+    "Id": "B14",
+    "Title": "GraphiT: Efficient Node Classification on Text-Attributed Graphs with Prompt Optimized LLMs",
+    "Read": "F"
+  },
+  {
+    "Id": "B15",
+    "Title": "MH-Diff: Muti-scale Hyperbolic Model for Information Diffusion Prediction",
+    "Read": "A"
+  },
+  {
+    "Id": "B16",
+    "Title": "Open Local Knowledge Graph Construction from Academic Papers Using Generative Large Language Models",
+    "Read": "P"
+  },
+  {
+    "Id": "B17",
+    "Title": "Leveraging Large Language Models for Biomedical Knowledge Graph Construction and Querying: An Advanced NLP Approach",
+    "Read": "A"
+  },
+  {
+    "Id": "B18",
+    "Title": "Graphusion: A RAG Framework for Scientific Knowledge Graph Construction with a Global Perspective",
+    "Read": "F"
+  },
+  {
+    "Id": "B19",
+    "Title": "Few Labels with Active Learning: From Weak to Strong Labels for Misinformation Detection",
+    "Read": "A"
+  },
+  {
+    "Id": "B20",
+    "Title": "Addressing the Challenges of Mental Health Conversations with Large Language Models",
+    "Read": "F"
+  },
+  {
+    "Id": "C01",
+    "Title": "Fitting Into Any Shape: A Flexible LLM-Based Re-Ranker With Configurable Depth and Width",
+    "Read": "F"
+  },
+  {
+    "Id": "C02",
+    "Title": "GraphCLIP: Enhancing Transferability in Graph Foundation Models for Text-Attributed Graphs",
+    "Read": "F"
+  },
+  {
+    "Id": "C03",
+    "Title": "Sherlock: Towards Multi-scene Video Abnormal Event Extraction and Localization via a Global-local Spatial-sensitive LLM",
+    "Read": "F"
+  },
+  {
+    "Id": "C04",
+    "Title": "InfoMAE: Pair-Efficient Cross-Modal Alignment for Multimodal Time-Series Sensing Signals",
+    "Read": "F"
+  },
+  {
+    "Id": "C05",
+    "Title": "LargePiG for Hallucination-Free Query Generation: Your Large Language Model is Secretly a Pointer Generator",
+    "Read": "F"
+  },
+  {
+    "Id": "C06",
+    "Title": "A Cooperative Multi-Agent Framework for Zero-Shot Named Entity Recognition",
+    "Read": "F"
+  },
+  {
+    "Id": "C07",
+    "Title": "Path-LLM: A Multi-Modal Path Representation Learning by Aligning and Fusing with Large Language Models",
+    "Read": "P"
+  },
+  {
+    "Id": "C08",
+    "Title": "Explainable Multi-Modality Alignment for Transferable Recommendation",
+    "Read": "F"
+  },
+  {
+    "Id": "C09",
+    "Title": "Reducing Symbiosis Bias through Better A/B Tests of Recommendation Algorithms",
+    "Read": "F"
+  },
+  {
+    "Id": "C10",
+    "Title": "A LLM-based Controllable, Scalable, Human-Involved User Simulator Framework for Conversational Recommender Systems",
+    "Read": "F"
+  },
+  {
+    "Id": "C11",
+    "Title": "Selective Multi-grained Alignment for Text-Video Retrieval",
+    "Read": "A"
+  },
+  {
+    "Id": "C12",
+    "Title": "Uncertainty-Aware Fusion: An Ensemble Framework for Mitigating Hallucinations in Large Language Models",
+    "Read": "F"
+  },
+  {
+    "Id": "C13",
+    "Title": "Unseen Fake News Detection Through Casual Debiasing",
+    "Read": "F"
+  },
+  {
+    "Id": "C14",
+    "Title": "A Cross-Domain Study of the Use of Persuasion Techniques in Online Disinformation",
+    "Read": "F"
+  },
+  {
+    "Id": "C15",
+    "Title": "JudgeBlender: Ensembling Automatic Relevance Judgments",
+    "Read": "F"
+  },
+  {
+    "Id": "C16",
+    "Title": "Towards Safe Synthetic Image Generation On the Web: A Multimodal Robust NSFW Defense and Million Scale Dataset",
+    "Read": "F"
+  },
+  {
+    "Id": "C17",
+    "Title": "Pushing The Limit of LLM Capacity for Text Classification",
+    "Read": "F"
+  },
+  {
+    "Id": "C18",
+    "Title": "RALLRec: Improving Retrieval Augmented Large Language Model Recommendation with Representation Learning",
+    "Read": "F"
+  },
+  {
+    "Id": "C19",
+    "Title": "Evaluating Personality Traits in Large Language Models: Insights from Psychological Questionnaires",
+    "Read": "F"
+  },
+  {
+    "Id": "C20",
+    "Title": "RAG-Enhanced Evidence Recommendation in Financial Legal Resolutions",
+    "Read": "A"
+  }
+]

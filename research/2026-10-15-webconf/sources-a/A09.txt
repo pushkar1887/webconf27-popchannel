@@ -1,0 +1,1500 @@
+https://arxiv.org/html/2403.17421
+
+
+MA4DIV: Multi-Agent Reinforcement Learning for Search Result Diversification
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+Submit in GitHub
+
+arXiv is now an independent nonprofit!
+Learn more
+×
+
+Back to arXiv
+
+Why HTML?
+
+Report Issue
+
+Back to Abstract
+
+Download PDF
+
+Abstract.
+
+1 Introduction
+
+2 Related Works
+
+2.1 Search Result Diversification
+
+2.2 Reinforcement Learning for IR
+
+2.3 Multi-Agent Reinforcement Learning
+
+3 Background
+
+3.1 Co-MARL
+
+3.2 General Format of Test Set for Diversified Search
+
+4 The MA4DIV Model
+
+4.1 Essential Elements of MA4DIV
+
+4.2 Agent Network
+
+4.3 Ranking Process
+
+4.4 Value-Decomposition for MA4DIV
+
+4.5 Mixing & Hyper Network Structure
+
+4.6 Training Process of MA4DIV
+
+5 Experiments
+
+5.1 Datasets and Experimental Settings
+
+5.2 Experimental Results
+
+5.2.1 The Results on TREC web track datasets
+
+5.2.2 The Results on DU-DIV dataset
+
+5.3 Comparison and Analysis of Efficiency
+
+5.3.1 Training Time on TREC web track datasets
+
+5.3.2 Iteration Times on DU-DIV dataset
+
+5.3.3 Analysis of Inference Complexity
+
+6 Conclusions and Future Work
+
+References
+
+A Why do existing methods lead to suboptimal diversity ranking?
+
+A.1 Why the "greedy selection" approach leads to suboptimality.
+
+A.2 Why optimizing an approximation of the objective function leads to suboptimality.
+
+B Diversity Evaluation Metrics
+
+B.1 α​-​N​D​C​G\alpha\textrm{-}NDCG
+
+B.2 E​R​R​-​I​AERR\textrm{-}IA
+
+B.3 S​-​r​e​c​a​l​lS\textrm{-}recall
+
+C The Detail of MHSA
+
+C.1 The structure of MHSA
+
+C.2 The reason for using MHSA
+
+D The Introduction of Datasets
+
+E Experimental Settings
+
+F Reason for Higher Efficiency of MA4DIV
+
+G Analysis of Inference Complexity
+
+License: CC BY 4.0
+
+arXiv:2403.17421v3 [cs.IR] 06 Feb 2025
+
+MA4DIV: Multi-Agent Reinforcement Learning for Search Result Diversification
+
+Conference: Proceedings of the ACM Web Conference 2025; April 28-May 2, 2025; Sydney, NSW, AustraliaProceedings of the ACM Web Conference 2025 (WWW ’25), April 28-May 2, 2025, Sydney, NSW, AustraliaDOI: 10.1145/3696410.3714862ISBN: 979-8-4007-1274-6/25/04CCS: Information systems Information retrieval diversity
+
+Yiqun Chen
+
+email: chenyiqun990321@ruc.edu.cn
+
+Affiliation: Renmin University of China, Beijing, China
+
+, 
+Jiaxin Mao
+
+Note: Jiaxin Mao and Dawei Yin are the corresponding authors.
+
+email: maojiaxin@gmail.com
+
+Affiliation: Renmin University of China, Beijing, China
+
+, 
+Yi Zhang
+
+email: zhangyi75@baidu.com
+
+Affiliation: Baidu Inc., Beijing, China
+
+, 
+Dehong Ma
+
+email: madehong@baidu.com
+
+Affiliation: Baidu Inc., Beijing, China
+
+, 
+Long Xia
+
+email: long.phil.xia@gmail.com
+
+Affiliation: Baidu Inc., Beijing, China
+
+, 
+Jun Fan
+
+email: fanjun@baidu.com
+
+Affiliation: Baidu Inc., Beijing, China
+
+, 
+Daiting Shi
+
+email: shidaiting01@baidu.com
+
+Affiliation: Baidu Inc., Beijing, China
+
+, 
+Zhicong Cheng
+
+email: chengzhicong01@baidu.com
+
+Affiliation: Baidu Inc., Beijing, China
+
+, 
+Simiu Gu
+
+email: gusimiu@baidu.com
+
+Affiliation: Baidu Inc., Beijing, China
+
+and 
+Dawei Yin
+
+email: yindawei@acm.org
+
+Affiliation: Baidu Inc., Beijing, China
+
+© acmlicensed
+
+Abstract.
+
+Search result diversification (SRD), which aims to ensure that documents in a ranking list cover a broad range of subtopics, is a significant and widely studied problem in Information Retrieval and Web Search. Existing methods primarily utilize a paradigm of "greedy selection", i.e., selecting one document with the highest diversity score at a time or optimize an approximation of the objective function. These approaches tend to be inefficient and are easily trapped in a suboptimal state. To address these challenges, we introduce Multi-Agent reinforcement learning (MARL) for search result DIVersity, which called MA4DIV 11
+1
+
+The code of MA4DIV can be seen on https://github.com/chenyiqun/MA4DIV.. In this approach, each document is an agent and the search result diversification is modeled as a cooperative task among multiple agents. By modeling the SRD ranking problem as a cooperative MARL problem, this approach allows for directly optimizing the diversity metrics, such as α\alpha-NDCG, while achieving high training efficiency. We conducted experiments on public TREC datasets and a larger scale dataset in the industrial setting. The experiemnts show that MA4DIV achieves substantial improvements in both effectiveness and efficiency than existing baselines, especially on the industrial dataset.
+
+Keywords: 
+Search Result Diversification; Learning to Rank; Multi-Agent Cooperation; Reinforcement Learning
+
+1. Introduction
+
+How to provide diverse search results to users is an important yet complicated problem in information retrieval. The search result diversification (SRD) (Agrawal et al., 2009) means that for a user’s search query, we need to provide search results that cover a wide range of subtopics to meet the requirements of different users who may have multiple interpretations or intentions. Many diversity-aware metrics, such as α\alpha-NDCG (Clarke et al., 2008), ERR-IA (Chapelle et al., 2011), S-recall (Zhai et al., 2015), have been proposed to evaluate the effectiveness of search result diversification. Since the diversity of a given document is affected by the documents that precede it, optimizing some of the diversity metrics is NP-Hard (Carterette, 2011). Therefore, search result diversification has become an important and challenging research topic.
+
+Existing works on SRD can primarily be categorized into three main approaches:
+
+Greedy Selection Approaches  The typical search result diversification methods use "greedy selection" to sequentially select documents to build a diversified ranking list in a step-by-step manner. At each step, the ranking model selects the best document for the current ranking position according to the additional utility it can bring to the whole ranking list. Different methods use different criteria in the greedy selection. Maximal marginal relevance (MMR) (Carbonell and Goldstein, 1998) algorithm proposes maximal marginal, and takes the maximum document distance as the utility. xQuAD (Santos et al., 2010) is another widely used diverse ranking model which defines the utility to explicitly account for relationship between documents and the possible sub-queries. In recent years, many methods based on machine learning (Zhu et al., 2014; Xu et al., 2017; Li et al., 2009; Mihalkova and Mooney, 2009; Qin et al., 2023) have been proposed to solve the search result diversification task.
+
+Single-Agent Reinforcement Learning Approaches
+
+While the greedy selection approaches only consider the myopic utility brought by each document, RL approaches can better models the current state (i.e., the documents examined by the user) and future expected reward. Xia et al. (Xia et al., 2017) propose the MDP-DIV framework to model the search result diversification ranking as Markov Decision Process (MDP) (Puterman, 2014), and uses a reinforcement learning (RL) algorithm (Williams, 1992) to optimize the ranking model. While MDP-DIV still use a "greedy selection" to select next candidate result, it can easily lead to sub-optimal ranking list. M2​Div\mathrm{M^{2}Div} (Feng et al., 2018) introduces Monte Carlo Tree Search (MCTS) (Coulom, 2006) for high-quality exploration. This method helps to alleviate the problem of being stuck in a sub-optimal solution at a cost of increasing training and inference time.
+
+Simultaneous Scoring and Ranking Approaches  Some recent studies propose to simultaneously score all candidate documents and obtain the whole ranking list by sorting these scores in a descending order. This paradigm can greatly improve the inference efficiency as the documents can be scored in parallel. In particular, DALETOR (Yan et al., 2021) and MO4SRD (Yu, 2022) propose a differentiable proxy for the non-differentiable diversity metric α\alpha-NDCG (Clarke et al., 2008), which enables a gradient-based optimization for the diversity metric. Other methods (Jiang et al., 2017; Qin et al., 2020; Su et al., 2021; Su et al., 2022; Deng et al., 2024) optimize the diversity of ranking list based on list-pairwise loss fuction (Xia et al., 2008). However, although both the differentiable approximation of the optimization objective and the list-pairwise loss function are good approximations to the true optimization objective, such as alpha-NDCG, they are still not equal to the true optimization objective. Therefore, the solution may still be biased and sub-optimal.
+
+To summarize, although the problem of search result diversification has been extensively investigated, existing methods still have some limitations in terms of the effectiveness and efficiency. From the perspective of effectiveness, the Greedy Selection Approaches (e.g. (Carbonell and Goldstein, 1998; Santos et al., 2010)) and the Simultaneous Scoring and Ranking Approaches (e.g (Yan et al., 2021; Yu, 2022; Jiang et al., 2017; Su et al., 2022)) may be sub-optimal in optimizing the end diversity metric. From the perspective of efficiency, those Single-Agent RL Approaches face a challenge of exploring a huge space of all possible rankings, which inevitably leads to sub-optimal solution (Xia et al., 2017) and high time-complexity in both training and inference (Feng et al., 2018).
+
+In this paper, in order to alleviate the problems of existing methods mentioned above, we propose to formalize the diverse ranking as a multi-agent cooperation process. Since Multi-Agent reinforcement learning (MARL) algorithm is used to optimize the DIVersity ranking model, we call this new method MA4DIV. Specifically, by treating each document as an independent agent within a cooperative multi-agent setting, we simulate a fully cooperative multi-agent task. In this setup, each agent (document) makes action selections based on observations that include the features of both the query and the documents, aiming to maximize a shared reward function that is directly related to the diversity evaluation metrics of search results. Furthermore, MA4DIV employs value decomposition (Rashid et al., 2018) to optimize global diversity directly by the structures of mixing network and hypernetworks during training.
+
+The advantages of our MA4DIV over existing works include:
+
+• 
+
+Compared to "greedy selection" paradigm, MA4DIV simultaneously predicts the ranking scores of all documents, which can improve the efficiency of ranking process.
+
+• 
+
+The ranking scores of all documents and a ranked documents list can be obtained in one time step. Therefore, MA4DIV has higher exploration efficiency than Single-Agent Reinforcement Learning algorithms, such as MDP-DIV, which must go through an entire episode to explore a diversity ranking list.
+
+• 
+
+The training of the MA4DIV model does not require any approximations of different diversity metrics, as it can directly optimize the diversity metrics as rewards during multi-agent reinforcement learning process.
+
+In order to demonstrate the effectiveness and efficiency of MA4DIV, we conducted experiments on TREC benchmark datasets and a new industrial dataset. The experimental results on TREC datasets showed that, MA4DIV achieved the state-of-the-art performance on some evaluation metrics, and training time was significantly shorter than baselines. Considering the small number of queries in TREC dataset (only 198 valid queries), we built a larger diversity dataset based on the real search engine data, which is called DU-DIV. On the DU-DIV dataset, MA4DIV achieved the state-of-the-art performance on all evaluation metrics, and demonstrated a substantial improvement in exploration efficiency and training efficiency.
+
+2. Related Works
+
+2.1. Search Result Diversification
+
+Carbonell and Goldstein (1998) introduced the maximal marginal relevance criterion, which uses a linear combination of query-document relevance and document novelty to determine the document to be selected. An extension of this concept, the probabilistic latent MMR model (Guo and Sanner, 2010) was proposed by Guo and Sanner. Approaches such as xQuAD (Santos et al., 2010) directly model different aspects of a query, estimating utility based on the relevance of retrieved documents to identified sub-queries or aspects. Hu et al. (2015) proposed a utility function that leverages hierarchical intents of queries, aiming to maximize diversity in the hierarchical structure. Other researchers, like He et al. (2012), have proposed combining implicit and explicit topic representations to create better diverse rankings, while Gollapudi et al. (Gollapudi and Sharma, 2009) proposed an axiomatic approach to result diversification.
+
+Machine learning techniques have also been applied to construct diverse ranking models, often adhering to the sequential document selection or greedy sequential decision-making framework. Several researchers have defined utility as a linear combination of handcrafted relevance and novelty features (Zhu et al., 2014; Xia et al., 2015; Xu et al., 2017). In (Xia et al., 2016), novelty can be modeled using deep learning models such as neural tensor networks. Radlinski et al. (Radlinski et al., 2008) propose to learn a diverse ranking of documents directly based on users’ clicking behavior.
+
+Reinforcement learning algorithms also are proposed to improve the effectiveness of "greedy selection" paradigm in search result diversification. MDP-DIV (Xia et al., 2017) consider the diverse ranking process as a Markov Decision Process (MDP). In MDP-DIV, agent select one document in one time step, so a ranked list can be obtained after an episode. And the episode reward can be any metrics, such as α\alpha-DCG. While Feng et al. (Feng et al., 2018) think that "greedy selection" paradigm is easily lead to local optimum, so M2​Div\mathrm{M^{2}Div} is proposed to introduce Monte Carlo Tree Search (MCTS) into MDP ranking process. In this way, M2​Div\mathrm{M^{2}Div} does alleviate the problem that tend to fall into local optimum by conducting high-quality exploration, but also brings expensive training and inference costs.
+
+There are some methods based on score-and-sort paradigm. DALETOR (Yan et al., 2021) and MO4SRD (Yu, 2022) are proposed to derive differentiable diversification-aware losses which are approximation of different diversity metrics, such as α\alpha-NDCG. And some other methods (Jiang et al., 2017; Qin et al., 2020; Su et al., 2021; Su et al., 2022; Deng et al., 2024) use list-pairwise loss function (Xia et al., 2008) to optimize the diversity of the ranking list.
+
+2.2. Reinforcement Learning for IR
+
+Wei et al. (2017) formulate a ranking process as an MDP and train the ranking model with a policy gradient algorithm of REINFORCE (Williams, 1992). Singh et al. (Singh and Joachims, 2019) propose PG Rank algorithm to enhance the fairness of ranking process with reinforcement learning methods. PPG (Xu et al., 2020) uses pairwise comparisons of two sampled document list with in a same query, which makes an unbiased and low variance policy gradient estimations. Yao et al. (2020) model the interactions between search engine and users with a hierarchical Markov Decision Process, which improves the personalized search performance. RLIRank (Zhou and Agichtein, 2020) implement a learning to rank (LTR) model for each iteration of the dynamic search process. Zou et al. (Zou et al., 2019) formulate the ranking process as a multi-agent Markov Decision Process, where the interactions among documents are considered in the ranking process. However, Zou et al. (Zou et al., 2019) conduct the REINFORCE to optimize the ranking model.
+
+2.3. Multi-Agent Reinforcement Learning
+
+Value decomposition (Sunehag et al., 2017; Rashid et al., 2018; Wang et al., 2020b; Wang et al., 2020a; Chen et al., 2022b; Chen et al., 2022a) and Actor-Critic (Lowe et al., 2017; Zhang et al., 2022; Zhang et al., 2023a; Zhang et al., 2023b; Yu et al., 2022) are two typical branches of multi-agent reinforcement learning (MARL). Among these, QMIX (Rashid et al., 2018) is the algorithm that first obtains the global utility function by nonlinear combination of individual utility functions, which can assign the global reward to each agent implicitly and nonlinearly. In this paper, we conduct the framework of QMIX as a reference to optimize the diverse ranking process.
+
+3. Background
+
+3.1. Co-MARL
+
+In this work, we consider the process of diversity ranking as a fully cooperative multi-agent reinforcement learning (Co-MARL) task, which is formally defined as a tuple G=⟨𝒮,𝒜,r,𝒵,𝒪,n,γ⟩G=\left\langle\mathcal{S},\mathcal{A},r,\mathcal{Z},\mathcal{O},n,\gamma\right\rangle. s∈𝒮s\in\mathcal{S} is the state of the environment. Each agent i∈𝒢≡{1,…,n}i\in\mathcal{G}\equiv\{1,\dots,n\} chooses an action ai∈Aa_{i}\in A which forms the joint action a∈𝒜≡An\textbf{a}\in\mathcal{A}\equiv A^{n}. The reward function which is modeled as r⁡(s,a):𝒮×𝒜r(s,\textbf{a}):\mathcal{S}\times\mathcal{A} is shared by all agents and the discount factor is γ∈[0,1)\gamma\in[0,1). In our diversified search task, it follows fully observable settings, where agents have access to the state. Instead, it samples observations z∈𝒵z\in\mathcal{Z} according to observation function 𝒪⁡(s,i):𝒮×𝒜→𝒵\mathcal{O}(s,i):\mathcal{S}\times\mathcal{A}\to\mathcal{Z}. In our algorithm, the joint policy π\pi is based on action-value function Qt​o​tπ(st,at)=𝔼st+1:∞,at+1:∞[∑k=0∞γkrt+k|st,at]Q^{\pi}_{tot}(s_{t},\textbf{a}_{t})=\mathbb{E}_{s_{t+1}:\infty,\textbf{a}_{t+1}:\infty}[\sum_{k=0}^{\infty}\gamma^{k}r_{t+k}|s_{t},\textbf{a}_{t}]. The final goal is to get the optimal action-value function Q∗Q^{*}.
+
+3.2. General Format of Test Set for Diversified Search
+
+Suppose there is a given query 𝐪\mathbf{q} which is associated with a set of candidate documents D={𝐝𝟏,…,𝐝𝐧}∈𝒟\textbf{D}=\{\mathbf{d_{1}},\dots,\mathbf{d_{n}}\}\in\mathcal{D}, where query 𝐪\mathbf{q} and each document 𝐝𝐢\mathbf{d_{i}} are represented as LL-dimensional preliminary representations, i.e., the LL-dimensional vector given by the BERT model (Devlin et al., 2018), and 𝒟\mathcal{D} is the set of all candidate documents. Our objective is to sort the documents in the candidate set 𝒟\mathcal{D} in such a way that the documents ranked higher cover as many subtopics as possible, thereby improving the diversity evaluation metrics.
+
+To compute the diversity metrics introduced above, we need to collect a test collection with relevance labels at the subtopic level. Therefore, a test collection with NN labeled queries can be formulated as:
+
+{(qk,Dk),Jk}k=1N\{(q^{k},D^{k}),J^{k}\}_{k=1}^{N}
+
+where JkJ^{k} is a binary matrix with n×mn\times m dimensions. Jk​(i,l)=1J^{k}(i,l)=1 means that document 𝐝𝐢\mathbf{d_{i}} covers the ll-th subtopic in the given query qkq^{k} and Jk​(i,l)=0J^{k}(i,l)=0 otherwise.
+
+4. The MA4DIV Model
+
+In this section, we first describe how to formulate the search results diversification problem as a Co-MARL by introducing the basic elements in the MA4DIV framework. Then, we present the architecture of the MA4DIV framework, as shown in Figure 1, and elaborate the implementation of the Agent Network, Ranking Process, and Mixing Network. Finally, we will give an algorithm to train the MA4DIV.
+
+4.1. Essential Elements of MA4DIV
+
+In Section 3.1, we define the process of diversity ranking as a Co-MARL. Next, we introduce the essential elements of Co-MARL specified to our MA4DIV:
+
+Agents 𝒢\mathcal{G}: We model each document i∈{1,…,n}i\in\{1,\dots,n\} as agent i∈𝒢≡{1,…,n}i\in\mathcal{G}\equiv\{1,\dots,n\}. In the setting of multi-agent cooperation, each document implements the ranking process by cooperating with each other.
+
+State 𝒮\mathcal{S}: State signifies global information and holds a pivotal role in multi-agent cooperation. It is through the utilization of state 𝒮\mathcal{S} that effective collaboration between agents (documents) can be established, resulting in a diverse and high-quality ranking list. State is defined 𝒔\bm{s} as:
+
+(1)
+
+𝒔\displaystyle\bm{s}
+={𝐪,D}\displaystyle=\{\mathbf{q},\textbf{D}\}
+
+From Equation (1) we can see that state 𝒔\bm{s} contains information for the given query 𝐪\mathbf{q} and information for all documents D={𝐝𝟏,…,𝐝𝐧}\textbf{D}=\{\mathbf{d_{1}},\dots,\mathbf{d_{n}}\}.
+
+Observation 𝒪\mathcal{O}: Observation represents the information that each agent receives. Each agent makes decisions based on its respective observation 𝒐𝒊\bm{o_{i}}. The definition of 𝒐𝒊\bm{o_{i}} is shown as Equation (2).
+
+(2)
+
+𝒐𝒊={𝐪,D,𝐝𝐢}\bm{o_{i}}=\left\{\mathbf{q},\textbf{D},\mathbf{d_{i}}\right\}
+
+where 𝐪\mathbf{q} is embedding vector of the given query, D={𝐝𝟏,…,𝐝𝐧}\textbf{D}=\{\mathbf{d_{1}},\dots,\mathbf{d_{n}}\} represents the embedding vectors of all documents and 𝐝𝐢\mathbf{d_{i}} is embedding vector of document ii to make 𝒐𝒊\bm{o_{i}} be personalized to each agent.
+
+Actions 𝒜\mathcal{A}: The action space ai∈𝒜a_{i}\in\mathcal{A} of each agent is corresponding to a set of integer ranking scores si∈{1,…,|𝒜|}s_{i}\in\{1,\dots,\mathcal{|A|}\}, |𝒜|\mathcal{|A|} is the dimension of the action space. When making decisions, agent ii will select an action aia_{i} from 𝒜\mathcal{A}. And the action aia_{i} corresponds to a ranking score sis_{i}, which will serve as the basis for agent ii (document ii) to assess the level of diversity to itself, and thus, be used in generating the final ranking list.
+
+Upon the selection of joint-action 𝐚={a1,…,an}\mathbf{a}=\{a_{1},\dots,a_{n}\} by all agents based on joint-observation 𝐨={𝒐𝟏,…,𝒐𝒏}\mathbf{o}=\{\bm{o_{1}},\dots,\bm{o_{n}}\}, the ranking scores of candidate documents list D={𝐝𝟏,…,𝐝𝐧}\textbf{D}=\{\mathbf{d_{1}},\dots,\mathbf{d_{n}}\} can be obtained as 𝐬𝐜𝐨𝐫𝐞𝐬={s1,…,sn}\mathbf{scores}=\{s_{1},\dots,s_{n}\}. By sorting all documents according to 𝐬𝐜𝐨𝐫𝐞𝐬\mathbf{scores}, a ranked document list by diversity level can be achieved, called 𝐃𝐫𝐚𝐧𝐤𝐞𝐝\mathbf{D_{ranked}}.
+
+Reward ℛ\mathcal{R}: The reward function should guide the parameter updates of the model to achieve diversity of ranked documents. In search result diversification, there are some evaluation metrics, such as α\alpha-NDCG, are used to evaluate the diversity of a ranked document list. So it’s natural to consider these metrics as reward functions. In this paper, we define the reward function as α\alpha-NDCG@k:
+
+(3)
+
+ℛ⁡(𝐃𝐫𝐚𝐧𝐤𝐞𝐝)=α​-​N​D​C​G​@​k\mathcal{R}\left(\mathbf{D_{ranked}}\right)=\alpha\textrm{-}NDCG@k
+
+Episode ℰ\mathcal{E}: In typical MDP, an episode contains multiple decision steps. So the objective function is cumulative rewards in an episode with a discount factor γ\gamma, defined as:
+
+(4)
+
+Gt=∑k=0n−1−tγk​ℛt+k+1G_{t}=\sum_{k=0}^{n-1-t}\gamma^{k}\mathcal{R}_{t+k+1}
+
+where nn is the step number in an episode.
+
+However, the episode in MA4DIV contains only one step. Since the complete ranked document list can be obtained in one time step, the reward can then be calculated for end-to-end training. Therefore, instead of implementing a multi-step decision through a state transition function, an episode can contain only one step. And the final objective function of MA4DIV can be written as:
+
+(5)
+
+G=ℛ=α​-​N​D​C​G​@​kG=\mathcal{R}=\alpha\textrm{-}NDCG@k
+
+4.2. Agent Network
+
+Figure 1. The Framework of MA4DIV.
+
+In Figure 1, the green modules represent the Agent Network for an agent ii, which share parameters with each other. On the left side of Figure 1 is the detailed structure of the Agent Network. It can be seen that we concatenate {𝐪,𝐝𝐢,𝐞𝐢}\{\mathbf{q},\mathbf{d_{i}},\mathbf{e_{i}}\}, which is precisely obtained from the observation for agent ii defined in Equation (2). And 𝐞𝐢\mathbf{e_{i}} is a vector with high-level cross feature between document ii and all other documents, computed by Multi-Head Self-Attention (MHSA) module. The detail of MHSA and the reason why we use MHSA can be found in Appendix C. Finally, the features of all documents D={𝐝𝟏,…,𝐝𝐧}\textbf{D}=\{\mathbf{d_{1}},\dots,\mathbf{d_{n}}\} is reshaped to output 𝐞𝐢\mathbf{e_{i}} as Equation (6):
+
+(6)
+
+{𝐞𝟏,…,𝐞𝐢,…,𝐞𝐧}=𝐌𝐇𝐒𝐀⁡({𝐝𝟏,…,𝐝𝐧})\{\mathbf{e_{1}},\dots,\mathbf{e_{i}},\dots,\mathbf{e_{n}}\}=\mathbf{MHSA}(\{\mathbf{d_{1}},\dots,\mathbf{d_{n}}\})
+
+Then, the action-values Qiam,m∈{1,…,|𝒜|}Q_{i}^{a_{m}},m\in\{1,\dots,|\mathcal{A}|\} are calculated according to Equation (7). Specifically, Qiam=Q⁡(𝒐𝒊,am)Q_{i}^{a_{m}}=Q(\bm{o_{i}},a_{m}) represents the expected reward of taking a specific action ama_{m} in a given observation 𝒐𝒊\bm{o_{i}} for agent ii, which is defined in Equation (8).
+
+(7)
+
+{Qia1,…,Qiam,…,Qia|𝒜|}\displaystyle\{Q_{i}^{a_{1}},\dots,Q_{i}^{a_{m}},\dots,Q_{i}^{a_{|\mathcal{A}|}}\}
+=𝐌𝐋𝐏⁡({𝐪,𝐝𝐢,𝐞𝐢})\displaystyle=\mathbf{MLP}\left(\{\mathbf{q},\mathbf{d_{i}},\mathbf{e_{i}}\}\right)
+
+(8)
+
+Qiam\displaystyle Q_{i}^{a_{m}}
+=Q⁡(𝒐𝒊,am)\displaystyle=Q(\bm{o_{i}},a_{m})
+
+=𝔼[ℛ|𝒐=𝒐𝒊,a=am]\displaystyle=\mathbb{E}[\mathcal{R}|\bm{o}=\bm{o_{i}},a=a_{m}]
+
+=𝐌𝐋𝐏⁡(𝒐𝒊)​and​m∈{1,…,|𝒜|}\displaystyle=\mathbf{MLP}(\bm{o_{i}})\hskip 8.5359pt\text{and}\hskip 2.84544ptm\in\{1,\dots,|\mathcal{A}|\}\quad
+
+In reinforcement learning (RL), a popular approach to select the action-value is the ε\varepsilon-greedy policy, which is used to balance exploration and exploitation during the learning process.
+
+Specifically, with a probability of 1−ε1-\varepsilon, the agent ii chooses the action-value Qia∗Q_{i}^{a_{*}} which has the highest estimated value (max⁡Qiam\max Q_{i}^{a_{m}}) for the current observation 𝒐𝒊\bm{o_{i}}, and the corresponding chosen action is ai∗=arg⁡maxam⁡Qiam,∀m∈{1,…,|𝒜|}a_{i}^{*}=\arg\max_{a_{m}}Q_{i}^{a_{m}},\forall m\in\{1,\dots,|\mathcal{A}|\}. This is the exploitation part, where the agent makes the best decision based on the current model. On the other hand, with a probability of ε\varepsilon, the agent ii chooses an action-value uniformly at random from |𝒜|\mathcal{|A|} action-values. This is the exploration part, where the agents try to discover new permutations of the candidate documents set. Mathematically, this process can be written as Equation (9):
+
+(9)
+
+Qia∗={max⁡Qiam,∀m∈{1,…,|𝒜|}with ​p​=​1​-​εrandom ​Qiam,∀m∈{1,…,|𝒜|}with ​p​=​εQ_{i}^{a_{*}}=\begin{cases}\max Q_{i}^{a_{m}},\forall m\in\{1,\dots,|\mathcal{A}|\}&\text{with }p\textrm{=}1\textrm{-}\varepsilon\\
+\text{random }Q_{i}^{a_{m}},\forall m\in\{1,\dots,|\mathcal{A}|\}&\text{with }p\textrm{=}\varepsilon\end{cases}
+
+In the training process, the value of ε\varepsilon is often initially set to a high value (e.g., 1.0), and gradually decayed to a low value (e.g., 0.05) over training steps tt (ε⁡(t)=max⁡(0.05,1−tT)\varepsilon(t)=\max(0.05,1-\frac{t}{T})), allowing the agent to explore the environment extensively at the beginning, and then exploit more as its knowledge increases. In the testing process, we set ε=0\varepsilon=0 to get the optimal policy.
+
+In this way, the ε\varepsilon-greedy policy used in MA4DIV helps to balance the trade-off between exploration and exploitation, which promotes to explore more different ranking permutation. And it’s more conducive to update the parameters of the Agent Network.
+
+4.3. Ranking Process
+
+In the ranking process, the agents receive a query q and the associated documents D={𝐝𝟏,…,𝐝𝐧}\textbf{D}=\{\mathbf{d_{1}},\dots,\mathbf{d_{n}}\}. As shown in Figure 1, each agent ii select its own action-value Qia∗Q_{i}^{a_{*}} and the corresponding action ai∗a_{i}^{*} according to Equation (9). Because the action space 𝒜\mathcal{A} is defined as integer ranking scores, that is, each action ama_{m} corresponds to a ranking score. So the ranking scores of all documents can be obtained as 𝐬𝐜𝐨𝐫𝐞𝐬={s1,…,sn}\mathbf{scores}=\{s_{1},\dots,s_{n}\}. Finally, a ranked document list 𝐃𝐫𝐚𝐧𝐤𝐞𝐝\mathbf{D_{ranked}} is obtained based on the descending order of 𝐬𝐜𝐨𝐫𝐞𝐬\mathbf{scores}.
+
+We show the pseudo-code of ranking process in Algorithm 1.
+
+Algorithm 1 The Ranking Process of MA4DIV
+
+1
+Inputs: Give the query q and documents D={𝐝𝟏,…,𝐝𝐧}\textbf{D}=\{\mathbf{d_{1}},\dots,\mathbf{d_{n}}\}. 
+
+2
+Select Actions: Each agent ii select action-value Qia∗Q_{i}^{a_{*}} to get {Q1a∗,…,Qia∗,…,Qna∗}\{Q_{1}^{a_{*}},\dots,Q_{i}^{a_{*}},\dots,Q_{n}^{a_{*}}\} based on Equation (9), and the corresponding joint-action 𝐚∗={a1∗,…,ai∗,…,an∗}\mathbf{a}^{*}=\{a_{1}^{*},\dots,a_{i}^{*},\dots,a_{n}^{*}\}.
+
+3
+Getting Scores: Obtain the 𝐬𝐜𝐨𝐫𝐞𝐬={s1,…,si,…,sn}\mathbf{scores}=\{s_{1},\dots,s_{i},\dots,s_{n}\} corresponding to the joint-action 𝐚∗\mathbf{a}^{*}. 
+
+4
+Sorting: Sort the candidate documents in D based on 𝐬𝐜𝐨𝐫𝐞𝐬\mathbf{scores}. 
+
+5
+Output: Get a ranked document list 𝐃𝐫𝐚𝐧𝐤𝐞𝐝\mathbf{D_{ranked}}.
+
+4.4. Value-Decomposition for MA4DIV
+
+After the ranking process, the reward ℛ\mathcal{R} is obtained according to Equation (3) based on 𝐃𝐫𝐚𝐧𝐤𝐞𝐝\mathbf{D_{ranked}}. Obviously, ℛ\mathcal{R} is a scalar while there are nn action-values {Q1a∗,…,Qna∗}\{Q_{1}^{a_{*}},\dots,Q_{n}^{a_{*}}\} for all agents. ℛ\mathcal{R} is the evaluation of the global ranking effect, while Qia∗Q_{i}^{a_{*}} is related to the score of a single document. Therefore, we cannot use ℛ\mathcal{R} to directly update the action-value functions of all agents.
+
+The MARL algorithms based on value decomposition, such as (Sunehag et al., 2017; Rashid et al., 2018; Wang et al., 2020b), consider that there is the global utility function Qt​o​t∗Q_{tot}^{*} can be decomposed into the action-value functions Qia∗Q_{i}^{a_{*}} of all individual agents. Qt​o​t∗Q_{tot}^{*} represents the action-value utility of the joint-action 𝐚∗={a1∗,…,an∗}\mathbf{a}^{*}=\{a_{1}^{*},\dots,a_{n}^{*}\} under the joint-observation information 𝐨={𝒐𝟏,…,𝒐𝒏}\mathbf{o}=\{\bm{o_{1}},\dots,\bm{o_{n}}\}, and is also a scalar value. The monotonic decomposition relation can be expressed as Equation (10):
+
+(10)
+
+arg⁡max𝐚​Qt​o​t∗​(𝐨,𝐚)=(arg⁡maxa1​Q1​(𝒐𝟏,a1)arg⁡maxan​Qn​(𝒐𝒏,an))\arg\max_{\mathbf{a}}Q_{tot}^{*}(\mathbf{o},\mathbf{a})=\begin{pmatrix}\arg\max_{{a}_{1}}Q_{1}(\bm{o_{1}},{a}_{1})\\
+\vdots\\
+\arg\max_{{a}_{n}}Q_{n}(\bm{o_{n}},{a}_{n})\end{pmatrix}
+
+In online ranking process, all agents adopt a greedy strategy to score documents, which is consistent with the maximization operation on the right side of Equation (10). So we just need to learn how to maximize Qt​o​t∗Q_{tot}^{*}. Since Qt​o​t∗Q_{tot}^{*} is a global utility function and ℛ\mathcal{R} is also used to measure the global ranking effect, we can maximize Qt​o​t∗Q_{tot}^{*} with ℛ\mathcal{R}, thus maximizing the utility of each individual agent (Qia∗Q_{i}^{a_{*}}). The specific loss function will be introduced in the following Section 4.6 (Equation (14)).
+
+Furthermore, QMIX (Rashid et al., 2018) proposes a sufficient but not necessary realization to satisfy Equation (10). Monotonicity can be enforced by a constraint condition on the relationship of partial derivative between Qt​o​t∗Q_{tot}^{*} and Qia∗Q_{i}^{a_{*}}:
+
+(11)
+
+∂Qt​o​t∗∂Qia∗≥0,∀i∈𝒢≡{1,…,n}\frac{\partial Q_{tot}^{*}}{\partial Q_{i}^{a_{*}}}\geq 0,\hskip 8.5359pt\forall i\in\mathcal{G}\equiv\{1,\dots,n\}
+
+Additionally, in Equation (10) and (11), it is established that Qia∗=max⁡Qi​(𝒐𝒊,am),a∗i=arg⁡maxam​Qi​(𝒐𝒊,am),∀m∈{1,…,|𝒜|}Q_{i}^{a_{*}}=\max Q_{i}(\bm{o_{i}},{a}_{m}),a_{*}^{i}=\arg\max_{a_{m}}Q_{i}(\bm{o_{i}},{a}_{m}),\forall m\in\{1,\dots,|\mathcal{A}|\}.
+
+4.5. Mixing & Hyper Network Structure
+
+To convert the individual action-value functions Qia∗Q_{i}^{a_{*}} into the global utility function Qt​o​t∗Q_{tot}^{*} and ensure compliance with Equation (11), an architecture consisting of a mixing network and a set of hypernetworks are designed. The right part of Figure 1 illustrates the detail structure.
+
+Mixing network, a fully connected network, utilizes the action-values {Q1a∗,…,Qna∗}\{Q_{1}^{a_{*}},\dots,Q_{n}^{a_{*}}\} from the agent network as inputs, and then, monotonically combines these inputs to generate Qt​o​t∗Q_{tot}^{*}. The calculation process is shown as:
+
+(12)
+
+Qt​o​t∗=𝐖𝟐⋅𝐄𝐥𝐮⁡(𝐖𝟏⋅[Q1a∗,…,Qna∗]+𝐁𝟏)+B2Q_{tot}^{*}=\mathbf{W_{2}}\cdot\mathbf{Elu}\left(\mathbf{W_{1}}\cdot[Q_{1}^{a_{*}},\dots,Q_{n}^{a_{*}}]+\mathbf{B_{1}}\right)+B_{2}
+
+Hypernetworks, several fully connected networks, play a role in generating mixing network weights. Firstly, each hypernetwork takes global state 𝒔\bm{s} as input and generate the vectors of 𝐖𝟏\mathbf{W_{1}}, 𝐁𝟏\mathbf{B_{1}}, 𝐖𝟐\mathbf{W_{2}}, B2B_{2} respectively. Then, the vectors are reshaped into matrices of appropriate size as parameters for the mixing network. Lastly, to achieve the monotonicity constraint of Equation (11), 𝐖𝟏\mathbf{W_{1}}, 𝐖𝟐\mathbf{W_{2}} are limited to non-negative by an absolute activation function. However, biases 𝐁𝟏\mathbf{B_{1}}, B2B_{2} do not need to be set to non-negative because biases has nothing to do with the partial derivatives between Qt​o​t∗Q_{tot}^{*} and Qia∗Q_{i}^{a_{*}}. The hypernetworks operate as follows:
+
+(13)
+
+𝐖𝟏=𝐑𝐞𝐬𝐡𝐚𝐩𝐞⁡(|𝐅𝐂𝐖𝟏​(𝒔)|),𝐁𝟏=𝐑𝐞𝐬𝐡𝐚𝐩𝐞⁡(𝐅𝐂𝐁𝟏​(𝒔))𝐖𝟐=𝐑𝐞𝐬𝐡𝐚𝐩𝐞⁡(|𝐅𝐂𝐖𝟐​(𝒔)|),B2=𝐑𝐞𝐬𝐡𝐚𝐩𝐞⁡(𝐅𝐂𝐁𝟐​(𝒔))\begin{gathered}\begin{aligned} \mathbf{W_{1}}&=\mathbf{Reshape}\left(\left|\mathbf{FC_{{\scriptscriptstyle W_{1}}}}\left(\bm{s}\right)\right|\right),\mathbf{B_{1}}=\mathbf{Reshape}\left(\mathbf{FC_{{\scriptscriptstyle B_{1}}}}\left(\bm{s}\right)\right)\\
+\mathbf{W_{2}}&=\mathbf{Reshape}\left(\left|\mathbf{FC_{{\scriptscriptstyle W_{2}}}}\left(\bm{s}\right)\right|\right),B_{2}=\mathbf{Reshape}\left(\mathbf{FC_{{\scriptscriptstyle B_{2}}}}\left(\bm{s}\right)\right)\end{aligned}\end{gathered}
+
+4.6. Training Process of MA4DIV
+
+In this section, we introduce the complete training process for MA4DIV. The parameters of models are Θ={θ,ψ,ϕ}\Theta=\{\theta,\psi,\phi\} where θ\theta represents the parameters of agent network, ψ\psi and ϕ\phi are the parameters of mixing network and hypernetworks respectively. The model parameters Θ\Theta is updated on NN training data with the form of {(qk,Dk),Jk}k=1N\{(q^{k},D^{k}),J^{k}\}_{k=1}^{N} mentioned in Section 3.2.
+
+Algorithm 2 The Training Process of MA4DIV
+
+1
+Initialize: The parameters of network Θ={θ,ψ,ϕ}\Theta=\{\theta,\psi,\phi\}, replay buffer ℳ\mathcal{M}.
+
+2
+Inputs: Training data {(qk,Dk),Jk}k=1N\{(q^{k},D^{k}),J^{k}\}_{k=1}^{N}.
+
+3
+for e​p​o​c​h=1epoch=1 to N​_​e​p​o​c​hN\_epoch do
+
+    
+4
+// generate data 
+
+    
+5
+for i=1i=1 to NN do
+
+        
+6
+Current training data: 𝐪=qi\mathbf{q}=q^{i}, 𝐃=Di\mathbf{D}=D^{i}, with subtopic labels JiJ^{i}. 
+
+        
+7
+Rollout an episode following Algorithm 1. 
+
+        
+8
+Collect a tuple 𝒯\mathcal{T} = (𝐨,𝒔,𝐚,ℛ\mathbf{o},\bm{s},\mathbf{a},\mathcal{R}) during this episode. 
+
+        
+9
+Store the tuple 𝒯\mathcal{T} in ℳ\mathcal{M}. 
+
+    
+10
+// update models 
+
+    
+11
+for u​p​d​a​t​e=1update=1 to N​_​u​p​d​a​t​eN\_update do
+
+        
+12
+Sample a random minibatch 𝒃\bm{b} from ℳ\mathcal{M}. 
+
+        
+13
+Calculate yt​o​ty^{tot} and loss ℒ\mathcal{L} for all sampled data from 𝒃\bm{b} based on Equation (15) and (14). 
+
+        
+14
+Update the parameters of networks Θ\Theta by gradient descent. 
+
+15
+Ouput: A well-trained ranking model with parameters Θ\Theta. 
+
+Algorithm 2 shows the training pseudo-code. At the beginning, parameters Θ\Theta are initialized randomly and the replay buffer ℳ\mathcal{M} is set to ∅\varnothing. A whole training epoch consists of two parts. The first part is the stage of data generation. Given data 𝐪=qi\mathbf{q}=q^{i}, 𝐃=Di\mathbf{D}=D^{i}, with subtopic labels JiJ^{i}, tuple 𝒯\mathcal{T} in the episode is obtained based on the definition in Equation (1, 2, 3). Then, store the tuple 𝒯\mathcal{T} in replay buffer. Each epoch can generate a kind of permutation of all documents {Dk}k=1N\{D^{k}\}_{k=1}^{N} in all training data. The second part is updating models with parameters Θ\Theta for N​_​u​p​d​a​t​eN\_update times. And the update is performed by sampling data through a mini-batch approach from ℳ\mathcal{M}. The whole network is trained end-to-end by minimizing the Temporal Difference (TD) (Sutton, 1988) loss shown in Equation (14) which is widely used in MARL to maximize Qt​o​tQ_{tot}.
+
+(14)
+
+ℒT​D=∑i=1b(yit​o​t−Qt​o​t​(o,a,𝒔,Θ))2\mathcal{L}_{TD}=\sum_{i=1}^{b}\left(y_{i}^{tot}-Q_{tot}(\textbf{o},\textbf{a},\bm{s};\Theta)\right)^{2}
+
+(15)
+
+yt​o​t=ℛ+γ​maxa′​Qt​o​t​(o′,a′,𝒔′,Θ′)=ℛ\displaystyle y^{tot}=\mathcal{R}+\gamma\max_{a^{\prime}}Q_{tot}(\textbf{o}^{\prime},\textbf{a}^{\prime},\bm{s}^{\prime};\Theta^{\prime})=\mathcal{R}
+
+In Equation (14), bb is the batch size of sampled data from replay buffer. In Equation (15), Qt​o​t​(o′,a′,𝒔′,Θ′)Q_{tot}(\textbf{o}^{\prime},\textbf{a}^{\prime},\bm{s}^{\prime};\Theta^{\prime}) is calculated based on information of the next time step, i.e., o′,a′,𝒔′\textbf{o}^{\prime},\textbf{a}^{\prime},\bm{s}^{\prime}, in typical MDP which contains multiple decision steps. However, we define that MA4DIV only have one time step for an episode, so o′,a′,𝒔′\textbf{o}^{\prime},\textbf{a}^{\prime},\bm{s}^{\prime} do not exist and Qt​o​t​(o′,a′,𝒔′,Θ′)Q_{tot}(\textbf{o}^{\prime},\textbf{a}^{\prime},\bm{s}^{\prime};\Theta^{\prime}) equals to 0, that is yt​o​t=ℛy^{tot}=\mathcal{R}.
+
+5. Experiments
+
+Our experiments mainly focus on next research questions:
+
+(RQ.1) How does MA4DIV perform on the TREC Web Track datasets when compared to existing diversified search baselines?
+
+(RQ.2) How does MA4DIV perform on a larger scale industrial dataset compared to the baselines?
+
+(RQ.3) How efficient is MA4DIV in training and inference process?
+
+5.1. Datasets and Experimental Settings
+
+We conduct experiments to address above research questions on two datasets, the public TREC 2009∼\sim2012 Web Track datasets and the industrial DU-DIV dataset. The details of these two datasets are shown in Table 1.
+
+TREC 2009∼\sim2012 Web Track datasets are publicly available and Xia et al. (Xia et al., 2017) first uses them for training and evaluating diversified search models. Almost all the following works, such as M2​Div\mathrm{M^{2}Div} (Feng et al., 2018), DALETOR (Yan et al., 2021), MO4SRD (Yu, 2022), etc., conduct experiments on these datasets. As a widely used test collection for diversified search, the TREC Web track datasets only contains 198 queries, and previous studies often use Doc2vec (Le and Mikolov, 2014) to obtain the document embeddings on this dataset. In this work, to ensure a fair and meaningful comparison with existing work, we first compare MA4DIV with existing baselines on the this relatively small dataset. Then, we further conduct extensive experiments on a new and larger scale diversity dataset called DU-DIV, which is constructed based on real user data in industrial search engine. More details of datasets can be seen in Appendix D.
+
+Table 1. Comparisons of datasets TREC and DU-DIV.
+
+Dataset
+TREC
+DU-DIV
+
+Source
+TREC 2009∼\sim2012 Web Track
+Real search engine
+
+No. of Queries
+198
+4473
+
+No. of Documents/Query
+average 211 docs/query
+15 docs/query
+
+No. of Subtopics
+maximum 7 subtopics/doc
+total 50 subtopics
+
+Representation
+Doc2vec (Le and Mikolov, 2014)
+BERT (Devlin et al., 2018)
+
+We conduct 5-fold cross-validation experiments on the reshaped TREC dataset with the same subset split based on unique queries as in (Feng et al., 2018). In the DU-DIV dataset, we randomly sample 80% of 4473 unique queries and their associated document lists to the training set, and the left 20% to the test set. The code framework of MA4DIV is based on PyMARL2 framework (Hu et al., 2021), which is a open-source code framework for multi-agent reinforcement learning. More detail settings of experiments are shown in Appendix E.
+
+We compare MA4DIV with several state-of-the-art baselines in search result diversification, including:
+
+MMR (Carbonell and Goldstein, 1998): a heuristic approach which select document according to maximal marginal relevance.
+
+xQuAD (Santos et al., 2010): a representative approach that explicitly models different aspects underlying the query in the form of subqueries.
+
+MDP-DIV (Xia et al., 2017): a single-agent reinforcement learning approach which model the diverse ranking process as MDP.
+
+𝐌𝟐\mathbf{M^{2}}Div (Feng et al., 2018): a single-agent reinforcement learning approach which utilizes Monte Carlo Tree Search to enhance ranking policy.
+
+DALETOR (Yan et al., 2021): a method for approximating evaluation metrics that optimizes an approximate and differentiable objective function.
+
+MO4SRD (Yu, 2022): another method to make evaluation metrics differentiable and optimize the approximating evaluation metrics.
+
+5.2. Experimental Results
+
+Table 2 and 3 report the performances of all baselines and our MA4DIV in terms of the six diversity performance metrics, including α\alpha-NDCG@5, α\alpha-NDCG@10, ERR-IA@5, ERR-IA@10, S-recall@5, S-recall@10 on the TREC web track datasets and the DU-DIV dataset respectively. The detail of evaluation metrics can be found in Appendix B. We highlight the top three algorithms on each metric by darkening the background color of the numbers.
+
+Table 2. Performance comparison of baselines and MA4DIV on TREC web track datasets. The best result in each metric is bold and the top-3 results are shaded. "*" indicates the difference between the baseline and M4DIV (ours) is statistically significant.
+
+Method
+
+α\alpha-NDCG@5
+
+α\alpha-NDCG@10
+
+ERR-IA@5
+
+ERR-IA@10
+
+S-recall@5
+
+S-recall@10
+
+MMR
+
+0.4273*
+
+0.5059*
+
+0.2015*
+
+0.2153*
+
+0.6058*
+
+0.7848*
+
+xQuAD
+
+0.4451*
+
+0.5296*
+
+0.2108*
+
+0.2243*
+
+0.5994*
+
+0.7887*
+
+MDP-DIV
+
+0.4987*
+
+0.5663*
+
+0.2662
+
+0.2865
+
+0.6310*
+
+0.7853*
+
+M2​Div\mathrm{M^{2}Div}
+
+0.5144*
+
+0.5798*
+
+0.2338*
+
+0.2448*
+
+0.6593
+
+0.8028
+
+DALETOR
+
+0.5008
+
+0.5703
+
+0.2237*
+
+0.2355*
+
+0.6451*
+
+0.8012
+
+MO4SRD
+
+0.5135*
+
+0.5815*
+
+0.2280*
+
+0.2396*
+
+0.6576
+
+0.8074
+
+MA4DIV (ours)
+
+0.5056
+
+0.5724
+
+0.2680
+
+0.2882
+
+0.6600
+
+0.8070
+
+Table 3. Performance comparison of baselines and MA4DIV on DU-DIV dataset. The best result in each metric is bold and the top-3 results are shaded. "*" indicates the difference between the baseline and M4DIV (ours) is statistically significant.
+
+Method
+
+α\alpha-NDCG@5
+
+α\alpha-NDCG@10
+
+ERR-IA@5
+
+ERR-IA@10
+
+S-recall@5
+
+S-recall@10
+
+MMR
+
+0.7416*
+
+0.8171*
+
+0.7583*
+
+0.8100*
+
+0.6062*
+
+0.8481*
+
+xQuAD
+
+0.7075*
+
+0.8277*
+
+0.7745*
+
+0.8201*
+
+0.5670*
+
+0.8520*
+
+MDP-DIV
+
+0.8101*
+
+0.8623
+
+0.7694*
+
+0.8204*
+
+0.6389*
+
+0.8590*
+
+M2​Div\mathrm{M^{2}Div}
+
+0.8089*
+
+0.8610*
+
+0.7633*
+
+0.8142*
+
+0.6468
+
+0.8608*
+
+DALETOR
+
+0.7981*
+
+0.8543*
+
+0.7450*
+
+0.7955*
+
+0.6447*
+
+0.8550*
+
+MO4SRD
+
+0.7989*
+
+0.8553*
+
+0.7467*
+
+0.7969*
+
+0.6432*
+
+0.8556*
+
+MA4DIV (ours)
+
+0.8187
+
+0.8702
+
+0.7836
+
+0.8342
+
+0.6534
+
+0.8699
+
+5.2.1. The Results on TREC web track datasets
+
+In Table 2, M2​Div\mathrm{M^{2}Div} and MO4SRD have the best performance in term of α\alpha-NDCG, our MA4DIV performs worse than these two algorithms but better than the others. Moreover, MA4DIV takes the lead in both ERR-IA and S-recall metrics, with MO4SRD also exhibiting strong performance in S-recall metric. Considering multiple evaluation metrics comprehensively, MA4DIV, M2​Div\mathrm{M^{2}Div} and MO4SRD are the best three algorithms on the TREC web track datasets. (answer to RQ.1)
+
+As mentioned in Table 1, TREC web track datasets have only 198 unique queries, deep learning methods are prone to overfitting on this dataset. Figure 2 shows the training curve of MA4DIV on the TREC web track datasets. We can see, after about the 11 iterations, MA4DIV achieves the best performance on the test data, and the subsequent iterations fall into overfitting the relatively small training set. However, the evaluation metric α\alpha-NDCG@10 on the training set grows to more than 0.8. These results indicate that: (1) Our MA4DIV is capable to effectively optimize the diversity metric α\alpha-NDCG@10. (2) It could easily overfit the relatively small training set of the TREC web track dataset, which only contains 198 unique queries. (3) MA4DIV has the potential to perform better in the search result diversification task when given a larger dataset.
+
+Figure 2. Training curves of MA4DIV on TREC web track datasets.
+
+Therefore, we construct a larger diversity dataset called DU-DIV from a real industrial search engine. And then we show the experiments on DU-DIV dataset.
+
+5.2.2. The Results on DU-DIV dataset
+
+Table 3 shows results in different evaluation metrics on the DU-DIV dataset. MA4DIV achieves state-of-the-art performances on all six evaluation metrics. Heuristic algorithms, MMR and xQuAD, perform poorly on α\alpha-NDCG. Comparing to single-agent reinforcement learning methods, MDP-DIV and M2​Div\mathrm{M^{2}Div}, MA4DIV has a better performance on evaluation metrics which demonstrate that MA4DIV can improve the diversity of search results. MA4DIV also outperforms DALETOR and MO4SRD which optimize the approximate value of the evaluation metrics. This verifies that directly optimizing the evaluation metrics is indeed better than optimizing the approximation of the evaluation metrics. All these results demonstrate that the proposed MA4DIV method outperforms existing search result diversification methods on an industrial scale dataset (answering RQ.2).
+
+Interestingly, we notice that MDP-DIV, which does not perform well on the TREC web track datasets, is the second best performing algorithm on the DU-DIV dataset, following our MA4DIV in terms of α\alpha-NDCG@5 and α\alpha-NDCG@10. In MDP-DIV, the reward function is defined as:
+R⁡(st,at)=α​-​D​C​G​[t+1]−α​-​D​C​G​[t]R(s_{t},a_{t})=\alpha\textrm{-}DCG[t+1]-\alpha\textrm{-}DCG[t],
+where α​-​D​C​G​[t]\alpha\textrm{-}DCG[t] is the discounted cumulative gain at the tt-th ranking position. And the objective function of MDP-DIV is to maximize the cumulative rewards in one episode, that is Gt=∑k=0n−1−tγk​Rt+k+1G_{t}=\sum_{k=0}^{n-1-t}\gamma^{k}R_{t+k+1}. Consider that Xia et al. (Xia et al., 2017) sets γ​=​1\gamma\textrm{=}1 and α​-​D​C​G​[t]​=​0\alpha\textrm{-}DCG[t]\textrm{=}0, the objective function can be rewritten as Gt=α​-​D​C​G​[n]G_{t}=\alpha\textrm{-}DCG[n], which is different from α​-​N​D​C​G\alpha\textrm{-}NDCG with just a normalization factor. In addition, the objective function of our MA4DIV defined in Equation (5) is equal to α​-​N​D​C​G\alpha\textrm{-}NDCG. Similar to MA4DIV, MDP-DIV also directly optimizes one of the end evaluation metrics in SRD. Therefore, this provides a theoretical analysis for MDP-DIV to be able to outperform other baselines.
+
+5.3. Comparison and Analysis of Efficiency
+
+5.3.1. Training Time on TREC web track datasets
+
+To highlight the efficiency of our MA4DIV, we also compare several algorithms from the perspective of training time. Table 4 shows the comparison of training time taken by different algorithms to achieve their optimal performance on the TREC web track datasets. To ensure a fair comparison, all the algorithms in Table 4 run on the same machine.
+
+Table 4. The comparison of the training time taken by different algorithms to achieve the optimal value of metrics.
+
+Method
+
+Training Time
+
+MDP-DIV
+
+5∼\sim6 hours
+
+MO4SRD
+
+6∼\sim7 hours
+
+M2​Div\mathrm{M^{2}Div}
+
+1 day +
+
+MA4DIV (ours)
+
+20∼\sim25 mins
+
+We can see that M2​Div\mathrm{M^{2}Div} takes over a day to reach optimal performance. This is because M2​Div\mathrm{M^{2}Div} utilizes Monte Carlo Tree Search for policy enhancement, which is highly time-consuming. The time taken by MDP-DIV and MO4SRD is close and significantly less than M2​Div\mathrm{M^{2}Div}. MA4DIV takes the shortest time, only 20∼\sim25 minutes. This is due to the efficient exploration ability of using a multi-agent to model the ranking process, in which a permutation of the given documents set (nn documents) can be obtained at one time step. The single agent reinforcement learning algorithm MDP-DIV can only explore a permutation of the given documents after a whole episode which contains nn time steps. This is the main reason why the training time of MA4DIV is significantly shorter than MDP-DIV. In MO4SRD, the complexity of calculating all approximate ranking positions rir_{i} in α​-​D​C​G\alpha\textrm{-}DCG is 𝒪⁡(n2)\mathcal{O}(n^{2}) and the complexity of calculating all cl​ic_{li} approximations is 𝒪⁡(n2​m)\mathcal{O}(n^{2}m), which are time-consuming parts. While MA4DIV directly optimizes α​-​N​D​C​G\alpha\textrm{-}NDCG without complex approximations, which takes significantly less time.
+
+In summary, the training time of MA4DIV is significantly shorter than that of other baselines, which demonstrate its training efficiency and answers RQ.3.
+
+5.3.2. Iteration Times on DU-DIV dataset
+
+As the optimization goals of MA4DIV and MDP-DIV are essentially the same (we discussed in the analysis of the results on DU-DIV dataset), we are interested in comparing the learning efficiency of the proposed multi-agent RL approach and the existing single-agent RL method.
+
+Figure 3. Training curves of MA4DIV and MDP-DIV on DU-DIV dataset.
+
+Figure 3 shows the training curves of MA4DIV and MDP-DIV on the DU-DIV dataset. We conduct the experiments of these two algorithms with the same learning rate which is set to 1×10−51\times 10^{-5}. From the curves, we can see that, after 250 iterations, α\alpha-NDCG of MA4DIV basically converges to about 0.87. However, α\alpha-NDCG of MDP-DIV still fails to reach the optimal value at around 6000 iterations. This indicates that MA4DIV has higher exploration and exploitation efficiency compared with MDP-DIV, which also answers RQ.3.
+
+The main reason for the results just mentioned can be seen in Appendix F.
+
+5.3.3. Analysis of Inference Complexity
+
+The analysis of the inference complexity about different diversified search algorithms can be seen in Appendix G.
+
+The Section 5.3 shows that MA4DIV have the shorter training time on the TREC web track datasets, the faster convergence rate on the DU-DIV dataset and the lowest inference complexity. And these advantages jointly demonstrate that MA4DIV has high efficiency in training and inference process, which answers RQ.3.
+
+6. Conclusions and Future Work
+
+In this paper we have proposed a novel method for search result diversification using MARL, called MA4DIV. To alleviate the sub-optimal problem and improve the efficiency of training, we consider each document as an agent and model the diversity ranking process as a multi-agent cooperative task. We conduct experiments on the TREC web track dataset to prove the effectiveness and potential of our MA4DIV. Furthermore, we construct a larger scale dataset called DU-DIV using the real data from industrial search engine. And MA4DIV achieve state-of-the-art performance and high learning efficiency on the DU-DIV dataset.
+
+A major contribution of this paper is to introduce a multi-agent reinforcement learning framework for the ranking optimization task. We argue that modeling ranking process in the multi-agent setting can be used not only to optimize the diversity of search results, but also to optimize other ranking tasks, such as relevance ranking and fairness ranking. Therefore, in future work, we will try to propose a general ranking framework base on multi-agent reinforcement learning and apply it to a variety of ranking tasks.
+
+Acknowledgments
+
+This research was supported by the Natural Science Foundation of China (61902209, 62377044, U2001212), and Beijing Outstanding Young Scientist Program (NO.BJJWZYJH012019100020098), Intelligent Social Governance Platform, Major Innovation & Planning Interdisciplinary Platform for the “Double-First Class” Initiative, Renmin University of China, Engineering Research Center of Next-Generation Intelligent Search and Recommendation, Ministry of Education, and the fund for building world-class universities (disciplines) of Renmin University of China.
+
+References
+
+Agrawal et al. (2009)
+
+Rakesh Agrawal, Sreenivas Gollapudi, Alan Halverson, and Samuel Ieong. 2009.
+
+Diversifying search results. In Proceedings of the second ACM international conference on web search and data mining. 5–14.
+
+Carbonell and Goldstein (1998)
+
+Jaime Carbonell and Jade Goldstein. 1998.
+
+The use of MMR, diversity-based reranking for reordering documents and producing summaries. In Proceedings of the 21st annual international ACM SIGIR conference on Research and development in information retrieval. 335–336.
+
+Carterette (2011)
+
+Ben Carterette. 2011.
+
+An analysis of NP-completeness in novelty and diversity ranking.
+
+Information Retrieval 14 (2011), 89–106.
+
+Chapelle et al. (2011)
+
+Olivier Chapelle, Shihao Ji, Ciya Liao, Emre Velipasaoglu, Larry Lai, and Su-Lin Wu. 2011.
+
+Intent-based diversification of web search results: metrics and algorithms.
+
+Information Retrieval 14 (2011), 572–592.
+
+Chen et al. (2022a)
+
+Yiqun Chen, Hangyu Mao, Tianle Zhang, Shiguang Wu, Bin Zhang, Jianye Hao, Dong Li, Bin Wang, and Hongxing Chang. 2022a.
+
+Ptde: Personalized training with distillated execution for multi-agent reinforcement learning.
+
+arXiv preprint arXiv:2210.08872 (2022).
+
+Chen et al. (2022b)
+
+Yiqun Chen, Wei Yang, Tianle Zhang, Shiguang Wu, and Hongxing Chang. 2022b.
+
+Commander-Soldiers Reinforcement Learning for Cooperative Multi-Agent Systems. In 2022 International Joint Conference on Neural Networks (IJCNN). IEEE, 1–7.
+
+Clarke et al. (2008)
+
+Charles LA Clarke, Maheedhar Kolla, Gordon V Cormack, Olga Vechtomova, Azin Ashkan, Stefan Büttcher, and Ian MacKinnon. 2008.
+
+Novelty and diversity in information retrieval evaluation. In Proceedings of the 31st annual international ACM SIGIR conference on Research and development in information retrieval. 659–666.
+
+Coulom (2006)
+
+Rémi Coulom. 2006.
+
+Efficient selectivity and backup operators in Monte-Carlo tree search. In International conference on computers and games. Springer, 72–83.
+
+Deng et al. (2024)
+
+Zhirui Deng, Zhicheng Dou, Yutao Zhu, and Ji-Rong Wen. 2024.
+
+CL4DIV: A Contrastive Learning Framework for Search Result Diversification. In Proceedings of the 17th ACM International Conference on Web Search and Data Mining. 171–180.
+
+Devlin et al. (2018)
+
+Jacob Devlin, Ming-Wei Chang, Kenton Lee, and Kristina Toutanova. 2018.
+
+Bert: Pre-training of deep bidirectional transformers for language understanding.
+
+arXiv preprint arXiv:1810.04805 (2018).
+
+Feng et al. (2018)
+
+Yue Feng, Jun Xu, Yanyan Lan, Jiafeng Guo, Wei Zeng, and Xueqi Cheng. 2018.
+
+From greedy selection to exploratory decision-making: Diverse ranking with policy-value networks. In The 41st international ACM SIGIR conference on research & development in information retrieval. 125–134.
+
+Gollapudi and Sharma (2009)
+
+Sreenivas Gollapudi and Aneesh Sharma. 2009.
+
+An axiomatic approach for result diversification. In Proceedings of the 18th international conference on World wide web. 381–390.
+
+Guo and Sanner (2010)
+
+Shengbo Guo and Scott Sanner. 2010.
+
+Probabilistic latent maximal marginal relevance. In Proceedings of the 33rd international ACM SIGIR conference on Research and development in information retrieval. 833–834.
+
+He et al. (2012)
+
+Jiyin He, Vera Hollink, and Arjen de Vries. 2012.
+
+Combining implicit and explicit topic representations for result diversification. In Proceedings of the 35th international ACM SIGIR conference on Research and development in information retrieval. 851–860.
+
+Hu et al. (2021)
+
+Jian Hu, Siyang Jiang, Seth Austin Harding, Haibin Wu, and Shih-wei Liao. 2021.
+
+Rethinking the implementation tricks and monotonicity constraint in cooperative multi-agent reinforcement learning.
+
+arXiv e-prints (2021), arXiv–2102.
+
+Hu et al. (2015)
+
+Sha Hu, Zhicheng Dou, Xiaojie Wang, Tetsuya Sakai, and Ji-Rong Wen. 2015.
+
+Search result diversification based on hierarchical intents. In Proceedings of the 24th ACM International on Conference on Information and Knowledge Management. 63–72.
+
+Jiang et al. (2017)
+
+Zhengbao Jiang, Ji-Rong Wen, Zhicheng Dou, Wayne Xin Zhao, Jian-Yun Nie, and Ming Yue. 2017.
+
+Learning to diversify search results via subtopic attention. In Proceedings of the 40th international ACM SIGIR Conference on Research and Development in Information Retrieval. 545–554.
+
+Le and Mikolov (2014)
+
+Quoc Le and Tomas Mikolov. 2014.
+
+Distributed representations of sentences and documents. In International conference on machine learning. PMLR, 1188–1196.
+
+Li et al. (2009)
+
+Liangda Li, Ke Zhou, Gui-Rong Xue, Hongyuan Zha, and Yong Yu. 2009.
+
+Enhancing diversity, coverage and balance for summarization through structure learning. In Proceedings of the 18th international conference on World wide web. 71–80.
+
+Lowe et al. (2017)
+
+Ryan Lowe, Yi I Wu, Aviv Tamar, Jean Harb, OpenAI Pieter Abbeel, and Igor Mordatch. 2017.
+
+Multi-agent actor-critic for mixed cooperative-competitive environments.
+
+Advances in neural information processing systems 30 (2017).
+
+Mihalkova and Mooney (2009)
+
+Lilyana Mihalkova and Raymond Mooney. 2009.
+
+Learning to disambiguate search queries from short sessions. In Joint European Conference on Machine Learning and Knowledge Discovery in Databases. Springer, 111–127.
+
+Pang et al. (2020)
+
+Liang Pang, Jun Xu, Qingyao Ai, Yanyan Lan, Xueqi Cheng, and Jirong Wen. 2020.
+
+Setrank: Learning a permutation-invariant ranking model for information retrieval. In Proceedings of the 43rd international ACM SIGIR conference on research and development in information retrieval. 499–508.
+
+Puterman (2014)
+
+Martin L Puterman. 2014.
+
+Markov decision processes: discrete stochastic dynamic programming.
+
+John Wiley & Sons.
+
+Qin et al. (2020)
+
+Xubo Qin, Zhicheng Dou, and Ji-Rong Wen. 2020.
+
+Diversifying search results using self-attention network. In Proceedings of the 29th ACM International Conference on Information & Knowledge Management. 1265–1274.
+
+Qin et al. (2023)
+
+Xubo Qin, Zhicheng Dou, Yutao Zhu, and Ji-Rong Wen. 2023.
+
+GDESA: Greedy Diversity Encoder with Self-attention for Search Results Diversification.
+
+ACM Transactions on Information Systems 41, 2 (2023), 1–36.
+
+Radlinski et al. (2008)
+
+Filip Radlinski, Robert Kleinberg, and Thorsten Joachims. 2008.
+
+Learning diverse rankings with multi-armed bandits. In Proceedings of the 25th international conference on Machine learning. 784–791.
+
+Rashid et al. (2018)
+
+Tabish Rashid, Mikayel Samvelyan, Christian Schroeder, Gregory Farquhar, Jakob Foerster, and Shimon Whiteson. 2018.
+
+Qmix: Monotonic value function factorisation for deep multi-agent reinforcement learning. In International conference on machine learning. PMLR, 4295–4304.
+
+Santos et al. (2010)
+
+Rodrygo LT Santos, Craig Macdonald, and Iadh Ounis. 2010.
+
+Exploiting query reformulations for web search result diversification. In Proceedings of the 19th international conference on World wide web. 881–890.
+
+Singh and Joachims (2019)
+
+Ashudeep Singh and Thorsten Joachims. 2019.
+
+Policy learning for fairness in ranking.
+
+Advances in neural information processing systems 32 (2019).
+
+Su et al. (2021)
+
+Zhan Su, Zhicheng Dou, Yutao Zhu, Xubo Qin, and Ji-Rong Wen. 2021.
+
+Modeling intent graph for search result diversification. In Proceedings of the 44th International ACM SIGIR Conference on Research and Development in Information Retrieval. 736–746.
+
+Su et al. (2022)
+
+Zhan Su, Zhicheng Dou, Yutao Zhu, and Ji-Rong Wen. 2022.
+
+Knowledge Enhanced Search Result Diversification. In Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining. 1687–1695.
+
+Sunehag et al. (2017)
+
+Peter Sunehag, Guy Lever, Audrunas Gruslys, Wojciech Marian Czarnecki, Vinicius Zambaldi, Max Jaderberg, Marc Lanctot, Nicolas Sonnerat, Joel Z Leibo, Karl Tuyls, et al. 2017.
+
+Value-decomposition networks for cooperative multi-agent learning.
+
+arXiv preprint arXiv:1706.05296 (2017).
+
+Sutton (1988)
+
+Richard S Sutton. 1988.
+
+Learning to predict by the methods of temporal differences.
+
+Machine learning 3 (1988), 9–44.
+
+Vaswani et al. (2017)
+
+Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N Gomez, Łukasz Kaiser, and Illia Polosukhin. 2017.
+
+Attention is all you need.
+
+Advances in neural information processing systems 30 (2017).
+
+Wang et al. (2020b)
+
+Jianhao Wang, Zhizhou Ren, Terry Liu, Yang Yu, and Chongjie Zhang. 2020b.
+
+Qplex: Duplex dueling multi-agent q-learning.
+
+arXiv preprint arXiv:2008.01062 (2020).
+
+Wang et al. (2020a)
+
+Tonghan Wang, Tarun Gupta, Anuj Mahajan, Bei Peng, Shimon Whiteson, and Chongjie Zhang. 2020a.
+
+Rode: Learning roles to decompose multi-agent tasks.
+
+arXiv preprint arXiv:2010.01523 (2020).
+
+Wei et al. (2017)
+
+Zeng Wei, Jun Xu, Yanyan Lan, Jiafeng Guo, and Xueqi Cheng. 2017.
+
+Reinforcement learning to rank with Markov decision process. In Proceedings of the 40th international ACM SIGIR conference on research and development in information retrieval. 945–948.
+
+Williams (1992)
+
+Ronald J Williams. 1992.
+
+Simple statistical gradient-following algorithms for connectionist reinforcement learning.
+
+Machine learning 8 (1992), 229–256.
+
+Xia et al. (2008)
+
+Fen Xia, Tie-Yan Liu, Jue Wang, Wensheng Zhang, and Hang Li. 2008.
+
+Listwise approach to learning to rank: theory and algorithm. In Proceedings of the 25th international conference on Machine learning. 1192–1199.
+
+Xia et al. (2015)
+
+Long Xia, Jun Xu, Yanyan Lan, Jiafeng Guo, and Xueqi Cheng. 2015.
+
+Learning maximal marginal relevance model via directly optimizing diversity evaluation measures. In Proceedings of the 38th international ACM SIGIR conference on research and development in information retrieval. 113–122.
+
+Xia et al. (2016)
+
+Long Xia, Jun Xu, Yanyan Lan, Jiafeng Guo, and Xueqi Cheng. 2016.
+
+Modeling document novelty with neural tensor network for search result diversification. In Proceedings of the 39th International ACM SIGIR conference on Research and Development in Information Retrieval. 395–404.
+
+Xia et al. (2017)
+
+Long Xia, Jun Xu, Yanyan Lan, Jiafeng Guo, Wei Zeng, and Xueqi Cheng. 2017.
+
+Adapting Markov decision process for search result diversification. In Proceedings of the 40th international ACM SIGIR conference on research and development in information retrieval. 535–544.
+
+Xu et al. (2020)
+
+Jun Xu, Zeng Wei, Long Xia, Yanyan Lan, Dawei Yin, Xueqi Cheng, and Ji-Rong Wen. 2020.
+
+Reinforcement learning to rank with pairwise policy gradient. In Proceedings of the 43rd International ACM SIGIR Conference on Research and Development in Information Retrieval. 509–518.
+
+Xu et al. (2017)
+
+Jun Xu, Long Xia, Yanyan Lan, Jiafeng Guo, and Xueqi Cheng. 2017.
+
+Directly optimize diversity evaluation measures: A new approach to search result diversification.
+
+ACM Transactions on Intelligent Systems and Technology (TIST) 8, 3 (2017), 1–26.
+
+Yan et al. (2021)
+
+Le Yan, Zhen Qin, Rama Kumar Pasumarthi, Xuanhui Wang, and Michael Bendersky. 2021.
+
+Diversification-aware learning to rank using distributed representation. In Proceedings of the Web Conference 2021. 127–136.
+
+Yao et al. (2020)
+
+Jing Yao, Zhicheng Dou, Jun Xu, and Ji-Rong Wen. 2020.
+
+RLPer: A reinforcement learning model for personalized search. In Proceedings of The Web Conference 2020. 2298–2308.
+
+Yu et al. (2022)
+
+Chao Yu, Akash Velu, Eugene Vinitsky, Jiaxuan Gao, Yu Wang, Alexandre Bayen, and Yi Wu. 2022.
+
+The surprising effectiveness of ppo in cooperative multi-agent games.
+
+Advances in Neural Information Processing Systems 35 (2022), 24611–24624.
+
+Yu (2022)
+
+Hai-Tao Yu. 2022.
+
+Optimize What You Evaluate With: Search Result Diversification Based on Metric Optimization. In Proceedings of the AAAI Conference on Artificial Intelligence, Vol. 36. 10399–10407.
+
+Zhai et al. (2015)
+
+ChengXiang Zhai, William W Cohen, and John Lafferty. 2015.
+
+Beyond independent relevance: methods and evaluation metrics for subtopic retrieval. In Acm sigir forum, Vol. 49. ACM New York, NY, USA, 2–9.
+
+Zhang et al. (2022)
+
+Bin Zhang, Yunpeng Bai, Zhiwei Xu, Dapeng Li, and Guoliang Fan. 2022.
+
+Efficient cooperation strategy generation in multi-agent video games via hypergraph neural network.
+
+arXiv preprint arXiv:2203.03265 (2022).
+
+Zhang et al. (2023a)
+
+Bin Zhang, Lijuan Li, Zhiwei Xu, Dapeng Li, and Guoliang Fan. 2023a.
+
+Inducing stackelberg equilibrium through spatio-temporal sequential decision-making in multi-agent reinforcement learning. In Proceedings of the Thirty-Second International Joint Conference on Artificial Intelligence. 353–361.
+
+Zhang et al. (2023b)
+
+Bin Zhang, Hangyu Mao, Lijuan Li, Zhiwei Xu, Dapeng Li, Rui Zhao, and Guoliang Fan. 2023b.
+
+Stackelberg decision transformer for asynchronous action coordination in multi-agent systems.
+
+arXiv preprint arXiv:2305.07856 (2023).
+
+Zhou and Agichtein (2020)
+
+Jianghong Zhou and Eugene Agichtein. 2020.
+
+Rlirank: Learning to rank with reinforcement learning for dynamic search. In Proceedings of The Web Conference 2020. 2842–2848.
+
+Zhu et al. (2014)
+
+Yadong Zhu, Yanyan Lan, Jiafeng Guo, Xueqi Cheng, and Shuzi Niu. 2014.
+
+Learning for search result diversification. In Proceedings of the 37th international ACM SIGIR conference on Research & development in information retrieval. 293–302.
+
+Zou et al. (2019)
+
+Shihao Zou, Zhonghua Li, Mohammad Akbari, Jun Wang, and Peng Zhang. 2019.
+
+MarlRank: Multi-agent reinforced learning to rank. In Proceedings of the 28th ACM International Conference on Information and Knowledge Management. 2073–2076.
+
+Appendix
+
+Appendix A Why do existing methods lead to suboptimal diversity ranking?
+
+A.1. Why the "greedy selection" approach leads to suboptimality.
+
+In the task of Search Result Diversification, the “greedy selection” methods (Carbonell and Goldstein, 1998; Santos et al., 2010; Xia et al., 2017; Feng et al., 2018) typically refer to selecting the document that can provide the most additional information at each step when generating a diversified result list, i.e., making a locally optimal choice. However, this method is prone to suboptimal rankings for the following reasons:
+
+• 
+
+Local Optimality Instead of Global Optimality: The greedy selection method chooses the document most beneficial to the current ranking at each step, but this method only considers the optimal solution for the current step, not the global optimality of the entire ranking list. Hence, although each step is a locally optimal choice, the final result may not be the best overall ranking.
+
+• 
+
+Lack of Holistic Perspective: As the greedy selection is performed step by step, it does not take into account all possible combinations of documents and their overall effects. This might result in missing out on document combinations that could provide broader topic coverage.
+
+• 
+
+Ignoring Interactions Among Documents: Greedy selection often does not fully consider the interrelationships among documents. For instance, some documents might be highly related in content, and their consecutive appearance might reduce user satisfaction and the diversity of the results.
+
+• 
+
+Mismatch Between Objective Function and Evaluation Metrics: The objective function used in the training of the greedy selection method may not match the metrics used in the final evaluation. This inconsistency could lead to optimising for a target in the training process that does not match the performance needing evaluation.
+
+• 
+
+Lack of Flexibility: Greedy selection methods are usually not flexible; once the ranking order is determined, it is difficult to adjust. If the selected documents are not optimal, i.e., there is an error in the ranking compared to the optimal one, then the documents chosen based on the currently selected documents will result in cumulative errors.
+
+A.2. Why optimizing an approximation of the objective function leads to suboptimality.
+
+Methods of optimizing the approximation of the objective function (Yan et al., 2021; Yu, 2022) can often achieve parallel inference (faster than the serial selection of “greedy selection”), but may result in suboptimal ranking results due to the following issues:
+
+• 
+
+Mismatch Between Objective Function and Evaluation Metrics: There is a mismatch between the optimization objective used in the training process and the evaluation metrics used in the final assessment, which may prevent the model from accurately learning to achieve the best diversification effect.
+
+• 
+
+Low Exploration Efficiency: Such methods are less capable of exploring different document ranking combinations. When faced with the challenge of exploring as many different document ranking combinations as possible in a vast combination space, it leads to an increase in the time complexity of training and makes it difficult to find the global optimum.
+
+Appendix B Diversity Evaluation Metrics
+
+In this section, we introduce three diversity evaluation metrics, namely α\alpha-NDCG (Clarke et al., 2008), ERR-IA (Chapelle et al., 2011) and S-recall (Zhai et al., 2015). The basic setting is that there are nn documents in a query, and each document may cover 1 to mm subtopics.
+
+B.1. α​-​N​D​C​G\alpha\textrm{-}NDCG
+
+Firstly, the α\alpha discounted cumulative gain (α​-​D​C​G\alpha\textrm{-}DCG) is defined as Equation (16).
+
+(16)
+
+α​-​D​C​G=∑i=1n∑l=1myi​l​(1−α)cl​il​o​g2​(1+ri)\alpha\textrm{-}DCG=\sum^{n}_{i=1}\sum^{m}_{l=1}\frac{y_{il}(1-\alpha)^{c_{li}}}{log_{2}(1+r_{i})}
+
+yi​l=1y_{il}=1 means that subtopic ll is covered by document ii and yi​l=0y_{il}=0 is the opposite. α\alpha is a parameter between 0 to 1, which quantifies the probability of a reader getting the information about a specific subtopic from a relevant document. rir_{i} is the ranking position of document ii, and cl​ic_{li} is the number of times that the subtopic ll being covered by the documents on the prior positions to rir_{i}. Specifically, cl​ic_{li} is defined as cl​i=∑j:rj≤riyj​lc_{li}=\sum_{j:r_{j}\leq r_{i}}y_{jl}.
+
+Then, dividing the α​-​D​C​G\alpha\textrm{-}DCG of a given documents list by the α​-​D​C​Gi​d​e​a​l\alpha\textrm{-}DCG_{ideal} of an ideal ranking list yields the normalized α​-​N​D​C​G\alpha\textrm{-}NDCG,
+
+(17)
+
+α​-​N​D​C​G=α​-​D​C​Gα​-​D​C​Gi​d​e​a​l\alpha\textrm{-}NDCG=\frac{\alpha\textrm{-}DCG}{\alpha\textrm{-}DCG_{ideal}}
+
+The metric of top kk documents in a given list, called α−N​D​C​G​@​k\alpha-NDCG@k, is usually used to measure the diversity of the documents list.
+
+B.2. E​R​R​-​I​AERR\textrm{-}IA
+
+The E​R​R​-​I​AERR\textrm{-}IA is defined in Equation (18).
+
+(18)
+
+ERR-IA=∑i=1n1ri∑l=1m1m(∏j:rj≤ri(1−2yj​l−12ylm​a​x))2yj​l−12ylm​a​xERR\textrm{-}IA=\sum^{n}_{i=1}\frac{1}{r_{i}}\sum^{m}_{l=1}\frac{1}{m}\left(\prod_{j:r_{j}\leq r_{i}}(1-\frac{2^{y_{jl}}-1}{2^{y_{l}^{max}}})\right)\frac{2^{y_{jl}}-1}{2^{y_{l}^{max}}}
+
+If yi​ly_{il} is a binary label (yi​ly_{il} = 0 or 1), the Equation (18) can be rewritten as Equation (19).
+
+(19)
+
+E​R​R​-​I​A=∑i=1n1ri​∑l=1m1m​yi​l2cl​i+1ERR\textrm{-}IA=\sum^{n}_{i=1}\frac{1}{r_{i}}\sum^{m}_{l=1}\frac{1}{m}\frac{y_{il}}{2^{c_{li}+1}}
+
+Similar to α​-​N​D​C​G​@​k\alpha\textrm{-}NDCG@k, E​R​R​-​I​A​@​kERR\textrm{-}IA@k is also often used in practice.
+
+B.3. S​-​r​e​c​a​l​lS\textrm{-}recall
+
+The S​-​r​e​c​a​l​lS\textrm{-}recall is always defined on top kk documents of a ranked list, i.e.,
+
+(20)
+
+S​-​r​e​c​a​l​l​@​k=|∪ki=1subtopics(di)||∪ni=1subtopics(di)|S\textrm{-}recall@k=\frac{\left|\cup^{k}_{i=1}subtopics(d_{i})\right|}{\left|\cup^{n}_{i=1}subtopics(d_{i})\right|}
+
+Obviously, S​-​r​e​c​a​l​l​@​kS\textrm{-}recall@k represents the proportion of subtopics number recalled in the first top kk documents to the number of subtopics contained in the whole document list.
+
+Appendix C The Detail of MHSA
+
+C.1. The structure of MHSA
+
+The MHSA module is an essential component in Transformer (Vaswani et al., 2017) and its variants. Given an input matrix 𝐗∈ℝn×L\mathbf{X}\in\mathbb{R}^{n\times L}, where nn and LL denote the number of documents in candidiate document set D and the embedding vector dimension of 𝐝𝐢\mathbf{d_{i}}. MHSA computes a weighted sum of all the input tokens for each token. The weight (also called attention score) between two tokens is calculated using their similarity.
+
+Specifically, MHSA first linearly projects the input matrix into query 𝐐\mathbf{Q}, key 𝐊\mathbf{K}, and value 𝐕\mathbf{V} matrices, i.e., 𝐐=𝐗𝐖Q\mathbf{Q}=\mathbf{X}\mathbf{W}_{Q}, 𝐊=𝐗𝐖K\mathbf{K}=\mathbf{X}\mathbf{W}_{K}, and 𝐕=𝐗𝐖V\mathbf{V}=\mathbf{X}\mathbf{W}_{V}, where 𝐖Q\mathbf{W}_{Q}, 𝐖K\mathbf{W}_{K}, and 𝐖V\mathbf{W}_{V} are learnable weight matrices with dimensions L×dkL\times d_{k}, L×dkL\times d_{k}, and L×dvL\times d_{v} respectively, and dkd_{k} and dvd_{v} are the dimensions of keys/values. Then, the attention score between each two tokens is computed as 𝐀𝐬=softmax​(𝐐𝐊Tdk)\mathbf{A_{s}}=\text{softmax}(\frac{\mathbf{Q}\mathbf{K}^{T}}{\sqrt{d_{k}}}). The output of MHSA is 𝐎=𝐀𝐬​𝐕\mathbf{O}=\mathbf{A_{s}}\mathbf{V}, with 𝐎∈ℝn×dv\mathbf{O}\in\mathbb{R}^{n\times d_{v}}.
+
+MHSA further enhances the model capacity by applying the above process multiple times in parallel, which is called multi-head mechanism. Suppose there are hh heads, the output after multi-head is 𝐎=[𝐎1;𝐎2;⋯;𝐎h]​𝐖O\mathbf{O}=[\mathbf{O}_{1};\mathbf{O}_{2};\cdots;\mathbf{O}_{h}]\mathbf{W}_{O}, where [⋅][\cdot] denotes concatenation, and 𝐎i\mathbf{O}_{i} and 𝐖O\mathbf{W}_{O} are the output of the ii-th head and a learnable weight matrix with dimensions h⋅dv×dh\cdot d_{v}\times d, respectively.
+
+C.2. The reason for using MHSA
+
+Why do we employ the MHSA module to obtain 𝐞𝐢\mathbf{e_{i}} rather than using other networks like MLP to compute the cross features of all documents directly? The main reason is as follows:
+
+According to (Pang et al., 2020), the ranking model should satisfy the permutation invariance property which is described as following Definition:
+
+Definition 0 (Permutation Invariance).
+
+The target ranking for a given set is the same regardless of the order of documents in the set. In other words, no matter how exchange the positions of did_{i} and djd_{j} in inputs information, it will not affect the final ranking result.
+
+A method to construct a ranking model in accordance with Permutation Invariance involves initially attributing scores to the documents via a permutation equivariant scoring function, followed by ordering based on these scores. Pang et al. (Pang et al., 2020) also proved that the multi-head attention block is permutation equivariant. Therefore, the MHSA module is used to compute higher-level cross feature vectors between documents.
+
+Appendix D The Introduction of Datasets
+
+We conduct experiments to address above research questions on two datasets, TREC 2009∼\sim2012 Web Track datasets and DU-DIV dataset. TREC 2009∼\sim2012 Web Track datasets are publicly available and Xia et al. (Xia et al., 2017) first uses them for training and evaluating diversified search models. Almost all the following works, such as M2​Div\mathrm{M^{2}Div} (Feng et al., 2018), DALETOR (Yan et al., 2021), MO4SRD (Yu, 2022), etc., conduct experiments on these datasets. As a widely used test collection for diversified search, the TREC Web track dataset only contains 198 queries, and previous studies often use Doc2vec (Le and Mikolov, 2014) to obtain the document embeddings on this dataset. In this work, to ensure a fair and meaningful comparison with existing work, we first compare MA4DIV with existing baselines on the this relatively small dataset. Then, we further conduct extensive experiments on a new and larger scale diversity dataset called DU-DIV, which is constructed based on real user data in industrial search engine. The Figure 4 shows the average number of subtopics of the 15 documents with ideal ranking permutation in the DU-DIV dataset.
+
+Figure 4. Average number of subtopics across the 15 documents in the DU-DIV dataset. The abscissa from 1 to 15 represents positions 1 to 15 in the ideal permutation, and the ordinate is the average of the number of subtopics contained in the documents of the corresponding position.
+
+Table 5. Comparisons of datasets TREC and DU-DIV.
+
+Dataset
+TREC
+DU-DIV
+
+Source
+TREC 2009∼\sim2012 Web Track
+Real search engine
+
+No. of Queries
+198
+4473
+
+No. of Documents per Query
+average 211 docs/query
+15 docs/query
+
+No. of Subtopics
+maximum 7 subtopics/doc
+total 50 subtopics
+
+Representation
+Doc2vec (Le and Mikolov, 2014)
+BERT (Devlin et al., 2018)
+
+More details of these two datasets are shown in Table 5. The DU-DIV dataset has 4473 queries, far more than the TREC datasets. The documents in the DU-DIV dataset are the top-15 documents retrieved by the industrial search engine for each query, which makes this dataset particularly useful for the diversified ranking task in which we need to rerank these top documents for diversity. In the TREC web track datasets, each document contains a maximum of 7 subtopics. In the DU-DIV dataset, we predefined 50 subtopics, such as law, healthcare, education, etc. Each document corresponds to one or more of the predefined subtopics. Moreover, while previous studies on the TREC web track dataset often use the Doc2vec model to represent queries and documents in vector with L​=​100L\textrm{=}100 dimensions, the DU-DIV dataset utilizes the more powerful model BERT (Devlin et al., 2018) to encode queries and documents into vectors with L​=​1024L\textrm{=}1024 dimensions.
+
+Appendix E Experimental Settings
+
+Considering that TREC datasets contain only 198 queries, this is prone to overfitting for existing deep learning models. In addition, the average number of documents related to each query is about 211, but a large number of these documents do not contain any subtopics. Therefore, we reshape TREC dataset. That is, from each of the original document lists in TREC (198 lists in total, with an average of 211 documents per query), we subsample 30 documents at a time to form a new document list. This process runs multiple times over a document list associated with the same query, resulting in a reshaped dataset with a total of 6,232 document lists (198 unique queries). And it’s crucial to ensure that an appropriate number of the 30 documents sampled contain at least one subtopic. Figure 5 shows the number of documents with subtopics in these 6,232 document lists. We can see that there are 1,053, 1,717, and 1,980 document lists with 16 ∼\sim 20, 21 ∼\sim 25, 26 ∼\sim 30 documents containing any subtopics, and 758 document lists with 1 ∼\sim 5 documents containing any subtopics. This means that after our sampling, most document lists contain a rich number of subtopics, and some document lists have a small number of subtopics. Overall, this ensures that the data is comprehensive.
+
+Figure 5. This figure illustrates the relationship between the quantity of newly sampled document lists and the count of documents that include any subtopics present in the sampled list.
+
+We conduct 5-fold cross-validation experiments on the reshaped TREC dataset with the same subset split based on unique queries as in (Feng et al., 2018). In the DU-DIV dataset, we randomly sample 80% of 4473 unique queries and their associated document lists to the training set, and the left 20% to the test set.
+
+The code framework of MA4DIV is based on PyMARL2 framework (Hu et al., 2021), which is a open-source code framework for multi-agent reinforcement learning. The key hyperparameters of MA4DIV on two datasets are shown in Table 6. |𝒜||\mathcal{A}| is the dimension of action space, i.e. the number of discrete scores (1, …, |𝒜|\mathcal{|A|}). LL, HH and z respectively represent the number of MHSA block, attention heads and attention embedding dimensions of MHSA.
+
+Table 6. Hyperparemeters of MA4DIV on different dataset.
+
+Dataset
+|𝒜||\mathcal{A}|
+LL
+HH
+zz
+
+TREC
+30
+1
+4
+64
+
+DU-DIV
+15
+1
+4
+256
+
+We reproduce the code of DALETOR and MO4SRD, and ensure that these two algorithms have the same parameter scale of MHSA structure as our MA4DIV in Table 6, that is, the L=1L=1 and H=4H=4, zz is 64 and 256 respectively on two datasets.
+
+Appendix F Reason for Higher Efficiency of MA4DIV
+
+The main reason for the higher efficiency of MA4DIV is as follows: MDP-DIV adopts an on-policy RL method to optimize the cumulative rewards. A feature of on-policy RL is that the currently sampled data is discarded after it is utilized. While MA4DIV is a off-policy RL method. From 9-th line and 12-th line of Algorithm 2, we can see that the sampled data is stored in replay buffer ℳ\mathcal{M}, then update the model multiple times in minibatch approach. In addition, each data stored in replay buffer ℳ\mathcal{M} may be sampled multiple times to update the ranking model. Therefore, the data utilization efficiency of MA4DIV is higher than that of MDP-DIV, which is the main reason why MA4DIV converges significantly faster.
+
+Appendix G Analysis of Inference Complexity
+
+Table 7 shows the inference complexity of different approaches. We can see that the Heuristic Approaches, including MMR (Carbonell and Goldstein, 1998) and xQuAD (Santos et al., 2010), have to perform inference process in O⁡(n)O(n). And nn is the number of candidate documents. In addition, Single-Agent RL Approaches, such as MDP-DIV (Xia et al., 2017), also has a O⁡(n)O(n) inference complexity. These two approaches can only select one document in one time step, so the inference complexity is equal to the number of candidate documents.
+
+Because DALETOR (Yan et al., 2021) and MO4SRD (Yu, 2022) optimize the approximation of evaluation metrics and can score for all candidate documents at once, these approaches have O⁡(1)O(1) inference complexity. In our MA4DIV, the ranking scores {s1,…,sn}\{s_{1},\dots,s_{n}\} can be obtained in one time step, so MA4DIV also has the lowest inference complexity with O⁡(1)O(1).
+
+Table 7. The inference complexity of different diversified search algorithms. nn is the number of candidate documents.
+
+Method
+
+Inference Complexity
+
+Heuristic Approaches
+
+O⁡(n)O(n)
+
+Single-Agent RL Approaches
+
+O⁡(n)O(n)
+
+Approximate Metric Approaches
+
+O⁡(1)O(1)
+
+MA4DIV (ours)
+
+O⁡(1)O(1)
+
+Experimental support, please
+view the build logs
+for errors. Generated by
+
+L
+A
+T
+E
+
+xml
+
+.
+
+Instructions for reporting errors
+
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+
+Click the "Report Issue" (
+
+) button, located in the page header.
+
+Tip: You can select the relevant text first, to include it in your report.
+
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+
+Major funding support from
+

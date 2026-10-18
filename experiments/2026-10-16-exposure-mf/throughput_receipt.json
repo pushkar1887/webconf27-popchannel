@@ -1,0 +1,7 @@
+{
+  "first_full_epoch_seconds": 0.3458793000008882,
+  "training_rows": 792189,
+  "batch_size": 32768,
+  "device": "CPU",
+  "does_not_predict_all_method_runtimes": true
+}

@@ -1,0 +1,439 @@
+{
+  "receipt": {
+    "repo": "snap-research/GraphHash",
+    "sha": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+    "candidates": [
+      "README.md",
+      "configs/model/LightGCN.yaml",
+      "loss.py",
+      "models/lightgcn.py",
+      "requirements.txt"
+    ]
+  },
+  "tree": {
+    "sha": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+    "url": "https://api.github.com/repos/snap-research/GraphHash/git/trees/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+    "tree": [
+      {
+        "path": ".gitignore",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "0c0e00f84d271840e39ba7c3a9ac2de4497364f9",
+        "size": 439,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/0c0e00f84d271840e39ba7c3a9ac2de4497364f9"
+      },
+      {
+        "path": "GraphHash.png",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "b83b946c1d8ccb00f3cf682c5a53c18d078bd6f2",
+        "size": 192330,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/b83b946c1d8ccb00f3cf682c5a53c18d078bd6f2"
+      },
+      {
+        "path": "LICENSE",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "5f05724b3ab9a23e7d7ab438b091a4e9f8331ace",
+        "size": 26376,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/5f05724b3ab9a23e7d7ab438b091a4e9f8331ace"
+      },
+      {
+        "path": "README.md",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "b5add24e64e5c00015ad8f91f00a43b8f820f1d5",
+        "size": 2200,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/b5add24e64e5c00015ad8f91f00a43b8f820f1d5"
+      },
+      {
+        "path": "commands.sh",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "3842ae85a1527d51b599513d6b0ff2626d5dcc5e",
+        "size": 15398,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/3842ae85a1527d51b599513d6b0ff2626d5dcc5e"
+      },
+      {
+        "path": "configs",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "b9a30330c76de23ef4ec802b34918fc952a39b1b",
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/trees/b9a30330c76de23ef4ec802b34918fc952a39b1b"
+      },
+      {
+        "path": "configs/dataset",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "44369cf16e5891856f7235ed8d02b3fbe1a3efd2",
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/trees/44369cf16e5891856f7235ed8d02b3fbe1a3efd2"
+      },
+      {
+        "path": "configs/dataset/AmazonBook.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "04ec190542d11fb9c8b0bb9cd6db86c9859fd61a",
+        "size": 204,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/04ec190542d11fb9c8b0bb9cd6db86c9859fd61a"
+      },
+      {
+        "path": "configs/dataset/Frappe.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "bbd0a06af9b9b9e93e5ebb9d43e5bb842d3eb51d",
+        "size": 149,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/bbd0a06af9b9b9e93e5ebb9d43e5bb842d3eb51d"
+      },
+      {
+        "path": "configs/dataset/Gowalla.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "e2379ad48887363dca4ef23a56a3d42b495bd53e",
+        "size": 155,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/e2379ad48887363dca4ef23a56a3d42b495bd53e"
+      },
+      {
+        "path": "configs/dataset/MovieLens1M-ranking.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "4ea4c7ffa38e81abc956dd3c338ab1a4d6787c0f",
+        "size": 161,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/4ea4c7ffa38e81abc956dd3c338ab1a4d6787c0f"
+      },
+      {
+        "path": "configs/dataset/Pinterest.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "bd948e69c0af433661a9b1904b93b1b6b1d8c4e4",
+        "size": 157,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/bd948e69c0af433661a9b1904b93b1b6b1d8c4e4"
+      },
+      {
+        "path": "configs/dataset/Yelp2018.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "3e0b6a678428b877f17c7c46dab9e64cce581107",
+        "size": 201,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/3e0b6a678428b877f17c7c46dab9e64cce581107"
+      },
+      {
+        "path": "configs/default.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "debb18b5ad819cc4201347f9a30e28967e56b76f",
+        "size": 254,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/debb18b5ad819cc4201347f9a30e28967e56b76f"
+      },
+      {
+        "path": "configs/model",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "0bf5361262acec1384051ed87d585e6b570654d3",
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/trees/0bf5361262acec1384051ed87d585e6b570654d3"
+      },
+      {
+        "path": "configs/model/DCNv2.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "965e87ec37f95a939f2dfd1f64030d10b17352f0",
+        "size": 144,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/965e87ec37f95a939f2dfd1f64030d10b17352f0"
+      },
+      {
+        "path": "configs/model/DCNv2s.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "04ffe81d551b1124a61c8ac79f68d2c9d67a86e2",
+        "size": 154,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/04ffe81d551b1124a61c8ac79f68d2c9d67a86e2"
+      },
+      {
+        "path": "configs/model/DCNv2xL.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "b65a227d76e8edc73d8d44bd7875f0c17071960d",
+        "size": 134,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/b65a227d76e8edc73d8d44bd7875f0c17071960d"
+      },
+      {
+        "path": "configs/model/DLRM.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "16532b3155adbb4fd09604c9d35333a222d770a1",
+        "size": 142,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/16532b3155adbb4fd09604c9d35333a222d770a1"
+      },
+      {
+        "path": "configs/model/DLRMs.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "7fc7bda3d3b4d62e3d85b3942b903d0ce0dec1cf",
+        "size": 152,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/7fc7bda3d3b4d62e3d85b3942b903d0ce0dec1cf"
+      },
+      {
+        "path": "configs/model/DLRMxL.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "6c971d5faacff34090a58ebb8aea97f3b41350da",
+        "size": 133,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/6c971d5faacff34090a58ebb8aea97f3b41350da"
+      },
+      {
+        "path": "configs/model/DeepFM.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "2ae63f3f20ba2ad7659d710c66a1a2be309c0c1e",
+        "size": 146,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/2ae63f3f20ba2ad7659d710c66a1a2be309c0c1e"
+      },
+      {
+        "path": "configs/model/DeepFMs.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "3ec74dae2c1e34b74114fc21e1c7c8d43ec9b1d0",
+        "size": 156,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/3ec74dae2c1e34b74114fc21e1c7c8d43ec9b1d0"
+      },
+      {
+        "path": "configs/model/LightGCN.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "9248756bd39a744b02605fbc182752c9e25874bd",
+        "size": 148,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/9248756bd39a744b02605fbc182752c9e25874bd"
+      },
+      {
+        "path": "configs/model/MF.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "d9f9e5e642a1c52556b6be2058e757fc09ada2bf",
+        "size": 82,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/d9f9e5e642a1c52556b6be2058e757fc09ada2bf"
+      },
+      {
+        "path": "configs/model/MFDAU.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "b913f8846fbdc5686404790e9204d82e7830f49a",
+        "size": 88,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/b913f8846fbdc5686404790e9204d82e7830f49a"
+      },
+      {
+        "path": "configs/model/NeuMF.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "1b55e6de4bcfbacff69155600be144f01b5fc7df",
+        "size": 88,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/1b55e6de4bcfbacff69155600be144f01b5fc7df"
+      },
+      {
+        "path": "configs/model/WideDeep.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "d0cb05a5f9f055684e22c53d8912edb4fa967172",
+        "size": 150,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/d0cb05a5f9f055684e22c53d8912edb4fa967172"
+      },
+      {
+        "path": "configs/model/WideDeeps.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "2845643217ce7c126499134e791e79636c3c8157",
+        "size": 160,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/2845643217ce7c126499134e791e79636c3c8157"
+      },
+      {
+        "path": "configs/model/WideDeepxL.yaml",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "efa65596a38ddcc9fe7dad4b2d0a8f110beb25b6",
+        "size": 139,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/efa65596a38ddcc9fe7dad4b2d0a8f110beb25b6"
+      },
+      {
+        "path": "data.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "31ef9a3d86174224298ed9e51b16a1dcf2e49e49",
+        "size": 4728,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/31ef9a3d86174224298ed9e51b16a1dcf2e49e49"
+      },
+      {
+        "path": "loss.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "765393b80c161fa811285b95f144e1b7fdc85a19",
+        "size": 3956,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/765393b80c161fa811285b95f144e1b7fdc85a19"
+      },
+      {
+        "path": "metrics.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "bae526b767267126278a04b67a2dd4c1ebb20290",
+        "size": 1326,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/bae526b767267126278a04b67a2dd4c1ebb20290"
+      },
+      {
+        "path": "models",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "3f8556b234832ccfc0a7ce860763938c1da28e8c",
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/trees/3f8556b234832ccfc0a7ce860763938c1da28e8c"
+      },
+      {
+        "path": "models/baserec.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "227aeb3c8d8636cec0b92a8898c9a7d6cc8851c1",
+        "size": 2125,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/227aeb3c8d8636cec0b92a8898c9a7d6cc8851c1"
+      },
+      {
+        "path": "models/dcnv2.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "3fb1f719ee9bf37e3de7340bccdd67bf77925d60",
+        "size": 7651,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/3fb1f719ee9bf37e3de7340bccdd67bf77925d60"
+      },
+      {
+        "path": "models/deepfm.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "fe3eec0439294f32c817f4868bd3747c6200cb92",
+        "size": 4698,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/fe3eec0439294f32c817f4868bd3747c6200cb92"
+      },
+      {
+        "path": "models/dlrm.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "ac8cb58cf61308c5b9d706ff2c2e417d41824621",
+        "size": 6288,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/ac8cb58cf61308c5b9d706ff2c2e417d41824621"
+      },
+      {
+        "path": "models/lightgcn.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "f350bb3a7ee5389181f3584af01ddb199a146643",
+        "size": 5260,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/f350bb3a7ee5389181f3584af01ddb199a146643"
+      },
+      {
+        "path": "models/mf.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "e874e44d69e707135fdd50da5e5d9c454b660e54",
+        "size": 2280,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/e874e44d69e707135fdd50da5e5d9c454b660e54"
+      },
+      {
+        "path": "models/mfdau.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "0a7335c5db97adf78fe185fd6f11e3e4bb6d6fb1",
+        "size": 1980,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/0a7335c5db97adf78fe185fd6f11e3e4bb6d6fb1"
+      },
+      {
+        "path": "models/mlp.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "5154dcc77209511cb9bd17e08f12643d44fcf5fa",
+        "size": 603,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/5154dcc77209511cb9bd17e08f12643d44fcf5fa"
+      },
+      {
+        "path": "models/neumf.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "2e1d985a2d4f34f143ccd945969fe55e94d5bb7d",
+        "size": 4392,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/2e1d985a2d4f34f143ccd945969fe55e94d5bb7d"
+      },
+      {
+        "path": "models/widedeep.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "457e844febf3cedde2ad07b6c20c7de0ba07df46",
+        "size": 7057,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/457e844febf3cedde2ad07b6c20c7de0ba07df46"
+      },
+      {
+        "path": "models/wmf.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "cfaccd4474bef8fda9798fce13ec35a33b5b0329",
+        "size": 2891,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/cfaccd4474bef8fda9798fce13ec35a33b5b0329"
+      },
+      {
+        "path": "requirements.txt",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "d4f025242f968da11ac6b2e722b39cc991c7b509",
+        "size": 164,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/d4f025242f968da11ac6b2e722b39cc991c7b509"
+      },
+      {
+        "path": "train.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "a1d140ddb71e0b811c20232f86d50b8ce707f34c",
+        "size": 15258,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/a1d140ddb71e0b811c20232f86d50b8ce707f34c"
+      },
+      {
+        "path": "training",
+        "mode": "040000",
+        "type": "tree",
+        "sha": "0b206ad1356fd28dff3997054336a9f4915bdc44",
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/trees/0b206ad1356fd28dff3997054336a9f4915bdc44"
+      },
+      {
+        "path": "training/train_test_dau.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "593f95b95da0194f316096e1b11a73bc2981009e",
+        "size": 6444,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/593f95b95da0194f316096e1b11a73bc2981009e"
+      },
+      {
+        "path": "training/train_test_ials.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "8cef9549acc6fb33811c5f84210a074eff4f0159",
+        "size": 6909,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/8cef9549acc6fb33811c5f84210a074eff4f0159"
+      },
+      {
+        "path": "training/train_test_id_only.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "f8897e4c0bcb97958ebf785597584fee19d9ffd6",
+        "size": 6921,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/f8897e4c0bcb97958ebf785597584fee19d9ffd6"
+      },
+      {
+        "path": "training/train_test_ranking.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "ec8aecb6645e85397e949f63189f6d9f9a1a4cbe",
+        "size": 6307,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/ec8aecb6645e85397e949f63189f6d9f9a1a4cbe"
+      },
+      {
+        "path": "utils.py",
+        "mode": "100644",
+        "type": "blob",
+        "sha": "f349fb355bfb8f57dfb9a68b9766ee8db5a641f3",
+        "size": 11732,
+        "url": "https://api.github.com/repos/snap-research/GraphHash/git/blobs/f349fb355bfb8f57dfb9a68b9766ee8db5a641f3"
+      }
+    ],
+    "truncated": false
+  }
+}

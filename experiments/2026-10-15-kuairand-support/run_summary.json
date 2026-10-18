@@ -1,0 +1,17 @@
+{
+  "status": "local_exploratory_probe_executed_and_artifacts_verified",
+  "verdict": "narrow_same_policy_component_signal; context-robust-compression hypothesis not validated",
+  "raw_rows": 2622668,
+  "clean_rows": 2575783,
+  "quarantined_rows": 46885,
+  "native_label_documentation_mismatches": 67596,
+  "two_context_users_min10": 4229,
+  "random_test_dominant_context_fraction": 0.9932430552452323,
+  "elapsed_seconds": {
+    "download": 69.81966980000288,
+    "successful_support_audit": 13.395627999998396,
+    "count_baselines": 10.955478400006541
+  },
+  "workspace_bytes_at_report": 282382940,
+  "report": "D:\\web_2\\experiments\\2026-10-15-kuairand-support\\AUDIT_REPORT.md"
+}

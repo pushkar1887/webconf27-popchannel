@@ -1,0 +1,16 @@
+[{"stream_name":"stdout","time":67.882234794,"data":"{\"event\": \"clustering_ready\", \"version\": \"0.32.1\", \"artifact\": \"scikit_network-0.32.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\", \"mode\": \"source_rebuild\"}\n"}
+,{"stream_name":"stdout","time":74.08493177,"data":"{\"event\": \"data_ready\", \"dataset\": \"Gowalla\", \"users\": 29858, \"items\": 40981, \"user_id_max\": 29857, \"item_id_max\": 40980, \"interactions\": 1027370, \"split_counts\": [821896, 102737, 102737], \"file_sha256\": {\"train\": \"6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8\", \"val\": \"18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc\", \"test\": \"d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa\"}, \"user_buckets\": 5792, \"item_buckets\": 5806, \"compressed_parameters\": 742272, \"full_parameters\": 4533696}\n"}
+,{"stream_name":"stdout","time":268.122523033,"data":"{\"event\": \"val\", \"tag\": \"p3-dfreq-dau\", \"seed\": 0, \"epoch\": 5, \"val_recall\": 0.025248486119776162, \"best\": 0.025248486119776162, \"elapsed\": 186.6}\n"}
+,{"stream_name":"stdout","time":456.516324556,"data":"{\"event\": \"val\", \"tag\": \"p3-dfreq-dau\", \"seed\": 0, \"epoch\": 10, \"val_recall\": 0.028505050041262348, \"best\": 0.028505050041262348, \"elapsed\": 375.0}\n"}
+,{"stream_name":"stdout","time":645.085064254,"data":"{\"event\": \"val\", \"tag\": \"p3-dfreq-dau\", \"seed\": 0, \"epoch\": 15, \"val_recall\": 0.031284808177788094, \"best\": 0.031284808177788094, \"elapsed\": 563.6}\n"}
+,{"stream_name":"stdout","time":833.633912167,"data":"{\"event\": \"val\", \"tag\": \"p3-dfreq-dau\", \"seed\": 0, \"epoch\": 20, \"val_recall\": 0.031201637246654285, \"best\": 0.031284808177788094, \"elapsed\": 752.1}\n"}
+,{"stream_name":"stdout","time":1022.164670183,"data":"{\"event\": \"val\", \"tag\": \"p3-dfreq-dau\", \"seed\": 0, \"epoch\": 25, \"val_recall\": 0.03184815630498033, \"best\": 0.03184815630498033, \"elapsed\": 940.6}\n"}
+,{"stream_name":"stdout","time":1210.232893195,"data":"{\"event\": \"val\", \"tag\": \"p3-dfreq-dau\", \"seed\": 0, \"epoch\": 30, \"val_recall\": 0.03189392883144481, \"best\": 0.03189392883144481, \"elapsed\": 1128.7}\n"}
+,{"stream_name":"stdout","time":1246.865921122,"data":"{\"event\": \"seed_done\", \"tag\": \"p3-dfreq-dau\", \"seed\": 0, \"best_epoch\": 30, \"test_raw\": 0.03233992621238269, \"test_cosine\": 0.021819361735121893, \"test_cos_prior\": 0.05149731861018845, \"test_raw_prior\": 0.04901358760389725}\n"}
+,{"stream_name":"stderr","time":1253.880247684,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":1253.880284767,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":1254.217402221,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":1254.217432107,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":1255.166964681,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":1256.352981398,"data":"[NbConvertApp] Writing 327991 bytes to __results__.html\n"}
+]

@@ -1,0 +1,35 @@
+{
+  "status": "independent_artifact_checks_passed",
+  "pair_predictors_replayed": 16,
+  "optimizer_snapshots_replayed": 24,
+  "matched_seeds_checked": 3,
+  "full_bootstrap_contrast_vectors_replayed": 12,
+  "independent_adjusted_regression_bootstraps": 15,
+  "same_seed_round12_matches_previous_E0": true,
+  "equal_grouped_varying_bytes_by_seed": {
+    "11": [
+      89010
+    ],
+    "29": [
+      89130
+    ],
+    "47": [
+      88890
+    ]
+  },
+  "gate_recomputed": false,
+  "max_absolute_errors": {
+    "prediction": 0.0,
+    "count_table": 0.0,
+    "bootstrap": 0.0,
+    "adjusted_coefficient": 0.0
+  },
+  "limits": [
+    "Native label-rule inconsistency remains unresolved.",
+    "Validation and train were previously used; no independent confirmatory evidence.",
+    "Matching and within-block regression do not prove intrinsic preferences or eliminate all item-exposure confounding.",
+    "Two-user groups are a mechanism diagnostic, not a severe-compression/neural benchmark.",
+    "Heuristic stalling is not certified optimality."
+  ],
+  "elapsed_seconds": 1.598142800000005
+}

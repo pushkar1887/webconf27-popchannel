@@ -1,0 +1,828 @@
+=== PDF PAGE 1 ===
+G-Refer:GraphRetrieval-AugmentedLargeLanguageModelfor
+                                        ExplainableRecommendation
+
+                    Yuhan Li                                       Xinni Zhang                                       Linhao Luo
+   TheHong KongUniversity ofScience                  TheChineseUniversityofHongKong                               Monash University
+        and Technology (Guangzhou)                            Hong Kong SAR, China                               Melbourne, Australia
+               Guangzhou, China                           xnzhang23@cse.cuhk.edu.hk                           Linhao.Luo@monash.edu
+             yuhanli98@gmail.com
+                Heng Chang∗                                        Yuxiang Ren                                        Irwin King
+        Huawei Technologies Co., Ltd.                    Huawei Technologies Co., Ltd.                TheChineseUniversityofHongKong
+                  Beijing, China                                  Shanghai, China                              Hong Kong SAR, China
+           changh.heng@gmail.com                         renyuxiang931028@gmail.com                             king@cse.cuhk.edu.hk
+
+                                                                       Jia Li†
+                                                     The HongKongUniversity ofScience
+                                                          and Technology (Guangzhou)
+                                                                Guangzhou, China
+                                                                    jialee@ust.hk
+Abstract                                                                        achieves superior performance compared with existing methods
+Explainable recommendation has demonstrated significant advan-                  inbothexplainabilityandstability.Codesanddataareavailableat
+tagesininformingusersaboutthelogicbehindrecommendations,                        https://github.com/Yuhan1i/G-Refer.
+thereby increasing system transparency, effectiveness, and trust-               CCSConcepts
+worthiness.Toprovidepersonalizedandinterpretableexplanations,
+existing works often combine the generation capabilities of large               •Computing methodologies→ Artificial intelligence; •In-
+language models (LLMs) with collaborative filtering (CF) informa-               formationsystems→Informationretrieval.
+tion.CFinformationextractedfromtheuser-iteminteractiongraph
+captures the user behaviors and preferences, which is crucial for               Keywords
+providinginformativeexplanations.However,duetothecomplex-                       ExplainableRecommendation,LargeLanguageModel,GraphRAG
+ity of graph structure, effectively extracting the CF information              ACMReferenceFormat:
+from graphs still remains a challenge. Moreover, existing methods              Yuhan Li, Xinni Zhang, Linhao Luo, Heng Chang, Yuxiang Ren, Irwin King,
+often struggle with the integration of extracted CF information                 andJiaLi.2025.G-Refer:GraphRetrieval-AugmentedLargeLanguageModel
+with LLMsdue toits implicitrepresentation and themodality gap                   forExplainableRecommendation.InProceedingsoftheACMWebConference
+between graph structures and natural language explanations. To                  2025 (WWW ’25), April 28-May 2, 2025, Sydney, NSW, Australia.ACM, New
+address these challenges, we propose G-Refer, a framework us-                  York, NY, USA, 12 pages. https://doi.org/10.1145/3696410.3714727
+ing Graph Retrieval-augmented large language models (LLMs) for
+explainablerecommendation.Specifically,wefirstemployahybrid                     1   Introduction
+graphretrievalmechanismtoretrieveexplicitCFsignalsfromboth                      Recommendation systems(RS) play an essentialrolein our daily
+structural and semantic perspectives. The retrieved CF informa-                 lives,astheyaffecthowpeoplenavigatethevastarrayofproducts
+tion is explicitly formulated as human-understandable text by the               availableinonlineservices[12,23,47,74,91,95,96].Thesesystems
+proposedgraphtranslationandaccountsfortheexplanationsgener-                     havethe abilityto predictwhethera useris interestedinan item,
+atedbyLLMs.Tobridgethemodalitygap,weintroduceknowledge                          e.g.,byclicking on itormakingapurchase.Recently,explainable
+pruningandretrieval-augmentedfine-tuningtoenhancetheabil-                       recommendation [57, 73, 92, 93] has attractedmoreattention and
+ityofLLMstoprocessandutilizetheretrievedCFinformationto                         demonstratedsignificantadvantagesininformingusersaboutthe
+generate explanations. Extensive experiments show that G-Refer                  logic behind their received recommendation results, thereby in-
+
+∗Project leader.                                                                creasing system transparency, effectiveness, and trustworthiness.
+†Corresponding author.                                                          Specifically, this task aims to generate human-understandable tex-
+                                                                                tualexplanationsforeachuser-itemrecommendation.Thisenables
+                                                                                ustounderstandtheunderlyingreasonsbehindeachrecommenda-
+ThisworkislicensedunderaCreativeCommonsAttribution4.0InternationalLicense.      tion and develop accountable RS as a result [10].
+WWW ’25, Sydney, NSW, Australia                                                    Duetotheimpressivegenerativeandreasoningcapabilitiesof
+© 2025 Copyright held by the owner/author(s).                                   large language models (LLMs) [9, 31, 37, 39–41, 67], existing ex-
+ACM ISBN 979-8-4007-1274-6/25/04
+https://doi.org/10.1145/3696410.3714727                                         plainable recommendation methods [33, 34, 50] can now produce
+
+=== PDF PAGE 2 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                             Yuhan Li et al.
+
+fluent and informative explanations in natural language based on                   knowledgepruning techniquetofilter outtrainingsamples with
+useranditemprofiles,aswellastheirinteractions.Toprovidemore                        less relevant CF information. After the training, LLMs exhibit a
+personalizedexplanations,[50]haveutilizeduser-iteminteraction                      greaterabilityto leverageboththeretrieved CF informationand
+graphs,whichcontainabundantcollaborativefiltering(CF)infor-                        rich semantics in profiles to generate accurate and contextually
+mationfrom graphstructure.TheCF information[24]reveals the                         relevant explanations for recommendations.
+complexpatternsbetweenusers anditems,whichcanbeusedto                                  Our main contributions can be summarized as follows:
+generate more accurate and informative explanations. Neverthe-                     • Comprehensive Analysis. We identify the challenges in ex-
+less,thegraphstructureisinherentlynoisyandcomplex,makingit                            isting explainable recommendation works, as GNNs struggle to
+challengingto effectively extractCFinformationfor explanations.                       capture explicit and semantically rich CF information.
+   InordertobettermodeltheCFinformationfromgraphstructure                          • ArchitectureDesign.WeproposeG-Refer,amodelleveraging
+in RS, graph neural networks (GNNs) have been widely adopted                          hybrid graph retrieval to capture both structural and semantic
+and demonstrated exceptional performance in recommendation                            CFsignalsfromuser-iteminteractiongraphs.Wealsoincorpo-
+tasks[2,11,22,75,82].GNNscaptureCFinformationbylearning                               rateknowledgepruningandretrieval-augmentedfine-tuningto
+hiddenrepresentationsofbothusersanditemsthroughaniterative                            enhance LLMs’ ability to utilize retrieved knowledge.
+processoffeaturetransformationandinformationaggregationfrom                        • SuperiorPerformance.Extensiveexperimentsonpublicdatasets
+neighboringnodes.WhileGNNsexcelatcapturingCFinformation                               demonstrate theeffectiveness ofour proposed G-Refer,surpass-
+forrecommendations,simplyincorporatingGNNswithLLM-based                               ing a series of SOTA baselines by up to 8.67%.
+RS such as XRec [50] still faces several challenges in producing
+satisfactory explanations for recommendations:(C1)ImplicitCF                       2   Preliminaries
+signal. The CF signals are injected into LLMs by feeding user and
+item embeddings generated by GNNs, where the CF signals are                        2.1   ExplainableRecommendation
+representedasimplicitnodeembeddings.Giventhevaguenessof                            Theexplainablerecommendationaimstounveiltherationalebe-
+theexplainabilityofGNNsthemselves[86],itisdifficulttointerpret                     hindtherecommendationresultsandprovidehuman-understandable
+theCFsignalscontainedintheseembeddings.Therefore,moreex-                           textualexplanations.Inrecommendationscenarios,theuser-item
+plicitevidenceconstructedfromtheCFsignalscontainedingraphs,                        interactionscanberepresentedbyabipartitegraphG={(𝑢,𝑖)|𝑢 ∈
+especially favored from the view of human-understandable text,                     U,𝑖 ∈I}, whereU andI are the sets ofusers and items, respec-
+iseagerlyneeded.(C2)Modalitygap.SinceGNNsareprimarily                              tively.Each nodeinG isassociated withtextual informationfrom
+used to capture structural information, the rich semantics within                  either the userprofilesetB or the itemprofile setC. Specifically,
+user and item profiles are inevitably ignored. In addition, LLMs                   eachuser𝑢 hasaprofile𝑏𝑢 ∈ B describingtheirpreferences,and
+struggle todirectly understand the structuredCF signals captured                   eachitem𝑖 hasaprofile𝑐𝑖 ∈ C detailingattributesanddescriptions.
+by GNNs, because of their unstructured nature. This results in a                       Given a recommendation (𝑢,𝑖), which is a pair of user 𝑢 and
+significant modality gap between structured representations and                    recommendeditem𝑖,thegoalofanexplainablerecommendation
+naturallanguage,makingitdifficultforLLMstoeffectivelyleverage                      is to generate a clear textual explanation, which is formulated as:
+graph-derived CF information when generating explanations.                                      𝑒𝑥𝑝𝑙𝑎𝑛𝑎𝑡𝑖𝑜𝑛(𝑢,𝑖)= generator(𝑢,𝑖,G,B,C).             (1)
+PresentedWork.Motivated by these challenges, in this work, we                      ThegraphmodelsabundantstructuralCFinformationbeneficialfor
+propose G-Refer, a framework designed to use Graph Retrieval-                      explainablerecommendations.Giventhesizeoftheentiregraph,we
+augmented LLMs for explainable recommendation. We aim to ad-                       commonly utilize the subgraphG(𝑢,𝑖) ⊆ G as input [84, 88]. This
+dress the limitations of existing methods and extract explicit, di-                subgraph represents the 𝐿-hop edge-centered ego-graph around
+verse,andsemanticallyrichCFinformationtogeneratemoreaccu-                          thepair(𝑢,𝑖).Itincludesnodesthatareatmost𝐿 hopsawayfrom
+rateandpersonalizedexplanations.AsshowninFigure1,givena                            either𝑢 or𝑖, effectively capturing the local connectivity structure
+user-itemrecommendationtobeexplained,weleverageahybrid                             for generating explanations.
+graphretrievalmechanismthatcombinesmulti-granularityretriev-
+ers to extract explicit structural and semantic CF information from                2.2   GraphRetrieval-AugmentedGeneration
+the graphs (to addressC1). Specifically, we employ a path-level re-                Retrieval-Augmented Generation (RAG) has achieved remarkable
+trievertocapturestructural CFinformationbyidentifying𝑘 paths                       success in enhancing Large Language Models (LLMs) by retrieving
+from graphsthat accountfor recommendation. To utilizethe rich                      external documents. However, existing RAGs fail to fully exploit
+semanticswithinnodes,wealsoemployanode-levelretrieverto                            the structural information in the graph to augment LLMs. The
+retrievesemanticCFinformationfromthegraphsbyfindingthe                             graph retrieval-augmented generation (GraphRAG), to address this
+mostrelevantnodestotherecommendation.TheretrievedCFinfor-                          issue,leveragesstructuralinformationtoenable moreprecisere-
+mation is then translated into human-understandable text with the                  trievalandfacilitatecontext-awaregeneration[58].Givenaquery𝑞,
+graphtranslationmoduletofacilitateLLMsingeneratingexplana-                         GraphRAGaimstoretrievestructuralinformationfromagraphG
+tions.Tobridgethemodalitygapandenhancetheunderstandingof                           andgenerateresponses𝑎 conditionedbytheretrievedinformation,
+LLMs(toaddressC2),weadoptalightweightretrieval-augmented                           which can be formulated as:
+fine-tuning(RAFT)approachtoinstructLLMsinunderstandingthe
+retrieved CF information and generating explanations. To further                                             𝐺 = G-retriever(𝑞,G),                               (2)
+improve the training efficiency and reduce noise, we introduce a                                            𝑃(𝑎|𝑞,G)= 𝑃(𝑎|𝑞,𝐺,𝜃),                              (3)
+
+=== PDF PAGE 3 ===
+G-Refer: Graph Retrieval-Augmented Large Language Model for Explainable Recommendation                                        WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Figure1:OurproposedpipelineG-Referfacilitatesexplainablerecommendationwiththreekeycomponents:(1)HybridGraph
+Retrievalemploysmulti-granularityretrieverstoretrieveexplicitCFsignalsandformulatedashuman-readabletextbythe
+GraphTranslation;(2)KnowledgePruningeliminatesnoiseandimprovestrainingefficiency;and(3)Retrieval-augmented
+Fine-tuninginstructsLLMstoleverageretrievedCFinformationingeneratinginformativeexplanation.
+
+where 𝜃 is the parameters of the LLMs, and 𝐺 is the structural                    strengths for addressing variousaspects of retrieval scenarios. In-
+information (e.g., nodes, paths, and subgraphs) retrieved by the                  spired by recent works[18, 49], we adopt a hybridgraph retrieval
+graph retriever.                                                                  strategythatemploysbothpath-levelandnode-levelretrieversto
+                                                                                  respectively retrieve structural and semantic CF information from
+                                                                                  theuser-iteminteractiongraph,whichiscomposedofpurchasehis-
+3   Methodology                                                                   tories withenriched textattributes. The CFinformation retrieved
+OurproposedG-Refer isdesignedtoexcavatetheCF information                          frombothviewsisthentranslatedintohuman-understandabletext,
+fromthegraphtoenhanceexplainablerecommendations.First,we                          facilitating the generation of explanations.
+leverageahybridgraphretrievalmechanismthatcombinesmulti-                          3.1.1   Path-levelRetriever. Thepath-levelretrieveraimstoretrieve
+granularity retrievers to extract both structural and semantic CF                 the structural CF information from the graphsby identifying the
+information from the user-item interaction graph. In the second                   most𝑘 informative paths that connect users and items for inter-
+part,weemployknowledgepruningtofilteroutlessrelevantorre-                         pretable recommendations. Typically, recommendations on graphs
+dundanttrainingsamples,eliminatingnoiseandimprovingtraining                       canbeformalizedasalinkprediction(LP)problem,whichpredicts
+efficiency.Finally,alightweightretrieval-augmentedfine-tuningis                   the connectionsbetweenuser𝑢 and𝑖 based onthe graph structure
+conducted to bridge the modality gap, instructing LLMs to under-                  [36]. This can be formulated as
+standretrievedknowledgeandgenerateaccurateandcontextually
+relevant explanations.                                                                                           𝑖 = 𝑓𝜙(𝑢,G),                                       (4)
+                                                                                  where 𝑓𝜙 denotes alink prediction modelparameterized by𝜙. The
+3.1   HybridGraphRetrieval                                                        𝑓𝜙 capturescomplexpatternsbetweenusersanditemsinthegraph
+The user-item interaction graph encapsulates a wealth of knowl-                   to provide the recommendation results.
+edge,includinguserbehaviors,preferences,andrelationshipsamong                     Motivation. GNNs [42, 43, 76, 77, 79] have demonstrated excep-
+users andbetweenitems [74]. Itcan provide sufficientCF informa-                   tional performance in capturing graph structures and are widely
+tionfromdifferentperspectives,suchasstructuralandsemantic                         used in recommender systems [22, 75]. While GNNs excel at ex-
+views,toexplaintheuserbehaviors,therebyenhancingtheexplain-                       tractingCFinformationforrecommendations, theyareoftencrit-
+abilityofrecommendations.Forexample,asillustratedinFigure1,                       icized for their lack of interpretability. GNNs struggle to provide
+we can explain why user𝑢1 might be interested in item 𝑖2 from                     clear explanations for their predictions [85], which significantly
+both structuraland semantic perspectives. From the structuralper-                 underminestransparency. Toaddressthis issue, inspiredbyrecent
+spective,thepath(𝑢1 →𝑖1 →𝑢2 →𝑖2)illustratesthepotentially                         GNN explanation methods [88], we propose a path-level retriever
+shared preferences between user𝑢1 and𝑢2, both of whom have                        that generates explanations for GNN predictions and reveals the
+watched𝑖1,IronMan,suggeststhatuser𝑢1mayalsoenjoy𝑖2,Doctor                         structuralCFinformationcapturedbyGNNsasinterpretablepaths,
+Strange,whichuser𝑢2 haswatched,duetotheoverlappingMarvel                          which is illustrated in Figure 2.
+fandom.Inaddition,fromthesemanticview,retrievingitems𝑖2 and                       GNNTraining.TocapturethestructuralCFinformation,wefirst
+𝑖3 could also lead to an explanation. Both items feature the same                 trainaGNNtolearntheuser-iteminteractionsinthegraphforrec-
+leading actor, Benedict Cumberbatch. This commonality suggests                    ommendations.Wefollowastandardtwo-steppipeline,whichin-
+that user𝑢1, having shown interestin related actors through their                 volvesobtaininguseranditemrepresentationswithan𝐿-hopGNN
+viewing habits, might find𝑖3, Sherlock, appealing as well.                        encoderandapplyingapredictionheadtogetarecommendation
+   According to [58], retrievers based on different levels of granu-              prediction.WeuseR-GCN[62]astheGNNencodertolearnnode
+larityinthegraph(e.g.,nodes,paths,andsubgraphs)haveunique                         embeddingsonuser-itemgraphs,andaninnerproductisadopted
+
+=== PDF PAGE 4 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                             Yuhan Li et al.
+
+                                                                                     where𝜎(·)isthe sigmoid function,⊙ isthe element-wiseproduct,
+                                                                                      and𝑌 istheoriginalGNNprediction.AnotherlosstermL𝑝𝑎𝑡ℎ isto
+                                                                                      learntoselectpath-formingedges.Wefirstusethefollowingscore
+                                                                                      function to assign a score to each candidate path 𝑝 in the graph,
+                                                                                      prioritizing shorter paths and those without high-degree nodes:Ö
+                                                                                                   𝑆𝑐𝑜𝑟𝑒(𝑝)=         log𝜎(M𝜏(𝑒))−log(deg(𝑒)),             (8)
+                                                                                                                𝑒∈𝑝
+                                                                                     whereM𝜏(𝑒) denotes the mask corresponding to the type of the
+                                                                                      edge 𝑒 and deg(𝑒) is the degree of the target node of 𝑒. Using
+                                                                                      Dijkstra’sshortestpathalgorithm,wherepathlengthsareredefined
+                                                                                      accordingtothescorefunction,asetofcandidateedgesconsidered
+                                                                                      concise and informative isselected, denoted byE𝑝𝑎𝑡ℎ. Guided by
+                                                                                      E𝑝𝑎𝑡ℎ, we defineL𝑝𝑎𝑡ℎ accordingly:
+                                                                                                            ∑︁      ∑︁                     ∑︁
+                                                                                         L𝑝𝑎𝑡ℎ(M)=−             (          M𝜏(𝑒) −                  M𝜏(𝑒)).    (9)
+                                                                                                            𝑟∈R  𝑒∈E𝑝𝑎𝑡ℎ              𝑒∈E,𝑒∉E𝑝𝑎𝑡ℎ
+                                                                                      Upon convergence of mask learning, we can run the Dijkstra’s
+       Figure2:Theillustrationofpath-levelretriever.                                  shortest path to generate up to𝑘 explanation paths based onM.
+as the prediction head. We also explore other GNN variants, i.e.,                     3.1.2   Node-levelRetriever. Thenode-levelretrieveraimstoretrieve
+LightGCN[22],inourexperiments(Section4.3).Theforward-pass                             the semantic CF information from the graphs by selecting the 𝑘
+update of each user𝑢 in R-GCN is formalized as follows:                               most relevant user nodes and the𝑘 most relevant item nodes.
+                                                                                      Motivation.Graphsareoftenknownasnoisyandincomplete,and
+                     ∑︁      1                                                        thestructuralinformationalonemaynotbesufficienttoprovide
+   h(𝑙)𝑢  = ReLU©­         |N𝑢|W(𝑙−1)1      h(𝑙−1)𝑖′     +W(𝑙−1)0      h(𝑙−1)𝑢   ª®,     (5)accurate explanations. Additionally, graphs in recommendations
+                   «𝑖′∈N𝑢                                            ¬                typically contain rich semantics within user and item nodes de-
+where h(𝑙)𝑢   is the hidden state of user𝑢 in the 𝑙-th layer andN𝑢                    rived from user interests and item properties. While the profiles
+denotes the neighbors of𝑢. The W(𝑙−1)                                                 provide some information, using only individual profiles for ex-
+                                          0      and W(𝑙−1)1      are learnable       planations may be inadequate, as it might not fully capture user
+weightmatricesatlayer𝑙-1.Likewise,theitemrepresentation h(𝑙)𝑖                         topics or itemfeatures. Thus, retrieving semantics from graphsis
+can be obtained in a similar manner.                                                  crucial to uncovering latent connections and supplementing more
+The𝑚-corePruning.Toensureconciseandaccurateexplanations,                              comprehensive explanations for recommendations. Our node-level
+weaimtoextractpathsthatareshortinlengthandavoidcontaining                             retriever incorporates a dense retrieval to calculate the semantic
+high-degreenodesin thegraph[88].Givena prediction(𝑢,𝑖),the                            similarity between users and items to retrieve the most relevant
+corresponding𝐿-hopedge-centeredego-graphisinitiallyextracted,                         neighboringnodesforthecurrentrecommendation(𝑢,𝑖)tounveil
+which includes nodes that are at most𝐿 hops away from either𝑢                         the semantic CF knowledge for explanations.
+or𝑖. A𝑚-core pruningprocess is then appliedto remove spurious                         DenseRetrieval. We employ a dual-encoder-based retriever ar-
+neighborsandimprovespeed.Specifically,the𝑚-corepruningisa                             chitecture, which has demonstrated effectiveness across various
+recursive algorithm that eliminates nodes with degrees less than                      retrieval tasks [53] and efficiency at the inference stage [26, 28].
+𝑚, until only those with degrees≥𝑚 remain, forming the𝑚-core.                         Given a user-item pair(𝑢,𝑖), a text encoder maps the user profile
+ExplanationPathRetrieval.WeleveragePaGE-Link[88]toper-                               𝑏𝑢 to anembedding 𝑓(𝑏𝑢) ∈R𝑑, andthe same encoder mapseach
+formmasklearningonthelearnedGNNmodeltoidentifyexpla-                                  item profile𝑐𝑖 to an embedding 𝑓(𝑐𝑖) ∈R𝑑, where𝑑 is the hidden
+nation paths from the user-item interaction graph via learning a                      state dimension of the text encoder. The top-𝑘 relevant users are
+maskoveralledges,assigninghighweightstoimportantedgesand                              retrieved based on the user-user semantic similarities, which are
+low weights to others. Based on the mask, we apply the Dijkstra’s                     computed via cosine similarity:
+shortest path algorithm [15] to retrieve explanation paths.
+   Formally, let E denote all user-item interactions, 𝜏(𝑒) be the                                   𝑠𝑖𝑚(𝑢,𝑢′)=    𝑓(𝑏𝑢)·𝑓(𝑏𝑢′)∥𝑓(𝑏𝑢)∥∥𝑓(𝑏𝑢′)∥,  𝑢′ ∈N𝑖,              (10)
+typeof theedge𝑒,andM belearnable masksofalledge types.To
+optimizeM, the objective functionL that needs to be minimized                        whereN𝑖 isthesetofusersconnectedtoitem𝑖.Wealsoretrievetop-
+iscomposedoftwolossterms,whichcanbeformulatedasfollows:                              𝑘 itemsbasedontheitem-itemsemanticsimilarities.Theretrieveris
+                  L(M)=L𝑝𝑟𝑒𝑑(M)+L𝑝𝑎𝑡ℎ(M).                     (6)                     training-freeandapre-trainedlanguagemodelspecificallyutilized
+                                                                                      to generate high-quality sentence embeddings.
+ThefirstlosstermL𝑝𝑟𝑒𝑑 istolearntoselectcrucialedgesformodel                           3.1.3   Graph Translation. After the hybrid retrieval, the complex
+prediction based on the perturbation-based explanation. Given a                       nature of graph-type knowledge, particularly the paths retrieved,
+connected pair (𝑢,𝑖), the loss can be defined as follows:                             presentsachallengesinceitcannotbedirectlyintegratedwithpro-
+   L𝑝𝑟𝑒𝑑(M)=−log𝑃(𝑌 = 1|G= (U,I,E ⊙𝜎(M)),(𝑢,𝑖)),   (7)                                filesof usersanditems forinputinto theLLMs[9, 69].Toaddress
+
+=== PDF PAGE 5 ===
+                G-Refer: Graph Retrieval-Augmented Large Language Model for Explainable Recommendation                                        WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+                this, it is necessary to employ graph translation techniques that                    ground truth explanations, which is defined as follows:
+                convertthegraph-type knowledgeintoaformatcompatiblewith
+                LLMs,enablingLLMstoeffectivelyprocessandutilizestructured                               𝑠𝑖𝑚((𝑢,𝑖),Explain(𝑢,𝑖))=    𝑓(𝑏𝑢 ⊕𝑐𝑖)·𝑓(Explain(𝑢,𝑖))∥𝑓(𝑏𝑢 ⊕𝑐𝑖)∥∥𝑓(Explain(𝑢,𝑖))∥,   (11)
+                information. Considering that instructions are typically presented
+                in natural language, we follow [66, 83] to adopt a flatten-based                     where⊕representstheconcatenationandExplain(𝑢,𝑖) istheground
+                method, which transforms retrieved paths and nodes into descrip-                     truth explanation for (𝑢,𝑖). We introduce a pruning ratio𝑡, which
+                tive, easily comprehensible language. For each user-item pair(𝑢,𝑖)                   determines the portion of the total training dataD to be filtered
+                requiringanexplanation,alongwith𝑘 retrievedpaths,𝑘 usernodes,                        after re-ranking. The top “(1−𝑡)·|D|” training samples are pre-
+                and𝑘 item nodes, we design the instruction prompt as follows:                        served, ensuring that samples that are most likely to benefit from
+                                                                                                     CF-based explanationsare prioritized,thereby improving theover-
+                                                                                                     all efficiency and effectiveness of the training process.
+
+                                                                                                     3.3   Retrieval-AugmentedFine-Tuning
+                                                                                                     Motivation. To improve the LLM’s capacity for generating bet-
+                                                                                                     ter explanations using retrieved CF information, we fine-tune it
+                                                                                                     with a parameter-efficient pre-training strategy, i.e., LoRA [25],
+                                                                                                     on the pruned training set with in-context retrieval augmenta-
+                                                                                                     tion.Integrating retrieval resultsduringfine-tuning offerstwokey
+                3.1.4   DiscussionofRetrievalGranularity. InG-Refer,weconsider                       advantages.(1)ItadaptstheLLMtobetterutilizeretrievedCFinfor-
+                node-levelandpath-levelretrievalratherthansubgraph-levelbased                        mationtogenerate explanation,especiallyfortherequirementof
+                onthefollowingobservations.Firstly,bothnodesandpathshave                             domain-specificknowledgeithasneverseenbefore.(2)Evenstate-
+                a considerably smaller search space than subgraphs. As proven                        of-the-artretrieverscanfalterandreturninaccurateresults[45].By
+                in [88], compared to the expected number of edge-induced sub-                        trainingtheLLMtogenerateground-truthresponsesevenwhen
+                graphs, the expected number of candidate nodes and paths grows                       irrelevant CF information is given, we enable the LLM to ignore
+                strictly slower and becomes negligible. Therefore, such explana-                     misleading retrieval content and lean into its internal knowledge
+                tionsexcludemanyless-meaningfulsubgraphcandidates,making                             to reduce hallucination.
+                theexplanationgenerationmuchmorestraightforwardandaccu-                              Fine-tuning.Weemployretrieval-augmentedfine-tuning(RAFT)
+                rate.Secondly,subgraphscontaincomplexhigh-orderinformation,                          with a conventional language modeling loss [90]. The model is
+                making it difficult to describe a retrieved subgraph with hundreds                   trained to process input consisting of a user-item pair (𝑢,𝑖) with
+                oreventhousandsofnodesinawaythatiseasilyunderstandable,                              profiles𝑏𝑢 and𝑐𝑖, its associated retrieved knowledgeK(𝑢,𝑖), and a
+                especially when all nodes have text attributes [46]. Consequently,                   correspondingpromptquestion𝑄 togeneratetextualexplanations
+                we implement hybrid graph retrieval in the path and node levels.                     𝐸 asoutputs.TheRAFTlossiscomputedbasedonthediscrepancy
+                                                                                                     between the model’s predicted explanations and the ground truth
+                3.2   KnowledgePruning                                                               explanationsinthedataset.Formally,thelossisdefinedasfollows:∑︁
+                Motivation. After graph retrieval, our goal is to enable LLMs to                         LRAFT =−                   log𝑃(Explain(𝑢,𝑖)|𝑏𝑢,𝑐𝑖,K(𝑢,𝑖),𝑄;𝜃),
+                effectivelygenerateexplanationsbasedonthegraphCFinformation                                            (𝑢,𝑖)∈Dprune
+                of varying granularities retrieved. However, it is noticed that for                                                                                            (12)
+                someuser-itempairs,asufficientexplanationcanbederivedsolely                          whereDprune represents the pruned training set and𝜃 is the pa-
+                from their profiles, without the need for additional CF information.                 rameters associated with the LoRA model.
+                Forinstance,ifauser’sprofileshowsapreferenceforsciencefiction
+                andtherecommendeditemisapopular sci-fi film,thenexplaining                           4   Experiments
+                thisinteractionmightonlyrequirereferencingtheseprofiledetails.                       We evaluate our modelon real-world datasets to assessits perfor-
+                Insuch cases,theretrieved knowledgeisnot onlyredundantbut                            mance in enhancing explainable recommendations. Inparticular,
+                employing such training samples could also weaken the LLM’s                          we aim to answer the following research questions:Q1: How effec-
+                ability to utilize CF information.                                                   tiveisG-Refercomparedwithstate-of-the-artmodels?Q2:Howdo
+                Re-ranking. To enhance LLMs’ focus on CF information, we pro-                        themaincomponentsofourmodelimpacttheperformance?Q3:
+                pose knowledge pruning to filter out less relevant or redundant                      What is the impact of hyper-parameters?Q4: How does G-Refer’s
+                training samples[58], buildingon theinherent abilityof LLMsto                        training efficiency compare to state-of-the-art methods?
+                generateexplanationsbyunderstandinguseranditemprofiles.It                            4.1   ExperimentalProtocols
+                also improves training efficiency through reduced data volume,
+                particularly beneficial for large graphs. To be specific, we use a                   4.1.1   Datasets. WeevaluateG-Referandleveragethreeprominent
+                re-ranking method [38, 64] that sorts all training samples based                     publicdatasets thatofferdistinctperspectives onuser-iteminter-
+                on their reliance on CF information for explanation, prioritizing                    actions, including Amazon-books [52], Yelp [50], and Google-
+                those that require more additional knowledge. We measure such                        reviews[30,80].Table3liststhestatisticsofthreedatasets.More
+                reliance via the semantic similarity between the profiles and the                    details of datasets can be found in Appendix A.1.
+Given the item title, item profile, and user profile, please explain why
+the user wouldenjoy this item. Itemtitle:[Item title]. Item profile:[Item
+summary].Userprofile:[Usersummary].Fortheuser-itempair,hereare
+some related users and items. Users:[Top-        𝑘 similar user profiles]. Items:
+[Top-𝑘 similaritemprofiles].Forthegivenuser-itempair,hereareseveral
+relatedpathsconnectingusersanditemsthroughtheirinteractions.[Top-
+𝑘 explanationpaths](eachformattedas"<Userprofile>->buys-><Item
+profile> -> bought by -> <User profile> -> ..."). Explanations:
+
+=== PDF PAGE 6 ===
+                 WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                             Yuhan Li et al.
+
+                 Table1:OverallcomparisonintermsofExplainabilityandStability.Superscripts“P”,“R”,and“F1”denotePrecision,Recall,
+                 andF1-Score,respectively.Thesubscript“std”indicatesthestandarddeviationofeachmetric.Boldindicatesthebestresults,
+                 whileunderlined            denotesthesecond-best.“7B”and“8B”denoteLLaMA2-7BandLLaMA3-8B,respectively.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                 4.1.2   Metrics. We follow XRec [50] to utilize a suite of metrics                                utilize the same model, i.e., LLaMA 2-7B adopted by baselines [50].
+                 aimed at assessing the semantic explainability and stability of                                   Wealsoreportresults basedontheadvancedLLaMA 3-8Bmodel.
+                 the generated explanations. Traditional n-gram-based metrics like                                 We set the learning rate, epochs, and max length as 2e-5, 2, and
+                 BLEU[56]and ROUGE[44]are notadequatefor thispurpose due                                           2048forRAFT,whichistrainedon8NVIDIAA100GPUs.Thetotal
+                 totheirinabilitytofullycapturesemanticmeaning.Specifically,we                                     batch sizes are set to 32 and 16, respectively, for the 7B and 8B
+                 useGPTscore [70],BERTscore [89],BARTscore [87],BLEURT[63],                                        models. The rank of the LoRA adapter is set to8. For inference, we
+                 and USR [33] to measure the explainability. Notably, BERTscore                                    set the temperature as 0 and the maximum output tokens as 256,
+                 comprises the Recall score, which measures the completeness and                                   ensuringastableandreasonablegeneration.Inaddition,weemploy
+                 qualityoftheretrievedCFinformation,allowingustoevaluatethe                                        the GPT-3.5-turbo model for computing the GPTScore metric.
+                 performanceofourgraphretriever.Moredetailsoftheusedmetrics
+                 can be found in Appendix A.2. To evaluate quality consistency, we                                 4.2   ModelPerformance(RQ1)
+                 alsoreportthestandarddeviationsofthesemetrics.Lowerstandard                                       4.2.1   OverallPerformance. Wefirstcomparethequalityof gener-
+                 deviation values indicate more stable performance.                                                atedexplanationsagainstbaselinesacrossthreedatasets,theresults
+                 4.1.3   Baselines. We introduce five state-of-the-art baselines, in-                              aresummarizedinTable1.ItisobservedthatG-Referdemonstrates
+                 cludingNRT [35],Att2Seq [16],PETER [33],PEPLER [34], and                                          superiorperformanceinbothexplainabilityandstability,outper-
+                 XRec [50]. These models are based on representative language                                      formingbaselinesacrosssemanticevaluatorssuchasGPT,BERT,
+                 models, suchas GRU, LSTM,GPT,and LLaMA.More detailsof the                                         and BART. Compared to the most powerful baseline, XRec [50],
+                 compared baselines can be found in Appendix A.3.                                                  which uses GNNs to implicitlycapture CF information, our model
+                                                                                                                   shows improvements in BERTF1score across three datasets, with in-
+                 4.1.4   Implementation Details. For path-level retrieval, we set the                              creases of 1.67%, 2.73%, and 2.81% respectively. This indicates that
+                 node embedding dimension to 128, the maximum retrieved path                                       the explicit CF information retrieved by our hybrid graph retriever
+                 length to 5, and 𝑚 is set to 2 for m-core pruning. We initialize                                  is more accurate and better utilizes both structures and seman-
+                 the encoders in both the node-level retriever and the re-ranking                                  tics of user-item interaction graphs compared to the implicit CF
+                 mechanismwithSentenceBERT[60].Thenumberofretrievedpaths,                                          information captured by XRec. In addition, graph translation en-
+Models           aswellasthenumberofretrievednodes(includingusersanditems),Explainability↑                         ablestheadapter-free RAFT,allowing LLMstobettercomprehendStability↓
+                 GPTscore   BERTPscore     BERTRscore       BERTF1score     BARTscore   BLEURT     USRis setto2, andthe pruning ratio𝑡 is setto70% acrossall datasets.GPTstd   BERTPstd   BERTRstd   BERTF1std   BARTstd   BLEURTstdthe structural inputs and leverage their powerful capabilities to
+                 Forretrieval-augmentedfine-tuning,weusethemodelsfromtheAmazon-books                               generate human-understandable explanations. Notably, G-Refer
+NRT              open-source LLaMA family. Specifically, for a fair comparison, we75.63        0.3444          0.3440            0.3443          -3.9806      -0.4073    0.541312.82     0.1804      0.1035      0.1321      0.5101        0.3104significantlyoutperformsallbaselinesinBERTRscore,withincreases
+Att2Seq            76.08        0.3746          0.3624            0.3687          -3.9440      -0.3302    0.7757  12.56     0.1691      0.1051      0.1275      0.5080        0.2990
+PETER              77.65        0.4279          0.3799            0.4043          -3.8968      -0.2937    0.8480  11.21     0.1334      0.1035      0.1098      0.5144        0.2667
+PEPLER             78.77        0.3506          0.3569            0.3543          -3.9142      -0.2950    0.9563  11.38     0.1105      0.0935      0.0893      0.5064        0.2195
+XRec               82.57        0.4193         0.4038            0.4122          -3.8035     -0.1061   1.0000      9.60     0.0836     0.0920     0.0800     0.4832       0.1780
+G-Refer(7B)        82.70       0.4076          0.4476           0.4282         -3.3358      -0.1246    1.0000      9.04     0.0937      0.0845      0.0820     0.4009        0.1893
+G-Refer(8B)        82.82       0.4073      0.4494 (+4.56%)  0.4289 (+1.67%)   -3.3110       -0.1203    1.0000     8.95      0.0945      0.0855      0.0825     0.3983        0.1912
+                                                                                        Yelp
+NRT                61.94        0.0795          0.2225            0.1495          -4.6142      -0.7913    0.2677  16.81     0.2293      0.1134      0.1581      0.5612        0.2728
+Att2Seq            63.91        0.2099          0.2658            0.2379          -4.5316      -0.6707    0.7583  15.62     0.1583      0.1074      0.1147      0.5616        0.2470
+PETER              67.00        0.2102          0.2983            0.2513          -4.4100      -0.5816    0.8750  15.57     0.3315      0.1298      0.2230      0.5800        0.3555
+PEPLER             67.54        0.2920          0.3183            0.3052          -4.4563      -0.3354    0.9143  14.18     0.1476      0.1044      0.1050      0.5777        0.2524
+XRec               74.53       0.3946          0.3506            0.3730          -4.3911      -0.2287    1.0000   11.45     0.0969     0.1048     0.0852     0.5770        0.2322
+G-Refer(7B)        74.91       0.3573          0.4264           0.3922         -3.7729      -0.1451    1.0000     10.88     0.1050      0.0952      0.0862     0.4815        0.2197
+G-Refer(8B)        75.16       0.3629      0.4373 (+8.67%)  0.4003 (+2.73%)   -3.6448       -0.1336    1.0000     10.76     0.1068      0.0995      0.0885     0.4743       0.2182
+                                                                                  Google-reviews
+NRT                58.27        0.3509          0.3495            0.3496          -4.2915      -0.4838    0.2533  19.16     0.2176      0.1267      0.1571      0.6620        0.3118
+Att2Seq            61.31        0.3619          0.3653            0.3636          -4.2627      -0.4671    0.5070  17.47     0.1855      0.1247      0.1403      0.6663        0.3198
+PETER              65.16        0.3892          0.3905            0.3881          -4.1527      -0.3375    0.4757  17.00     0.2819      0.1356      0.2005      0.6701        0.3272
+PEPLER             61.58        0.3373          0.3711            0.3546          -4.1744      -0.2892    0.8660  17.17     0.1134      0.1161      0.0999      0.6752        0.2484
+XRec               69.12       0.4546          0.4069            0.4311          -4.1647      -0.2437    0.9993   14.24     0.0972     0.1163      0.0938      0.6591        0.2452
+G-Refer(7B)        71.47       0.4253          0.4873           0.4566         -3.3857      -0.1561    1.0000     13.46     0.1184      0.0872      0.0921     0.4739       0.2415
+G-Refer(8B)        71.73       0.4245      0.4935 (+7.48%)  0.4592 (+2.81%)   -3.3235      -0.1518     1.0000     13.23     0.1175      0.0920     0.0916      0.4761        0.2511
+
+=== PDF PAGE 7 ===
+               G-Refer: Graph Retrieval-Augmented Large Language Model for Explainable Recommendation                                        WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+                                                                                                      Table 2: Ablation study for G-Refer, with the best results
+                                                                                                      highlightedredandtheworstinblueforthecomponent.
+
+
+
+
+
+
+
+
+               Figure3:HumanevaluationcomparingXRecandG-Refer.
+
+               of 4.56%, 8.67%, and 7.48% across the three datasets, while slightly
+               decreasinginBERTPscore.TheretrievedCFinformationenablesgen-
+               eratedexplanationstoincludemorekeyinformation(e.g.,usertopic
+               modelingand interactionhistory).Although introducingretrieved
+               knowledgeinevitablyintroducessomenoise,reducingtheprecision
+               slightly,weconsiderthistrade-offbeneficial,asthecompletenessof
+               explanationsiscrucialforuserunderstandingcomparedtoaccurate
+               but less informative expressions. Finally, we notice that G-Refer’s
+               performance improvement on Amazon is relatively modest com-
+               paredtootherdatasets.Thiscanbeattributedtothesparsityofits
+               user-item interaction graph, particularly in the test set where the                    Thisdemonstratestheireffectivenessincapturingstructuralinfor-
+               averagenodedegreeisonly2.76.Insuchcases,evenwithretrieval,                             mation for recommendation and the flexibility of our path-level
+               the effectiveness of CF information from the graph is limited.                         retriever, which couldadapt to differentgraphs and recommenda-
+               4.2.2   HumanEvaluation. Theultimategoalofmodelexplanation                             tion scenarios using different GNN architectures.
+               isto aidhumanunderstandingand decision-making.Humaneval-                               4.3.3   The Effects of Various LLMs with Different Scales. We in-
+               uation is thus the best way to evaluate the effectiveness of an                        vestigate the impact of LLM scales on G-Refer’s performance by
+               explainer, which has been widely used in previous works [20, 61].                      comparingthe advancedQwen2.5 family[81]of differentscales.
+               Weconductahumanevaluationbyrandomlyselecting20user-item                                Firstly, we observe a clear performance scaling from 0.5B to 3B
+               pairs from thetest set of each dataset andgenerating explanations                      models. Interestingly, the 3B model achieves comparable results
+               for each sample using XRec [50] and G-Refer. We designed a sur-                        to the 7B model, indicating that with the introduction of retrieved
+               vey with single-choice questions and distributed it to five senior                     knowledge, even a relatively smaller LLM can achieve impressive
+               researchers,askingthemtoselectthebestexplanations.Asshown                              results through RAFT. This also demonstrates the necessity of fine-
+               in Figure 3, explanations generated by G-Refer were consistently                       tuning with retrieved knowledge, which can significantly enhance
+               favoredacrossalldatasets,especiallyfor YelpandGoogle-reviews,                          the model’s ability to generate high-quality explanations.
+               where our explanations were chosen in over 80% of cases.
+               4.2.3   CaseStudy. TodemonstratetheeffectivenessofG-Referand                           4.3.4   The Effects of Knowledge Pruning. Training with the full
+               show howretrieved CF signalsbenefit the generated explanations,                        dataset increases the number of samples by several times but does
+               we provide several cases and give analysis in Appendix B.                              not improve performance proportionally, and may even lead to
+                                                                                                      slight degradation(e.g., on Yelp). Thisis becausesome user-items
+               4.3   AblationStudy(RQ2)                                                               areself-explanatory,andadditionalCFinformationmayintroduce
+               4.3.1   The Effects of Hybrid Graph Retriever. From Table 2 we can                     noise. Thus, knowledge pruning is essential for removing these
+               observe that both path-level and node-level retrievers contribute                      samples from training and improving model performance.
+
+               to the final results, with their combination yielding the best per-                    4.4   HyperparameterStudy(RQ3)
+               formance. We observe that semantic information is more crucial                         We explore the variation of G-Refer’s performance with respect
+               forYelp,whilestructuralknowledgeoffersgreateradvantagesfor                             to the number of retrieved elements𝑘, including both paths and
+               Google-reviews. This suggests that the importance of retrievers                        nodes. Figure 4 illustrates the impact of 𝑘 (ranging from 1 to 5)
+               maydifferbasedondatasetcharacteristicsandhighlightsthecom-                             on BERTscore precision and BERTscore recall (abbr. precision and
+               plementarity of the two retrievers.                                                    recall in the following). The best precision is achieved at𝑘=2, after
+               4.3.2   TheEffects ofVariousGNNs. TheGNN encoderinour path-                            which it decreases, showing that more retrieved paths and nodes
+               retriever captures structural CF information and can be replaced                       canintroducenoiseanddeterioratetheperformance.Conversely,a
+               withanyadvancedGNN-basedrecommendermodel.Wecompare                                     low𝑘 (i.e.,𝑘=1)failstoprovidesufficientCFinformation,leading
+               LightGCN[22],whichisoneoftherepresentativeGNNmodelsfor                                 to lower results. We also notice that recall is not sensitive to the
+   Datasets    recommendation, with R-GCN [62] in the ablation study. The re-YelpGoogle-reviews       increased 𝑘, suggesting that a modest 𝑘 can effectively retrieve
+               sultsshowthatbothoftheGNNsachievecompetitiveperformance.                               essential information for generating explanations.
+  Ablations        BERTF1 ↑       BERTstd ↓      BERTF1 ↑       BERTstd↓
+
+Variants on graph retriever:
+w/opath-level         0.3927            0.0868     0.4560           0.0924
+w/onode-level         0.3966            0.0894     0.4544           0.0922
+w/oGraphRAG           0.3880  0.0896               0.4468 0.0940
+Variants on link prediction model:
+ w/LightGCN           0.3941  0.0870               0.4589           0.0922
+  w/R-GCN             0.4003  0.0885               0.4592 0.0916
+Variants on LLMs with different scales:
+w/Qwen-0.5B           0.3201            0.6530     0.4129           0.2171
+w/Qwen-1.5B           0.3557            0.3940     0.4451           0.0940
+ w/Qwen-3B            0.3994  0.0861               0.4602 0.0903
+ w/Qwen-7B            0.3991  0.0851               0.4582           0.0914
+Knowledge pruning v.s. full training set:
+ w/opruning           0.4002            0.0892     0.4605 0.0909
+    G-Refer           0.4003  0.0885               0.4592           0.0916
+
+=== PDF PAGE 8 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                             Yuhan Li et al.
+
+
+
+
+
+
+
+
+
+
+                                                                                               Figure5:EfficiencyAnalysisofG-Refer.
+
+                                                                                   5.2   GraphRetrieval-AugmentedGeneration
+   Figure4:Performanceofdifferentretrievednumber𝑘.                                Although retrieval-augmentedgeneration (RAG) hasbeen widely
+                                                                                   usedtoenhancetheLLMsbyincorporatingexternalknowledge[19,
+4.5   EfficiencyAnalysis(RQ4)                                                      55],ithasshownlimitationsinconsideringthegraphstructure.To
+In Figure5, we analyzethe efficiency ofour model, includingthe                     addressthisissue,graphretrieval-augmentedgeneration(GraphRAG)
+timetakentotrainoneepoch,performanceresults,andthenumber                           has been proposed to effectively incorporate graph information
+ofparametersthatrequiretuningforG-Refer,XRec[50],andfull-                          intothe LLMgeneration process[58, 71, 72].The GraphRAGtypi-
+settraining.Forafaircomparison,allexperimentswereconducted                         cally involves two processes: graph retrieval and graph-augmented
+on a single GPU with a batch size of 1. Though requiring more                      generation.Ingraph retrieval,weneedto designaretrievalmodel
+learnable parameters,G-Refer achieves faster trainingand better                    toretrieverelevantgraphinformationforthegivenquery,which
+performance compared to XRec. This can be attributed to (1) our                    can be some simple non-parametric retrievers like 𝐿-hop neigh-
+knowledge pruning which significantly reduces training data; (2)                   bors.Tobetterconsiderthegraphstructure,GNN-based[5,21,29]
+XRec’sspeedlimitationduetoadapterinsertion.Inaddition,full-set                     retrievers have been proposed. For example, GNN-RAG [51] first
+trainingreducesefficiencywithoutperformancegains,indicating                        encodes the graph, assigns a score to each entity, and retrieves
+the necessity of knowledge pruning.                                                entitiesrelevanttothequery.InsteadofGNNs,RoG[49]proposes
+                                                                                   anLLM-based graphretrieverby planning,retrieving,and reason-
+                                                                                   ingongraphs.Inthegraph-augmentedgeneration,theretrieved
+5   RelatedWorks                                                                   graph information is used to enhance the generation process of
+5.1   ExplainableRecommendation                                                    LLMs. Due to the unstructured nature of the LLMs, some works
+Explainablerecommendation[4,6,57,68,92,93]hasdemonstrated                          introduceanadapterlayertobridgethemodalitygap.GraphLLM
+significant advantages in informing users about the logic behind                   [3]firstencodesthegraphasembeddingsandthenfeedstheminto
+recommendations,therebyincreasingsystemtransparency,effec-                         LLMswithagraphadapterlayer.However,thehiddenembeddings
+tiveness, and trustworthiness. Early works focus on generating                     usedbythesemethodsaredifficulttointerpretandunderstand.To
+explanationswithpredefinedtemplates[32]orextractinglogicrea-                       improve the interpretability, recent research adopts some graph
+soning rules from recommendation models [8, 65, 98]. To provide                    descriptionlanguagetotranslatethegraphstructureintonatural
+more detailed and personalized explanations, recent works have                     language, such as edge list, node list, and syntax tree [27, 48, 97].
+explored generating explanations from graph structure, which con-                  In thisway,the graphstructurecan beunderstood byboth LLMs
+tainsabundantCFinformationforprovidingexplanations[1,17,78].                       andhumans.Thus,weadoptasimpleprompttodescribethegraph
+Forexample,PGPR[78]proposesareinforcementlearning-based                            structure for the explainable recommendation.
+method to find a path in the graph to explain the recommendation.                  6   Conclusion
+However,thegraphstructureisoftencomplexandhardforusersto                          We systematically analyze the limitations of existing explainable
+understand. To address this issue, some works have explored gen-                   recommendation methods and introduce G-Refer, a novel model
+erating explanations innatural language [7, 13, 14, 16, 33–35, 50].                to address these challenges. The key design of our model involves
+Withthe advanceof LLMs,likeChatGPT [54],theycangenerate                            leveraging a hybrid graph retrieval to extract explicit CF signals,
+morefluentandinformativeexplanationsbasedonuser’sanditem’s                         employingknowledgepruningtofilteroutlessrelevantsamples,
+profile [34]. Recently, researchershave tried to combine the advan-                andutilizingretrieval-augmentedfine-tuningtointegrateretrieved
+tagesofgraphstoenhancetheexplanationgeneratedbyLLMs[59].                           knowledge into explanation generation. Comprehensive experi-
+XRec[50]adoptsagraphneuralnetwork(GNN)tomodelthegraph                              mentsvalidatetheeffectivenessofourmodel.G-Referrevealsgreat
+structureandgenerateembeddings.Then,theembeddingsarefed                            potentialforgraphretrieval-augmentedgenerationinrecommen-
+into LLMs to generate explanations. This approach allows LLMs to                   dationscenarios.Futureworkincludesexploringfullytraining-free
+produce more informative explanations by considering CF infor-                     retrievers and investigating the transferability to other tasks.
+mation withinthe graphstructure.However, XRecrepresentsCF
+informationashiddenembeddings,leavingitunclearwhatspecific                         Acknowledgments
+CF information is considered when generating explanations. This
+ambiguitymakesitdifficulttoverifytheexplanationsgeneratedby                       This work was supported by National Key Research and Develop-
+LLMs,whichsufferfromseverehallucinationissues[94]andfurther                        mentProgramofChinaGrantNo.2023YFF0725100andGuangzhou-
+diminishesthetrustworthinessoftheexplainablerecommendation.                        HKUST(GZ) Joint Funding Scheme 2023A03J0673.
+
+=== PDF PAGE 9 ===
+G-Refer: Graph Retrieval-Augmented Large Language Model for Explainable Recommendation                                        WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+References                                                                                                 [25]  Edward J Hu, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu
+ [1]  Giacomo Balloccu, Ludovico Boratto, Christian Cancedda, Gianni Fenu, and                                   Wang,WeizhuChen,etal.2021. LoRA:Low-RankAdaptationofLargeLanguage
+      Mirko Marras. 2023. FaithfulPath Language Modelling forExplainable Recom-                                  Models. In International Conference on Learning Representations.
+      mendation over Knowledge Graph. arXiv preprint arXiv:2310.16452 (2023).                              [26]  Gautier Izacard, Mathilde Caron, Lucas Hosseini, Sebastian Riedel, Piotr Bo-
+ [2]  Yixin Cao, Xiang Wang, Xiangnan He, Zikun Hu, and Tat-Seng Chua. 2019.                                     janowski,ArmandJoulin,andEdouardGrave.2022. UnsupervisedDenseInfor-
+      Unifying knowledge graph learning and recommendation: Towards a better                                     mation Retrieval with Contrastive Learning. TMLR (2022).
+      understanding of user preferences. In ACM WWW. 151–161.                                              [27]  Jiho Kim, Yeonsu Kwon, Yohan Jo, and Edward Choi. 2023. Kg-gpt: A general
+ [3]  ZiweiChai,TianjieZhang,LiangWu,KaiqiaoHan,XiaohaiHu,XuanwenHuang,                                          framework for reasoning on knowledge graphs using large language models.
+      andYang Yang.2023. Graphllm:Boostinggraphreasoningabilityoflargelan-                                       arXiv preprint arXiv:2310.11220 (2023).
+      guage model. arXiv preprint arXiv:2310.05845 (2023).                                                 [28]  PatrickLewis,EthanPerez,AleksandraPiktus,FabioPetroni,VladimirKarpukhin,
+ [4]  HengChang,JieCai, andJiaLi.2023. Knowledgegraphcompletionwithcoun-                                         NamanGoyal,HeinrichKüttler,MikeLewis,Wen-tauYih,TimRocktäschel,etal.
+      terfactual augmentation. In ACM WWW. 2611–2620.                                                            2020.Retrieval-augmentedgenerationforknowledge-intensivenlptasks.NeurIPS
+ [5]  Heng Chang, Yu Rong, Tingyang Xu, Wenbing Huang, Honglei Zhang, Peng                                       33 (2020), 9459–9474.
+      Cui, Wenwu Zhu, and Junzhou Huang. 2020. A restricted black-box adversarial                          [29]  Jia Li, Yongfeng Huang, Heng Chang, and Yu Rong. 2022.  Semi-supervised
+      framework towards attacking graph embedding models. In Proceedings of the                                  hierarchical graph classification.   IEEE Transactions on Pattern Analysis and
+      AAAI Conference on Artificial Intelligence, Vol. 34. 3389–3396.                                            Machine Intelligence 45, 5 (2022), 6265–6276.
+ [6]  HengChang,Jiangnan Ye,AlejoLopez-Avila,JinhuaDu,and JiaLi.2024. Path-                                [30]  Jiacheng Li, Jingbo Shang, and Julian McAuley. 2022.  Uctopic: Unsupervised
+      based explanation for knowledge graph completion. In Proceedings of the 30th                               contrastive learning for phrase representations and topic mining. arXiv preprint
+      ACM SIGKDD Conference on Knowledge Discovery and Data Mining. 231–242.                                     arXiv:2202.13469 (2022).
+ [7]  HanxiongChen,XuChen,ShaoyunShi,andYongfengZhang.2021. Generatenat-                                   [31]  Jia Li, Xiangguo Sun, Yuhan Li, Zhixun Li, Hong Cheng, and Jeffrey Xu Yu.
+      ural language explanations for recommendation. arXiv preprint arXiv:2101.03392                             2024. Graph intelligence with large language models and prompt learning. In
+      (2021).                                                                                                    Proceedings of the 30th ACM SIGKDD Conference on Knowledge Discovery and
+ [8]  Hanxiong Chen, Shaoyun Shi, Yunqi Li, and Yongfeng Zhang. 2021.  Neural                                    Data Mining. 6545–6554.
+      collaborative reasoning. In ACM WWW. 1516–1527.                                                      [32]  LeiLi,LiChen,andRuihaiDong.2021. Caesar:context-awareexplanationbased
+ [9]  Nuo Chen, Yuhan Li, Jianheng Tang, and Jia Li. 2024. GraphWiz: An Instruction-                             on supervised attention for service recommendations.  Journal of Intelligent
+      FollowingLanguageModelforGraphComputationalProblems.In Proceedings                                         Information Systems 57, 1 (2021), 147–170.
+      of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining.                            [33]  Lei Li, Yongfeng Zhang, and Li Chen. 2021. Personalized Transformer for Ex-
+      353–364.                                                                                                   plainable Recommendation. In Proceedings of the 59th Annual Meeting of the
+[10]  Xu Chen, Yongfeng Zhang, and Ji-Rong Wen. 2022.  Measuring" why" in rec-                                   Association for Computational Linguistics and the 11th International Joint Confer-
+      ommendersystems:Acomprehensivesurveyontheevaluationofexplainable                                           ence on Natural Language Processing (Volume 1: Long Papers). 4947–4957.
+      recommendation. arXiv preprint arXiv:2202.06466 (2022).                                              [34]  Lei Li, Yongfeng Zhang, and Li Chen. 2023. Personalized prompt learning for
+[11]  Yankai Chen, Huifeng Guo, Yingxue Zhang, Chen Ma, Ruiming Tang, Jingjie                                    explainable recommendation. ACM Transactions on Information Systems 41, 4
+      Li, and Irwin King. 2022. Learning binarized graph representations with multi-                             (2023), 1–26.
+      faceted quantization reinforcement for top-k recommendation. In Proceedings                          [35]  Piji Li, Zihao Wang, Zhaochun Ren, Lidong Bing, and Wai Lam. 2017. Neural
+      of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining.                                  ratingregressionwithabstractivetipsgenerationforrecommendation.InProceed-
+      168–178.                                                                                                   ings of the 40th International ACM SIGIR conference on Research and Development
+[12]  YankaiChen,Quoc-TuanTruong,XinShen,JinLi,andIrwinKing.2024.Shopping                                        in Information Retrieval. 345–354.
+      trajectory representation learning with pre-training for e-commerce customer                         [36]  XinLiandHsinchunChen.2013. Recommendationaslinkpredictioninbipartite
+      understanding and recommendation. In Proceedings of the 30th ACM SIGKDD                                    graphs: A graph kernel-based machine learning approach.  Decision Support
+      Conference on Knowledge Discovery and Data Mining. 385–396.                                                Systems 54, 2 (2013), 880–890.
+[13]  Zhongxia Chen, Xiting Wang, Xing Xie, Tong Wu, Guoqing Bu, Yining Wang,                              [37]  Yuhan Li, Zhixun Li, Peisong Wang, Jia Li, Xiangguo Sun, Hong Cheng, and
+      and EnhongChen. 2019. Co-attentive multi-tasklearning for explainablerecom-                                Jeffrey Xu Yu. 2023. A survey of graph meets large language model: Progress
+      mendation.. In IJCAI, Vol. 2019. 2137–2143.                                                                and future directions. arXiv preprint arXiv:2311.12399 (2023).
+[14]  HaoCheng,ShuoWang,WenshengLu,WeiZhang,MingyangZhou,Kezhong                                           [38]  Yuhan Li, Wei Shen, Jianbo Gao, and Yadong Wang. 2022.  Community ques-
+      Lu, and Hao Liao. 2023. Explainable recommendation with personalized review                                tion answering entity linking via leveraging auxiliary data.   arXiv preprint
+      retrieval and aspect learning. arXiv preprint arXiv:2306.12657 (2023).                                     arXiv:2205.11917 (2022).
+[15]  EdsgerW Dijkstra.2022. A noteontwoproblemsin connexionwithgraphs. In                                 [39]  Yuhan Li, Peisong Wang, Zhixun Li, Jeffrey Xu Yu, and Jia Li. 2024.  Zerog:
+      Edsger Wybe Dijkstra: his life, work, and legacy. 287–290.                                                 Investigating cross-dataset zero-shot transferability in graphs. In Proceedings
+[16]  Li Dong, Shaohan Huang, Furu Wei, Mirella Lapata, Ming Zhou, and Ke Xu.                                    of the 30th ACM SIGKDD Conference on Knowledge Discovery and Data Mining.
+      2017. Learning to generate product reviews from attributes. In Proceedings of                              1725–1735.
+      the 15th Conference of the European Chapter of the Association for Computational                     [40]  Yuhan Li, Peisong Wang, Xiao Zhu, Aochuan Chen, Haiyun Jiang, Deng Cai,
+      Linguistics: Volume 1, Long Papers. 623–632.                                                               VictorWaiKinChan,andJiaLi.2024. Glbench:Acomprehensivebenchmarkfor
+[17]  ZuohuiFu,YikunXian,RuoyuanGao,JieyuZhao,QiaoyingHuang,Yingqiang                                            graph with large language models. arXiv preprint arXiv:2407.07457 (2024).
+      Ge,ShuyuanXu,ShijieGeng,ChiragShah,YongfengZhang,etal.2020. Fairness-                                [41]  Yuhan Li, Jian Wu, Zhiwei Yu, Börje F Karlsso, Wei Shen, Manabu Okumura,
+      aware explainable recommendation over knowledge graphs. In SIGIR. 69–78.                                   andChin-YewLin.2023. UnlockingScience:NovelDatasetandBenchmarkfor
+[18]  YifuGao,LinboQiao,ZhigangKan,ZhihuaWen,YongquanHe,andDongsheng                                             Cross-ModalityScientificInformationExtraction. arXivpreprintarXiv:2311.08189
+      Li.2024. Two-stageGenerativeQuestionAnsweringonTemporalKnowledge                                           (2023).
+      Graph Using Large Language Models. arXiv preprint arXiv:2402.16568 (2024).                           [42]  Zhixun Li, Yushun Dong, Qiang Liu, and Jeffrey Xu Yu. 2024. Rethinking fair
+[19]  Yunfan Gao, Yun Xiong, Xinyu Gao, Kangxiang Jia, Jinliu Pan, Yuxi Bi, Yi Dai,                              graphneuralnetworksfromre-balancing.InProceedingsofthe30thACMSIGKDD
+      Jiawei Sun,and Haofen Wang. 2023. Retrieval-augmentedgeneration for large                                  Conference on Knowledge Discovery and Data Mining. 1736–1745.
+      language models: A survey. arXiv preprint arXiv:2312.10997 (2023).                                   [43]  ZhixunLi,XinSun,YifanLuo,YanqiaoZhu,DingshuoChen,YingtaoLuo,Xi-
+[20]  AzinGhazimatin,OanaBalalau,RishirajSahaRoy,andGerhardWeikum.2020.                                          angxin Zhou, Qiang Liu, Shu Wu, Liang Wang, et al. 2024.  GSLB: the graph
+      Prince: Provider-side interpretability with counterfactual explanations in rec-                            structure learning benchmark. NeurIPS 36 (2024).
+      ommendersystems.In Proceedings of the 13th International Conference on Web                           [44]  Chin-Yew Lin. 2004. Rouge: A package for automatic evaluation of summaries.
+      Search and Data Mining. 196–204.                                                                           In Text summarization branches out. 74–81.
+[21]  FangdaGu,HengChang,WenwuZhu,SomayehSojoudi,andLaurentElGhaoui.                                       [45]  Xi Victoria Lin, Xilun Chen, Mingda Chen, Weijia Shi, Maria Lomeli, Richard
+      2020. Implicit graph neural networks. NeurIPS 33 (2020), 11984–11995.                                      James,PedroRodriguez,JacobKahn,GergelySzilvasy,MikeLewis,etal.2024. RA-
+[22]  Xiangnan He, Kuan Deng, Xiang Wang, Yan Li, Yongdong Zhang, and Meng                                       DIT:Retrieval-AugmentedDualInstructionTuning.In The Twelfth International
+      Wang.2020. Lightgcn:Simplifyingandpoweringgraphconvolutionnetworkfor                                       Conference on Learning Representations.
+      recommendation. In Proceedings of the 43rd International ACM SIGIR conference                        [46]  HaoLiu,JiaruiFeng,LechengKong,NingyueLiang,DachengTao,YixinChen,
+      on research and development in Information Retrieval. 639–648.                                             and Muhan Zhang. 2024. OneFor All: Towards Training One Graph Model For
+[23]  Xiangnan He, Lizi Liao, Hanwang Zhang, Liqiang Nie, Xia Hu, and Tat-Seng                                   All Classification Tasks. InICLR.
+      Chua. 2017. Neural collaborative filtering. InACM WWW. 173–182.                                      [47]  Jie Lu, Dianshuang Wu, Mingsong Mao, Wei Wang, and Guangquan Zhang.
+[24]  Jonathan L Herlocker, Joseph A Konstan, and John Riedl. 2000. Explaining col-                              2015. Recommendersystemapplicationdevelopments:asurvey. Decisionsupport
+      laborative filtering recommendations. InProceedings of the 2000 ACM conference                             systems 74 (2015), 12–32.
+      on Computer supported cooperative work. 241–250.                                                     [48]  LinhaoLuo,JiaxinJu, BoXiong, Yuan-FangLi, GholamrezaHaffari, andShirui
+                                                                                                                 Pan. 2023.  ChatRule: Mining Logical Rules with Large Language Models for
+                                                                                                                 Knowledge Graph Reasoning. arXiv preprint arXiv:2309.01538 (2023).
+
+=== PDF PAGE 10 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                             Yuhan Li et al.
+
+
+[49]  LinhaoLuo,Yuan-FangLi,RezaHaf,andShiruiPan.2024. ReasoningonGraphs:                                          VLDB Endowment 17, 2 (2023), 175–183.
+      Faithful and Interpretable Large Language Model Reasoning. In The Twelfth                             [77]  Zonghan Wu, Shirui Pan, Fengwen Chen, Guodong Long, Chengqi Zhang, and
+      International Conference on Learning Representations.                                                        S Yu Philip. 2020.  A comprehensive survey on graph neural networks.  IEEE
+[50]  Qiyao Ma, Xubin Ren, and Chao Huang. 2024. XRec: Large Language Models for                                   transactions on neural networks and learning systems 32, 1 (2020), 4–24.
+      Explainable Recommendation. arXiv preprint arXiv:2406.02377 (2024).                                   [78]  Yikun Xian, Zuohui Fu, Shan Muthukrishnan, Gerard De Melo, and Yongfeng
+[51]  CostasMavromatisandGeorgeKarypis.2024.GNN-RAG:GraphNeuralRetrieval                                           Zhang. 2019.  Reinforcement knowledge graph reasoning for explainable rec-
+      for Large Language Model Reasoning. arXiv preprint arXiv:2405.20139 (2024).                                  ommendation.In Proceedings of the 42nd international ACM SIGIR conference on
+[52]  Jianmo Ni, Jiacheng Li, and Julian McAuley. 2019. Justifying recommendations                                 research and development in information retrieval. 285–294.
+      using distantly-labeled reviews and fine-grained aspects. InProceedings of the                        [79]  YuanyuanXu,WenjieZhang,YingZhang,MariaE.Orlowska,andXueminLin.
+      2019 conference on empirical methods in natural language processing and the 9th                              2024. TimeSGN: Scalable and Effective Temporal Graph Neural Network. In40th
+      international joint conference on natural language processing (EMNLP-IJCNLP).                                IEEE International Conference on Data Engineering. IEEE, 3297–3310.
+      188–197.                                                                                              [80]  AnYan,ZhankuiHe,JiachengLi,TianyangZhang,andJulianMcAuley.2023. Per-
+[53]  Jianmo Ni, Chen Qu, Jing Lu, Zhuyun Dai, Gustavo Hernandez Abrego, Ji Ma,                                    sonalizedshowcases:Generatingmulti-modalexplanationsforrecommendations.
+      Vincent Zhao, Yi Luan, Keith Hall, Ming-Wei Chang, et al. 2022.  Large Dual                                  In SIGIR. 2251–2255.
+      Encoders Are Generalizable Retrievers. In Proceedings of the 2022 Conference on                       [81]  AnYang,BaosongYang,BinyuanHui,BoZheng,BowenYu,ChangZhou,Cheng-
+      Empirical Methods in Natural Language Processing. 9844–9855.                                                 peng Li, Chengyuan Li, Dayiheng Liu, Fei Huang, et al. 2024. Qwen2 technical
+[54]OpenAI. 2022. Introducing ChatGPT.  https://openai.com/index/chatgpt/                                          report. arXiv preprint arXiv:2407.10671 (2024).
+[55]  Shirui Pan, Linhao Luo, Yufei Wang, Chen Chen, Jiapu Wang, and Xindong Wu.                            [82]  Liqi Yang, Linhao Luo, Xiaofeng Zhang, Fengxin Li, Xinni Zhang, Zelin Jiang,
+      2024.  Unifying Large Language Models and Knowledge Graphs: A Roadmap.                                       and Shuai Tang. 2022. Why do semantically unrelated categories appear in the
+      IEEE Transactions on Knowledge and Data Engineering (2024).                                                  samesession? Ademand-aware method.In Proceedings of the 45th International
+[56]  Kishore Papineni, Salim Roukos, Todd Ward, and Wei-Jing Zhu. 2002. Bleu: a                                   ACM SIGIR Conference on Research and Development in Information Retrieval.
+      method for automatic evaluation of machine translation. In Proceedings of the                                2065–2069.
+      40th annual meeting of the Association for Computational Linguistics. 311–318.                        [83]  Ruosong Ye, Caiqi Zhang, Runhui Wang, Shuyuan Xu, Yongfeng Zhang, et al.
+[57]  GeorginaPeakeandJunWang.2018. Explanationmining:Posthocinterpretabil-                                        2023. Naturallanguageisallagraphneeds. arXiv preprint arXiv:2308.07134 4,5
+      ity oflatentfactor models forrecommendationsystems. In SIGKDD.2060–2069.                                     (2023), 7.
+[58]  Boci Peng, Yun Zhu, Yongchao Liu, Xiaohe Bo, Haizhou Shi, Chuntao Hong,                               [84]  RexYing,RuiningHe,KaifengChen,PongEksombatchai,WilliamLHamilton,
+      YanZhang,andSiliangTang.2024. GraphRetrieval-AugmentedGeneration:A                                           and Jure Leskovec. 2018. Graph convolutional neural networks for web-scale
+      Survey. arXiv preprint arXiv:2408.08921 (2024).                                                              recommender systems. In SIGKDD. 974–983.
+[59]  Zhangchi Qiu, Linhao Luo, Shirui Pan, and Alan Wee-Chung Liew. 2024. Un-                              [85]  Zhitao Ying, Dylan Bourgeois, Jiaxuan You, Marinka Zitnik, and Jure Leskovec.
+      veiling User Preferences: A Knowledge Graph and LLM-Driven Approach for                                      2019. Gnnexplainer:Generatingexplanationsforgraphneuralnetworks. NeurIPS
+      Conversational Recommendation. arXiv preprint arXiv:2411.14459 (2024).                                       32 (2019).
+[60]  Nils Reimers and Iryna Gurevych. 2019. Sentence-bert: Sentence embeddings                             [86]  Hao Yuan, Haiyang Yu, Shurui Gui, and Shuiwang Ji. 2022.  Explainability in
+      using siamese bert-networks. arXiv preprint arXiv:1908.10084 (2019).                                         graphneuralnetworks:Ataxonomicsurvey. IEEEtransactionsonpatternanalysis
+[61]  Marco Tulio Ribeiro, Sameer Singh, and Carlos Guestrin. 2016. " Why should i                                 and machine intelligence 45, 5 (2022), 5782–5799.
+      trustyou?" Explainingthepredictionsof anyclassifier.InSIGKDD.1135–1144.                               [87]  Weizhe Yuan, Graham Neubig, and Pengfei Liu. 2021.  Bartscore: Evaluating
+[62]  Michael Schlichtkrull, Thomas N Kipf, Peter Bloem, Rianne Van Den Berg, Ivan                                 generated text as text generation. NeurIPS 34 (2021), 27263–27277.
+      Titov,andMaxWelling.2018. Modelingrelationaldatawithgraphconvolutional                                [88]  Shichang Zhang, Jiani Zhang, Xiang Song, Soji Adeshina, Da Zheng, Christos
+      networks. In The semantic web: 15th international conference. Springer, 593–607.                             Faloutsos,andYizhouSun.2023. PaGE-Link:Path-basedgraphneuralnetwork
+[63]  Thibault Sellam, Dipanjan Das, and Ankur Parikh. 2020.  BLEURT: Learning                                     explanation for heterogeneous link prediction. In ACM WWW. 3784–3793.
+      Robust Metrics for Text Generation. In ACL. 7881–7892.                                                [89]  Tianyi Zhang, Varsha Kishore, Felix Wu, Kilian Q Weinberger, and Yoav
+[64]  Wei Shen, Yuhan Li, Yinan Liu, Jiawei Han, Jianyong Wang, and Xiaojie Yuan.                                 Artzi. 2019.  Bertscore: Evaluating text generation with bert.  arXiv preprint
+      2021. Entitylinkingmeetsdeeplearning:Techniquesandsolutions. IEEE Trans-                                     arXiv:1904.09675 (2019).
+      actions on Knowledge and Data Engineering 35, 3 (2021), 2556–2578.                                    [90]  Tianjun Zhang, Shishir G Patil, Naman Jain, Sheng Shen, Matei Zaharia, Ion
+[65]  Shaoyun Shi, Hanxiong Chen, Weizhi Ma, Jiaxin Mao, Min Zhang, and Yongfeng                                   Stoica, andJoseph E Gonzalez.2024. Raft: Adaptinglanguage modelto domain
+      Zhang.2020. Neurallogicreasoning.InProceedingsofthe29thACMInternational                                      specific rag. arXiv preprint arXiv:2403.10131 (2024).
+      Conference on Information & Knowledge Management. 1365–1374.                                          [91]  XinniZhang,YankaiChen,CuiyunGao,QingLiao,ShenglinZhao,andIrwinKing.
+[66]  YanchaoTan,ZihaoZhou,HangLv,WeimingLiu,andCarlYang.2024. Walklm:A                                            2022. Knowledge-awareneuralnetworkswithpersonalizedfeaturereferencing
+      uniform language model fine-tuning framework for attributed graph embedding.                                 for cold-start recommendation. arXiv preprint arXiv:2209.13973 (2022).
+      NeurIPS 36 (2024).                                                                                    [92]  Yongfeng Zhang, Xu Chen, et al. 2020. Explainable recommendation: A survey
+[67]  JianhengTang,QifanZhang,YuhanLi,andJiaLi.2024. Grapharena:Benchmark-                                         and new perspectives. Foundations and Trends® in Information Retrieval 14, 1
+      ing large language models on graph computational problems.  arXiv preprint                                   (2020), 1–101.
+      arXiv:2407.00379 (2024).                                                                              [93]  YongfengZhang,GuokunLai,MinZhang,YiZhang,YiqunLiu,andShaoping
+[68]  BotaoWang,JiaLi,HengChang,KeliZhang,andFugeeTsung.2024. Heterophilic                                         Ma. 2014.  Explicit factor models for explainable recommendation based on
+      Graph Neural Networks Optimization with Causal Message-passing.   arXiv                                      phrase-level sentiment analysis. In Proceedings of the 37th international ACM
+      preprint arXiv:2411.13821 (2024).                                                                            SIGIR conference on Research & development in information retrieval. 83–92.
+[69]  HengWang,ShangbinFeng,TianxingHe,ZhaoxuanTan,XiaochuangHan,and                                        [94]  Yue Zhang, Yafu Li, Leyang Cui, Deng Cai, Lemao Liu, Tingchen Fu, Xinting
+      Yulia Tsvetkov. 2024.  Can language models solve graph problems in natural                                   Huang, Enbo Zhao, Yu Zhang, Yulong Chen, et al. 2023.  Siren’s song in the
+      language? NeurIPS 36 (2024).                                                                                AI ocean: a survey on hallucination in large language models.  arXiv preprint
+[70]  Jiaan Wang, Yunlong Liang, Fandong Meng, Zengkui Sun, Haoxiang Shi, Zhixu                                    arXiv:2309.01219 (2023).
+      Li,JinanXu,JianfengQu,andJieZhou.2023. IsChatGPTaGoodNLGEvaluator?                                    [95]  ChuangZhao,HongkeZhao,MingHe,JianZhang,andJianpingFan.2023. Cross-
+      A Preliminary Study. In Proceedings of the 4th New Frontiers in Summarization                                domainrecommendationviauserinterestalignment.In ACM WWW.887–896.
+      Workshop. 1–11.                                                                                       [96]  ChuangZhao, HongkeZhao,XiaomengLi, MingHe,JiahuiWang,andJianping
+[71]  JiapuWang,KaiSun,LinhaoLuo,WeiWei,YongliHu,Alan Wee-ChungLiew,                                               Fan.2023. Cross-domainrecommendationviaprogressivestructuralalignment.
+      Shirui Pan, and Baocai Yin. 2024.  Large Language Models-guided Dynamic                                      IEEE Transactions on Knowledge and Data Engineering (2023).
+      Adaptation for Temporal Knowledge Graph Reasoning. NeurIPS (2024).                                    [97]  Jianan Zhao, Le Zhuo, Yikang Shen, Meng Qu, Kai Liu, Michael Bronstein,
+[72]  Luzhi Wang, Yizhen Zheng, Di Jin, Fuyi Li, Yongliang Qiao, and Shirui Pan. 2024.                             ZhaochengZhu,andJianTang.2023. Graphtext:Graphreasoningintextspace.
+      Contrastivegraphsimilaritynetworks. ACMTransactionsontheWeb18,2(2024),                                       arXiv preprint arXiv:2310.01089 (2023).
+      1–20.                                                                                                 [98]  Yaxin Zhu, Yikun Xian, Zuohui Fu, Gerard De Melo, and Yongfeng Zhang. 2021.
+[73]  Xiang Wang, Xiangnan He, Fuli Feng, Liqiang Nie, and Tat-Seng Chua. 2018.                                    Faithfullyexplainablerecommendationvianeurallogicreasoning. arXivpreprint
+      Tem:Tree-enhancedembeddingmodelforexplainablerecommendation.InACM                                            arXiv:2104.07869 (2021).
+      WWW. 1543–1552.
+[74]  Likang Wu, Zhi Zheng, Zhaopeng Qiu, Hao Wang, Hongchao Gu, Tingjia Shen,
+      Chuan Qin, Chen Zhu, Hengshu Zhu, Qi Liu, et al. 2024.  A survey on large
+      language models for recommendation. ACM WWW 27, 5 (2024), 60.
+[75]  Shiwen Wu, Fei Sun, Wentao Zhang, Xu Xie, and Bin Cui. 2022. Graph neural
+      networksinrecommendersystems:asurvey. Comput.Surveys55,5(2022),1–37.
+[76]  Xueyi Wu, Yuanyuan Xu, Wenjie Zhang, and Ying Zhang. 2023. Billion-scale
+      bipartite graph embedding: A global-local induced approach. Proceedings of the
+
+=== PDF PAGE 11 ===
+               G-Refer: Graph Retrieval-Augmented Large Language Model for Explainable Recommendation                                        WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia
+
+               A   MoreExperimentDetails                                                             • BLEURT[63]employsanovellanguagemodelpre-trainedwith
+               A.1   DetailsofDatasets                                                                  syntheticdatatoassessthesimilaritybetweenthegeneratedand
+                                                                                                        reference texts.
+                       Table3:Statisticsoftheexperimentaldatasets.                                   • USR [33] assesses the uniqueness of generated explanations by
+                                                                                                        calculating the ratio of unique sentences to total sentences.
+                                                                                                     A.3   DetailsofBaselines
+                                                                                                     • NRT [35] employs multi-task learning to predict ratings and
+                                                                                                        generatetipsforrecommendationssimultaneouslybasedonuser
+                                                                                                        and item IDs. The generation component is a GRU.
+               • Amazon-books[52]isa subsetoftheAmazon reviewdataset,                                • Att2Seq[16]implementsanattention-basedattribute-to-sequence
+                  specificallyfocusedonbookrecommendations.Thisdataseten-                               modelthatgeneratesreviewsbyleveragingattributeinformation.
+                  compassesuser-bookinteractions,includingbothnumericalrat-                             The generation component is a two-layer LSTM.
+                  ingsandtextualreviewssubmittedbyusersaftertheirpurchases.                          • PETER[33]isapersonalizedTransformermodelthatmapsuser
+               • Yelp[50]isawidelyuseddatasetderivedfromYelp1,wherelocal                                anditemIDstogeneratedexplanations.ItbridgesIDsandwords
+                  businesses such as restaurants and bars are considered items. It                      through a "context prediction" task. PETER is used instead of
+                  providesrichinformationaboutlocalbusinesses,includinguser                             PETER+ due to the absence of word features in the datasets.
+                  reviews and ratings across various categories.                                     • PEPLER [34] proposes sequential tuning and recommendation
+               • Google-reviews[30,80]comprisesrestaurantreviewscollected                               asregularizationstrategiestobridgethegapbetweenprompts
+                  from Google Local2. This dataset incorporates both business                           (incorporating user and item ID vectors) and the pre-trained
+                  metadata and user feedback, offering a broad perspective on                           transformer model for generating explanations.
+                  dining establishments globally.                                                    • XRec[50]utilizestheencodeduser/itemembeddingsfromGNNs
+                                                                                                        as implicitcollaborative signals, which are thenintegrated into
+               A.2   DetailsofMetrics                                                                   each layer of LLMs, enabling the generation of explanations.
+               • GPTscore [70]leverageslargelanguagemodelstoevaluatetext                             B   CaseStudy
+                  quality, providing a context-aware assessment.
+               • BERTscore [89] computesthe similarity betweenreference and                          We present two cases in Table 4 and Table 5 to demonstrate the
+                  generated texts using contextual embeddings from BERT. Given                       effectiveness of G-Refer and illustrate how retrieved CF signals
+                  areferencesentence𝑥 = ⟨𝑥1,𝑥2,...,𝑥𝑛⟩ andageneratedsentence                         benefitthegeneratedexplanations.Allretrievedknowledgeispre-
+                  ˆ𝑥 = ⟨ˆ𝑥1, ˆ𝑥2,..., ˆ𝑥𝑚⟩, A sequence of word embeddings are first                  sented as human-readable text after graph translation for better
+                  generated using BERT:                                                              userunderstanding.Wealsoprovidethegroundtruthexplanations
+                               BERT(⟨𝑥1,𝑥2,...,𝑥𝑛⟩)= ⟨x1,x2,...,xn⟩                                  and explanations generated by XRec [50] for comparison.
+                               BERT(⟨ˆ𝑥1, ˆ𝑥2,..., ˆ𝑥𝑚⟩)= ⟨ˆx1, ˆx2,..., ˆxm⟩                (13)        FromTable4,wecanobservethattheuserprofilecontainsnoex-
+                                                                                                     plicitdrinkinginterests.However,node-levelCFsignalsrevealthat
+                  Thesimilaritybetweentwoindividualembeddings(xi, ˆxj)ismea-                         otheruserswhohavesimilarintereststothecurrentusershowa
+                  suredusingcosinesimilarity,whichsimplyreducestox⊤i ˆxj since                       preferencefordrinking.ThisallowsG-Refertoinferthatthecurrent
+                  bothembeddingsarepre-normalized.Withthesedefinitions,the                           usermightappreciatethisrestaurantspecializingin“craftedbeers”.
+                  Precision, Recall, and F1-score are calculated as follows:                         Incontrast,XRec’sexplanationisnotablygeneric,whichrelieson
+                                                              cosine similarity                      commonphraseslike“deliciousfood”and“greatservice”,missing
+                                                   ∑︁              z}|{                              thekeyrecommendationreasons,thusleadingtoalowRecallscore.
+                               BERTPscore =  1|ˆ𝑥|      maxxi∈𝑥    x⊤i ˆxj               (14)        Table5providesanothercasethatleveragespath-levelretrievedCF
+                                                   ˆxj∈ˆ𝑥|                   {z                  }   informationformorecomprehensiveexplanations.Whiletheuser
+                                                           greedy matching                           profile onlyindicates general preferences for comfort food andeffi-
+                                                              cosine similarity                      cient services, path-level CFsignals uncoverbroader connections
+                                                   ∑︁             z}|{                               betweenthecurrentuserandotherusers/items.Usersalongthere-
+                               BERTRscore =  1          max        x⊤i ˆxj               (15)        trievedpathhaveaninterestin“frozenyogurt”,allowingustoinfer
+                                               |𝑥| xi∈𝑥 ˆxj∈ˆ𝑥                                       thatthecurrentusermightbeinterestedinthisrestaurantduetoits
+                                                        |                   {z                  }    frozenyogurt offerings.Incontrast, XRecincorrectly explainsthat
+                                                           greedy matching                           the user might choose this restaurant for its Thai food, failing to
+                              BERTF1score = 2× BERTPscore×BERTRscore                     (16)        capture the user’s true interests. These cases show that node-level
+                                                   BERTPscore+BERTRscore                             and path-level CF signals are complementary. While not equally
+               • BARTscore [87]conceptualizestheevaluationasatextgenera-                             effectiveineverysituation,gatheredCFsignalscancontributeto
+                  tiontask,assigningscoresbasedontheprobabilityofregenerat-                          generatingmoreaccurateexplanationsinrecommendationscenar-
+                  ing reference texts using the BART model.                                          ios.ThebetterexplanationsdemonstrateG-Referhastheabilityto
+                                                                                                     effectively retrieve, understand, and utilize such knowledge.
+               1https://www.yelp.com/dataset/
+               2https://www.google.com/maps
+
+
+
+
+
+
+
+
+
+Dataset               #Users   #Items   #Interactions   #Train   #Test(𝑢-𝑖)      (𝑢-𝑖)
+
+Amazon-books    15,349    15,247        360,839        95,841    3,000
+Yelp                   15,942    14,085        393,680        74,212    3,000
+Google-reviews    22,582    16,557        411,840        94,663    3,000
+
+=== PDF PAGE 12 ===
+WWW ’25, April 28-May 2, 2025, Sydney, NSW, Australia                                                                                                                                                                             Yuhan Li et al.
+
+Table4:AcasefromYelp,whichshowshowG-Referprimarilyleveragesnode-levelretrievedCFinformationtogeneratebetter
+explanations.
+
+
+                                                                                      Inputs
+  UserProfile             TheuserislikelytoenjoyMexicanrestaurantswithafocusonburritosandtacos,aswellasbaseballgamesatsceniclocationsand
+                           coffee shops for cozy work or socializing.
+  ItemProfile             Beerenthusiastslookingfor alaid-backatmospherewithavarietyof craftbeersandcasualdiningoptions, includingdogowners
+                           seeking a pet-friendly environment, would enjoy this business.
+  Node-levelCF         For the user-item pair, here are some related users and items: Users: The user is likely to enjoy businesses with unique decor,
+                           traditionalfamilyrecipes,craftbeers,outdoordining,gourmetwood-firedentrees,livemusic,andwaterfrontlocations.,Theuseris
+                           likelytoenjoy finediningexperiences,laid-backaccommodationswith resortamenities,Americanpubfare withcraftbeer, and
+                           relaxed atmospheres with delicious comfort food and craft beer selections.Items: Coffee enthusiasts looking for a cozy atmosphere
+                           with delicious pastries and brunch options would enjoy Lulu Carpenter’s., Food enthusiasts who appreciate classic Italian cuisine
+                           and casual dining experiences would enjoy Joe’s Pizza & Subs.
+                                                                                  Explanations
+  GroundTruth              The user would enjoy the business for itsawesome selection of beersand ciders, great outdoor spaces, and the option to order bar
+                           food from Carpos, even though it predominantly focuses on beer.
+  XRec                     Theuserwouldenjoythebusinessbecause ofitsdeliciousfood,greatservice,andcozyatmosphere,makingitagreatplacetorelax
+                           and enjoy a good meal.
+  G-Refer    (ours)         Theuserwouldenjoythebusinessbecauseofthegreatselectionofbeers,friendlystaff,andtheopportunitytotrynewandunique
+                           brews like the hazy IPA.
+
+Table 5: A case from Google-review, which shows how G-Refer primarily leverages path-level retrieved CF information to
+generatebetterexplanations.
+
+
+                                                                                      Inputs
+  UserProfile             This user is likely to enjoy businesses that offer comfort food with unique twists, efficient waxing services with minimal pain,
+                           upscale dining with stunning views and impressive service, and flavorful Asian cuisine with fast service in Philadelphia.
+  ItemProfile             Fansoffrozenyogurt withawidevarietyofflavors andtoppings,inavibrantand welcoming settinginPhiladelphia,wouldenjoy
+                           BerrySweetFrozenYogurt.Idealforthosewhoappreciateafunatmosphere,qualitytreats,andconvenientlocationonSouthStreet.
+  Path-levelCF          For the given user-itempair,here are several related paths connecting usersand items through their interactions: 1. User(Profile:
+                           This user is likely to enjoy businesses that offer comfort food with unique twists, efficient waxing services with minimal pain,
+                           upscalediningwithstunningviewsandimpressiveservice,andflavorfulAsiancuisinewithfastserviceinPhiladelphia.)->buys
+                           -> Item (Profile: Users who appreciate high-quality skincare products, attentive customer service, and are willing to splurge for
+                           effective beauty items would enjoy Kiehl’s in Philadelphia.) -> bought by -> User (Profile: This user is likely to enjoy businesses
+                           offeringhigh-qualityfoodandattentiveserviceincozysettings,suchasrestaurantslikeKanella,VillageWhiskey,andCheuNoodle
+                           Bar. They appreciate flavorful meals, knowledgeable staff, and unique dining experiences.) -> buys -> Item (Profile: Users who
+                           appreciate creative and high-quality vegan options, a personalized dining experience with small restaurant owners, unique and
+                           experimentaldisheswithvariedinfluences,andagreatwineandcocktailselectionwouldenjoyMeritageinPhiladelphia.)->bought
+                           by->User(Profile:TheuserislikelytoenjoyupscalediningwithLatinAmericanandMexicancuisine,diversefrozenyogurtflavors
+                           withuniquebubbleteaoptions,goodfoodinalow-keyambiance,andauthenticspicyIndiancuisinedespitesomereservations
+                           aboutservice andchicken quality.) ->buys ->Item (Profile:Fans offrozenyogurt witha widevariety offlavors andtoppings, in
+                           a vibrant and welcoming setting in Philadelphia, would enjoy Berry Sweet Frozen Yogurt. Ideal for those who appreciate a fun
+                           atmosphere, quality treats, and convenient location on South Street.)
+                                                                                  Explanations
+  GroundTruth              TheuserwouldenjoyBerrySweetbecauseofitsdeliciousfrozenyogurt,friendlystaff,varietyoftoppings,andfunatmospherethat
+                           makes it a great place to hang out with friends on South Street.
+  XRec                     Youwouldenjoythebusinessbecauseitoffersdelicious,authenticThaifoodwithavarietyofdishestochoosefrom,including
+                           spicy and non-spicy options, as well as a cozy atmosphere with friendly service.
+  G-Refer    (ours)         Theuser wouldenjoy BerrySweet becauseofthe widevariety offlavors andtheopportunity tomix andmatch them,makingit a
+                           fun foryogurt loversseeking a customizable and fun experience.

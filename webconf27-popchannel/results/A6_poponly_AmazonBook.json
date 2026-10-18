@@ -1,0 +1,18 @@
+{
+  "dataset": "AmazonBook",
+  "val": {
+    "recall": 0.95,
+    "ndcg": 0.61
+  },
+  "test": {
+    "recall": 0.96,
+    "ndcg": 0.61
+  },
+  "n_val_users": 50355,
+  "n_test_users": 50407,
+  "split_sizes": {
+    "train": 2387286,
+    "val": 298410,
+    "test": 298412
+  }
+}

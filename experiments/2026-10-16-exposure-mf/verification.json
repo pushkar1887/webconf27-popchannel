@@ -1,0 +1,25 @@
+{
+  "status": "independent_artifact_checks_passed",
+  "selected_MF_models_replayed": 12,
+  "all_policy_score_vectors_replayed": 48,
+  "raw_and_calibrated_macro_risks_recomputed": 48,
+  "individual_user_AUCs_bruteforce_checked": 2424,
+  "paired_risk_bootstrap_vectors_recomputed": 18,
+  "exact_calibration_root_equations_checked": 240,
+  "exact_calibration_bootstrap_gaps_recomputed": 90,
+  "selection_from_equal_three_candidate_validation_grid_verified": true,
+  "max_absolute_errors": {
+    "score": 4.440892098500626e-16,
+    "risk": 0.0,
+    "auc_sample": 0.0,
+    "bootstrap": 1.0299920638612292e-18
+  },
+  "continue_benchmark_recomputed": false,
+  "limitations": [
+    "Conditional on selected trained models and observed period.",
+    "Calibration uncertainty uses an asymptotic influence approximation, spot-checked rather than exact bootstrap coverage.",
+    "Full interaction validation gain is weak; no broad embedding-compression conclusion.",
+    "Native-label documentation mismatch and incomplete sequences remain unresolved."
+  ],
+  "elapsed_seconds": 17.487462300001425
+}

@@ -1,0 +1,48 @@
+E5: who gains from the popularity correction
+Scope: partial (Stage 1-2), not final Stage 3.
+No new scoring/training, no Kaggle/network, no mappings recomputed.
+
+Prediction copied from PR-E5:
+For the GraphHash prior gains, >=60% of the added hits fall in the top-20%-popularity items; bottom-80% recall changes by <=0.5 points.
+
+Operational choices (not retroactively preregistered):
+Head = top ceil(20% of catalog) by train event count; ties ascending original item ID.
+Added hits = gross newly recovered true-positive (user,item) pairs, before subtracting lost hits.
+Tail primary = mean hits_tail/min(20,tail truth count), only users with tail truth.
+Tail contribution = mean hits_tail/min(20,all truth count), over every evaluated user.
+Activity quartiles = train event counts among evaluated users, ties original user ID.
+
+All percentages below are scores or shares; deltas are percentage points.
+ID | base R20 -> corrected | head share of gross additions | tail primary delta | tail overall contribution delta | coverage base -> corrected | joint verdict
+A1 | 7.5666 -> 13.3047 | 96.78% | -6.8077 | -3.7239 | 95.19% -> 28.40% | FAIL
+  Gross newly recovered / lost / net hits: 9378 / 4019 / 5359; tail hits: 4156 -> 939; tail-eligible users 19512/25789.
+  Overall capped R20 gains by activity Q1..Q4: +6.382, +5.462, +5.762, +5.346.
+A4 | 1.9675 -> 5.6823 | 98.48% | -2.0107 | -0.9009 | 96.25% -> 21.65% | FAIL
+  Gross newly recovered / lost / net hits: 7387 / 1991 / 5396; tail hits: 1615 -> 210; tail-eligible users 23011/30304.
+  Overall capped R20 gains by activity Q1..Q4: +3.600, +3.973, +3.782, +3.503.
+A5 | 3.7845 -> 4.8007 | 96.42% | -0.5250 | -0.2543 | 22.88% -> 7.34% | FAIL
+  Gross newly recovered / lost / net hits: 2653 / 1034 / 1619; tail hits: 603 -> 205; tail-eligible users 23011/30304.
+  Overall capped R20 gains by activity Q1..Q4: +0.722, +0.987, +1.252, +1.103.
+AmazonBook_legacy_DAU | 4.6264 -> 6.3275 | 89.45% | -1.3024 | -0.6248 | 93.11% -> 80.68% | FAIL
+  Gross newly recovered / lost / net hits: 7443 / 2919 / 4524; tail hits: 6320 -> 4506; tail-eligible users 39697/50407.
+  Overall capped R20 gains by activity Q1..Q4: +1.798, +1.707, +1.725, +1.574.
+AmazonBook_legacy_BPR | 4.1128 -> 4.8103 | 74.64% | -0.4715 | -0.2068 | 44.39% -> 34.33% | PASS
+  Gross newly recovered / lost / net hits: 3438 / 1656 / 1782; tail hits: 4110 -> 3597; tail-eligible users 39697/50407.
+  Overall capped R20 gains by activity Q1..Q4: +0.779, +0.669, +0.740, +0.602.
+
+Interpretation:
+The head-added-hit prediction passes for every comparison. This does not imply tail safety: all three DirectAU comparisons fail the <=0.5pp tail prediction, even if tail is normalized as its contribution to overall recall.
+Gowalla and Yelp DirectAU also show large declines in catalog coverage and tail recommendation share. Aggregate Recall@20 improvements must be reported together with this concentration.
+Yelp BPR is marginally beyond the 0.5pp conditional-tail threshold (-0.525pp); its overall-denominator contribution is -0.254pp, so this borderline verdict depends on the preregistration denominator ambiguity.
+AmazonBook BPR passes both operational conditions; this does not imply no tail decline (-0.472pp).
+Every activity quartile has positive overall Recall@20 gain; that does not imply every user improves or that tail items improve.
+AmazonBook uses one legacy training checkpoint and random tie key seed 0. Modern Gowalla/Yelp inputs use their saved torch.topk lists. Do not pool these as matched tie/optimization replications.
+The JSON includes raw-baseline sensitivity for modern DirectAU, full popularity-quintile and activity-quartile tables, item coverage, gross losses and net changes.
+
+Lineage checks passed for every baseline/corrected list (plus raw DirectAU sensitivities): original test user set, npos, per-rank or per-user hit field, NDCG, duplicate item exclusion and train+val masking. Modern scalar recall reproduced within 1e-7.
+JSON numbers are fractions internally; multiply scores by 100 for percentages and deltas by 100 for percentage points.
+
+Commands:
+python -X utf8 -m unittest discover -s scripts -p test_e5_stage3.py -v
+python -X utf8 scripts/analyze_e5.py
+7 tests passed; real-data analysis exited 0.

@@ -1,0 +1,36 @@
+{
+  "status": "synthetic_algebra_checks_passed",
+  "scope": "Deterministic mathematical checks only; no real data, loss-recovery experiment, or paper reproduction.",
+  "finite_pair_floor_counterexample": {
+    "batch_counts": [
+      2,
+      2
+    ],
+    "pi": 0.5,
+    "rho": 0.3333333333333333,
+    "actual_uniformity": -1.0979415883820347,
+    "claimed_log_pi": -0.6931471805599453,
+    "correct_spherical_floor": -1.0979415883820345
+  },
+  "gradient_factorization": {
+    "batch_rho": 0.26666666666666666,
+    "cross_bucket_kernel_mean": 0.032222571702636364,
+    "alpha": 0.08139912687594651,
+    "max_identity_error": 5.551115123125783e-17,
+    "adaptive_rescaling_max_gradient_error": 6.661338147750939e-16,
+    "deduplicated_vs_multiplicity_preserved_gradient_cosine": 0.950523980603902
+  },
+  "BPR_item_collision": {
+    "loss": 0.6931471805599453,
+    "ranking_loss_gradients_zero": true
+  },
+  "mixed_volume_non_equivalence": {
+    "separate_collision_mass_sum": 1.3600000000000003,
+    "mixed_volume_penalties": [
+      2.7200000000000006,
+      2.0
+    ]
+  },
+  "raw_dot_score_scale_sensitivity_verified": true,
+  "LightGCN_can_break_initial_alias_equality_verified": true
+}

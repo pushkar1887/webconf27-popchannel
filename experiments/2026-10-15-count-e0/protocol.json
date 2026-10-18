@@ -1,0 +1,90 @@
+{
+  "recorded_utc": "2026-10-15T18:02:02.937196+00:00",
+  "status": "exploratory_count_level_E0_not_confirmatory",
+  "authorization": "User supplied COUNT-LEVEL E0 spec in attached request; local CPU probe only.",
+  "source_cache": "D:\\web_2\\experiments\\2026-10-15-kuairand-support\\audit_arrays.npz",
+  "source_cache_sha256": "413845cf5ed49a3c67d011fbf93183dfd069af8de6a99d2a39740617e761d16b",
+  "inherited_protocol_sha256": "93b66daafcf5886d9953175be38cef49acc3d37cc87abd19919553a2ade45756",
+  "inherited_audit_sha256": "5f4b03b67c47ae9f50a9cea0c233f41f043d9da75452c69a78ef92d31b46dae8",
+  "inherited_verification_status": "saved_artifact_checks_passed",
+  "inherited_label_rule_consistency": false,
+  "data_contract": "Existing cleaned UTC splits; native long_view; duplicate-key quarantine unchanged. Standard test already used for exploration.",
+  "features": [
+    "user_id",
+    "video_id",
+    "tab"
+  ],
+  "target": "native long_view",
+  "budgets": [
+    64,
+    256,
+    1024
+  ],
+  "random_seeds": [
+    11,
+    29,
+    47
+  ],
+  "behavioral_initialization_seed": 11,
+  "temperatures": [
+    0.1,
+    0.3,
+    1.0,
+    3.0
+  ],
+  "alpha": 10.0,
+  "user_effect_weight": 1.0,
+  "hyperparameters": "All fixed before this evaluation; use earlier validation-selected alpha=10 and individual weight=1 for every grouped and ungrouped model. No per-model retuning.",
+  "prediction": "sigmoid(logit(item_context_probability) + logit(group_context_probability) - logit(context_probability)); counts from train only.",
+  "profile": "r_us=(positive_us+alpha*context_prior_s)/(n_us+alpha), replaced by context_prior_s if n_us<10; delta=logit(r_us)-logit(context_prior_s). Clustering uses reconstructed Bernoulli r_us, not a debiased preference.",
+  "frequency_objective": "sum_g (|g|/N) sum_s p_train(s) c_g(s)",
+  "tilted_objective": "sum_g (|g|/N) lambda log(sum_s p_train(s) exp(c_g(s)/lambda))",
+  "dispersion": "c_g(s)=mean_{u in g} KL(Bernoulli(r_us)||Bernoulli(mean_{v in g} r_vs)); users weighted uniformly in grouping.",
+  "optimization": "Common balanced random initial partition for frequency and all tilted variants. Generalized Lloyd first-order assignment, arithmetic Bernoulli centroids, capped repair, exact objective acceptance, partial-step fallback. Max 12 accepted rounds; heuristic, no global-optimum guarantee.",
+  "capacity": "Every group nonempty, at most ceil(2*N_train_users/B) users; random/marginal partitions also satisfy this common cap.",
+  "marginal": "Balanced quantile bins on smoothed user-marginal residual, random stable tie order seed=11; one-dimensional similarity control, not a graph method.",
+  "storage": "Identical dense B*15 float32 group probabilities and fixed-length int16 user-to-group map at each budget; common item/context tables shared equally; report actual uncompressed array bytes, not zip sizes.",
+  "unknown_users": "Residual zero for users absent from train; never hash unseen users into a learned group.",
+  "cohorts": "All evaluation users; separately training-defined users with >=10 train records in each of >=2 contexts.",
+  "sweeps": "q_gamma proportional to p_train^(1-gamma), gamma=0,.25,.5,.75,1; targeted mix toward rarest train context. Both requested all-context sweeps and secondary train-qualified-context sweeps.",
+  "train_qualified_context_rule": ">=1000 train events and >=30 users with >=10 train events in that context; selected using train only.",
+  "train_qualified_contexts": [
+    0,
+    1,
+    2,
+    4,
+    8
+  ],
+  "rarest_all_context": 14,
+  "rarest_qualified_context": 8,
+  "evaluation": "Standard traffic only. Hold observed P(user,item,label|context) fixed and reweight context means; this is an empirical distribution stress test, not an intervention or identified deployment shift.",
+  "estimands": "Primary event-weighted mean within each context, then q-weight across contexts; secondary macro-user-within-context; raw observed-mixture loss also saved. No renormalization over missing contexts.",
+  "uncertainty": "1000 paired user-cluster bootstrap resamples, fixed models and q; pointwise 95% intervals. Missing-context replicates excluded and valid replicate counts recorded. No time-generalization guarantee.",
+  "primary_gate": {
+    "budget": 256,
+    "lambda": 0.3,
+    "cohort": "all",
+    "sweep": "all_flatten",
+    "conditions": [
+      "frequency penalty(1)-penalty(0)>0",
+      "frequency growth minus tilted growth>0",
+      "tilted-minus-frequency loss at gamma=0 <= .001"
+    ],
+    "inference": "Bonferroni-adjusted one-sided bounds across the three fixed primary conditions, family alpha=.05. Noninferiority margin .001 log loss is an analyst choice, not established practical significance."
+  },
+  "secondary_gates": "All other budgets, lambdas and sweeps exploratory; no GO selected by scanning them.",
+  "graphhash": "Optional author GraphHash baseline omitted from this count-only probe; source README is pinned in earlier audit, no adapted graph grouping was executed. No GraphHash superiority claim.",
+  "recalibration": "Optional random-set recalibration not included; no calibration explanation is established by this run.",
+  "limitations": [
+    "Support shrinkage can eliminate genuine low-support differences; it does not prove absence of false disagreement.",
+    "Uniform-user grouping and event-weighted prediction are different objectives.",
+    "Count grouping is a diagnostic sharing model, not a neural embedding-compression reproduction.",
+    "Single optimization initialization for nonrandom criteria; random assignment seeds are not training replications.",
+    "Repeated exploratory use of test data; no confirmatory paper claim."
+  ],
+  "environment": {
+    "python": "3.10.9",
+    "numpy": "2.2.6",
+    "device": "CPU"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "synthetic_component_check": {
+    "scores": [
+      9.502861976623535,
+      -9.513794898986816,
+      -9.572625160217285,
+      9.584007263183594
+    ],
+    "BCE": 7.162612746469676e-05,
+    "correct_opposite_user_rankings": true,
+    "scientific_scope": "implementation sanity only; not real-data evidence"
+  },
+  "real_full_s11_curve": [
+    {
+      "method": "full",
+      "seed": 11,
+      "epoch": 1,
+      "training_event_bce": 0.6325340688923603,
+      "validation_macro_loss": 0.6128519242290503,
+      "epoch_seconds": 0.3458793000008882
+    },
+    {
+      "method": "full",
+      "seed": 11,
+      "epoch": 2,
+      "training_event_bce": 0.5400860004309004,
+      "validation_macro_loss": 0.6219572217619247,
+      "epoch_seconds": 0.3098453000002337
+    },
+    {
+      "method": "full",
+      "seed": 11,
+      "epoch": 3,
+      "training_event_bce": 0.4536412067108781,
+      "validation_macro_loss": 0.6896056956560592,
+      "epoch_seconds": 0.2806860999990022
+    },
+    {
+      "method": "full",
+      "seed": 11,
+      "epoch": 4,
+      "training_event_bce": 0.3924948473391073,
+      "validation_macro_loss": 0.7692376461831554,
+      "epoch_seconds": 0.2908841000007669
+    },
+    {
+      "method": "full",
+      "seed": 11,
+      "epoch": 5,
+      "training_event_bce": 0.3548428410626409,
+      "validation_macro_loss": 0.8451794058041323,
+      "epoch_seconds": 0.2699444999998377
+    }
+  ]
+}

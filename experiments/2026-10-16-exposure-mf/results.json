@@ -1,0 +1,276 @@
+{
+  "completed_utc": "2026-10-16T10:37:21.617958+00:00",
+  "status": "exploratory_MF_exposure_pilot_executed",
+  "protocol_sha256": "4ab866c6cfa317b1f07d1f459aee4cba810aa11a583acdbbf6737206271da4c9",
+  "amendment_sha256": "bb81892d34600f8f38d10bf0ddbbcba17dbb33c24da8a4d03815ce4550bc60c1",
+  "selected_fit_manifest_sha256": "217ae79a744b905a5f038d5c65b05f169f4ba1818148be92b2ce42063e6a1b22",
+  "evaluation_code_sha256": "2ba8bb7d2b9cda981b9810b8ec73bf441124b37116476090ea260af4f4560039",
+  "models_evaluated": 12,
+  "total_training_trials": 36,
+  "cohorts": {
+    "standard": {
+      "calibration": {
+        "rows": 20828,
+        "users": 2253,
+        "event_positive_rate": 0.343143844824275,
+        "macro_user_positive_rate": 0.38038092946190094
+      },
+      "evaluation": {
+        "rows": 188362,
+        "users": 20606,
+        "event_positive_rate": 0.3492795786835986,
+        "macro_user_positive_rate": 0.37494002806075916
+      }
+    },
+    "random": {
+      "calibration": {
+        "rows": 80537,
+        "users": 2253,
+        "event_positive_rate": 0.08951165302904256,
+        "macro_user_positive_rate": 0.08487898912533659
+      },
+      "evaluation": {
+        "rows": 722167,
+        "users": 20606,
+        "event_positive_rate": 0.08827182632272036,
+        "macro_user_positive_rate": 0.08452821837764846
+      }
+    }
+  },
+  "auc_common_eligible_users": 9749,
+  "averaged_effects": {
+    "random": {
+      "raw": {
+        "delta_standard": -1.9968698414432982e-05,
+        "delta_random": 0.00022770826163404792,
+        "gap": 0.0002476769600484809,
+        "ci_95": [
+          0.0001988689182291934,
+          0.0002929601243185652
+        ],
+        "ci_family_99": null,
+        "seed_gaps": [
+          0.0001789472771930421,
+          0.0003268292138225763,
+          0.0002372543891298242
+        ]
+      },
+      "cal": {
+        "delta_standard": -2.7746146000323327e-05,
+        "delta_random": 1.2747098198188757e-05,
+        "gap": 4.049324419851208e-05,
+        "ci_95": [
+          -6.557598648508468e-06,
+          8.520416741069875e-05
+        ],
+        "ci_family_99": [
+          -2.2518778586784966e-05,
+          9.484148598179782e-05
+        ],
+        "seed_gaps": [
+          3.300837060915908e-05,
+          5.929084064724861e-05,
+          2.9180521339128553e-05
+        ]
+      },
+      "auc": {
+        "delta_standard": -0.00011894768974378346,
+        "delta_random": 4.2911344229504604e-05,
+        "gap": 0.00016185903397328814,
+        "ci_95": [
+          -0.00022807022983499005,
+          0.0005547390801818715
+        ],
+        "ci_family_99": null,
+        "seed_gaps": [
+          -3.0107161934109434e-05,
+          -0.0001431809325911259,
+          0.0006588651964450998
+        ]
+      }
+    },
+    "frequency": {
+      "raw": {
+        "delta_standard": -1.9943593373097062e-05,
+        "delta_random": 0.00023253909243365213,
+        "gap": 0.0002524826858067492,
+        "ci_95": [
+          0.00020305941631694284,
+          0.0002982691852639539
+        ],
+        "ci_family_99": null,
+        "seed_gaps": [
+          0.00018081722023208295,
+          0.0003368084294921384,
+          0.00023982240769602638
+        ]
+      },
+      "cal": {
+        "delta_standard": -2.8097092011991595e-05,
+        "delta_random": 1.2534890770816786e-05,
+        "gap": 4.063198278280838e-05,
+        "ci_95": [
+          -6.887125508749784e-06,
+          8.436557525916381e-05
+        ],
+        "ci_family_99": [
+          -2.3003782569772232e-05,
+          9.548284523214421e-05
+        ],
+        "seed_gaps": [
+          3.586968158642759e-05,
+          5.537899572702579e-05,
+          3.0647271034971755e-05
+        ]
+      },
+      "auc": {
+        "delta_standard": -0.00021741854031715371,
+        "delta_random": 4.9092446218939596e-05,
+        "gap": 0.0002665109865360933,
+        "ci_95": [
+          -0.00012080061753760068,
+          0.0006748992786598039
+        ],
+        "ci_family_99": null,
+        "seed_gaps": [
+          0.0002184756366034764,
+          -0.00013523262098142722,
+          0.0007162899439862307
+        ]
+      }
+    },
+    "rank2": {
+      "raw": {
+        "delta_standard": -2.1457980667363428e-05,
+        "delta_random": 0.00020716865950854316,
+        "gap": 0.00022862664017590656,
+        "ci_95": [
+          0.00018018052240921368,
+          0.00027447095779900484
+        ],
+        "ci_family_99": null,
+        "seed_gaps": [
+          0.00017306451846055458,
+          0.0002825558811573354,
+          0.00023025952090982975
+        ]
+      },
+      "cal": {
+        "delta_standard": -2.855518413266498e-05,
+        "delta_random": 1.3175860099175308e-05,
+        "gap": 4.173104423184029e-05,
+        "ci_95": [
+          -4.673540337368513e-06,
+          8.591202927739556e-05
+        ],
+        "ci_family_99": [
+          -2.5252490874494194e-05,
+          0.00010176043822347266
+        ],
+        "seed_gaps": [
+          4.1976269689082135e-05,
+          5.389651782499347e-05,
+          2.932034518144527e-05
+        ]
+      },
+      "auc": {
+        "delta_standard": -0.00016500029765654438,
+        "delta_random": 4.460856472928749e-05,
+        "gap": 0.0002096088623858318,
+        "ci_95": [
+          -0.00017856370124305916,
+          0.0005936556782296951
+        ],
+        "ci_family_99": null,
+        "seed_gaps": [
+          6.487788835270047e-05,
+          -0.000140644830057938,
+          0.0007045935288627329
+        ]
+      }
+    }
+  },
+  "specificity_vs_rank2": {
+    "random": {
+      "estimate": -1.237800033328209e-06,
+      "ci_95": [
+        -6.5246837856227745e-06,
+        4.194367440791109e-06
+      ],
+      "ci_family_99": [
+        -8.142831849148194e-06,
+        5.343590206529583e-06
+      ]
+    },
+    "frequency": {
+      "estimate": -1.099061449031909e-06,
+      "ci_95": [
+        -6.038245880950327e-06,
+        3.977975976226007e-06
+      ],
+      "ci_family_99": [
+        -7.497820379020162e-06,
+        5.516325295888042e-06
+      ]
+    }
+  },
+  "flags": {
+    "random": {
+      "conditions": {
+        "material_gap": false,
+        "family_interval_excludes_zero": false,
+        "all_seed_directions_agree": true,
+        "raw_and_calibrated_direction_agree": true,
+        "calibration_approximation_guard": true
+      },
+      "descriptive_material_policy_gap": false,
+      "sharing_specificity_interval_excludes_zero": false
+    },
+    "frequency": {
+      "conditions": {
+        "material_gap": false,
+        "family_interval_excludes_zero": false,
+        "all_seed_directions_agree": true,
+        "raw_and_calibrated_direction_agree": true,
+        "calibration_approximation_guard": true
+      },
+      "descriptive_material_policy_gap": false,
+      "sharing_specificity_interval_excludes_zero": false
+    }
+  },
+  "full_reference_quality": [
+    {
+      "seed": 11,
+      "selected_factor_lambda": 1.6,
+      "full_validation_loss": 0.5967685078998138,
+      "zero_interaction_validation_loss": 0.5968079140045734,
+      "full_validation_auc": 0.6032661161273571,
+      "zero_interaction_validation_auc": 0.603241795891399,
+      "interaction_score_sd": 0.007588970525461315
+    },
+    {
+      "seed": 29,
+      "selected_factor_lambda": 1.6,
+      "full_validation_loss": 0.5972835014906905,
+      "zero_interaction_validation_loss": 0.5973166656136155,
+      "full_validation_auc": 0.6046438321785972,
+      "zero_interaction_validation_auc": 0.6048892779115803,
+      "interaction_score_sd": 0.010425531248356552
+    },
+    {
+      "seed": 47,
+      "selected_factor_lambda": 1.6,
+      "full_validation_loss": 0.5969458385454239,
+      "zero_interaction_validation_loss": 0.5970040745053533,
+      "full_validation_auc": 0.6044128044672136,
+      "zero_interaction_validation_auc": 0.6039623796525646,
+      "interaction_score_sd": 0.011143403363519551
+    }
+  ],
+  "full_interaction_validation_quality_pass": false,
+  "continue_broader_benchmark": false,
+  "maximum_calibration_bootstrap_spotcheck_error": 4.2458324783745626e-06,
+  "fit_seconds": 86.17667359999905,
+  "evaluation_seconds": 19.416930100000172,
+  "scope": "Policy-dependent predictive risk for this fitted model family and declared population. Not intrinsic preferences, identified exposure mechanism, published-method rankings, independent confirmation or novelty."
+}

@@ -1,0 +1,93 @@
+{
+ "sessions": {
+  "pc-s3a-1017": {
+   "state": "done",
+   "account": "account-3",
+   "pushed_at": "2026-10-17T23:52:34",
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 56,
+   "run_dirs": [
+    "amazonbook__mf__graphhash__directau__s0",
+    "amazonbook__mf__random__directau__s0",
+    "gowalla__mf__dfreq__directau__s0",
+    "gowalla__mf__random__directau__s0"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 4,
+    "failed": [],
+    "device_count": 2
+   }
+  },
+  "pc-s3b-1017": {
+   "state": "done",
+   "account": "account-3",
+   "pushed_at": "2026-10-17T23:52:37",
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 69,
+   "run_dirs": [
+    "amazonbook__mf__dfreq__directau__s0",
+    "amazonbook__mf__full__bpr__s0",
+    "amazonbook__mf__graphhash__directau__s0-initmatch",
+    "gowalla__mf__graphhash__directau__s1",
+    "gowalla__mf__graphhash__directau__s2"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 5,
+    "failed": [],
+    "device_count": 2
+   }
+  },
+  "pc-s3c-1017": {
+   "state": "done",
+   "account": "account-4",
+   "pushed_at": "2026-10-17T23:52:41",
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 108,
+   "run_dirs": [
+    "amazonbook__mf__dfreq__bpr__s0",
+    "amazonbook__mf__full__directau__s0",
+    "gowalla__mf__full__bpr__s0-long",
+    "gowalla__mf__graphhash__bpr__s0-p500",
+    "gowalla__mf__graphhash__bpr__s1",
+    "gowalla__mf__graphhash__bpr__s2",
+    "yelp2018__mf__dfreq__directau__s0",
+    "yelp2018__mf__random__bpr__s0"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 8,
+    "failed": [],
+    "device_count": 2
+   }
+  },
+  "pc-s3d-1017": {
+   "state": "done",
+   "account": "account-4",
+   "pushed_at": "2026-10-17T23:52:45",
+   "status": "COMPLETE",
+   "final_status": "COMPLETE",
+   "files_saved": 108,
+   "run_dirs": [
+    "amazonbook__mf__random__bpr__s0",
+    "gowalla__mf__dfreq__bpr__s0",
+    "gowalla__mf__full__directau__s0",
+    "gowalla__mf__full__directau__s0-wd0",
+    "gowalla__mf__full__directau__s0-wd1e-4",
+    "gowalla__mf__random__bpr__s0",
+    "yelp2018__mf__dfreq__bpr__s0",
+    "yelp2018__mf__random__directau__s0"
+   ],
+   "session_summary": {
+    "state": "complete",
+    "n_jobs": 8,
+    "failed": [],
+    "device_count": 2
+   }
+  }
+ }
+}

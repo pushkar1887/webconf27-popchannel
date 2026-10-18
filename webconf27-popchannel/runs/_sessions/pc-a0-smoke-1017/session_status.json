@@ -1,0 +1,66 @@
+{
+ "slug": "pc-a0-smoke-1017",
+ "state": "complete",
+ "started": "2026-10-17T12:58:29+00:00",
+ "ended": "2026-10-17T13:04:03+00:00",
+ "device_count": 2,
+ "mode": "parallel_2gpu",
+ "inputs": {},
+ "jobs": {
+  "x__gowalla__mf__graphhash__directau__s0": {
+   "run_id": "x__gowalla__mf__graphhash__directau__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --loss dau --seeds 0 --lr 0.01 --wd 1e-8 --min-delta 0.0005 --patience 30 --cap-min 20 --epochs 2 --eval-every 1 --run-id x__gowalla__mf__graphhash__directau__s0",
+   "state": "done",
+   "started": "2026-10-17T12:59:32+00:00",
+   "ended": "2026-10-17T13:01:43+00:00",
+   "duration_s": 130.9,
+   "exit_code": 0,
+   "log": "logs/x__gowalla__mf__graphhash__directau__s0.log"
+  },
+  "x__yelp2018__mf__graphhash__bpr__s0": {
+   "run_id": "x__yelp2018__mf__graphhash__bpr__s0",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Yelp2018 --method GraphHash --loss bpr_author --seeds 0 --epochs 20 --eval-every 10 --lr 0.005 --wd 1e-6 --cap-min 20 --run-id x__yelp2018__mf__graphhash__bpr__s0",
+   "state": "done",
+   "started": "2026-10-17T12:59:32+00:00",
+   "ended": "2026-10-17T13:00:48+00:00",
+   "duration_s": 75.3,
+   "exit_code": 0,
+   "log": "logs/x__yelp2018__mf__graphhash__bpr__s0.log"
+  },
+  "x__coloc_a": {
+   "run_id": "x__coloc_a",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --loss dau --seeds 0 --lr 0.01 --wd 1e-8 --min-delta 0.0005 --patience 30 --cap-min 20 --epochs 1 --eval-every 1 --run-id x__coloc_a",
+   "state": "done",
+   "started": "2026-10-17T13:01:43+00:00",
+   "ended": "2026-10-17T13:04:02+00:00",
+   "duration_s": 138.5,
+   "exit_code": 0,
+   "log": "logs/x__coloc_a.log",
+   "colocated_with": "x__coloc_b"
+  },
+  "x__coloc_b": {
+   "run_id": "x__coloc_b",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --loss dau --seeds 0 --lr 0.01 --wd 1e-8 --min-delta 0.0005 --patience 30 --cap-min 20 --epochs 1 --eval-every 1 --run-id x__coloc_b",
+   "state": "done",
+   "started": "2026-10-17T13:01:43+00:00",
+   "ended": "2026-10-17T13:04:03+00:00",
+   "duration_s": 139.7,
+   "exit_code": 0,
+   "log": "logs/x__coloc_b.log",
+   "colocated_with": "x__coloc_a"
+  }
+ },
+ "errors": [],
+ "prepare_exit_code": 0,
+ "n_jobs": 4,
+ "n_failed": 0,
+ "failed_run_ids": []
+}

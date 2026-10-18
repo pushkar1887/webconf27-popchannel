@@ -1,0 +1,91 @@
+{
+ "run_id": "amazonbook__mf__graphhash__directau__s0",
+ "tag": "amazonbook__mf__graphhash__directau__s0",
+ "args": {
+  "dataset": "AmazonBook",
+  "method": "GraphHash",
+  "loss": "dau",
+  "seeds": [
+   0
+  ],
+  "epochs": 150,
+  "eval_every": 5,
+  "patience": 30,
+  "min_delta": 0.0005,
+  "cap_min": 300.0,
+  "lr": 0.001,
+  "wd": 1e-08,
+  "batch": null,
+  "run_id": "amazonbook__mf__graphhash__directau__s0",
+  "tag": "amazonbook__mf__graphhash__directau__s0",
+  "resolution": 200,
+  "init_match": false,
+  "equal_item_norm": false
+ },
+ "resolved": {
+  "lr": 0.001,
+  "wd": 1e-08,
+  "batch": 1024,
+  "n_train_edges": 2387286,
+  "embedding_dim": 64,
+  "eval_every": 5,
+  "patience": 30,
+  "min_delta": 0.0005,
+  "cap_min": 300.0,
+  "epochs": 150,
+  "resolution": 200
+ },
+ "exp_run_sha256": "3fe6421564350eda5f0ccf82123d394a65a9582bc06255541bee27ca142a214b",
+ "code_sha256": {
+  "exp_run.py": "3fe6421564350eda5f0ccf82123d394a65a9582bc06255541bee27ca142a214b",
+  "repro_run.py": "181882ae0353409c8c143e9c74907659c3f93b1486ed10143db8740868bf1f42",
+  "repro_core.py": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+ },
+ "torch_version": "2.11.0+cu128",
+ "python": "3.13.15",
+ "gpu_name": "Tesla T4",
+ "device_count": 1,
+ "CUDA_VISIBLE_DEVICES": "0",
+ "mapping_sha256": {
+  "users": "ca1f31ec548358f0c2d5283c7233f25d8f01d21f94cbb4ddf8a497226219ba2a",
+  "items": "86dbc8df6443fe14ed8459ba4daa1657ed2e18d213cfbd8a482545f79e213f72"
+ },
+ "mapping_shapes": {
+  "users": [
+   52643
+  ],
+  "items": [
+   91599
+  ]
+ },
+ "table_rows": {
+  "users": 9808,
+  "items": 9804
+ },
+ "init_match_factors": null,
+ "dataset_stats": {
+  "users": 52643,
+  "items": 91599,
+  "user_id_max": 52642,
+  "item_id_max": 91598,
+  "interactions": 2984108,
+  "split_counts": [
+   2387286,
+   298410,
+   298412
+  ],
+  "file_sha256": {
+   "train": "f2c3b1459b215aee2bcb2c64ea725179c08ea39cb525e794192e1e7cd2c80d02",
+   "val": "f6be12aeabb91d098bcb3b9ccc40cad3aaaabac073d482509015fe77f138ada1",
+   "test": "56a2abc9edf05224013a03ea983e4c5e506b71a74cec3d8babf6e261f72f3b26"
+  },
+  "user_buckets": 9808,
+  "item_buckets": 9804,
+  "compressed_parameters": 1255168,
+  "full_parameters": 9231488,
+  "train_users": 52643,
+  "val_eval_users": 50355,
+  "test_eval_users": 50407
+ },
+ "started": "2026-10-17T18:23:58+00:00"
+}

@@ -1,0 +1,9 @@
+{
+  "utc": "2026-10-16T10:37:02.221810+00:00",
+  "selected_fit_manifest_sha256": "217ae79a744b905a5f038d5c65b05f169f4ba1818148be92b2ce42063e6a1b22",
+  "evaluation_code_sha256": "2ba8bb7d2b9cda981b9810b8ec73bf441124b37116476090ea260af4f4560039",
+  "protocol_sha256": "4ab866c6cfa317b1f07d1f459aee4cba810aa11a583acdbbf6737206271da4c9",
+  "exact_recalibration_draws": 10,
+  "calibration_approximation_guard": "max absolute exact-vs-IF bootstrap contrast error <=.0005 on ten fixed draws; otherwise statistical flag withheld",
+  "reference_quality_guard": "Broader benchmark escalation additionally requires full interactions to improve both validation loss and validation AUC over the frozen zero-interaction ablation in every seed. Failure is a reference-quality limitation, not a rejection of the exposure hypothesis."
+}

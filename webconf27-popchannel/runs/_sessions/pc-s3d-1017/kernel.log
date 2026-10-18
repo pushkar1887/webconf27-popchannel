@@ -1,0 +1,26 @@
+[{"stream_name":"stdout","time":8.96032595,"data":"[2026-10-17T20:16:11+00:00] session pc-s3d-1017: device_count=2 mode=parallel_2gpu\n"}
+,{"stream_name":"stdout","time":59.772497953,"data":"[2026-10-17T20:17:01+00:00] warm-up prepare exit code 0\n"}
+,{"stream_name":"stdout","time":59.774091299,"data":"[2026-10-17T20:17:01+00:00] gowalla__mf__full__directau__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":59.775310097,"data":"[2026-10-17T20:17:01+00:00] yelp2018__mf__random__directau__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":2409.329354685,"data":"[2026-10-17T20:56:11+00:00] yelp2018__mf__random__directau__s0: exit code 0 after 2350s\n"}
+,{"stream_name":"stdout","time":2409.330186432,"data":"[2026-10-17T20:56:11+00:00] gowalla__mf__random__bpr__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":2581.64416116,"data":"[2026-10-17T20:59:03+00:00] gowalla__mf__random__bpr__s0: exit code 0 after 172s\n"}
+,{"stream_name":"stdout","time":2581.644194827,"data":"[2026-10-17T20:59:03+00:00] yelp2018__mf__dfreq__bpr__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":2898.208640942,"data":"[2026-10-17T21:04:20+00:00] yelp2018__mf__dfreq__bpr__s0: exit code 0 after 317s\n"}
+,{"stream_name":"stdout","time":2898.209559557,"data":"[2026-10-17T21:04:20+00:00] gowalla__mf__full__directau__s0-wd1e-4: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":4310.019930222,"data":"[2026-10-17T21:27:52+00:00] gowalla__mf__full__directau__s0-wd1e-4: exit code 0 after 1412s\n"}
+,{"stream_name":"stdout","time":6836.335381618,"data":"[2026-10-17T22:09:58+00:00] gowalla__mf__full__directau__s0: exit code 0 after 6777s\n"}
+,{"stream_name":"stdout","time":6836.336158806,"data":"[2026-10-17T22:09:58+00:00] gowalla__mf__dfreq__bpr__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":7076.615825465,"data":"[2026-10-17T22:13:58+00:00] gowalla__mf__dfreq__bpr__s0: exit code 0 after 240s\n"}
+,{"stream_name":"stdout","time":7076.61647069,"data":"[2026-10-17T22:13:58+00:00] amazonbook__mf__random__bpr__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":7444.112329009,"data":"[2026-10-17T22:20:06+00:00] amazonbook__mf__random__bpr__s0: exit code 0 after 367s\n"}
+,{"stream_name":"stdout","time":7444.112967662,"data":"[2026-10-17T22:20:06+00:00] gowalla__mf__full__directau__s0-wd0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":9265.160499139,"data":"[2026-10-17T22:50:27+00:00] gowalla__mf__full__directau__s0-wd0: exit code 0 after 1821s\n"}
+,{"stream_name":"stdout","time":9265.161114473,"data":"[2026-10-17T22:50:27+00:00] session finished: state=complete jobs=8 failed=[]\n"}
+,{"stream_name":"stderr","time":9267.140604355,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":9267.140649354,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":9267.3852873,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":9267.385310636,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":9268.115845854,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":9269.07975317,"data":"[NbConvertApp] Writing 489895 bytes to __results__.html\n"}
+]

@@ -1,0 +1,15 @@
+{"event": "data_ready", "dataset": "AmazonBook", "users": 52643, "items": 91599, "user_id_max": 52642, "item_id_max": 91598, "interactions": 2984108, "split_counts": [2387286, 298410, 298412], "file_sha256": {"train": "f2c3b1459b215aee2bcb2c64ea725179c08ea39cb525e794192e1e7cd2c80d02", "val": "f6be12aeabb91d098bcb3b9ccc40cad3aaaabac073d482509015fe77f138ada1", "test": "56a2abc9edf05224013a03ea983e4c5e506b71a74cec3d8babf6e261f72f3b26"}, "user_buckets": 9808, "item_buckets": 9804, "compressed_parameters": 1255168, "full_parameters": 9231488}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 5, "val_recall": 0.045500901668975226, "best": 0.045500901668975226, "elapsed": 563.2}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 10, "val_recall": 0.04555137279362617, "best": 0.04555137279362617, "elapsed": 1127.3}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 15, "val_recall": 0.04566438445343805, "best": 0.04566438445343805, "elapsed": 1691.0}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 20, "val_recall": 0.04593580887763553, "best": 0.04593580887763553, "elapsed": 2254.9}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 25, "val_recall": 0.045709307604398126, "best": 0.04593580887763553, "elapsed": 2818.8}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 30, "val_recall": 0.045978218513157754, "best": 0.045978218513157754, "elapsed": 3382.7}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 35, "val_recall": 0.04613239804031929, "best": 0.04613239804031929, "elapsed": 3946.6}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 40, "val_recall": 0.04623829157808109, "best": 0.04623829157808109, "elapsed": 4514.0}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 45, "val_recall": 0.04592997458421446, "best": 0.04623829157808109, "elapsed": 5078.1}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 50, "val_recall": 0.046031730212198266, "best": 0.04623829157808109, "elapsed": 5642.7}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 55, "val_recall": 0.046059873952535746, "best": 0.04623829157808109, "elapsed": 6207.1}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 60, "val_recall": 0.04622547213003733, "best": 0.04623829157808109, "elapsed": 6771.2}
+{"event": "val", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "epoch": 65, "val_recall": 0.046201201103217224, "best": 0.04623829157808109, "elapsed": 7337.0}
+{"event": "seed_done", "tag": "amazonbook__mf__graphhash__directau__s0", "seed": 0, "best_epoch": 40, "stop_reason": "patience", "test_raw": 0.04632975380766688, "test_cosine": 0.04636554436373153, "test_cos_prior": 0.0632848774967555, "test_raw_prior": 0.06292849086520827}

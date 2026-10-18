@@ -1,0 +1,146 @@
+{
+  "scope": "Task-only append/snapshot authorization; no push authorization",
+  "registered_at_ist": "2026-10-17 22:38 IST",
+  "snapshot_path": "D:\\web_2\\webconf27-popchannel\\results\\snapshots\\PREREG_20261017-2238.txt",
+  "snapshot_sha256": "a3c1b585f8f3b1f3e5c4bd7033c799345955999ffc406313980b939909775392",
+  "earlier_prereg_bytes_preserved": true,
+  "draft_block_sha256": "1052b969c9c9a8572bee9a9c1f37219a2cfbfd7c1c9a3ecf9bbca2b63326d3e6",
+  "draft_sha256": "0d5993a11327aa7129661801193de4423bf7d92134477cf9f2d2f56131a25745",
+  "sessions_sha256": "12d9616ce695ae376c3f1903db15504aaa39b9ff0ee02231ad8cd785c32d2135",
+  "receipt_path": "D:\\web_2\\webconf27-popchannel\\results\\stage3_registration_receipt.json",
+  "push_authorized": false,
+  "prereg_path": "D:\\web_2\\webconf27-popchannel\\PREREG.md",
+  "prereg_before_bytes": 11353,
+  "prereg_before_sha256": "be704ebe0632dd7aa4ab1b42ec69502bb2d1f421ebcfc0939aa8d8ba8b140de4",
+  "prereg_after_sha256": "a3c1b585f8f3b1f3e5c4bd7033c799345955999ffc406313980b939909775392",
+  "appended_payload_sha256": "b7b3797c330462f0582bbdda3519a1cea211129c11004c4de7ec41054306f5f9",
+  "appended_heading_count": 13,
+  "append_prefix_preserved": true,
+  "snapshot_equals_prereg": true,
+  "manifest_sha256": "a333133b73d0af3b5900e79dd9e98d25c07a3d861bcda0b5e0aa8b950e6f9efb",
+  "builder_sha256": "fd16029407219c3b79b2cbc27ce7e999b5038ff452177371fb8bebd081e52293",
+  "tests_sha256": "b9a3eb7e8d4f7f6678c9fed3441302396456acdc3af0566ab8e5d1928fbdbc2e",
+  "tasks_sha256": "5953949cd6cdf92249eca0971f625147730d313aa758e9ae4e6259ad59735ed3",
+  "plan_sha256": "446623be4d1ab65e148e733a1f4f029cd8d399310a1a8422e776ce82126b9e93",
+  "fix_prompt_sha256": "edaeca561c666c8abc63a4a4f323f0f027555207a58aac2ebb6e2e4387453756",
+  "tests": {
+    "total_passed": 171,
+    "stage3_queue": 12,
+    "runner": 8,
+    "runner_contract": 29,
+    "controls": 24,
+    "validation_aggregation": 83,
+    "E5": 7,
+    "E7_E9": 8
+  },
+  "dry_run": {
+    "sessions": 4,
+    "jobs": 25,
+    "syntax_ok": 4,
+    "submissions": 0
+  },
+  "estimate_limit_minutes": 540,
+  "budget_limit_minutes": 660,
+  "gpu_lists": [
+    {
+      "session": "pc-s3a-1017",
+      "account": "account-3",
+      "gpu": 0,
+      "jobs": [
+        "amazonbook__mf__graphhash__directau__s0",
+        "gowalla__mf__random__directau__s0"
+      ],
+      "estimated_minutes": 365.0,
+      "budget_minutes": 500.0
+    },
+    {
+      "session": "pc-s3a-1017",
+      "account": "account-3",
+      "gpu": 1,
+      "jobs": [
+        "amazonbook__mf__random__directau__s0",
+        "gowalla__mf__dfreq__directau__s0"
+      ],
+      "estimated_minutes": 365.0,
+      "budget_minutes": 500.0
+    },
+    {
+      "session": "pc-s3b-1017",
+      "account": "account-3",
+      "gpu": 0,
+      "jobs": [
+        "gowalla__mf__graphhash__directau__s1",
+        "amazonbook__mf__dfreq__directau__s0",
+        "amazonbook__mf__full__bpr__s0"
+      ],
+      "estimated_minutes": 379.0,
+      "budget_minutes": 600.0
+    },
+    {
+      "session": "pc-s3b-1017",
+      "account": "account-3",
+      "gpu": 1,
+      "jobs": [
+        "gowalla__mf__graphhash__directau__s2",
+        "amazonbook__mf__graphhash__directau__s0-initmatch"
+      ],
+      "estimated_minutes": 358.0,
+      "budget_minutes": 500.0
+    },
+    {
+      "session": "pc-s3c-1017",
+      "account": "account-4",
+      "gpu": 0,
+      "jobs": [
+        "gowalla__mf__full__bpr__s0-long",
+        "yelp2018__mf__random__bpr__s0",
+        "amazonbook__mf__full__directau__s0"
+      ],
+      "estimated_minutes": 401.0,
+      "budget_minutes": 510.0
+    },
+    {
+      "session": "pc-s3c-1017",
+      "account": "account-4",
+      "gpu": 1,
+      "jobs": [
+        "gowalla__mf__graphhash__bpr__s0-p500",
+        "gowalla__mf__graphhash__bpr__s1",
+        "gowalla__mf__graphhash__bpr__s2",
+        "yelp2018__mf__dfreq__directau__s0",
+        "amazonbook__mf__dfreq__bpr__s0"
+      ],
+      "estimated_minutes": 183.0,
+      "budget_minutes": 590.0
+    },
+    {
+      "session": "pc-s3d-1017",
+      "account": "account-4",
+      "gpu": 0,
+      "jobs": [
+        "gowalla__mf__full__directau__s0",
+        "gowalla__mf__dfreq__bpr__s0",
+        "amazonbook__mf__random__bpr__s0",
+        "gowalla__mf__full__directau__s0-wd0"
+      ],
+      "estimated_minutes": 382.0,
+      "budget_minutes": 580.0
+    },
+    {
+      "session": "pc-s3d-1017",
+      "account": "account-4",
+      "gpu": 1,
+      "jobs": [
+        "yelp2018__mf__random__directau__s0",
+        "gowalla__mf__random__bpr__s0",
+        "yelp2018__mf__dfreq__bpr__s0",
+        "gowalla__mf__full__directau__s0-wd1e-4"
+      ],
+      "estimated_minutes": 332.0,
+      "budget_minutes": 580.0
+    }
+  ],
+  "research_training_launched": false,
+  "kaggle_operations": 0,
+  "mapping_recomputed": false
+}

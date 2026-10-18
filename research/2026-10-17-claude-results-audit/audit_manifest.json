@@ -1,0 +1,366 @@
+{
+  "audit_date_client": "2026-10-17",
+  "timezone": "Asia/Calcutta",
+  "scope": "read-only inspection and arithmetic; no new training, rescoring, cancellation, or external write",
+  "source_cache_note": "API text checksums verified after LF normalization of Windows text-cache line endings; cached-file byte hashes recorded separately.",
+  "jobs": [
+    {
+      "alias": "Father",
+      "slug": "graphhash-fast-dau-fix-1016",
+      "latest_status": "COMPLETE",
+      "api_source_sha256": "de6bc8f7391e674b1c5db83efe1e24f8984390dff5b347548a6b496969227a76",
+      "cached_source_sha256": "90a2147f2e1703a4973d03ac61844635deee227bc01a76396cc99b9c7513d3e6",
+      "GraphHash_commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467"
+    },
+    {
+      "alias": "Father",
+      "slug": "graphhash-fast-dau-fix-s012-1016",
+      "latest_status": "COMPLETE",
+      "api_source_sha256": "ccc66597099c2bae4123410c9741206bed64f59bb2361b596abf226f44533fac",
+      "cached_source_sha256": "f1f71117a396d9e3c13e5d2bf7d0c985811de4569cb5e8e6307a6061b2895e7a",
+      "GraphHash_commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467"
+    },
+    {
+      "alias": "Father",
+      "slug": "graphhash-fast-dau-s012-1016",
+      "latest_status": "COMPLETE",
+      "api_source_sha256": "7ae613bbd41e52704591ad61ddad0117dfef1c1429fd00a0a195e2a98110fd31",
+      "cached_source_sha256": "b3f3b31da682272e764cd67103cddd0d180d6a168e9f93d7ba18b948eb3079f0",
+      "GraphHash_commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467"
+    },
+    {
+      "alias": "Father",
+      "slug": "graphhash-rescore-dau-s012-1016",
+      "latest_status": "COMPLETE",
+      "api_source_sha256": "d1a69d5dbe5ddb825e3e3c29fa0256ad8fb11e81fbd33584e6ba3443293e54c2",
+      "cached_source_sha256": "24a01cc41d286511d11a0e602f608a07450495dc1116362cd86ef8ac091c6424",
+      "GraphHash_commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467"
+    },
+    {
+      "alias": "University",
+      "slug": "graphhash-fast-bpr-author-1016",
+      "latest_status": "COMPLETE",
+      "api_source_sha256": "74831655f27703763e213e5dad3970b33edfffba59815529e6adfdb4e1013f6b",
+      "cached_source_sha256": "50c8e724458f106372ae499700031309497cd41a67fa4527cf9b655e38583452",
+      "GraphHash_commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467"
+    },
+    {
+      "alias": "University",
+      "slug": "graphhash-fast-bpr-long-1016",
+      "latest_status": "COMPLETE",
+      "api_source_sha256": "47e0f791a1f15879647dff7408f633bd816bed90be35a6b057057e5bfb495ee1",
+      "cached_source_sha256": "317382130ff5694c28b046db785ea991ed99214156a7f674d2b95265851a986e",
+      "GraphHash_commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467"
+    },
+    {
+      "alias": "University",
+      "slug": "graphhash-fast-dau-1016",
+      "latest_status": "COMPLETE",
+      "api_source_sha256": "0a16c38242c70987a26eda01aed86c442184e5c28c813746cd36e764ce28f78f",
+      "cached_source_sha256": "a7c11594d22aebd88bb9588761230ffd3c84e7f30e99101ce8cfaa929ba77501",
+      "GraphHash_commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467"
+    },
+    {
+      "alias": "University",
+      "slug": "graphhash-rescore-bpr-author-1016",
+      "latest_status": "COMPLETE",
+      "api_source_sha256": "d1a69d5dbe5ddb825e3e3c29fa0256ad8fb11e81fbd33584e6ba3443293e54c2",
+      "cached_source_sha256": "24a01cc41d286511d11a0e602f608a07450495dc1116362cd86ef8ac091c6424",
+      "GraphHash_commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467"
+    }
+  ],
+  "files": [
+    {
+      "file": "AUDIT_REPORT.md",
+      "sha256": "771c30773b351ee7ce4c769f47c223cc3f97c4a4e97f80f627d0ee8132b0368c"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-1016\\decoded\\fast_run.py",
+      "sha256": "d78bf3bca0869a5988358b278f66726fc258c4289bcc850cb0dd6169eb5b7448"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-1016\\decoded\\repro_core.py",
+      "sha256": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-1016\\decoded\\repro_run.py",
+      "sha256": "9c7c118fc1b3831e69438bb0f08020f951bbf56cec248f33135149b5bbed0585"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-1016\\kernel.log",
+      "sha256": "5e10cfee9fa975c22cbc2cceb48c49b8dfa3ba6d47ec4ef3d0a30eaaef3d8e09"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-1016\\outputs\\_work\\sknetwork_vendor\\scikit_network-0.32.1.dist-info\\top_level.txt",
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-1016\\outputs\\fast_dau_fix.json",
+      "sha256": "8fbb7b33c109e7322fe2f468a64a32e3f3cfe9ec8ae99d06b4afef9c994ab96d"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-1016\\receipt.json",
+      "sha256": "20dfd6739774bd84ec81eec88307da3754bfdb5229baaba781cda45165dfd14a"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-1016\\source.txt",
+      "sha256": "90a2147f2e1703a4973d03ac61844635deee227bc01a76396cc99b9c7513d3e6"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\artifact_inventory.json",
+      "sha256": "74a8c8271e107e95eb23cc6b43fb720504bd82430e347ad7d5b1b7d63cbb83f4"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\decoded\\fast_run.py",
+      "sha256": "7a469f38492470a2ca94206a9b606056f42061045594d185ff612384b676c2a3"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\decoded\\repro_core.py",
+      "sha256": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\decoded\\repro_run.py",
+      "sha256": "9c7c118fc1b3831e69438bb0f08020f951bbf56cec248f33135149b5bbed0585"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\kernel.log",
+      "sha256": "97866d285e074bcb4ec8bb9cc7bd36ba4d0dc6eb9bdef044965a1f25ce023bdf"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\outputs\\_work\\sknetwork_vendor\\scikit_network-0.32.1.dist-info\\top_level.txt",
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\outputs\\fast_dau_fix_seed0.json",
+      "sha256": "ebd2613eac4d2f53023078403e7aee963058140468e6420821526ffab667d563"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\outputs\\fast_dau_fix_seed1.json",
+      "sha256": "fa8ff6b9e47989730f7f3257f81ebc2944bb6fdb608880e6cf64adf7b9ed09a2"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\outputs\\fast_dau_fix_seed2.json",
+      "sha256": "75774603c4cd5a45d078c9270f7607713598f6b2fb552b1e68f5f21f10132a2c"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\receipt.json",
+      "sha256": "37c91c923597db7344a95fcd1e051e47ce3a172849f9efc867b5221df0dd3b05"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-fix-s012-1016\\source.txt",
+      "sha256": "f1f71117a396d9e3c13e5d2bf7d0c985811de4569cb5e8e6307a6061b2895e7a"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\artifact_inventory.json",
+      "sha256": "fc8854e5535558e52455c87e6192aab0ab92c878e9cdb979a6be78168d8abc70"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\decoded\\fast_run.py",
+      "sha256": "7a469f38492470a2ca94206a9b606056f42061045594d185ff612384b676c2a3"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\decoded\\repro_core.py",
+      "sha256": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\decoded\\repro_run.py",
+      "sha256": "9c7c118fc1b3831e69438bb0f08020f951bbf56cec248f33135149b5bbed0585"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\kernel.log",
+      "sha256": "e669c78ab1a4030ba1e89cf0ba38516d93b1d1ec2da9250123f643a2a4d07ba2"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\outputs\\_work\\sknetwork_vendor\\scikit_network-0.32.1.dist-info\\top_level.txt",
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\outputs\\fast_dau_seed0.json",
+      "sha256": "a9665e587913dcc02bd19d1ae80045464388fb77bd6beaf4ad6412a03a065202"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\outputs\\fast_dau_seed1.json",
+      "sha256": "16b452dcc80f2ba21a1066d9fc12046919454513a1a5ae2b190a5edf9ddb3665"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\outputs\\fast_dau_seed2.json",
+      "sha256": "a690a983891146a85adc42a5b86e33a96ac8e2911c6264d970f997061078a25a"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\receipt.json",
+      "sha256": "c9d7e0e461283c970b0c8b4261114db724094a3b13a784a0a23c2bbd864d6b0f"
+    },
+    {
+      "file": "Father\\graphhash-fast-dau-s012-1016\\source.txt",
+      "sha256": "b3f3b31da682272e764cd67103cddd0d180d6a168e9f93d7ba18b948eb3079f0"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\artifact_inventory.json",
+      "sha256": "c7a581fa7b5be145660d691df6273caa7ec253aa8b178a9f5cae58c127401afe"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\decoded\\repro_core.py",
+      "sha256": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\decoded\\repro_run.py",
+      "sha256": "9c7c118fc1b3831e69438bb0f08020f951bbf56cec248f33135149b5bbed0585"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\decoded\\rescore.py",
+      "sha256": "1fdd3988b667a44ce363ebaa933f095853d6be8744e066369ddcef1610437903"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\kernel.log",
+      "sha256": "06ba59a384f04c6570e7a7d896e8c397ffeb90a7dc06fb57f1d1960287a5015c"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\outputs\\_work\\sknetwork_vendor\\scikit_network-0.32.1.dist-info\\top_level.txt",
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\outputs\\rescore.json",
+      "sha256": "e9c96ec95f7f2d6c6f5d3b3fb389ec281582079539e84372314fb4511a8be512"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\receipt.json",
+      "sha256": "0f12839d925190df8eb5ab20e7baa802cd7af353f7837ec3abc789d9367a0dde"
+    },
+    {
+      "file": "Father\\graphhash-rescore-dau-s012-1016\\source.txt",
+      "sha256": "24a01cc41d286511d11a0e602f608a07450495dc1116362cd86ef8ac091c6424"
+    },
+    {
+      "file": "paired_analysis.json",
+      "sha256": "01108d8a790cac5afb012f731d2a9ba8fa96db6070e0312ca8bffbc89d142ccf"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-author-1016\\decoded\\fast_run.py",
+      "sha256": "dd672ecef8f3795e8428a7cb59235d2c6f48754d2ddea711ac4c9734e907b72f"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-author-1016\\decoded\\repro_core.py",
+      "sha256": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-author-1016\\decoded\\repro_run.py",
+      "sha256": "9c7c118fc1b3831e69438bb0f08020f951bbf56cec248f33135149b5bbed0585"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-author-1016\\kernel.log",
+      "sha256": "754a81c1f7bb88e7d3d1c2d7cc61d9424d7f9b9dd8fed582fd13b3193b269817"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-author-1016\\outputs\\_work\\sknetwork_vendor\\scikit_network-0.32.1.dist-info\\top_level.txt",
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-author-1016\\outputs\\fast_bpr_author.json",
+      "sha256": "2ae285a8c525722e2cce8bec51bbbf963df32bd117da4110ac05c5b81fa16084"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-author-1016\\receipt.json",
+      "sha256": "089f93fc5aea7073f19bd6026fc7d2b9140518b9371c6a4f4c9ce16056db153e"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-author-1016\\source.txt",
+      "sha256": "50c8e724458f106372ae499700031309497cd41a67fa4527cf9b655e38583452"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-long-1016\\decoded\\fast_run.py",
+      "sha256": "7a469f38492470a2ca94206a9b606056f42061045594d185ff612384b676c2a3"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-long-1016\\decoded\\repro_core.py",
+      "sha256": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-long-1016\\decoded\\repro_run.py",
+      "sha256": "9c7c118fc1b3831e69438bb0f08020f951bbf56cec248f33135149b5bbed0585"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-long-1016\\kernel.log",
+      "sha256": "379ff11be08117146e4ce310c1afb8434857cc90d650bcd9b1f3745b360080b2"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-long-1016\\outputs\\_work\\sknetwork_vendor\\scikit_network-0.32.1.dist-info\\top_level.txt",
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-long-1016\\outputs\\fast_bpr_long.json",
+      "sha256": "c4d11bc721b3bf72472949aea62a055a2f6e8d9fca00396d812b9d1c5a8952a8"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-long-1016\\receipt.json",
+      "sha256": "8505f2db2b24ce4cc6d537a33cca01a1f25f63c2cd0166436696f265719821ab"
+    },
+    {
+      "file": "University\\graphhash-fast-bpr-long-1016\\source.txt",
+      "sha256": "317382130ff5694c28b046db785ea991ed99214156a7f674d2b95265851a986e"
+    },
+    {
+      "file": "University\\graphhash-fast-dau-1016\\decoded\\fast_run.py",
+      "sha256": "d78bf3bca0869a5988358b278f66726fc258c4289bcc850cb0dd6169eb5b7448"
+    },
+    {
+      "file": "University\\graphhash-fast-dau-1016\\decoded\\repro_core.py",
+      "sha256": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+    },
+    {
+      "file": "University\\graphhash-fast-dau-1016\\decoded\\repro_run.py",
+      "sha256": "9c7c118fc1b3831e69438bb0f08020f951bbf56cec248f33135149b5bbed0585"
+    },
+    {
+      "file": "University\\graphhash-fast-dau-1016\\kernel.log",
+      "sha256": "c4b52e6c748c36aa028cd66dff823eaa4f8d3106ba99c359be2cd79be0735065"
+    },
+    {
+      "file": "University\\graphhash-fast-dau-1016\\outputs\\_work\\sknetwork_vendor\\scikit_network-0.32.1.dist-info\\top_level.txt",
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "University\\graphhash-fast-dau-1016\\outputs\\fast_dau.json",
+      "sha256": "ec4b404ae100e2ea3b8c3bc1028195b2375aa92befa1fd369afc0f51c62ba824"
+    },
+    {
+      "file": "University\\graphhash-fast-dau-1016\\receipt.json",
+      "sha256": "52654c7d5864b146325604e71e9b5070063269e3bc3393c4417717a775b0c128"
+    },
+    {
+      "file": "University\\graphhash-fast-dau-1016\\source.txt",
+      "sha256": "a7c11594d22aebd88bb9588761230ffd3c84e7f30e99101ce8cfaa929ba77501"
+    },
+    {
+      "file": "University\\graphhash-rescore-bpr-author-1016\\decoded\\repro_core.py",
+      "sha256": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+    },
+    {
+      "file": "University\\graphhash-rescore-bpr-author-1016\\decoded\\repro_run.py",
+      "sha256": "9c7c118fc1b3831e69438bb0f08020f951bbf56cec248f33135149b5bbed0585"
+    },
+    {
+      "file": "University\\graphhash-rescore-bpr-author-1016\\decoded\\rescore.py",
+      "sha256": "1fdd3988b667a44ce363ebaa933f095853d6be8744e066369ddcef1610437903"
+    },
+    {
+      "file": "University\\graphhash-rescore-bpr-author-1016\\kernel.log",
+      "sha256": "e44ca07c937142b8fcc2c648b3a06eee75467aa52388bb32d14b04cc9a7132d1"
+    },
+    {
+      "file": "University\\graphhash-rescore-bpr-author-1016\\outputs\\_work\\sknetwork_vendor\\scikit_network-0.32.1.dist-info\\top_level.txt",
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "University\\graphhash-rescore-bpr-author-1016\\outputs\\rescore.json",
+      "sha256": "973e296a5576bb2200814537d54aac2e8cf9ce895b53a6772360dda0422e283f"
+    },
+    {
+      "file": "University\\graphhash-rescore-bpr-author-1016\\receipt.json",
+      "sha256": "af5787bfa287482be2895f313452ec79f334ed948c1bbd752a9c0832bf9c29f9"
+    },
+    {
+      "file": "University\\graphhash-rescore-bpr-author-1016\\source.txt",
+      "sha256": "24a01cc41d286511d11a0e602f608a07450495dc1116362cd86ef8ac091c6424"
+    }
+  ]
+}

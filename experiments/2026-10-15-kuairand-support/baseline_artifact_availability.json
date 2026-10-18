@@ -1,0 +1,61 @@
+[
+  {
+    "repository": "https://github.com/snap-research/GraphHash",
+    "status": "read_only_artifact_check_not_executed",
+    "revision": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+    "commit_date": "2025-02-05T21:58:23Z",
+    "files": [
+      {
+        "name": "README.md",
+        "url": "https://raw.githubusercontent.com/snap-research/GraphHash/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/README.md",
+        "sha256": "d919e907afd3874c385f24b97b9ff8b8fbc1cdb603281b4a705e729462d691d5",
+        "bytes": 2200,
+        "local": "baseline_source_receipts\\snap-research__GraphHash__README.md"
+      },
+      {
+        "name": "requirements.txt",
+        "url": "https://raw.githubusercontent.com/snap-research/GraphHash/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/requirements.txt",
+        "sha256": "416fe97553bf806dfbb54f2d3615d1c7c0e3355a656f75e21f6a8c45cc721294",
+        "bytes": 164,
+        "local": "baseline_source_receipts\\snap-research__GraphHash__requirements.txt"
+      }
+    ]
+  },
+  {
+    "repository": "https://github.com/thomasahle/cce",
+    "status": "read_only_artifact_check_not_executed",
+    "revision": "5b8a93c1a3f4d3741872338d659702aee3ddae34",
+    "commit_date": "2023-10-25T07:34:50Z",
+    "files": [
+      {
+        "name": "README.md",
+        "url": "https://raw.githubusercontent.com/thomasahle/cce/5b8a93c1a3f4d3741872338d659702aee3ddae34/README.md",
+        "sha256": "f9c241a2b77c473cd828cd080472b3f8b35fd3d8c8592fd742463ec0021ff22d",
+        "bytes": 7717,
+        "local": "baseline_source_receipts\\thomasahle__cce__README.md"
+      },
+      {
+        "name": "pyproject.toml",
+        "url": "https://raw.githubusercontent.com/thomasahle/cce/5b8a93c1a3f4d3741872338d659702aee3ddae34/pyproject.toml",
+        "sha256": "9c63959595a844869cf875db17012a2631997b834c16df341136e74f1a277eae",
+        "bytes": 736,
+        "local": "baseline_source_receipts\\thomasahle__cce__pyproject.toml"
+      }
+    ]
+  },
+  {
+    "repository": "https://github.com/HKBU-LAGAS/BACO",
+    "status": "read_only_artifact_check_not_executed",
+    "revision": "b6691fa64daedd9d5fd41f87b3988e7bfcdace68",
+    "commit_date": "2026-04-20T06:36:20Z",
+    "files": [
+      {
+        "name": "README.md",
+        "url": "https://raw.githubusercontent.com/HKBU-LAGAS/BACO/b6691fa64daedd9d5fd41f87b3988e7bfcdace68/README.md",
+        "sha256": "5ca50869eede00456c17cec7b9e3c7ca3c92717b61a275ad4ea243a87908e097",
+        "bytes": 1363,
+        "local": "baseline_source_receipts\\HKBU-LAGAS__BACO__README.md"
+      }
+    ]
+  }
+]

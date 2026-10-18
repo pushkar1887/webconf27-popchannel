@@ -1,0 +1,10 @@
+{"event": "data_ready", "dataset": "AmazonBook", "users": 52643, "items": 91599, "user_id_max": 52642, "item_id_max": 91598, "interactions": 2984108, "split_counts": [2387286, 298410, 298412], "file_sha256": {"train": "f2c3b1459b215aee2bcb2c64ea725179c08ea39cb525e794192e1e7cd2c80d02", "val": "f6be12aeabb91d098bcb3b9ccc40cad3aaaabac073d482509015fe77f138ada1", "test": "56a2abc9edf05224013a03ea983e4c5e506b71a74cec3d8babf6e261f72f3b26"}, "user_buckets": 9808, "item_buckets": 9804, "compressed_parameters": 1255168, "full_parameters": 9231488}
+{"event": "val", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "epoch": 5, "val_recall": 0.09045066204139339, "best": 0.09045066204139339, "elapsed": 596.1}
+{"event": "val", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "epoch": 10, "val_recall": 0.09468196974656605, "best": 0.09468196974656605, "elapsed": 1191.9}
+{"event": "val", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "epoch": 15, "val_recall": 0.09479093072791743, "best": 0.09479093072791743, "elapsed": 1787.3}
+{"event": "val", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "epoch": 20, "val_recall": 0.09498928847707243, "best": 0.09498928847707243, "elapsed": 2382.7}
+{"event": "val", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "epoch": 25, "val_recall": 0.09509905586123803, "best": 0.09509905586123803, "elapsed": 2979.1}
+{"event": "val", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "epoch": 30, "val_recall": 0.09434245344147346, "best": 0.09509905586123803, "elapsed": 3575.4}
+{"event": "val", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "epoch": 35, "val_recall": 0.09473320843351445, "best": 0.09509905586123803, "elapsed": 4170.7}
+{"event": "val", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "epoch": 40, "val_recall": 0.09445136562084099, "best": 0.09509905586123803, "elapsed": 4766.3}
+{"event": "seed_done", "tag": "amazonbook__mf__full__directau__s0", "seed": 0, "best_epoch": 25, "stop_reason": "patience", "test_raw": 0.09574035048202643, "test_cosine": 0.0870122444675751, "test_cos_prior": 0.11045542070547057, "test_raw_prior": 0.10765152344922198}

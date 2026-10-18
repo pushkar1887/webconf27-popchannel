@@ -1,0 +1,18 @@
+[{"stream_name":"stdout","time":13.462328557,"data":"[2026-10-17T12:58:42+00:00] session pc-a0-smoke-1017: device_count=2 mode=parallel_2gpu\n"}
+,{"stream_name":"stdout","time":64.123110291,"data":"[2026-10-17T12:59:32+00:00] warm-up prepare exit code 0\n"}
+,{"stream_name":"stdout","time":64.124543995,"data":"[2026-10-17T12:59:32+00:00] x__gowalla__mf__graphhash__directau__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":64.125610212,"data":"[2026-10-17T12:59:32+00:00] x__yelp2018__mf__graphhash__bpr__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":139.434427647,"data":"[2026-10-17T13:00:48+00:00] x__yelp2018__mf__graphhash__bpr__s0: exit code 0 after 75s\n"}
+,{"stream_name":"stdout","time":195.05089833,"data":"[2026-10-17T13:01:43+00:00] x__gowalla__mf__graphhash__directau__s0: exit code 0 after 131s\n"}
+,{"stream_name":"stdout","time":195.052036769,"data":"[2026-10-17T13:01:43+00:00] x__coloc_a: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":195.053127578,"data":"[2026-10-17T13:01:43+00:00] x__coloc_b: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":333.544368019,"data":"[2026-10-17T13:04:02+00:00] x__coloc_a: exit code 0 after 138s\n"}
+,{"stream_name":"stdout","time":334.707922344,"data":"[2026-10-17T13:04:03+00:00] x__coloc_b: exit code 0 after 140s\n"}
+,{"stream_name":"stdout","time":334.708430361,"data":"[2026-10-17T13:04:03+00:00] session finished: state=complete jobs=4 failed=[]\n"}
+,{"stream_name":"stderr","time":336.848991646,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":336.849019869,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":337.142647262,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":337.142671565,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":337.907076522,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":338.961871556,"data":"[NbConvertApp] Writing 487551 bytes to __results__.html\n"}
+]

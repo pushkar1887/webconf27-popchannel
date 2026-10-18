@@ -1,0 +1,14 @@
+[{"stream_name":"stdout","time":13.462488756,"data":"[2026-10-17T13:07:22+00:00] session pc-s2a-1017: device_count=2 mode=parallel_2gpu\n"}
+,{"stream_name":"stdout","time":64.774709452,"data":"[2026-10-17T13:08:14+00:00] warm-up prepare exit code 0\n"}
+,{"stream_name":"stdout","time":64.776050823,"data":"[2026-10-17T13:08:14+00:00] gowalla__mf__graphhash__directau__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":64.777180823,"data":"[2026-10-17T13:08:14+00:00] gowalla__mf__graphhash__directau__s0-initmatch: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":2343.923876883,"data":"[2026-10-17T13:46:13+00:00] gowalla__mf__graphhash__directau__s0: exit code 0 after 2279s\n"}
+,{"stream_name":"stdout","time":3069.291624259,"data":"[2026-10-17T13:58:18+00:00] gowalla__mf__graphhash__directau__s0-initmatch: exit code 0 after 3005s\n"}
+,{"stream_name":"stdout","time":3069.292124602,"data":"[2026-10-17T13:58:18+00:00] session finished: state=complete jobs=2 failed=[]\n"}
+,{"stream_name":"stderr","time":3071.616294296,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":3071.616324226,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":3071.956134838,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":3071.956158264,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":3072.815529169,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":3073.95446054,"data":"[NbConvertApp] Writing 486445 bytes to __results__.html\n"}
+]

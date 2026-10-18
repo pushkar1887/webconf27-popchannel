@@ -1,0 +1,56 @@
+{
+  "created_ist": "2026-10-18 11:46 IST",
+  "status": "candidate_for_human_signoff",
+  "artifact_sha256": {
+    "master_metrics.csv": "70da9b4797efe194948ffb388faa43bbb1452bd8cbec870ae61ca9241a0d4805",
+    "master_metrics_v2.csv": "5b501b5b021e92a70d17a9a0bbb1050614b0e3190f586e14628a6ad51e993cd1",
+    "master_metrics_v2.schema.json": "f9906ec7327f8b2dac57e2e0cd6d82b2c3b637fdcf7790084548fbb7a59a30ca",
+    "E5_final.json": "c83450cec2f85c9ed333a21575327f4254a3490d58ce088b58e4edac7479fc66",
+    "E7_final.json": "41ee8cec547a0a796a3aeba6e5e2a1293d0c41990ab22f2bfe32b509752bc894",
+    "E8_final.json": "8e4fb9867abe586eb0e6d3630fb81211008ff54f998f5119ebb1aa30729c14eb",
+    "E9_final.json": "d1fa51e5f48c36c0d9991d5020a5b399d1074f89889f6ff6fb8bb1fc3b510715"
+  },
+  "abstract_word_count": 162,
+  "main_run_ids": [
+    "gowalla__mf__full__bpr__s0-long",
+    "gowalla__mf__full__directau__s0",
+    "gowalla__mf__graphhash__bpr__s0-p500",
+    "gowalla__mf__graphhash__directau__s0",
+    "yelp2018__mf__full__bpr__s0",
+    "yelp2018__mf__full__directau__s0",
+    "yelp2018__mf__graphhash__bpr__s0",
+    "yelp2018__mf__graphhash__directau__s0",
+    "amazonbook__mf__full__bpr__s0",
+    "amazonbook__mf__full__directau__s0",
+    "amazonbook__mf__graphhash__bpr__s0",
+    "amazonbook__mf__graphhash__directau__s0"
+  ],
+  "E8_pairs": [
+    {
+      "label": "Gowalla_s0",
+      "a_run_id": "gowalla__mf__graphhash__directau__s0",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s0-p500"
+    },
+    {
+      "label": "Gowalla_s1",
+      "a_run_id": "gowalla__mf__graphhash__directau__s1",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s1"
+    },
+    {
+      "label": "Gowalla_s2",
+      "a_run_id": "gowalla__mf__graphhash__directau__s2",
+      "b_run_id": "gowalla__mf__graphhash__bpr__s2"
+    },
+    {
+      "label": "Yelp2018_s0",
+      "a_run_id": "yelp2018__mf__graphhash__directau__s0",
+      "b_run_id": "yelp2018__mf__graphhash__bpr__s0"
+    },
+    {
+      "label": "AmazonBook_s0",
+      "a_run_id": "amazonbook__mf__graphhash__directau__s0",
+      "b_run_id": "amazonbook__mf__graphhash__bpr__s0-legacy"
+    }
+  ],
+  "package_sha256": "7be67508cb2ccffce35fa0dec67b7d393336b4883c3a703049c2f115b3e5afe0"
+}

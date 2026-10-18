@@ -1,0 +1,23 @@
+{"event": "data_ready", "dataset": "Gowalla", "users": 29858, "items": 40981, "user_id_max": 29857, "item_id_max": 40980, "interactions": 1027370, "split_counts": [821896, 102737, 102737], "file_sha256": {"train": "6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8", "val": "18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc", "test": "d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa"}, "user_buckets": 5792, "item_buckets": 5806, "compressed_parameters": 742272, "full_parameters": 4533696}
+{"event": "resolution_done", "dataset": "Gowalla", "resolution": 400, "buckets": [8882, 8924]}
+{"event": "resolution_done", "dataset": "Gowalla", "resolution": 800, "buckets": [12502, 12880]}
+{"event": "resolution_done", "dataset": "Gowalla", "resolution": 1600, "buckets": [15350, 17699]}
+{"event": "resolution_done", "dataset": "Gowalla", "resolution": 3200, "buckets": [19216, 25993]}
+{"event": "map_done", "key": "gowalla__graphhash", "eta2_p": 0.3589966177461597, "rho_proxy": 0.18867776524886765}
+{"event": "map_done", "key": "gowalla__random", "eta2_p": 0.1421738253926126, "rho_proxy": 0.2758756183394128}
+{"event": "map_done", "key": "gowalla__dfreq", "eta2_p": 0.9990141830951977, "rho_proxy": -0.05013565401984861}
+{"event": "map_done", "key": "gowalla__graphhash-r400", "eta2_p": 0.49290209067661034, "rho_proxy": 0.37732203208014203}
+{"event": "map_done", "key": "gowalla__graphhash-r800", "eta2_p": 0.6296865815445528, "rho_proxy": 0.5305038354204478}
+{"event": "map_done", "key": "gowalla__graphhash-r1600", "eta2_p": 0.7854541885977429, "rho_proxy": 0.5496913035793691}
+{"event": "map_done", "key": "gowalla__graphhash-r3200", "eta2_p": 0.9235061768310601, "rho_proxy": 0.5129310087157116}
+{"event": "data_ready", "dataset": "Yelp2018", "users": 31668, "items": 38048, "user_id_max": 31667, "item_id_max": 38047, "interactions": 1561406, "split_counts": [1249124, 156140, 156142], "file_sha256": {"train": "4554856760e47effdbe093b5297417084332423266fb0e0a38067fc8aa78f4eb", "val": "c684aa3c518838d1abe93bd816318850689a974923e99c40f0c4e47649727bc7", "test": "05941a1ce56dcf8580c18647709211471d85bbd8a73298103d0ab9c28490987f"}, "user_buckets": 7604, "item_buckets": 7656, "compressed_parameters": 976640, "full_parameters": 4461824}
+{"event": "map_done", "key": "yelp2018__graphhash", "eta2_p": 0.48382270967587143, "rho_proxy": 0.46814567823721803}
+{"event": "map_done", "key": "yelp2018__random", "eta2_p": 0.1990638351235704, "rho_proxy": 0.35284922518360484}
+{"event": "map_done", "key": "yelp2018__dfreq", "eta2_p": 0.9872499293588755, "rho_proxy": -0.10460071376333446}
+{"event": "data_ready", "dataset": "AmazonBook", "users": 52643, "items": 91599, "user_id_max": 52642, "item_id_max": 91598, "interactions": 2984108, "split_counts": [2387286, 298410, 298412], "file_sha256": {"train": "f2c3b1459b215aee2bcb2c64ea725179c08ea39cb525e794192e1e7cd2c80d02", "val": "f6be12aeabb91d098bcb3b9ccc40cad3aaaabac073d482509015fe77f138ada1", "test": "56a2abc9edf05224013a03ea983e4c5e506b71a74cec3d8babf6e261f72f3b26"}, "user_buckets": 9808, "item_buckets": 9804, "compressed_parameters": 1255168, "full_parameters": 9231488}
+{"event": "map_done", "key": "amazonbook__graphhash", "eta2_p": 0.35789451707096104, "rho_proxy": 0.22816282030803683}
+{"event": "map_done", "key": "amazonbook__random", "eta2_p": 0.10868498822527667, "rho_proxy": 0.2413327437494455}
+{"event": "map_done", "key": "amazonbook__dfreq", "eta2_p": 0.9988258325356912, "rho_proxy": -0.05986340788269252}
+{"event": "assert_aliases", "name": "gowalla__graphhash", "equal": true}
+{"event": "assert_aliases", "name": "amazonbook__graphhash", "equal": true}
+{"event": "done", "out": "/kaggle/working/maps/maps_summary.json", "errors": []}

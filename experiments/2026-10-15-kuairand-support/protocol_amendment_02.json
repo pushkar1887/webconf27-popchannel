@@ -1,0 +1,11 @@
+{
+  "stage": "after_raw_timestamp_and_duplicate_audit_before_any_baseline_fit",
+  "reason": "Calendar date partitions overlap in event time, and repeated (user_id, video_id, time_ms, tab) event keys occur within logs.",
+  "canonical_clock": "Unix time_ms interpreted as UTC; supplied date remains an audited metadata field, not the split clock or a predictor.",
+  "training": "all standard-policy rows with 2022-04-08T00:00:00Z <= time_ms < 2022-04-19T00:00:00Z",
+  "validation": "all standard-policy rows with 2022-04-19T00:00:00Z <= time_ms < 2022-04-22T00:00:00Z",
+  "evaluation": "standard and random policies separately, with 2022-04-22T00:00:00Z <= time_ms < 2022-05-09T00:00:00Z",
+  "duplicate_rule": "Quarantine every row belonging to an event-key group of size greater than one across the three logs. This rule uses keys only, not label agreement or model outcomes.",
+  "unchanged": ["native binary target", "all predictor exclusions", "validation-only parameter selection", "no outcome-based record filtering"],
+  "claim_limit": "Conservative exploratory clean-cohort probe. Report exclusion counts and coverage. This is not an assertion that every repeated key is an erroneous event or that date metadata are corrupt."
+}

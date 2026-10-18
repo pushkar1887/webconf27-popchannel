@@ -1,0 +1,104 @@
+{
+  "recorded_utc": "2026-10-16T10:29:48.383515+00:00",
+  "status": "exploratory_new_MF_fits_on_previously_explored_data",
+  "authorization": "User: okay do it; make it more mathematically grounded. Scope: corrected small MF pilot and formal analysis.",
+  "source_cache_sha256": "413845cf5ed49a3c67d011fbf93183dfd069af8de6a99d2a39740617e761d16b",
+  "source_verification_sha256": "d0c96e5d8fb8d7f0fbc5ca1fa78237960390cbb0adca0d4b17e985ddf00c9ba0",
+  "data_contract_sha256": "3567883234864df97675a41d97a2ccd9f3dadca8f3a391adc48145e51bf00142",
+  "math_spec_sha256": "877cc0995ffa1132d5b4d18ccdbe7fc288cf631b84a4dce10de4bf56ada7326e",
+  "data": "Existing quarantined duplicate groups, canonical UTC splits and native long_view retained. Native label-rule consistency remains false.",
+  "context": "tab=1 for training, validation, calibration and evaluation",
+  "training": {
+    "rows": 792189,
+    "users": 24837,
+    "items": 7214,
+    "positive_rate": 0.3873886168003082
+  },
+  "validation": {
+    "rows": 44362,
+    "selection": "minimum ordinary validation macro-user logistic loss; same fixed config and early-stop rule for all methods"
+  },
+  "target_population": {
+    "common_users": 22859,
+    "common_warm_items": 5692,
+    "calibration_users": 2253,
+    "evaluation_users": 20606,
+    "cohorts": {
+      "standard": {
+        "calibration": {
+          "rows": 20828,
+          "users": 2253
+        },
+        "evaluation": {
+          "rows": 188362,
+          "users": 20606
+        }
+      },
+      "random": {
+        "calibration": {
+          "rows": 80537,
+          "users": 2253
+        },
+        "evaluation": {
+          "rows": 722167,
+          "users": 20606
+        }
+      }
+    }
+  },
+  "roster_selection": "Label-independent warm-ID and tab support; common observed item support and users across both policies; calibration hash seed20261016 modulo10=0. No test outcomes loaded by prepare/fit.",
+  "inference_population": "Uniform common evaluation users, each policy keeps its observed conditional item/event distribution. This is not intrinsic preferences or full-catalogue utility.",
+  "methods": [
+    "full",
+    "random",
+    "frequency",
+    "rank2"
+  ],
+  "seeds": [
+    11,
+    29,
+    47
+  ],
+  "dimension": 16,
+  "control_rank": 2,
+  "group_budget": 3107,
+  "shared_user_interaction_parameters": 49712,
+  "rank2_user_interaction_parameters": 49706,
+  "model": "global + individual user bias + item bias + dot(user/group interaction factor,item factor); only the user interaction factor table is shared. Bias tables remain individual in every condition.",
+  "capacity": "Rank2 user factor A_u times shared 2x16 projection; shared budget ceil((2U+32)/16). Shared/random/frequency allocation exactly equal; rank2 differs by <16 scalar parameters. Actual inference arrays and maps reported, not zip bytes.",
+  "hash": "SplitMix64 on original user IDs with training seed. Frequency reserves floor(B/2) private rows for top training-event counts, stable original-ID ties; tail hashes into remaining rows.",
+  "initialization": "Identical item factors per training seed, all biases zero except global train log-odds. User effective-factor scale .1; rank2 projection scale1/sqrt(2). CPU deterministic operations.",
+  "training_config": {
+    "device": "CPU",
+    "threads": 4,
+    "batch_size": 32768,
+    "max_epochs": 25,
+    "patience": 4,
+    "patience_min_delta": 1e-05,
+    "optimizer": "Adam",
+    "learning_rate": 0.03,
+    "factor_regularizer": 0.0001,
+    "bias_regularizer": 1e-05,
+    "negative_sampling": false,
+    "hyperparameter_search": false
+  },
+  "calibration": "Per-model/per-policy intercept-only macro-user BCE minimum on disjoint calibration users. One-dimensional convex bisection; rankings unchanged. This is a separate policy-adapted-risk estimand.",
+  "primary_metric": "macro-user logistic loss; DeltaP=R_P(method)-R_P(full), G=Delta_random-Delta_standard",
+  "ranking_secondary": "macro-user event AUC on users with both classes under both policies; finite-sample exposed-candidate estimand; no catalogue-wide NDCG",
+  "uncertainty": "1000 paired user-bootstrap resamples. Separate disjoint calibration/evaluation resamples; same user weights across policies/models/seeds. Calibrated intervals include first-order implicit-function correction; exact-recalibration check on first10 draws.",
+  "five_family_contrasts": [
+    "random_G_cal",
+    "frequency_G_cal",
+    "rank2_G_cal",
+    "random_minus_rank2_G_cal",
+    "frequency_minus_rank2_G_cal"
+  ],
+  "decision": "For random/frequency: mean abs(Gcal)>=.001, Bonferroni99% bootstrap interval excludes0 across five declared contrasts, all3 seeds same calibrated sign, raw mean same sign. A flag only permits broader benchmark/controlled exposure study. Rank2 specificity reported separately.",
+  "unidentified": "No exposure propensity estimation, IPS, causal imitation mechanism, universal unbiased population, exact GraphHash/CCE/BACO reproduction, independently confirmed hypothesis, or new-theorem claim.",
+  "resource_scope": "Local CPU pilot only; no GPU/Kaggle/NVIDIA inference, package installation or new data download.",
+  "environment": {
+    "numpy": "2.2.6",
+    "torch": "2.13.0+cpu",
+    "cuda": false
+  }
+}

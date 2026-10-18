@@ -1,0 +1,1 @@
+dataset,method,loss,seed,status,lr,weight_decay,batch_size,gamma,parameters,epochs,best_epoch,wall_seconds,peak_cuda_mib,val_raw_recall,val_raw_ndcg,test_raw_recall,test_raw_ndcg,val_cosine_recall,val_cosine_ndcg,test_cosine_recall,test_cosine_ndcg

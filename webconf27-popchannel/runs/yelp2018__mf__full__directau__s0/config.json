@@ -1,0 +1,91 @@
+{
+ "run_id": "yelp2018__mf__full__directau__s0",
+ "tag": "yelp2018__mf__full__directau__s0",
+ "args": {
+  "dataset": "Yelp2018",
+  "method": "Full",
+  "loss": "dau",
+  "seeds": [
+   0
+  ],
+  "epochs": 150,
+  "eval_every": 5,
+  "patience": 30,
+  "min_delta": 0.0005,
+  "cap_min": 180.0,
+  "lr": 0.01,
+  "wd": 1e-08,
+  "batch": null,
+  "run_id": "yelp2018__mf__full__directau__s0",
+  "tag": "yelp2018__mf__full__directau__s0",
+  "resolution": 200,
+  "init_match": false,
+  "equal_item_norm": false
+ },
+ "resolved": {
+  "lr": 0.01,
+  "wd": 1e-08,
+  "batch": 1024,
+  "n_train_edges": 1249124,
+  "embedding_dim": 64,
+  "eval_every": 5,
+  "patience": 30,
+  "min_delta": 0.0005,
+  "cap_min": 180.0,
+  "epochs": 150,
+  "resolution": 200
+ },
+ "exp_run_sha256": "3fe6421564350eda5f0ccf82123d394a65a9582bc06255541bee27ca142a214b",
+ "code_sha256": {
+  "exp_run.py": "3fe6421564350eda5f0ccf82123d394a65a9582bc06255541bee27ca142a214b",
+  "repro_run.py": "181882ae0353409c8c143e9c74907659c3f93b1486ed10143db8740868bf1f42",
+  "repro_core.py": "41e66b7dce2848f009724b9c3a256c7c87dd01c7f9a9061b1831e9739159d1de"
+ },
+ "torch_version": "2.11.0+cu128",
+ "python": "3.13.15",
+ "gpu_name": "Tesla T4",
+ "device_count": 1,
+ "CUDA_VISIBLE_DEVICES": "0",
+ "mapping_sha256": {
+  "users": "654820a003460e2c86dfd8f8cfe75cdff849d22ec0c9beb9b685c83d9ce3fb59",
+  "items": "c20a36bb5e2d1579bcb595bb053bd1098f5e532d83a9c190a1f2e26af0bf1495"
+ },
+ "mapping_shapes": {
+  "users": [
+   31668
+  ],
+  "items": [
+   38048
+  ]
+ },
+ "table_rows": {
+  "users": 31668,
+  "items": 38048
+ },
+ "init_match_factors": null,
+ "dataset_stats": {
+  "users": 31668,
+  "items": 38048,
+  "user_id_max": 31667,
+  "item_id_max": 38047,
+  "interactions": 1561406,
+  "split_counts": [
+   1249124,
+   156140,
+   156142
+  ],
+  "file_sha256": {
+   "train": "4554856760e47effdbe093b5297417084332423266fb0e0a38067fc8aa78f4eb",
+   "val": "c684aa3c518838d1abe93bd816318850689a974923e99c40f0c4e47649727bc7",
+   "test": "05941a1ce56dcf8580c18647709211471d85bbd8a73298103d0ab9c28490987f"
+  },
+  "user_buckets": 7604,
+  "item_buckets": 7656,
+  "compressed_parameters": 976640,
+  "full_parameters": 4461824,
+  "train_users": 31668,
+  "val_eval_users": 30261,
+  "test_eval_users": 30304
+ },
+ "started": "2026-10-17T13:08:22+00:00"
+}

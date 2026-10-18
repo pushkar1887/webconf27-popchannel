@@ -1,0 +1,21 @@
+{
+  "alias": "University",
+  "slug": "graphhash-rescore-bpr-author-1016",
+  "files": [
+    {
+      "file": "_work/sknetwork_vendor/scikit_network-0.32.1.dist-info/top_level.txt",
+      "bytes": 10,
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "rescore.json",
+      "bytes": 246,
+      "sha256": "973e296a5576bb2200814537d54aac2e8cf9ce895b53a6772360dda0422e283f"
+    }
+  ],
+  "status": {
+    "status": "COMPLETE",
+    "failureMessage": ""
+  },
+  "source_sha256": "d1a69d5dbe5ddb825e3e3c29fa0256ad8fb11e81fbd33584e6ba3443293e54c2"
+}

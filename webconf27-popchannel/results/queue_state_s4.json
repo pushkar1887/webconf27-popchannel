@@ -1,0 +1,28 @@
+{
+ "sessions": {
+  "pc-s4a-1018": {
+   "state": "running",
+   "account": "account-3",
+   "pushed_at": "2026-10-18T13:55:59",
+   "status": "RUNNING"
+  },
+  "pc-s4b-1018": {
+   "state": "running",
+   "account": "account-3",
+   "pushed_at": "2026-10-18T13:56:02",
+   "status": "RUNNING"
+  },
+  "pc-s4c-1018": {
+   "state": "running",
+   "account": "account-4",
+   "pushed_at": "2026-10-18T13:56:06",
+   "status": "RUNNING"
+  },
+  "pc-s4d-1018": {
+   "state": "running",
+   "account": "account-4",
+   "pushed_at": "2026-10-18T13:56:10",
+   "status": "RUNNING"
+  }
+ }
+}

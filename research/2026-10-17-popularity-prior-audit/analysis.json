@@ -1,0 +1,72 @@
+{
+  "unit": "percent for scores; percentage points for differences",
+  "scores": {
+    "GraphHash_DirectAU": {
+      "test_raw_dot": 7.532547309332825,
+      "test_beta0": 7.545586307218424,
+      "test_best": 13.30240397223065
+    },
+    "Full_DirectAU": {
+      "test_raw_dot": 17.895064976153318,
+      "test_beta0": 12.99592468605732,
+      "test_best": 19.544423222931513
+    },
+    "GraphHash_BPR": {
+      "test_raw_dot": 9.342327632462041,
+      "test_beta0": 6.082944422849855,
+      "test_best": 10.22277290378418
+    }
+  },
+  "popularity_only_local": {
+    "val": {
+      "recall": 3.06,
+      "ndcg": 1.75
+    },
+    "test": {
+      "recall": 2.97,
+      "ndcg": 1.7
+    }
+  },
+  "GraphHash_BPR_raw_plus_prior_recall": 11.238817682921336,
+  "GraphHash_BPR_best_beta": 0.5,
+  "norm_count_spearman": {
+    "Full_DAU": 0.8149569731787857,
+    "GH_DAU": 0.2702293164074907,
+    "GH_BPR": 0.054098892464624036
+  },
+  "differences": {
+    "GH_gain_vs_raw_pp": 5.7698566628978245,
+    "Full_gain_vs_raw_pp": 1.6493582467781955,
+    "GH_minus_Full_gain_vs_raw_pp": 4.120498416119629,
+    "GH_gain_vs_cosine_pp": 5.756817665012226,
+    "Full_gain_vs_cosine_pp": 6.5484985368741935,
+    "GH_minus_Full_gain_vs_cosine_pp": -0.7916808718619679,
+    "GH_DAU_prior_minus_GH_BPR_raw_prior_pp": 2.0635862893093133
+  },
+  "extra_float32_item_prior": {
+    "items": 40981,
+    "bytes": 163924,
+    "KiB": 160.08203125,
+    "fraction_embedding_parameter_bytes": 0.05521021943438524
+  },
+  "adam_tangent_counterexample": {
+    "theta": [
+      2,
+      1
+    ],
+    "loss_gradient": [
+      1,
+      -2
+    ],
+    "gradient_dot_theta": 0,
+    "first_adam_step_eta": 0.01,
+    "idealized_epsilon_zero_updated_theta": [
+      1.99,
+      1.01
+    ],
+    "norm_squared_before": 5,
+    "norm_squared_after": 4.9802
+  },
+  "new_training_launched_by_audit": false,
+  "new_scoring_launched_by_audit": false
+}

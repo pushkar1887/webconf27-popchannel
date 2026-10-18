@@ -1,0 +1,2 @@
+dataset,method,loss,seed,status,lr,weight_decay,batch_size,gamma,parameters,epochs,best_epoch,wall_seconds,peak_cuda_mib,val_raw_recall,val_raw_ndcg,test_raw_recall,test_raw_ndcg,val_cosine_recall,val_cosine_ndcg,test_cosine_recall,test_cosine_ndcg,error
+Gowalla,Full,DirectAU,0,timeout,0.01,1e-08,1024,1.0,4533696,,,5400.047497997,380.24365234375,,,,,,,,,90-minute training cap reached

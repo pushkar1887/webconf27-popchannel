@@ -1,0 +1,53 @@
+{
+  "status": "attachment_review_and_replacement_protocol_only",
+  "input": {
+    "path": "C:\\Users\\PUSHKAR\\.codex\\attachments\\1c8482ed-b8a5-40d1-bcd8-0ebeeafcf2a0\\Pasted text.txt",
+    "sha256": "46cddc4580a84141f32782c80a018e0be3e49e5c2f027146aea02414c33ad4a8"
+  },
+  "review": {
+    "path": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\E0_PROTOCOL_REVIEW.md",
+    "sha256": "35676ca13d64322dda9e4995d9abf523704f2dc18ec1e725f7a8a6afdf303e02"
+  },
+  "source_receipts_verified": [
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__train.py",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "sha256": "753a4fbb310579bade8187987ac2466fce3c1c407793b7befd0f30b788de90a4"
+    },
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__training__train_test_dau.py",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "sha256": "b770685354b6d574d6c766994c39952029b80c0dbfba8fdc263700e05d1012f4"
+    },
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__commands.sh",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "sha256": "44e73c47f900304a3c60b546ddfa80609e83efd7d18f5631e48298f013c3ea5c"
+    },
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__configs__dataset__Gowalla.yaml",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "sha256": "0c4ae7f8a90a182054d0f10b54554601da5a06fde2005c303b723ad3d59e0cf5"
+    },
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\ZzYUuuu__SUAU__SUAU-main__model__SUAU.py",
+      "commit": "d1062bd7fedc137894dcd02bf846dd1e1261aec7",
+      "sha256": "d5c0a73138b79fbba4956733f960f6165a95f448e46d0bb2a86eea9e55e8d85b"
+    }
+  ],
+  "fit_count_arithmetic": {
+    "methods": 3,
+    "losses": 2,
+    "seeds": 2,
+    "lr_choices": 3,
+    "wd_choices": 3,
+    "baseline_fits_without_search": 12,
+    "baseline_fits_with_crossed_search": 108
+  },
+  "operations_this_review": {
+    "training_runs": 0,
+    "kaggle_submissions": 0,
+    "package_installs": 0,
+    "dataset_downloads": 0
+  }
+}

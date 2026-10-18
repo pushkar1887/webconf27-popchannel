@@ -1,0 +1,607 @@
+{
+  "scope": "exploratory support and count-baseline probe",
+  "source_protocol_sha256": "93b66daafcf5886d9953175be38cef49acc3d37cc87abd19919553a2ade45756",
+  "protocol_amendments": [
+    {
+      "file": "protocol_amendment_01.json",
+      "sha256": "4653835c9f641fc78d075b096c9f99c95e31128923869155a6f2b0fc7aa12135"
+    },
+    {
+      "file": "protocol_amendment_02.json",
+      "sha256": "800e4ab3ca1eb9a12b7a65f2f9590e77b09c3519412249d7112cc6c62a427205"
+    }
+  ],
+  "documentation_consistency_passed": false,
+  "environment": {
+    "python": "3.10.9",
+    "numpy": "2.2.6",
+    "pandas": "2.3.1"
+  },
+  "sources": [
+    {
+      "file": "log_random_4_22_to_5_08_pure.csv",
+      "rows": 1186059,
+      "all_columns": [
+        "user_id",
+        "video_id",
+        "date",
+        "hourmin",
+        "time_ms",
+        "is_click",
+        "is_like",
+        "is_follow",
+        "is_comment",
+        "is_forward",
+        "is_hate",
+        "long_view",
+        "play_time_ms",
+        "duration_ms",
+        "profile_stay_time",
+        "comment_stay_time",
+        "is_profile_enter",
+        "is_rand",
+        "tab"
+      ],
+      "date_min": 20220422,
+      "date_max": 20220508,
+      "target_rate": 0.08496120344772055,
+      "target_rule_mismatches": 37395,
+      "zero_duration_rows": 36920,
+      "mismatches_zero_duration": 36187,
+      "mismatches_positive_duration": 1208,
+      "label_rule_contingency": {
+        "native_0_expected_0": 1049103,
+        "native_0_expected_1": 36187,
+        "native_1_expected_0": 1208,
+        "native_1_expected_1": 99561
+      },
+      "duplicate_event_keys": 10,
+      "is_rand_counts": {
+        "1": 1186059
+      }
+    },
+    {
+      "file": "log_standard_4_08_to_4_21_pure.csv",
+      "rows": 1141112,
+      "all_columns": [
+        "user_id",
+        "video_id",
+        "date",
+        "hourmin",
+        "time_ms",
+        "is_click",
+        "is_like",
+        "is_follow",
+        "is_comment",
+        "is_forward",
+        "is_hate",
+        "long_view",
+        "play_time_ms",
+        "duration_ms",
+        "profile_stay_time",
+        "comment_stay_time",
+        "is_profile_enter",
+        "is_rand",
+        "tab"
+      ],
+      "date_min": 20220409,
+      "date_max": 20220421,
+      "target_rate": 0.33661989357749283,
+      "target_rule_mismatches": 25036,
+      "zero_duration_rows": 24076,
+      "mismatches_zero_duration": 22348,
+      "mismatches_positive_duration": 2688,
+      "label_rule_contingency": {
+        "native_0_expected_0": 734643,
+        "native_0_expected_1": 22348,
+        "native_1_expected_0": 2688,
+        "native_1_expected_1": 381433
+      },
+      "duplicate_event_keys": 16580,
+      "is_rand_counts": {
+        "0": 1141112
+      }
+    },
+    {
+      "file": "log_standard_4_22_to_5_08_pure.csv",
+      "rows": 295497,
+      "all_columns": [
+        "user_id",
+        "video_id",
+        "date",
+        "hourmin",
+        "time_ms",
+        "is_click",
+        "is_like",
+        "is_follow",
+        "is_comment",
+        "is_forward",
+        "is_hate",
+        "long_view",
+        "play_time_ms",
+        "duration_ms",
+        "profile_stay_time",
+        "comment_stay_time",
+        "is_profile_enter",
+        "is_rand",
+        "tab"
+      ],
+      "date_min": 20220422,
+      "date_max": 20220508,
+      "target_rate": 0.31338050809314477,
+      "target_rule_mismatches": 5165,
+      "zero_duration_rows": 4798,
+      "mismatches_zero_duration": 4433,
+      "mismatches_positive_duration": 732,
+      "label_rule_contingency": {
+        "native_0_expected_0": 198461,
+        "native_0_expected_1": 4433,
+        "native_1_expected_0": 732,
+        "native_1_expected_1": 91871
+      },
+      "duplicate_event_keys": 6893,
+      "is_rand_counts": {
+        "0": 295497
+      }
+    }
+  ],
+  "raw_total_rows": 2622668,
+  "total_rows": 2575783,
+  "duplicate_key_quarantine": {
+    "rows": 46885,
+    "event_key_groups": 23402,
+    "by_policy": {
+      "random": 20,
+      "standard": 46865
+    },
+    "by_canonical_split": {
+      "test_random": 20,
+      "test_standard": 13619,
+      "train": 30933,
+      "validation": 2313
+    },
+    "label_independent_rule": "all rows in repeated event-key groups quarantined"
+  },
+  "split_counts": {
+    "train": {
+      "rows": 1051988,
+      "users": 25977,
+      "items": 7501,
+      "date_min": 20220409,
+      "date_max": 20220419,
+      "event_time_min_utc": "2022-04-09 03:46:03.278000+00:00",
+      "event_time_max_utc": "2022-04-18 23:59:39.207000+00:00",
+      "target_rate": 0.3449602086715818,
+      "warm_user_fraction": 1.0,
+      "warm_item_fraction": 1.0,
+      "warm_user_item_fraction": 1.0,
+      "context_counts": {
+        "0": 142440,
+        "1": 792189,
+        "2": 37613,
+        "3": 3480,
+        "4": 71638,
+        "5": 88,
+        "6": 257,
+        "7": 294,
+        "8": 2312,
+        "9": 223,
+        "10": 67,
+        "11": 374,
+        "12": 746,
+        "13": 257,
+        "14": 10
+      },
+      "duplicate_event_keys": 0
+    },
+    "validation": {
+      "rows": 59072,
+      "users": 16958,
+      "items": 5066,
+      "date_min": 20220419,
+      "date_max": 20220422,
+      "event_time_min_utc": "2022-04-19 00:00:03.876000+00:00",
+      "event_time_max_utc": "2022-04-21 23:59:56.840000+00:00",
+      "target_rate": 0.3245192307692308,
+      "warm_user_fraction": 0.988759479956663,
+      "warm_item_fraction": 0.9998307150595883,
+      "warm_user_item_fraction": 0.9885901950162513,
+      "context_counts": {
+        "0": 7555,
+        "1": 45077,
+        "2": 1736,
+        "3": 88,
+        "4": 4086,
+        "5": 2,
+        "6": 30,
+        "7": 40,
+        "8": 250,
+        "9": 29,
+        "10": 13,
+        "11": 44,
+        "12": 95,
+        "13": 26,
+        "14": 1
+      },
+      "duplicate_event_keys": 0
+    },
+    "test_standard": {
+      "rows": 278684,
+      "users": 25748,
+      "items": 6590,
+      "date_min": 20220422,
+      "date_max": 20220508,
+      "event_time_min_utc": "2022-04-22 00:00:14.948000+00:00",
+      "event_time_max_utc": "2022-05-08 15:52:10.564000+00:00",
+      "target_rate": 0.3240910852435016,
+      "warm_user_fraction": 0.9632128145139297,
+      "warm_item_fraction": 0.9997847023869328,
+      "warm_user_item_fraction": 0.9630011051944137,
+      "context_counts": {
+        "0": 27653,
+        "1": 221119,
+        "2": 9015,
+        "3": 436,
+        "4": 17441,
+        "5": 21,
+        "6": 144,
+        "7": 170,
+        "8": 1347,
+        "9": 192,
+        "10": 72,
+        "11": 307,
+        "12": 631,
+        "13": 116,
+        "14": 20
+      },
+      "duplicate_event_keys": 0
+    },
+    "test_random": {
+      "rows": 1186039,
+      "users": 27285,
+      "items": 7583,
+      "date_min": 20220422,
+      "date_max": 20220508,
+      "event_time_min_utc": "2022-04-22 02:42:12.831000+00:00",
+      "event_time_max_utc": "2022-05-08 15:52:08.763000+00:00",
+      "target_rate": 0.08496263613591121,
+      "warm_user_fraction": 0.9666638280865975,
+      "warm_item_fraction": 0.989269324195916,
+      "warm_user_item_fraction": 0.9563142527353654,
+      "context_counts": {
+        "1": 1178025,
+        "2": 764,
+        "11": 6735,
+        "14": 515
+      },
+      "duplicate_event_keys": 0
+    },
+    "outside": {
+      "rows": 0
+    }
+  },
+  "temporal_checks": {
+    "train_before_validation": true,
+    "validation_before_standard_test": true,
+    "validation_before_random_test": true
+  },
+  "cross_file_duplicate_event_keys": 0,
+  "training_user_activity_quantiles": {
+    "0": 1.0,
+    "0.1": 5.0,
+    "0.25": 12.0,
+    "0.5": 28.0,
+    "0.75": 55.0,
+    "0.9": 91.0,
+    "0.95": 120.0,
+    "0.99": 198.0,
+    "1": 754.0
+  },
+  "training_user_activity_counts": {
+    "1": 25977,
+    "5": 23498,
+    "20": 16099,
+    "50": 7455,
+    "100": 2103
+  },
+  "context_support": {
+    "tab": {
+      "global_context_counts": {
+        "0": 142440,
+        "1": 792189,
+        "2": 37613,
+        "3": 3480,
+        "4": 71638,
+        "5": 88,
+        "6": 257,
+        "7": 294,
+        "8": 2312,
+        "9": 223,
+        "10": 67,
+        "11": 374,
+        "12": 746,
+        "13": 257,
+        "14": 10
+      },
+      "observed_contexts_per_user": {
+        "0": 1.0,
+        "0.1": 1.0,
+        "0.25": 1.0,
+        "0.5": 2.0,
+        "0.75": 3.0,
+        "0.9": 3.0,
+        "0.95": 4.0,
+        "0.99": 5.0,
+        "1": 7.0
+      },
+      "observations_per_observed_user_context": {
+        "0": 1.0,
+        "0.1": 1.0,
+        "0.25": 2.0,
+        "0.5": 8.0,
+        "0.75": 25.0,
+        "0.9": 54.0,
+        "0.95": 76.0,
+        "0.99": 134.0,
+        "1": 590.0
+      },
+      "thresholds": {
+        "3": {
+          "users_with_two_supported_contexts": 9935,
+          "fraction_train_users": 0.38245370905031373,
+          "train_event_coverage": 0.564462712502424,
+          "validation_event_coverage": 0.5195354821235103,
+          "test_standard_event_coverage": 0.4698188629415395,
+          "test_random_event_coverage": 0.375056806732325
+        },
+        "5": {
+          "users_with_two_supported_contexts": 7295,
+          "fraction_train_users": 0.28082534549794047,
+          "train_event_coverage": 0.47136564295410216,
+          "validation_event_coverage": 0.4198605092091008,
+          "test_standard_event_coverage": 0.3755759211149546,
+          "test_random_event_coverage": 0.2732110832780372
+        },
+        "10": {
+          "users_with_two_supported_contexts": 4229,
+          "fraction_train_users": 0.16279785964507065,
+          "train_event_coverage": 0.34315315383825673,
+          "validation_event_coverage": 0.28896939328277355,
+          "test_standard_event_coverage": 0.2504341835196854,
+          "test_random_event_coverage": 0.16108492216529136
+        },
+        "20": {
+          "users_with_two_supported_contexts": 1847,
+          "fraction_train_users": 0.0711013588944066,
+          "train_event_coverage": 0.20537876857910928,
+          "validation_event_coverage": 0.15514964788732394,
+          "test_standard_event_coverage": 0.13062823843492988,
+          "test_random_event_coverage": 0.07503884779505564
+        }
+      }
+    },
+    "hour_bin": {
+      "global_context_counts": {
+        "0": 170907,
+        "1": 208163,
+        "2": 235845,
+        "3": 293909,
+        "4": 74362,
+        "5": 68802
+      },
+      "observed_contexts_per_user": {
+        "0": 1.0,
+        "0.1": 2.0,
+        "0.25": 4.0,
+        "0.5": 5.0,
+        "0.75": 5.0,
+        "0.9": 6.0,
+        "0.95": 6.0,
+        "0.99": 6.0,
+        "1": 6.0
+      },
+      "observations_per_observed_user_context": {
+        "0": 1.0,
+        "0.1": 1.0,
+        "0.25": 2.0,
+        "0.5": 6.0,
+        "0.75": 12.0,
+        "0.9": 22.0,
+        "0.95": 30.0,
+        "0.99": 52.0,
+        "1": 275.0
+      },
+      "thresholds": {
+        "3": {
+          "users_with_two_supported_contexts": 20468,
+          "fraction_train_users": 0.7879277822689302,
+          "train_event_coverage": 0.9707278029787412,
+          "validation_event_coverage": 0.9173043066088841,
+          "test_standard_event_coverage": 0.8727232277418151,
+          "test_random_event_coverage": 0.8156949307737773
+        },
+        "5": {
+          "users_with_two_supported_contexts": 16770,
+          "fraction_train_users": 0.6455710821110983,
+          "train_event_coverage": 0.9195456602166565,
+          "validation_event_coverage": 0.8330511917659805,
+          "test_standard_event_coverage": 0.7822838770794162,
+          "test_random_event_coverage": 0.6912335934990333
+        },
+        "10": {
+          "users_with_two_supported_contexts": 10099,
+          "fraction_train_users": 0.3887669861800824,
+          "train_event_coverage": 0.7437261641767777,
+          "validation_event_coverage": 0.6203785211267606,
+          "test_standard_event_coverage": 0.5591781372450517,
+          "test_random_event_coverage": 0.4420647213118624
+        },
+        "20": {
+          "users_with_two_supported_contexts": 3671,
+          "fraction_train_users": 0.1413173191669554,
+          "train_event_coverage": 0.4134201150583467,
+          "validation_event_coverage": 0.3065580985915493,
+          "test_standard_event_coverage": 0.2579301287479726,
+          "test_random_event_coverage": 0.1683258307694772
+        }
+      }
+    },
+    "tab_hour_bin": {
+      "global_context_counts": {
+        "0": 22448,
+        "1": 26311,
+        "2": 31678,
+        "3": 42467,
+        "4": 10917,
+        "5": 8619,
+        "6": 128526,
+        "7": 158488,
+        "8": 179292,
+        "9": 219609,
+        "10": 54084,
+        "11": 52190,
+        "12": 6252,
+        "13": 7444,
+        "14": 8512,
+        "15": 10535,
+        "16": 2328,
+        "17": 2542,
+        "18": 307,
+        "19": 407,
+        "20": 743,
+        "21": 1143,
+        "22": 600,
+        "23": 280,
+        "24": 12465,
+        "25": 14487,
+        "26": 14561,
+        "27": 19060,
+        "28": 6249,
+        "29": 4816,
+        "30": 14,
+        "31": 21,
+        "32": 24,
+        "33": 16,
+        "34": 4,
+        "35": 9,
+        "36": 44,
+        "37": 53,
+        "38": 61,
+        "39": 66,
+        "40": 13,
+        "41": 20,
+        "42": 47,
+        "43": 50,
+        "44": 92,
+        "45": 77,
+        "46": 14,
+        "47": 14,
+        "48": 421,
+        "49": 525,
+        "50": 526,
+        "51": 517,
+        "52": 105,
+        "53": 218,
+        "54": 31,
+        "55": 63,
+        "56": 44,
+        "57": 62,
+        "58": 10,
+        "59": 13,
+        "60": 13,
+        "61": 21,
+        "62": 18,
+        "63": 6,
+        "64": 3,
+        "65": 6,
+        "66": 96,
+        "67": 91,
+        "68": 62,
+        "69": 80,
+        "70": 18,
+        "71": 27,
+        "72": 152,
+        "73": 175,
+        "74": 200,
+        "75": 167,
+        "76": 17,
+        "77": 35,
+        "78": 86,
+        "79": 25,
+        "80": 30,
+        "81": 103,
+        "83": 13,
+        "84": 5,
+        "85": 2,
+        "86": 2,
+        "87": 1
+      },
+      "observed_contexts_per_user": {
+        "0": 1.0,
+        "0.1": 3.0,
+        "0.25": 4.0,
+        "0.5": 6.0,
+        "0.75": 8.0,
+        "0.9": 12.0,
+        "0.95": 14.0,
+        "0.99": 16.0,
+        "1": 26.0
+      },
+      "observations_per_observed_user_context": {
+        "0": 1.0,
+        "0.1": 1.0,
+        "0.25": 1.0,
+        "0.5": 3.0,
+        "0.75": 8.0,
+        "0.9": 15.0,
+        "0.95": 22.0,
+        "0.99": 39.0,
+        "1": 275.0
+      },
+      "thresholds": {
+        "3": {
+          "users_with_two_supported_contexts": 19924,
+          "fraction_train_users": 0.7669861800823806,
+          "train_event_coverage": 0.9646507374608836,
+          "validation_event_coverage": 0.9058098591549296,
+          "test_standard_event_coverage": 0.8614488094041998,
+          "test_random_event_coverage": 0.7992705130269747
+        },
+        "5": {
+          "users_with_two_supported_contexts": 15709,
+          "fraction_train_users": 0.6047272587288756,
+          "train_event_coverage": 0.8974855226485473,
+          "validation_event_coverage": 0.8001252708559047,
+          "test_standard_event_coverage": 0.7495658164803146,
+          "test_random_event_coverage": 0.656915160462683
+        },
+        "10": {
+          "users_with_two_supported_contexts": 8618,
+          "fraction_train_users": 0.3317550140508912,
+          "train_event_coverage": 0.6791246668212946,
+          "validation_event_coverage": 0.5523429035752979,
+          "test_standard_event_coverage": 0.4967633592168908,
+          "test_random_event_coverage": 0.3888877178575072
+        },
+        "20": {
+          "users_with_two_supported_contexts": 2685,
+          "fraction_train_users": 0.10336066520383416,
+          "train_event_coverage": 0.32631645988357283,
+          "validation_event_coverage": 0.23219122426868904,
+          "test_standard_event_coverage": 0.19535746580356245,
+          "test_random_event_coverage": 0.12485677115170749
+        }
+      }
+    }
+  },
+  "features_in_baseline_cache": [
+    "user_id",
+    "video_id",
+    "tab",
+    "hour_bin",
+    "duration_ms"
+  ],
+  "target_in_cache": "long_view",
+  "excluded": "current outcomes other than target; all user/video side-information and month-aggregated statistics",
+  "elapsed_seconds": 13.395627999998396
+}

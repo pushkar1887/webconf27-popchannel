@@ -1,0 +1,14 @@
+[{"stream_name":"stdout","time":13.867505189,"data":"[2026-10-17T13:07:24+00:00] session pc-s2b-1017: device_count=2 mode=parallel_2gpu\n"}
+,{"stream_name":"stdout","time":64.483443451,"data":"[2026-10-17T13:08:15+00:00] warm-up prepare exit code 0\n"}
+,{"stream_name":"stdout","time":64.48495294,"data":"[2026-10-17T13:08:15+00:00] yelp2018__mf__full__directau__s0: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":64.485598492,"data":"[2026-10-17T13:08:15+00:00] yelp2018__mf__graphhash__directau__s0: start on GPU 1: exp_run.py\n"}
+,{"stream_name":"stdout","time":3551.236628863,"data":"[2026-10-17T14:06:22+00:00] yelp2018__mf__graphhash__directau__s0: exit code 0 after 3487s\n"}
+,{"stream_name":"stdout","time":8260.885320515,"data":"[2026-10-17T15:24:51+00:00] yelp2018__mf__full__directau__s0: exit code 0 after 8196s\n"}
+,{"stream_name":"stdout","time":8260.885933521,"data":"[2026-10-17T15:24:51+00:00] session finished: state=complete jobs=2 failed=[]\n"}
+,{"stream_name":"stderr","time":8263.145863417,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":8263.145895037,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":8263.463927938,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":8263.463955956,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":8264.280223113,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":8265.393195836,"data":"[NbConvertApp] Writing 486404 bytes to __results__.html\n"}
+]

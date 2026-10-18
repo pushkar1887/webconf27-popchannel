@@ -1,0 +1,44 @@
+[
+  {
+    "file": "papers\\2412.09243v3.pdf",
+    "pages": 10,
+    "sha256": "4a1114cb66c5d01a4d6c009e1edf58fcdea666a0cf9fedbc02c109b91b048647",
+    "title_excerpt": "          SPRec:Self-PlaytoDebiasLLM-basedRecommendation\n\n              Chongming Gao\u2217                                         Ruijun Chen\u2217                                          Shuai Yuan\n          chongminggao@ustc.edu.cn                            rjchen20@mail.ustc.edu.cn                             syuanaf@connect.ust.hk\n    UniversityofScienceandTechnology                    UniversityofScienceandTechnology                    Hong Kong University of Science and\n                      of China                                            o",
+    "text_path": "research\\2026-10-16-loss-compression-audit\\2412.09243v3.txt",
+    "table1_pages": []
+  },
+  {
+    "file": "papers\\2412.17245v2.pdf",
+    "pages": 13,
+    "sha256": "ff6ba79c71cd9a6b38680465033256cb397c5aba1876f27f3161fdc621d90a6f",
+    "title_excerpt": "  GraphHash: Graph Clustering Enables Parameter Efficiency in\n                                                  Recommender Systems\n\n     Xinyi Wu1\u2217    Donald Loveland2\u2217    Runjin Chen3\u2217     Yozen Liu4    Xin Chen4     Leonardo Neves4\n                              Ali Jadbabaie1     Clark Mingxuan Ju4     Neil Shah4     Tong Zhao4\n                                             1MIT        2UMich        3UT Austin        4Snap Inc.\n                    xinyiwu@mit.edu  {yliu2,xin.chen,lneves,mju,nshah,tong}@snap.com\nAbstract                        ",
+    "text_path": "research\\2026-10-16-loss-compression-audit\\2412.17245v2.txt",
+    "table1_pages": [
+      6
+    ]
+  },
+  {
+    "file": "papers\\2502.12586v1.pdf",
+    "pages": 12,
+    "sha256": "cf3307dafe953be949cc67f10358935cd956954c8c56f93cc92b2d5afaf713cb",
+    "title_excerpt": "G-Refer:GraphRetrieval-AugmentedLargeLanguageModelfor\n                                        ExplainableRecommendation\n\n                    Yuhan Li                                       Xinni Zhang                                       Linhao Luo\n   TheHong KongUniversity ofScience                  TheChineseUniversityofHongKong                               Monash University\n        and Technology (Guangzhou)                            Hong Kong SAR, China                               Melbourne, Australia\n               Guangzhou, China    ",
+    "text_path": "research\\2026-10-16-loss-compression-audit\\2502.12586v1.txt",
+    "table1_pages": []
+  },
+  {
+    "file": "papers\\2604.18351v1.pdf",
+    "pages": 14,
+    "sha256": "32e8124f463f57f95036a496527f1408fc4a7b79c10138fc1e47d6d265a8e057",
+    "title_excerpt": "BalancedCo-ClusteringofUsersandItemsforEmbeddingTable\n                              CompressioninRecommenderSystems\n                                                                 Technical Report\n\n                 Runhao Jiang                                       Renchi Yang\u2217                                      Donghao Wu\u2020\n        Hong Kong Baptist University                       Hong Kong Baptist University                  TheChineseUniversityofHongKong\n            Hong Kong SAR, China                               Hong Kong SAR, China  ",
+    "text_path": "research\\2026-10-16-loss-compression-audit\\2604.18351v1.txt",
+    "table1_pages": []
+  },
+  {
+    "file": "papers\\NeurIPS-2023-clustering-the-sketch-dynamic-compression-for-embedding-tables-Paper-Conference.pdf",
+    "pages": 26,
+    "sha256": "799333add2f62af3a139df94475db070f29c4c23a747680bb9d856884791e015",
+    "title_excerpt": "    ClusteringtheSketch: DynamicCompressionfor\n                                    EmbeddingTables\n\n\n\n\n                   HenryLing-HeiTsang\u2217                             ThomasDybdahlAhle\u2217\n                              Meta                                            Meta\u2020\n                 henrylhtsang@meta.com                                Normal Computing\n                                                                       thomas@ahle.dk\n\n                                                  Abstract\n\n          Embedding tablesare usedby machin",
+    "text_path": "research\\2026-10-16-loss-compression-audit\\NeurIPS-2023-clustering-the-sketch-dynamic-compression-for-embedding-tables-Paper-Conference.txt",
+    "table1_pages": []
+  }
+]

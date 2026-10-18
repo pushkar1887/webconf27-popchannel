@@ -1,0 +1,10 @@
+{"event": "data_ready", "dataset": "Gowalla", "users": 29858, "items": 40981, "user_id_max": 29857, "item_id_max": 40980, "interactions": 1027370, "split_counts": [821896, 102737, 102737], "file_sha256": {"train": "6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8", "val": "18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc", "test": "d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa"}, "user_buckets": 5792, "item_buckets": 5806, "compressed_parameters": 742272, "full_parameters": 4533696}
+{"event": "val", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "epoch": 5, "val_recall": 0.004064764981187122, "best": 0.004064764981187122, "elapsed": 195.3}
+{"event": "val", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "epoch": 10, "val_recall": 0.004599121668570547, "best": 0.004599121668570547, "elapsed": 390.2}
+{"event": "val", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "epoch": 15, "val_recall": 0.0043273708999291656, "best": 0.004599121668570547, "elapsed": 584.7}
+{"event": "val", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "epoch": 20, "val_recall": 0.004753560781399177, "best": 0.004753560781399177, "elapsed": 779.2}
+{"event": "val", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "epoch": 25, "val_recall": 0.004645520486286522, "best": 0.004753560781399177, "elapsed": 974.1}
+{"event": "val", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "epoch": 30, "val_recall": 0.004740087816059737, "best": 0.004753560781399177, "elapsed": 1168.6}
+{"event": "val", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "epoch": 35, "val_recall": 0.0047969804205013275, "best": 0.0047969804205013275, "elapsed": 1363.0}
+{"event": "val", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "epoch": 40, "val_recall": 0.00492790087331365, "best": 0.00492790087331365, "elapsed": 1557.8}
+{"event": "seed_done", "tag": "gowalla__mf__random__directau__s0", "seed": 0, "best_epoch": 40, "stop_reason": "patience", "test_raw": 0.0044686559787767526, "test_cosine": 0.0028788834099964062, "test_cos_prior": 0.03796590976266365, "test_raw_prior": 0.037019981569266204}

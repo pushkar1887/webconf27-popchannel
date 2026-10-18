@@ -1,0 +1,14 @@
+{
+ "device_count": 2,
+ "device_names": [
+  "Tesla T4",
+  "Tesla T4"
+ ],
+ "torch_version": "2.11.0+cu128",
+ "torch_error": null,
+ "nvidia_smi_L": "GPU 0: Tesla T4 (UUID: GPU-6cf1657c-e48f-9d58-2874-8cfd479fbcb6)\nGPU 1: Tesla T4 (UUID: GPU-7d9c93a0-c95a-3544-3ef0-1481d3d63103)",
+ "slug": "pc-a0-smoke-1017",
+ "start_time": "2026-10-17T12:58:42+00:00",
+ "python": "3.13.15",
+ "cuda_visible_devices_env": null
+}

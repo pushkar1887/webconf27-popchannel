@@ -1,0 +1,21 @@
+{
+  "alias": "University",
+  "slug": "graphhash-fast-dau-1016",
+  "files": [
+    {
+      "file": "_work/sknetwork_vendor/scikit_network-0.32.1.dist-info/top_level.txt",
+      "bytes": 10,
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "fast_dau.json",
+      "bytes": 1866,
+      "sha256": "ec4b404ae100e2ea3b8c3bc1028195b2375aa92befa1fd369afc0f51c62ba824"
+    }
+  ],
+  "status": {
+    "status": "COMPLETE",
+    "failureMessage": ""
+  },
+  "source_sha256": "0a16c38242c70987a26eda01aed86c442184e5c28c813746cd36e764ce28f78f"
+}

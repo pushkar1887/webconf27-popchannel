@@ -1,0 +1,48 @@
+{
+  "gpu_model_training_status": "timeout",
+  "additional_training_runs": 0,
+  "best_validation_event": {
+    "event": "validation",
+    "run": "Gowalla_Full_DirectAU_seed0",
+    "epoch": 120,
+    "val_recall": 0.17621450387636384,
+    "best": 0.17621450387636384,
+    "elapsed_seconds": 4724.32
+  },
+  "last_validation_event": {
+    "event": "validation",
+    "run": "Gowalla_Full_DirectAU_seed0",
+    "epoch": 130,
+    "val_recall": 0.17542310903293762,
+    "best": 0.17621450387636384,
+    "elapsed_seconds": 5114.3
+  },
+  "median_observed_epoch_seconds": 38.98599999999997,
+  "checkpoint_sha256": "b6b1ec3060ef71c2092dfc289d4bf10559cccaf3d23088dbe5d325841af0245d",
+  "checkpoint_parameters": 4533696,
+  "checkpoint_inspection_device": "CPU",
+  "checkpoint_inspection_seconds": 0.08247339999797987,
+  "diagnostics": {
+    "alignment": 0.711327075958252,
+    "uniformity_user": -3.7398946285247803,
+    "uniformity_item": -3.7243218421936035,
+    "user_rho": 0.00010500672043010753,
+    "user_rho_repeat": 0.00010500672043010753,
+    "user_rho_alias": 0.0,
+    "user_Z": 0.023654084652662277,
+    "user_alpha": 0.9955798941294816,
+    "user_collision_share": 0.004420105870518443,
+    "user_alignment_grad_norm": 0.004326791036874056,
+    "user_uniformity_grad_norm": 0.0013222849229350686,
+    "user_mean_embedding_norm": 8.946588516235352,
+    "item_rho": 0.00014700940860215054,
+    "item_rho_repeat": 0.00014700940860215054,
+    "item_rho_alias": 0.0,
+    "item_Z": 0.023985976353287697,
+    "item_alpha": 0.9939074719843201,
+    "item_collision_share": 0.006092528015679943,
+    "item_alignment_grad_norm": 0.004501356277614832,
+    "item_uniformity_grad_norm": 0.0014343442162498832,
+    "item_mean_embedding_norm": 8.50412654876709
+  }
+}

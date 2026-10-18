@@ -1,0 +1,11 @@
+{"event": "start", "run_id": "gowalla__mf__full__directau__s0-legacy120", "dataset": "Gowalla", "method": "Full", "base": "cos", "mapping_source": "identity", "device": "cuda", "mapping_items_sha256": "611e34b303e4014e55f30a0d13f6a5047ba34abeb15c4d73e6bbb29aedac5720"}
+{"event": "progress", "tag": "val", "split": "val", "users": 512, "of": 25738, "cells": 80, "seconds": 1.7}
+{"event": "progress", "tag": "val", "split": "val", "users": 10752, "of": 25738, "cells": 80, "seconds": 33.6}
+{"event": "progress", "tag": "val", "split": "val", "users": 20992, "of": 25738, "cells": 80, "seconds": 65.4}
+{"event": "run_done", "tag": "val", "split": "val", "cells": 80, "users": 25738, "seconds": 80.7}
+{"event": "selected", "beta_star": 0.1, "beta_legacy_cos": 0.1, "beta_legacy_raw": 1.0, "beta_full_prior": 0.1, "beta_other_prior": 1.0, "beta_mu": 0.1, "beta_eps": 0.0}
+{"event": "progress", "tag": "test", "split": "test", "users": 512, "of": 25789, "cells": 98, "seconds": 2.5}
+{"event": "progress", "tag": "test", "split": "test", "users": 10752, "of": 25789, "cells": 98, "seconds": 50.1}
+{"event": "progress", "tag": "test", "split": "test", "users": 20992, "of": 25789, "cells": 98, "seconds": 97.7}
+{"event": "run_done", "tag": "test", "split": "test", "cells": 98, "users": 25789, "seconds": 120.7}
+{"event": "done", "out": "/kaggle/working/controls/gowalla__mf__full__directau__s0-legacy120/controls.json"}

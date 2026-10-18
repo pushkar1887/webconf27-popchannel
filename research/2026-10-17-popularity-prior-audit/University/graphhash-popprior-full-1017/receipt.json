@@ -1,0 +1,18 @@
+{
+  "alias": "University",
+  "slug": "graphhash-popprior-full-1017",
+  "status": "COMPLETE",
+  "version": null,
+  "source_sha256": "11c6a9f1900d5cc65932a6bf53efbee0b927339988e54052a973622895ff4da8",
+  "decoded": [
+    "repro_core.py",
+    "repro_run.py",
+    "popprior.py"
+  ],
+  "saved": [
+    "_work/GraphHash/README.md",
+    "_work/GraphHash/requirements.txt",
+    "popprior.json"
+  ],
+  "file_count": 421
+}

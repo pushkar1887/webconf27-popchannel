@@ -1,0 +1,7 @@
+{
+  "status": "all_pointwise_logistic_curvature_bounds_verified",
+  "comparisons": 36,
+  "minimum_remainder_across_all_comparisons": -2.2438454957184326e-16,
+  "maximum_upper_bound_violation": 2.5707362123266477e-16,
+  "scope": "Post-evaluation descriptive finite-sample identity audit; not a confidence interval, new theorem, or primary test."
+}

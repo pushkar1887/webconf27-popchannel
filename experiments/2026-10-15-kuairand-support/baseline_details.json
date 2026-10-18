@@ -1,0 +1,17 @@
+{
+  "stage": "recorded_before_first_baseline_fit",
+  "status": "exploratory count-model component diagnostic",
+  "target": "native long_view",
+  "context": "tab only",
+  "probability_tables": "Beta-style shrinkage: (positives + alpha * prior_probability)/(count + alpha)",
+  "combined_prediction": "sigmoid(logit(p_item_context) + weight * (logit(p_user_context) - logit(p_context)))",
+  "marginal_user_control": "sigmoid(logit(p_item_context) + weight * (logit(p_user) - logit(p_global)))",
+  "random_shared_control": "Replace user IDs by one of 256 SplitMix64 hash buckets; use the same formulas, smoothing candidates, and validation weight search.",
+  "smoothing_candidates": [10.0, 50.0, 200.0],
+  "weights": [0.0, 0.25, 0.5, 1.0],
+  "hash_seeds": [11, 29, 47],
+  "probability_storage": "float32; training counts and transient arrays are separately reported. This is not a neural-embedding memory benchmark.",
+  "uncertainty": "500 paired user-cluster bootstrap replicates with seed 20261015 on warm-user/warm-item evaluation rows; conditional on the fixed period and selected models.",
+  "additional_control_reason": "Include user-marginal effects so ordinary user bias is not mistaken for conditional-context signal.",
+  "limitations": "No GraphHash/CCE/BACO model was fitted by this diagnostic. User-specific count tables and random bucket tables have different capacity; no claim of superior compression algorithm or equal-byte efficiency follows."
+}

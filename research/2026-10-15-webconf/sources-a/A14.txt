@@ -1,0 +1,1341 @@
+https://arxiv.org/html/2505.07105
+
+
+Knowledge Distillation for Enhancing Walmart E-commerce Search Relevance Using Large Language Models
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+Submit in GitHub
+
+arXiv is now an independent nonprofit!
+Learn more
+×
+
+Back to arXiv
+
+Why HTML?
+
+Report Issue
+
+Back to Abstract
+
+Download PDF
+
+Abstract.
+
+1 Introduction
+
+2 Related Work
+
+Previous Production Model
+
+3 Architecture
+
+3.1 Problem Formulation
+
+3.2 LLM as the Teacher Model
+
+3.3 Cross-encoder Architecture based Student Model
+
+4 Offline Experiments
+
+4.1 Datasets
+
+Training Datasets
+
+Test Data
+
+4.2 Experiment Setup
+
+4.2.1 Model Implementation
+
+4.2.2 Online Serving
+
+4.2.3 Evaluation Metrics
+
+4.3 Experiments Results
+
+Experiments with Teacher Models
+
+4.3.1 RQ1: What is the most effective knowledge distillation loss
+when both the student and teacher models use the same architecture?
+
+4.3.2 RQ2: Does large-scale unlabeled training data facilitate knowledge distillation from the teacher model to the student model?
+
+4.3.3 RQ3: Can a 110M-parameter student model achieve
+performance comparable to a 7B-parameter teacher LLM
+when trained on a large-scale unlabeled dataset?
+
+4.3.4 RQ4: Can the student model effectively learn from the teacher model,
+with fewer input features?
+
+5 Online Experiments
+
+5.1 Manual Evaluation Results
+
+5.2 Interleaving Results
+
+5.3 Online AB Test
+
+6 Discussion and Future Work
+
+Acknowledgements
+
+References
+
+License: CC BY 4.0
+
+arXiv:2505.07105v1 [cs.IR] 11 May 2025
+
+Knowledge Distillation for Enhancing Walmart E-commerce Search Relevance Using Large Language Models
+
+Conference: Companion
+Proceedings of the ACM Web Conference 2025; April 28-May 2, 2025; Sydney,
+NSW, AustraliaCompanion Proceedings of the ACM Web Conference 2025 (WWW
+Companion ’25), April 28-May 2, 2025, Sydney, NSW, AustraliaDOI: 10.1145/3701716.3715242ISBN: 979-8-4007-1331-6/2025/04CCS: Information systems Learning to rank
+
+Hongwei Shang
+
+Note: Both authors contributed equally to this research.
+
+email: hongwei.shang@walmart.com
+
+Note: Corresponding author.
+
+Affiliation: Walmart Global Tech, Sunnyvale, CA, USA
+
+, 
+Nguyen Vo
+
+email: vknguyen09@gmail.com
+
+Affiliation: Amazon Inc., Sunnyvale, CA, USA
+
+, 
+Nitin Yadav
+
+email: nitin.yadav@walmart.com
+
+Affiliation: Walmart Global Tech, Sunnyvale, CA, USA
+
+, 
+Tian Zhang
+
+email: tian.zhang@walmart.com
+
+Affiliation: Walmart Global Tech, Sunnyvale, CA, USA
+
+, 
+Ajit Puthenputhussery
+
+email: ajit.puthenputhussery@walmart.com
+
+Affiliation: Walmart Global Tech, Sunnyvale, CA, USA
+
+, 
+Xunfan Cai
+
+email: xunfan.cai@walmart.com
+
+Affiliation: Walmart Global Tech, Sunnyvale, CA, USA
+
+, 
+Shuyi Chen
+
+email: shuyi.chen@walmart.com
+
+Affiliation: Walmart Global Tech, Sunnyvale, CA, USA
+
+, 
+Prijith Chandran
+
+email: prijith.chandran@walmart.com
+
+Affiliation: Walmart Global Tech, Sunnyvale, CA, USA
+
+and 
+Changsung Kang
+
+email: changsung.kang@walmart.com
+
+Affiliation: Walmart Global Tech, Sunnyvale, CA, USA
+
+© acmlicensed
+
+Abstract.
+
+Ensuring the products displayed in e-commerce search results are relevant to users’ queries is crucial for improving the user experience.
+With their advanced semantic understanding, deep learning models have been widely used for relevance matching in search tasks.
+While large language models (LLMs) offer superior ranking capabilities, it is challenging to deploy LLMs in real-time systems due to the high-latency requirements.
+To leverage the ranking power of LLMs while meeting the low-latency demands of production systems,
+we propose a novel framework that distills a high-performing LLM into a more efficient, low-latency student model.
+To help the student model learn more effectively from the teacher model,
+we first train the teacher LLM as a classification model with soft targets.
+Then, we train the student model to capture the relevance margin between pairs of products for a given query using mean squared error loss.
+Instead of using the same training data as the teacher model,
+we significantly expand the student model’s dataset by generating unlabeled data and labeling it with the teacher model’s predictions.
+Experimental results show that the student model’s performance continues to improve as the size of the augmented training data increases.
+In fact, with enough augmented data, the student model can outperform the teacher model.
+The student model has been successfully deployed in production at Walmart.com with significantly positive metrics.
+
+Keywords: 
+LLM, Knowledge Distillation, E-commerce Search
+
+1. Introduction
+
+In recent years, there has been exceptionally rapid growth in e-commerce platforms.
+On e-commerce platforms such as Walmart, Amazon and Taobao, customers enter search queries,
+and the platform must deliver the most relevant items from millions of products in the product catalog.
+As the product catalog continues to grow, continuously improving search ranking systems has become essential for showing customers highly relevant items on e-commerce platforms.
+Product search ranking engine typically comprises two main stages: the retrieval stage
+where a set of relevant products candidates is retrieved from the product catalog to form the recall set,
+the rerank stage where the candidates obtained from the previous stage are re-ranked to
+form a ranked product list to be shown to customers.
+
+The embedding-based two tower model has become an important approach in the retrieval stage of
+e-commerce search engines, especially the bi-encoder which uses transformer-encoded representations.
+Bi-encoder models learn embedding representations for search queries and products from training data.
+At retrieval time, semantically similar items are retrieved based on simple similarity
+metrics, such as the cosine similarity between the query and the item.
+Since the query and document embeddings are learned through separate models,
+this approach allows the embeddings to be precomputed offline with minimal computational overhead and low latency (Yates et al., 2021; Bai et al., 2022).
+In contrast, the cross-encoder model takes the query and item text as input and directly outputs a prediction.
+
+Although bi-encoder approaches are typically much faster, they are generally less effective than cross-encoder methods (Vo et al., 2024; Wang et al., 2024).
+By concatenating query and item as input, the cross-encoder model can benefit from the attention mechanism across all tokens in the inputs,
+thus capturing interactions between query and item text.
+As a result, the trade-off with bi-encoders involves sacrificing the model’s effectiveness for large latency gain.
+The retrieval stage has strict latency requirements as it needs to search through millions of products in the product catalog.
+However, the downstream re-rank stage only ranks the products retrieved during the retrieval stage,
+allowing it to afford more relaxed latency requirements compared to the retrieval stage.
+
+Our previous production model is the first ranking model with a cross-encoder (XE) feature that can better
+understand the relevance of items to search queries.
+In this work, we present our our enhanced BERT-Base (B​E​R​TBaseBERT_{\text{Base}}) model with
+cross-encoder architecture,
+optimized through knowledge distillation from LLMs on an augmented large-scale training dataset.
+
+In this work, our goal is to improve effectiveness of cross-encoder models used in production for the tail segment.
+To achieve this goal, we propose a novel knowledge distillation framework that distills the teacher LLM model
+(i.e. 7 billion parameters) into a student model (i.e. B​E​R​TBaseBERT_{\text{Base}} (Kenton and Toutanova, 2019))
+with significantly augmented training data.
+This framework improves the student model’s effectiveness while preserving its efficiency.
+First, we train the LLM teacher model using soft-label targets converted from human editorial labels.
+In addition to item’s title, product type, brand, color and gender,
+we further incorporate item’s description into the model input
+to improve our teacher LLM model’s performance.
+After that, the student model is trained to mimic the margin between two documents predicted by the teacher model.
+Rather than distilling the knowledge on the labeled training data,
+we generate large-scale unlabeled data from user’s log data,
+and label it with the teacher model’s predictions such that the student model can learn from the teacher at a much larger dataset.
+The effectiveness of our cross-encoder based student model is demonstrated through both offline and online
+experiments, showing its ability to improve both the relevance and engagement metrics of the system.
+Our cross-encoder based student model has been deployed
+in Oct 2024 as the most dominant feature in the current production system, and is powering tail queries in Walmart.com’s e-commerce engine.
+
+Our main contributions are summarized as follows:
+
+• 
+
+We propose a knowledge distillation framework in which the teacher model is trained with soft-labeling, enabling more effective distillation through the teacher’s single output.
+The distillation process uses a extended Margin-MSE loss on an augmented, large-scale unlabeled dataset.
+Building on the work of Hofstätter et al. (2020),
+where both the student and teacher models share the same training data and require true labels for distillation,
+we significantly expand the dataset used to train the student model.
+Specifically, we generate a large-scale unlabeled dataset
+and use the teacher model’s predictions to label the data.
+The Margin-MSE loss is then computed on all item pairs for a given query,
+eliminating the need for true labels.
+
+• 
+
+We conduct an ablation study that reveals the following findings:
+(1) using Margin-MSE loss to align the margin with the teacher model significantly improves knowledge distillation compared to using pointwise cross-entropy (CE) loss.
+(2) distilling knowledge through a large-scale dataset labeled with the teacher’s predictions leads to a substantial performance boost, enabling the student model to achieve results comparable to the teacher model.
+(3) the student model performs on par with the teacher model, even without the ‘item description’ field, which has been shown to be beneficial.
+These results demonstrate that increasing the model’s capacity is not necessary to effectively learn from the teacher model.
+
+• 
+
+Our proposed model has been successfully deployed in production at Walmart.com with significantly positive metrics.
+
+The rest of this paper is organized as follows:
+in Section 2, we review related work and discuss the previous production model.
+Section 3 outlines our model architecture and loss functions.
+In Section 4, we present our offline experiment setup and evaluation metrics, followed by the online test results in Section 5.
+Finally, Section 6 concludes with a discussion of future work.
+
+2. Related Work
+
+Search ranking has long been a popular topic within the search community.
+Traditional method in search ranking are based on text match between queries
+and items like LSI (Deerwester et al., 1990), BM25 (Robertson et al., 2009)
+and its variations (Trotman et al., 2014; Tan et al., 2018).
+They struggle with handling the lexical gap between queries and product descriptions.
+Neural network models can learn representations of queries and
+documents from raw text, helping to bridge the lexical gap between the query and documents vocabularies
+to some extent.
+Many large e-commerce platforms have deployed neural network models in their product search engines
+e.g. Walmart (Magnani et al., 2022; Peng et al., 2023), Amazon (Nigam et al., 2019),
+Facebook Marketplace (He et al., 2023),
+Taobao (Zheng et al., 2022), JD.com (Wang et al., 2023),
+Baidu (Hager et al., 2024).
+Recent advancements in e-commerce search have focused on various aspects,
+including retrieval, ranking, and query understanding systems.
+Lin et al. (2024) addressed relevance degradation in Walmart’s retrieval system with a relevance reward model, while Peng et al. (2023) introduced an entity-aware model to enrich query representation with engagement data. Luo et al. (2024) proposed a multitask learning framework for ranking optimization at Amazon, and Peng et al. (2024) developed a query rewriting framework to address the semantic gap in long-tail queries.
+
+Recent advances in LLMs have revolutionized semantic search,
+with fine-tuned LLMs achieving accuracy close to human performance on labeled datasets (Thomas et al., 2024; Mehrdad et al., 2024).
+However, due to latency constraints, LLMs cannot be deployed
+for real-time inference in production.
+Knowledge distillation (Hinton, 2015) bridges this gap
+by transferring LLM capabilities to lighter, deployable models.
+Knowledge distillation methods can be mainly categorized into three types:
+response-based (Hofstätter et al., 2020; Menon et al., 2022; He et al., 2022; Liu et al., 2022; Ye et al., 2024; Ye et al., 2022),
+representation-based (Yao et al., 2022; Liu et al., 2023),
+and relation-based methods (Liu et al., 2019).
+Specifically, Hofstätter et al. (2020) introduced a margin focused loss (Margin-MSE)
+to adapt knowledge distillation across different architectures.
+Sun et al. (2023) introduced a novel instruction distillation method
+to improve the efficiency of LLMs by converting complex pairwise ranking
+into more efficient pointwise ranking.
+Building on the work of Hofstätter et al. (2020),
+we expand the student model’s dataset by incorporating augmented unlabeled data,
+which we label using the teacher model’s predictions.
+Our knowledge distillation approach does not require manual labeling of query-item pairs
+for the student model.
+
+Previous Production Model
+
+Figure 1. The architecture for the previous production version of the Cross encoder
+
+The previous BERT-based cross-encoder model treats the classification task as a multi-class classification problem, outputting probabilities over three classes (class 0, class 1, and class 2).
+It uses a Walmart in-house pre-trained BERT model as the starting checkpoint,
+which is then fine-tuned on human-labeled query-item pairs (QIPs) (human-judged_v1 in
+
+3).
+It aims to classify the relevance of these pairs.
+As shown in Figure 1,
+the query and item text are concatenated into a single string and fed into the BERT encoder. After encoding, non-linear layers transform the embedding into a three-dimensional classification vector, which is then passed through a softmax layer to generate a three-class probability vector. This vector is optimized using cross-entropy loss.
+
+The outputs of the cross-encoder model are used as features in our tail relevance model, which ranks results for the tail queries.
+While the launch of the cross-encoder in April 2024 marked a significant improvement over the previous model (which lacked the cross-encoder feature),
+there is still substantial room for further enhancement in relevance for long-tail queries.
+One limitation of the previous model was the insufficient training data, primarily due to the high costs associated with human annotators’ labeling. Additionally, the model suffered from a lack of sufficient negative-label examples and the presence of incorrect labels in the training data.
+
+3. Architecture
+
+3.1. Problem Formulation
+
+Table 1. Example of a query and items with class 2, class 1 and class 0 respectively
+
+Query
+Item
+Class label
+
+apple iphone 14 pro max
+iphone 14 pro max
+2
+
+apple iphone 14 pro max
+iphone 14 pro
+1
+
+apple iphone 14 pro max
+iphone 14 pro max case
+0
+
+Given a query qq and an item dd, where each item dd has attributes
+such as title, product type, brand, color, gender and description,
+our goal is to train a teacher model using LLM,
+and then distill this knowledge into a more lightweight student model
+using a large-scale, augmented dataset.
+We denote the predicted relevance for query qq and document dd
+as t⁡(q,d)∈ℛt(q,d)\in\mathcal{R} from the teacher model,
+and s⁡(q,d)∈ℛs(q,d)\in\mathcal{R} from the student model.
+
+Table 2. Rating score and relevance label mapping
+
+Rating
+Description
+Class
+Soft
+
+Score
+
+Label
+Target
+
+4
+Excellent - perfect match
+2
+1
+
+3
+Good - item with a mismatched attribute
+1
+0.5
+
+2
+Okay
+0
+0
+
+1
+bad - Irrelevant
+0
+0
+
+0
+Embarrassing
+0
+0
+
+Figure 2. Our proposed knowledge distillation framework
+
+Our guidelines categorize each (q,d)(q,d) pair into five ordered ratings, 4, 3, 2, 1, and 0.
+These ratings are then mapped to three classes (Class 2, Class 1, Class 0) based on our production requirements, as shown in Table 2.
+Examples of these three relevance classes are provided in Table 1.
+
+In this work, we formulate search relevance prediction as a binary classification problem with soft targets (Vo et al., 2024).
+We map the three-class labels into soft targets (as shown in Table 2),
+where an excellent item is labeled as 1, a good item as 0.5, and an irrelevant item as 0.
+The advantage of predicting a single output is that it enhances the effectiveness of knowledge distillation.
+Our framework consists of two main components: (1) the cross-encoder architecture based LLM used as the teacher model, (2) a more lightweighted cross-encoder architecture model serving as the student model.
+First, we fine-tuned the LLM as a teacher model using human editorial labels.
+Then, we use the teacher model to make inferences on a large-scale,
+augmented set of unlabeled query-item pairs obtained from search log data,
+generating a substantial training data for the student model.
+The details of these components are provided in the following subsections.
+
+3.2. LLM as the Teacher Model
+
+We use LLMs to predict the relevance of an item to a query based on textual information.
+For training our teacher model, we employ two 7B-parameter open-source LLMs:
+Llama2-7B (Touvron et al., 2023) and Mistral-7B-v0.1 (Jiang et al., 2023).
+The model training is implemented using PyTorch (Paszke et al., 2019)
+and the Huggingface Transformers framework (Wolf, 2019).
+Both Llama2-7B and Mistral-7B-v0.1 are fine-tuned using a cross-encoder architecture
+to predict the relevance between a query and an item.
+To improve training efficiency, we apply the softRank Adaptation (LoRA) (Hu et al., 2022),
+which has been shown to outperform full model fine-tuning when trained on datasets of size
+on the order of 10610^{6} (Mehrdad et al., 2024).
+
+Our teacher models are trained as classification models,
+using concatenated query and item textual features as inputs,
+along with soft relevance labels.
+The classification is based on the “last token”,
+where the hidden state of this token is used as the representation of the query-item pair.
+An MLP layer is then applied to transform this representation into a single output value,
+which represents the predicted relevance score t⁡(q,d)t(q,d) of the teacher model.
+We use cross-entropy loss to train the LLM, as defined by ℒt​e​a​c​h​e​r​(q)\mathcal{L}_{teacher}(q)
+for each query qq:
+
+ℒt​e​a​c​h​e​r(q)=∑d∈𝐃q[−yq,d⋅logt(q,d)−(1−yq,d)⋅log(1−t(q,d))],\mathcal{L}_{teacher}(q)=\sum_{d\in\mathbf{D}_{q}}[-y_{q,d}\cdot\log t(q,d)-(1-y_{q,d})\cdot\log(1-t(q,d))],
+
+where 𝐃q\mathbf{D}_{q} is the document collection for query qq,
+and yq,d∈{0,0.5,1}y_{q,d}\in\{0,0.5,1\} is the soft label for query qq and document dd,
+converted from the original editorial feedback.
+The objective is to optimize t⁡(q,d)t(q,d) by minimizing the above loss function.
+
+Note that the teacher model incorporates additional text data, specifically the “item description”,
+which has been shown to improve performance in multi-billion parameter LLMs (Mehrdad et al., 2024). According to Mehrdad et al. (2024), one of the key advantages of LLMs is their ability to effectively process long item descriptions—information that is often difficult for human evaluators to review quickly.
+
+3.3. Cross-encoder Architecture based Student Model
+
+Our student model is built on a B​E​R​TBaseBERT_{\text{Base}} cross-encoder architecture.
+Similar to the teacher model, we concatenate the query with the item’s attributes,
+including title, product type (PT), brand, gender and color.
+To meet production latency requirements, we exclude the item description from the input.
+Each item attribute is separated by unique separator tokens, as shown below:
+
+[C​L​S]​q​u​e​r​y​[S​E​P]​[S​E​Pt]​t​i​t​l​e​[S​E​Pp]​P​T​[S​E​Pb]​b​r​a​n​d​[S​E​Pc]​c​o​l​o​r​[S​E​Pg]​g​e​n​d​e​r{\scriptstyle[CLS]\;query\;[SEP]\;[SEP_{t}]title[SEP_{p}]PT[SEP_{b}]brand[SEP_{c}]color[SEP_{g}]gender}
+
+,
+where [S​E​Pt][SEP_{t}], [S​E​Pp][SEP_{p}] and [S​E​Pb][SEP_{b}], [S​E​Pc][SEP_{c}] and [S​E​Pg][SEP_{g}] are
+distinct [u​n​u​s​e​d][unused] tokens from the BERT vocabulary.
+After the encoder pass, the hidden state of [C​L​S][CLS] token is used
+as the representation of the query-item pair.
+An MLP layer is then applied to this hidden state to generate a single prediction score.
+
+Our student model training is based on a loss function similar to the margin MSE loss (Hofstätter et al., 2020; Vo et al., 2024).
+Based on the observation that different architectures converge to different scoring ranges,
+(Hofstätter et al., 2020) proposed distilling knowledge
+not by directly optimizing the raw scores for each query-item pair,
+but by focusing on the margin between relevant and non-relevant documents
+for each query, using a Margin-MSE loss.
+The relevance of a document is determined by its true label.
+In their work, the training data for the student model is the same as that for the teacher model,
+meaning that all query-item pairs have known true labels (either relevant or non-relevant)
+for knowledge distillation.
+We extend this approach by augmenting the training data with a much larger set of unlabeled data,
+where the true labels are unknown.
+Building on the works of Hofstätter et al. (2020) and Vo et al. (2024) which
+focus on distilling knowledge from the teacher model using labeled data,
+we adapt the approach to handle unlabeled data.
+Specifically, we compute the Margin-MSE loss for all triplets (q,di,dj)(q,d_{i},d_{j}),
+where did_{i} and djd_{j} are documents from the document collection for query qq,
+denoted by 𝐃q\mathbf{D}_{q}.
+Let |𝐃q||\mathbf{D}_{q}| denote the number of documents in 𝐃q\mathbf{D}_{q},
+which results in |𝐃q|​(|𝐃q|−1)/2|\mathbf{D}_{q}|(|\mathbf{D}_{q}|-1)/2 triplets,
+as shown in Equation (1).
+
+In contrast to Hofstätter et al. (2020), who sample triplets (q,d+,d−)(q,d^{+},d^{-})
+where d+d^{+} is a relevant document and d−d^{-} is an irrelevant document
+based on the training data’s relevance labels,
+our approach relies entirely on the teacher model’s predictions
+and does not require any labeling of the query-item pairs.
+This extension makes knowledge distillation feasible for large-scale augmented datasets,
+even when they are unlabeled.
+Let Δq,di,djt\Delta^{t}_{q,d_{i},d_{j}} and Δq,di,djs\Delta^{s}_{q,d_{i},d_{j}} represent
+the score differences for the pairs (q,di)(q,d_{i}) and (q,dj)(q,d_{j})
+from the teacher and student models respectively, where
+Δq,di,djt=t⁡(q,di)−t⁡(q,dj)\Delta^{t}_{q,d_{i},d_{j}}=t(q,d_{i})-t(q,d_{j})
+and
+Δq,di,djs=s⁡(q,di)−s⁡(q,dj)\Delta^{s}_{q,d_{i},d_{j}}=s(q,d_{i})-s(q,d_{j}).
+The goal of the student model is to make Δq,di,djs\Delta^{s}_{q,d_{i},d_{j}} as close as possible to Δq,di,djt\Delta^{t}_{q,d_{i},d_{j}}.
+The loss function for the student model for query qq is defined as:
+
+(1)
+
+ℒs​t​u​d​e​n​t​(q)=2|𝐃q|​(|𝐃q|−1)​∑di,dj∈𝐃q,1≤i<j≤|𝐃q|(Δq,di,djt−Δq,di,djs)2.\mathcal{L}_{student}(q)=\frac{2}{|\mathbf{D}_{q}|(|\mathbf{D}_{q}|-1)}\sum_{\begin{subarray}{c}d_{i},d_{j}\in\mathbf{D}_{q},\\
+1\leq i<j\leq|\mathbf{D}_{q}|\end{subarray}}(\Delta^{t}_{q,d_{i},d_{j}}-\Delta^{s}_{q,d_{i},d_{j}})^{2}.
+
+Table 3. Statistics of Training datasets
+
+Dataset
+Total QIPs
+Unique queries
+Unique items
+Class 2 percentage
+Class 1 percentage
+Class 0 percentage
+
+human-judged_v1
+6.0M
+709K
+2.3M
+64.2%
+19.7%
+16.1%
+
+human-judged_v2
+10M
+1M
+3.7M
+63.6%
+19.8%
+16.6%
+
+llm-judged_v1
+50M
+5.2M
+15M
+NA
+NA
+NA
+
+llm-judged_v2
+110M
+5.2M
+22.6M
+NA
+NA
+NA
+
+llm-judged_v3
+170M
+5.2M
+29.4M
+NA
+NA
+NA
+
+4. Offline Experiments
+
+4.1. Datasets
+
+Training Datasets
+
+In search ranking, people usually use either search log data (Wu et al., 2024) or human editorial judgment data (Wang et al., 2024) for training text models. While collecting logged data from search engagements and impressions can help generate large-scale training data, we observe that for most of the tail queries, engagement data is often sparse and does not always reliably indicate relevance.
+
+We leverage human-annotated labels following 5-scale relevance guidelines (as described in Table 2), to create our datasets.
+Our human labeled data is generated by manually assessing the top k (usually 10) items for a set of sampled queries. We refer to these as human-judged datasets.
+Over time, the size of the human-judged datasets increase as more data is annotated.
+We version our human-judged datasets with higher version indicating addition of more annotated data.
+We conduct experiments using two such versions shown in Table 3.
+When training our previous production model and teacher models, we only had access to human-judged_v1 dataset.
+
+To improve knowledge distillation from the teacher model,
+we also create three datasets,
+where the labels are generated from the teacher model’s predictions.
+We refer to these as llm-judged datasets.
+These datasets are created by incrementally adding more samples,
+with each new version incorporating additional predictions from the teacher model.
+As we expand the dataset, we update the version number.
+This also allows us to assess the impact of scaling the training data
+on the student model’s performance.
+All datasets are summarized in Table 3.
+
+Test Data
+
+We evaluate the models using a golden test dataset
+consisting of 2,354 queries randomly selected
+from the tail segment of our search traffic.
+For each query, we sample the top 10 products and,
+an additional 10 random products from the remaining results, if available.
+This results in a total of 32,586 QIPs in the golden dataset.
+Note that the golden test data was generated after all
+human evaluation data (used for training data) was collected,
+ensuring no risk of data leakage.
+While 32,000+ QIPs might seem small for a test set,
+our analysis shows that offline metrics
+from this golden dataset align closely with
+online human evaluations across multiple features.
+This consistency demonstrates
+that the offline metrics from the golden test data are a reliable
+indicator of model performance.
+
+4.2. Experiment Setup
+
+4.2.1. Model Implementation
+
+We use a cross-encoder based LLM model as the teacher model
+(with the architecture described in Section 3.2),
+and fine-tune two 7B pre-trained language models:
+Llama2-7B and Mistral-7B-v0.1.
+Both models are initialized from Hugging Face checkpoints and
+fine-tuned on the human-judged data human-judged_1.
+The model training is conducted on 8 NVIDIA 40GB A100 GPUs using the AdamW optimizer.
+Building on the work of Mehrdad et al. (2024) on fine-tuning LLMs
+with Walmart’s human-annotated data,
+we adopt the hyperparameters identified as optimal in their study.
+Specifically, we set the LoRA rank to 256, as increasing it further
+did not yield performance gains for datasets of size around 10610^{6} (Mehrdad et al., 2024).
+We also set the LoRA α\alpha to 128 and the dropout rate to 0.05.
+For the learning rate, we experiment with values of 1​e−41e-4 and 1​e−51e-5
+using a decay scheduler,
+and find that 1​e−51e-5 produced the best results.
+
+We use the B​E​R​TBaseBERT_{\text{Base}} model with a cross-encoder architecture as the student model
+(as described in Section 3.3).
+The student model is trained using the same learning rate of 1​e−51e-5.
+
+4.2.2. Online Serving
+
+We deploy our Bert-based student model, X​E​v​2XEv2, into production.
+The output from the X​E​v​2XEv2 model for a given (query, item) pair -
+referred to as the X​E​v​2XEv2 feature score -
+is used as a feature in our ranking model.
+To reduce latency, we implement two optimizations:
+1. We precompute X​E​v​2XEv2 feature scores for frequent query-item pairs
+as query signals through an offline pipeline.
+2. We cache the X​E​v​2XEv2 feature scores to further minimize real-time computation.
+For query-item pairs not present in the cache or query signal,
+the X​E​v​2XEv2 model is invoked at run-time.
+To further enhance the runtime performance of the cross encoder model,
+we employ techniques like operator fusion and intermediate representations
+using the TensorRT framework (Vanholder, 2016).
+
+4.2.3. Evaluation Metrics
+
+The models are evaluated on two tasks to measure semantic relevance:
+a classification task (determining whether a product is an exact match) and a ranking task.
+We use the following two offline metrics to assess performance:
+
+• 
+
+Recall at a fixed precision: This metric evaluates performance on the classification task.
+It measures the percentage of relevant products retrieved at specific precision levels
+for our golden test dataset.
+In our work, we fix the precision at 90% and 95%.
+We denote recall at these precision levels as R@P=95% and R@P=90%, respectively.
+
+• 
+
+Normalized Discounted Cumulative Gain (NDCG):
+This metric evaluates performance on the ranking task.
+Here NDCG@5 and NDCG@10 are used to measure
+ranking quality for the top 5 and top 10 documents, respectively.
+
+Table 4. Offline Experiment results for LLM teacher models
+
+Model
+Train Data
+Starting Checkpoint
+R@P=95%
+R@P=90%
+NDCG@5
+NDCG@10
+
+X​E​v​1XEv1 (Baseline)
+human-judged_1
+Walmart pre-trained Bert-Base
+0%
+0%
+0%
+0%
+
+Llama2-7B
+human-judged_1
+Hugging Face checkpoint
++11.84%
++5.57%
++1.02%
++0.8%
+
+Mistral-7B
+human-judged_1
+Hugging Face checkpoint
++13.27%
++6.52%
++1.33%
++1.03%
+
+Table 5. Offline Comparison of Bert-Base models
+
+Model
+Train Data
+Loss Function
+Starting Checkpoint
+R@P=95%
+R@P=90%
+NDCG@5
+NDCG@10
+
+X​E​v​1XEv1 (baseline)
+human-judged_1
+multi-class CE
+Walmart pre-trained
+0%
+0%
+0%
+0%
+
+X​E​v​1.1XEv1.1
+human-judged_2
+soft-target CE
+Walmart pre-trained
++9.99%
++4.38%
++0.77%
++0.66%
+
+X​E​v​1.2XEv1.2
+llm-judged_1
+CE
+X​E​v​1.1XEv1.1
+-2.28%
++2.01%
++1.16%
++0.89%
+
+X​E​v​1.3XEv1.3
+llm-judged_1
+Margin MSE
+X​E​v​1.1XEv1.1
++12.55%
++5.92%
++1.24%
++0.92%
+
+X​E​v​1.4XEv1.4
+llm-judged_2
+Margin MSE
+X​E​v​1.1XEv1.1
++13.27%
++5.92%
++1.36%
++1.04%
+
+X​E​v​2XEv2
+llm-judged_3
+Margin MSE
+X​E​v​1.1XEv1.1
++12.84%
++6.04%
++1.5%
++1.04%
+
+4.3. Experiments Results
+
+For both teacher and student model experiments,
+we use the cross-encoder based B​E​R​TBaseBERT_{\text{Base}} (X​E​v​1XEv1,
+as shown in Tables 4 and 5)
+from the previous production systems as our baseline.
+This choice is driven by the fact
+that live experiments (see Section 5) consistently compare the performance of the new models against the existing production model.
+
+Experiments with Teacher Models
+
+Table 4 compares the performance of Llama2-7B and Mistral-7B
+to the baseline B​E​R​TBaseBERT_{\text{Base}} model on the golden test data.
+All three models are fine-tuned with the human-annotated dataset human-judged_1.
+Specifically, the B​E​R​TBaseBERT_{\text{Base}} X​E​v​1XEv1 model is fine-tuned starting from a Walmart pre-trained B​E​R​TBaseBERT_{\text{Base}} checkpoint, which was trained on a masked language modeling task and a prediction task (Mehrdad et al., 2024).
+In contrast, both the Llama2-7B and Mistral-7B models are fine-tuned starting from Hugging Face checkpoints.
+Compared to the baseline X​E​v​1XEv1, both Llama2-7B and Mistral-7B achieve competitive performance
+on both classification and ranking tasks.
+Notably, Mistral-7B outperforms the baseline with +13.27% in R@P=95% and +6.52% in R@P=90%.
+Its NDCG@5 and NDCG@10 scores also improve by +1.33% and +1.03% respectively,
+showing better performance on the ranking task as well.
+Based on the results in Table 4,
+since Mistral-7B performs the best as a teacher model,
+we use its predictions to label a large-scale augmented dataset for knowledge distillation.
+
+For the student models, we train multiple B​E​R​TBaseBERT_{\text{Base}} models
+on the generated large-scale datasets
+and conduct an ablation study to examine the impact of each factor
+on model performance.
+This process allows us to address the following research questions
+and share insights with machine learning practitioners.
+
+4.3.1. RQ1: What is the most effective knowledge distillation loss
+when both the student and teacher models use the same architecture?
+
+Previous work by Hofstätter et al. (2020)
+shows that different model architectures,
+such as cross-encoder based BERT,
+bi-encoder based BERT, and ColBERT,
+produce output scores with varying magnitudes.
+Their proposed Margin-MSE loss effectively adapts to
+these differences in score distributions.
+
+In our case, both the student model and teacher models
+use the cross-encoder architecture,
+so we are interested in whether focusing on the margin between two items
+remains an effective approach for knowledge distillation.
+We aim to determine the most effective approach for knowledge distillation in this context.
+We compare our extended Margin-MSE loss
+(described in Section 3.3)
+with a pointwise cross-entropy loss,
+where the teacher model’s prediction scores serve as the target labels.
+The pointwise cross-entropy loss is defined as follows:
+
+ℒs​t​u​d​e​n​t′(q)=∑d∈𝐃q[−tq,d⋅logs(q,d)−(1−tq,d)⋅log(1−s(q,d))].\mathcal{L}_{student^{\prime}}(q)=\sum_{d\in\mathbf{D}_{q}}[-t_{q,d}\cdot\log s(q,d)-(1-t_{q,d})\cdot\log(1-s(q,d))].
+
+We validate our strategy with an ablation study comparing two knowledge distillation losses.
+As shown in Table 5,
+Model X​E​v​1.2XEv1.2 and X​E​v​1.3XEv1.3 were both fine-tuned on the same dataset, llm-judged_1,
+labeled by the Mistral-7B teacher model.
+The only difference between these two models is the choice of
+knowledge distillation loss.
+The results show that the Margin-MSE loss significantly outperforms the cross-entropy loss
+across both precision/recall and NDCG metrics.
+Notably, we observe substantial improvements in precision/recall,
+with relative gains of +14.83% at R@P=95% and +3.91% at R@P=90%.
+
+4.3.2. RQ2: Does large-scale unlabeled training data facilitate knowledge distillation from the teacher model to the student model?
+
+Using the extended Margin-MSE as the knowledge distillation loss,
+we fine-tune B​E​R​TBaseBERT_{\text{Base}} models (X​E​v​1.3XEv1.3, X​E​v​1.4XEv1.4, X​E​v​2XEv2) on LLM-labeled datasets of increasing sizes.
+As the dataset size grows from 50M to 110M and then to 170M,
+we observe consistent improvements in NDCG metrics,
+while performance on precision/recall metrics appears to plateau
+at higher data volume (see Table 5).
+Overall, as the dataset expands, the student model continues to
+show significant performance gains,
+highlighting the effectiveness of training with large-scale teacher-generated labels.
+
+4.3.3. RQ3: Can a 110M-parameter student model achieve
+performance comparable to a 7B-parameter teacher LLM
+when trained on a large-scale unlabeled dataset?
+
+When compared to the Mistral-7B teacher model, X​E​v​1.4XEv1.4 achieves identical performance on R@P=95% (+13.27% for both models) but shows a slightly lower R@P=90% (+5.92% for X​E​v​1.4XEv1.4 vs. +6.52% for the teacher model). However, X​E​v​1.4XEv1.4 slightly outperforms the teacher model on NDCG metrics, with +1.36% for NDCG@5 (vs. +1.33% for the teacher) and +1.04% for NDCG@10 (vs. +1.03% for the teacher).
+When comparing X​E​v​2XEv2 to the teacher model,
+X​E​v​2XEv2 shows notable improvements in NDCG metrics,
+with +1.5% for NDCG@5 (vs. +1.33% for the teacher)
+and +1.04% for NDCG@10 (vs. +1.03% for the teacher).
+X​E​v​2XEv2 slightly lags behind on precision/recall metrics though,
+achieving +12.84% for R@P=95% (vs. +13.27% for the teacher)
+and +6.04% for R@P=90% (vs. +6.52% for the teacher).
+
+Overall, despite being more than 60 times smaller than the teacher model,
+the student model demonstrates comparable performance,
+proving that it effectively learns from the teacher.
+This suggests that, in this context,
+additional model capacity may not be necessary for successful knowledge distillation.
+
+4.3.4. RQ4: Can the student model effectively learn from the teacher model,
+with fewer input features?
+
+Item descriptions have been shown to enhance performance
+in multi-billion parameter LLMs (Mehrdad et al., 2024).
+We include the item description in the input for the teacher LLM.
+However, due to the long text and latency requirements in production,
+we exclude it from the student model.
+Despite removing the item description from the student model’s input,
+the student model still achieves performance comparable to that of the teacher model.
+This also demonstrates the effectiveness of knowledge distillation,
+even when the student model has less input data.
+
+5. Online Experiments
+
+We deployed the enhanced X​E​v​2XEv2 feature into production for our online experiments. In these experiments, the X​E​v​2XEv2 score for a query-item pair
+serves as a feature in our ranking model.
+The control model uses the existing production setup with the X​E​v​1XEv1 feature,
+while the variation model incorporates the new X​E​v​2XEv2 feature in place of X​E​v​1XEv1.
+
+5.1. Manual Evaluation Results
+
+Table 6. Human evaluation of top-10 rankings for tail queries by the new model
+
+NDCG@5 Lift (P-value)
+NDCG@10 Lift (P-value)
+
++1.07% (0.00)
++0.87% (0.01)
+
+We evaluate the performance of the proposed X​E​v​2XEv2 by
+having human assessors evaluate the top-10 ranking results
+generated by the model, with X​E​v​2XEv2 as a feature, compared to
+the existing production model that uses X​E​v​1XEv1.
+Queries are randomly selected from the tail segment of our search traffic.
+For each query, human assessors are presented with the product image, title, price and a link to the product on the Walmart website.
+They rate the relevance of each product on a 5-point scale,
+while NDCG metrics are calculated based on a mapped 3-class scale, in accordance with our production requirements.
+As shown in Table 6,
+the new X​E​v​2XEv2 feature significantly improved relevance for tail queries,
+with notable lifts in both the top 5 and top 10 rankings.
+It is crucial to underscore the significance of this improvement
+given the robustness of our baseline and the maturity of our existing search ranking system.
+The search ranking system has already been optimized over time,
+making any incremental enhancement a noteworthy achievement.
+Therefore, it should be viewed as a substantial uplift.
+
+5.2. Interleaving Results
+
+Interleaving (Joachims et al., 2003) is an online evaluation method
+used to compare user engagement performance
+between our proposed model and the previous production model at Walmart.
+During the 14-day interleaving period,
+each user is shown a mix of ranking results
+from both the control and variation models.
+The metric measured is ATC@40, the count of add-to-carts (ATC)
+within the top 40 positions for both the control and variation models.
+The results show an ATC-lift of 0.06% with a P-value of 0.00 on the top-40 ranking,
+indicating a significant improvement in user engagement performance.
+
+5.3. Online AB Test
+
+Table 7. AB test results on e-commerce engagement metrics
+for the proposed architecture
+
+Improvement
+
+ATC Rate per Session
++0.8%
+
+ATC Rate per Visitor
++1.2%
+
+Search Session Abandonment Rate
+-0.6%
+
+Clicks Needed before an ATC event
+-1.1%
+
+• 
+
+Note: Bold values indicate statistically significant results (p<0.05).
+
+We conduct an online AB test using production tail traffic from August 26 to September 9, 2024 (two weeks).
+Our proposed architecture
+shows statistically significant improvements
+across multiple key engagement metrics over the previous production model.
+As reported in Table 8, the new architecture increases the average ATC rate per session by 0.8%
+and the ATC rate per visitor by 1.2%.
+Additionally, it reduces search session abandonment rate by 0.6%
+and lowers the average number of clicks required before an ATC event by 1.1%.
+These positive results lead to the successful deployment of
+the student model in production.
+It now handles the traffic for tail queries,
+significantly improving the customer experience.
+
+6. Discussion and Future Work
+
+In this work, we present a knowledge distillation framework
+tailored for search re-ranking tasks.
+Our results show that the student model can be significantly improved
+through knowledge distillation using the Margin-MSE loss,
+as compared to pointwise cross-entropy loss.
+This suggests that learning the margin between two items
+is more effective than optimizing pointwise loss,
+even when both the student model and teacher models
+use a cross-encoder architecture.
+We also conduct an ablation study to examine the impact
+of augmented training data size on model performance.
+Our results show that increasing the training data size
+significantly boosts the student model’s performance.
+However, once the data reaches a certain size,
+performance improvements plateau.
+
+The student model, X​E​v​2XEv2, trained using this framework,
+has been successfully deployed in the re-ranking stage
+of Walmart’s e-commerce platform,
+resulting in notable improvements in both relevance and engagement.
+This gains are validated through both offline and online evaluations.
+
+Despite these promising results,
+there are a few limitations in our current approach.
+Due to computational and time constraints,
+we did not experiment with different versions
+of human-judged data for training the teacher model.
+Future work could include more experiments with the teacher model,
+which may further enhance the performance of
+both the teacher and student models.
+Additionally, we did not incorporate query attributes
+(e.g., query product type) as input for the teacher model,
+which could provide further context and improve model performance.
+Furthermore, while the current X​E​v​2XEv2 model focuses solely
+on learning relevance between query-item pairs,
+we plan to explore incorporating a multi-objective loss function
+that combines both relevance and engagement metrics.
+Finally, while this current X​E​v​2XEv2 model is deployed for tail queries,
+we aim to expand its use to head/torso query segments in the near future.
+
+Acknowledgements.
+
+We would like to sincerely thank Juexin Lin, Nick Rossi, and Tony Lee for providing the ANN data and for their valuable discussions. Our gratitude also goes to Ciya Liao and Matthew Mu for their useful guidance. We appreciate Mossaab Bagdouri for his help with the manual evaluations and Atul Singh for his work on implementing the query signal pipeline. Last but not least, we would like to extend our heartfelt thanks to Yuan-Tai Fu, Bhavin Madhani, and the entire engineering team. Without their support, the successful operation of the pipeline would not have been possible.
+
+References
+
+Bai et al. (2022)
+
+Xiao Bai, Lei Duan, Richard Tang, Gaurav Batra, and Ritesh Agrawal. 2022.
+
+Improving text-based similar product recommendation for dynamic product advertising at yahoo. In Proceedings of the 31st ACM International Conference on Information & Knowledge Management. 2883–2892.
+
+Deerwester et al. (1990)
+
+Scott Deerwester, Susan T Dumais, George W Furnas, Thomas K Landauer, and Richard Harshman. 1990.
+
+Indexing by latent semantic analysis.
+
+Journal of the American society for information science 41, 6 (1990), 391–407.
+
+Hager et al. (2024)
+
+Philipp Hager, Romain Deffayet, Jean-Michel Renders, Onno Zoeter, and Maarten de Rijke. 2024.
+
+Unbiased Learning to Rank Meets Reality: Lessons from Baidu’s Large-Scale Search Dataset. In Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval. 1546–1556.
+
+He et al. (2022)
+
+Xingwei He, Yeyun Gong, A Jin, Weizhen Qi, Hang Zhang, Jian Jiao, Bartuer Zhou, Biao Cheng, Siu-Ming Yiu, Nan Duan, et al. 2022.
+
+Metric-guided distillation: Distilling knowledge from the metric to ranker and retriever for generative commonsense reasoning.
+
+arXiv preprint arXiv:2210.11708 (2022).
+
+He et al. (2023)
+
+Yunzhong He, Yuxin Tian, Mengjiao Wang, Feier Chen, Licheng Yu, Maolong Tang, Congcong Chen, Ning Zhang, Bin Kuang, and Arul Prakash. 2023.
+
+Que2engage: Embedding-based retrieval for relevant and engaging products at facebook marketplace. In Companion Proceedings of the ACM Web Conference 2023. 386–390.
+
+Hinton (2015)
+
+Geoffrey Hinton. 2015.
+
+Distilling the Knowledge in a Neural Network.
+
+arXiv preprint arXiv:1503.02531 (2015).
+
+Hofstätter et al. (2020)
+
+Sebastian Hofstätter, Sophia Althammer, Michael Schröder, Mete Sertkan, and Allan Hanbury. 2020.
+
+Improving efficient neural ranking models with cross-architecture knowledge distillation.
+
+arXiv preprint arXiv:2010.02666 (2020).
+
+Hu et al. (2022)
+
+Edward J Hu, Yelong Shen, Phillip Wallis, Zeyuan Allen-Zhu, Yuanzhi Li, Shean Wang, Lu Wang, and Weizhu Chen. 2022.
+
+Lora: Low-rank adaptation of large language models.
+
+International Conference on Learning Representations (2022).
+
+Jiang et al. (2023)
+
+Albert Q Jiang, Alexandre Sablayrolles, Arthur Mensch, Chris Bamford, Devendra Singh Chaplot, Diego de las Casas, Florian Bressand, Gianna Lengyel, Guillaume Lample, Lucile Saulnier, et al. 2023.
+
+Mistral 7B.
+
+arXiv preprint arXiv:2310.06825 (2023).
+
+Joachims et al. (2003)
+
+Thorsten Joachims et al. 2003.
+
+Evaluating Retrieval Performance Using Clickthrough Data.
+
+Kenton and Toutanova (2019)
+
+Jacob Devlin Ming-Wei Chang Kenton and Lee Kristina Toutanova. 2019.
+
+Bert: Pre-training of deep bidirectional transformers for language understanding. In Proceedings of naacL-HLT, Vol. 1. Minneapolis, Minnesota, 2.
+
+Lin et al. (2024)
+
+Juexin Lin, Sachin Yadav, Feng Liu, Nicholas Rossi, Praveen R Suram, Satya Chembolu, Prijith Chandran, Hrushikesh Mohapatra, Tony Lee, Alessandro Magnani, et al. 2024.
+
+Enhancing Relevance of Embedding-based Retrieval at Walmart. In Proceedings of the 33rd ACM International Conference on Information and Knowledge Management. 4694–4701.
+
+Liu et al. (2023)
+
+Shilei Liu, Lin Li, Jun Song, Yonghua Yang, and Xiaoyi Zeng. 2023.
+
+Multimodal pre-training with self-distillation for product understanding in e-commerce. In Proceedings of the Sixteenth ACM International Conference on Web Search and Data Mining. 1039–1047.
+
+Liu et al. (2019)
+
+Yufan Liu, Jiajiong Cao, Bing Li, Chunfeng Yuan, Weiming Hu, Yangxi Li, and Yunqiang Duan. 2019.
+
+Knowledge distillation via instance relationship graph. In Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition. 7096–7104.
+
+Liu et al. (2022)
+
+Ziyang Liu, Chaokun Wang, Hao Feng, Lingfei Wu, and Liqun Yang. 2022.
+
+Knowledge distillation based contextual relevance matching for e-commerce product search. In Proceedings of the 2022 Conference on Empirical Methods in Natural Language Processing: Industry Track. 63–76.
+
+Luo et al. (2024)
+
+Chen Luo, Xianfeng Tang, Hanqing Lu, Yaochen Xie, Hui Liu, Zhenwei Dai, Limeng Cui, Ashutosh Joshi, Sreyashi Nag, Yang Li, et al. 2024.
+
+Exploring Query Understanding for Amazon Product Search.
+
+arXiv preprint arXiv:2408.02215 (2024).
+
+Magnani et al. (2022)
+
+Alessandro Magnani, Feng Liu, Suthee Chaidaroon, Sachin Yadav, Praveen Reddy Suram, Ajit Puthenputhussery, Sijie Chen, Min Xie, Anirudh Kashi, Tony Lee, et al. 2022.
+
+Semantic Retrieval at Walmart. In Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining. 3495–3503.
+
+Mehrdad et al. (2024)
+
+Navid Mehrdad, Hrushikesh Mohapatra, Mossaab Bagdouri, Prijith Chandran, Alessandro Magnani, Xunfan Cai, Ajit Puthenputhussery, Sachin Yadav, Tony Lee, ChengXiang Zhai, et al. 2024.
+
+Large Language Models for Relevance Judgment in Product Search.
+
+arXiv preprint arXiv:2406.00247 (2024).
+
+Menon et al. (2022)
+
+Aditya Menon, Sadeep Jayasumana, Ankit Singh Rawat, Seungyeon Kim, Sashank Reddi, and Sanjiv Kumar. 2022.
+
+In defense of dual-encoders for neural ranking. In International Conference on Machine Learning. PMLR, 15376–15400.
+
+Nigam et al. (2019)
+
+Priyanka Nigam, Yiwei Song, Vijai Mohan, Vihan Lakshman, Weitian Ding, Ankit Shingavi, Choon Hui Teo, Hao Gu, and Bing Yin. 2019.
+
+Semantic product search. In Proceedings of the 25th ACM SIGKDD International Conference on Knowledge Discovery & Data Mining. 2876–2885.
+
+Paszke et al. (2019)
+
+Adam Paszke, Sam Gross, Francisco Massa, Adam Lerer, James Bradbury, Gregory Chanan, Trevor Killeen, Zeming Lin, Natalia Gimelshein, Luca Antiga, et al. 2019.
+
+Pytorch: An imperative style, high-performance deep learning library.
+
+Advances in neural information processing systems 32 (2019).
+
+Peng et al. (2024)
+
+Wenjun Peng, Guiyang Li, Yue Jiang, Zilong Wang, Dan Ou, Xiaoyi Zeng, Derong Xu, Tong Xu, and Enhong Chen. 2024.
+
+Large language model based long-tail query rewriting in taobao search. In Companion Proceedings of the ACM on Web Conference 2024. 20–28.
+
+Peng et al. (2023)
+
+Zhiyuan Peng, Vachik Dave, Nicole McNabb, Rahul Sharnagat, Alessandro Magnani, Ciya Liao, Yi Fang, and Sravanthi Rajanala. 2023.
+
+Entity-aware Multi-task Learning for Query Understanding at Walmart. In Proceedings of the 29th ACM SIGKDD Conference on Knowledge Discovery and Data Mining. 4733–4742.
+
+Robertson et al. (2009)
+
+Stephen Robertson, Hugo Zaragoza, et al. 2009.
+
+The probabilistic relevance framework: BM25 and beyond.
+
+Foundations and Trends® in Information Retrieval 3, 4 (2009), 333–389.
+
+Sun et al. (2023)
+
+Weiwei Sun, Zheng Chen, Xinyu Ma, Lingyong Yan, Shuaiqiang Wang, Pengjie Ren, Zhumin Chen, Dawei Yin, and Zhaochun Ren. 2023.
+
+Instruction distillation makes large language models efficient zero-shot rankers.
+
+arXiv preprint arXiv:2311.01555 (2023).
+
+Tan et al. (2018)
+
+Xing Tan, Fanghong Jiang, and Jimmy Xiangji Huang. 2018.
+
+StatBM25: An Aggregative and Statistical Approach for Document Ranking. In Proceedings of the 2018 ACM SIGIR International Conference on Theory of Information Retrieval. 207–210.
+
+Thomas et al. (2024)
+
+Paul Thomas, Seth Spielman, Nick Craswell, and Bhaskar Mitra. 2024.
+
+Large language models can accurately predict searcher preferences. In Proceedings of the 47th International ACM SIGIR Conference on Research and Development in Information Retrieval. 1930–1940.
+
+Touvron et al. (2023)
+
+Hugo Touvron, Thibaut Lavril, Gautier Izacard, Xavier Martinet, Marie-Anne Lachaux, Timothée Lacroix, Baptiste Rozière, Naman Goyal, Eric Hambro, Faisal Azhar, et al. 2023.
+
+Llama: Open and efficient foundation language models.
+
+arXiv preprint arXiv:2302.13971 (2023).
+
+Trotman et al. (2014)
+
+Andrew Trotman, Antti Puurula, and Blake Burgess. 2014.
+
+Improvements to BM25 and language models examined. In Proceedings of the 2014 Australasian Document Computing Symposium. 58–65.
+
+Vanholder (2016)
+
+Han Vanholder. 2016.
+
+Efficient inference with tensorrt. In GPU Technology Conference, Vol. 1.
+
+Vo et al. (2024)
+
+Nguyen Vo, Hongwei Shang, Zhen Yang, Juexin Lin, SD Mohseni Taheri, and Changsung Kang. 2024.
+
+Knowledge Distillation for Efficient and Effective Relevance Search on E-commerce.
+
+SIGIR eCom (2024).
+
+Wang et al. (2023)
+
+Binbin Wang, Mingming Li, Zhixiong Zeng, Jingwei Zhuo, Songlin Wang, Sulong Xu, Bo Long, and Weipeng Yan. 2023.
+
+Learning Multi-Stage Multi-Grained Semantic Embeddings for E-Commerce Search. In Companion Proceedings of the ACM Web Conference 2023. 411–415.
+
+Wang et al. (2024)
+
+Han Wang, Mukuntha Narayanan Sundararaman, Onur Gungor, Yu Xu, Krishna Kamath, Rakesh Chalasani, Kurchi Subhra Hazra, and Jinfeng Rao. 2024.
+
+Improving Pinterest Search Relevance Using Large Language Models.
+
+arXiv preprint arXiv:2410.17152 (2024).
+
+Wolf (2019)
+
+T Wolf. 2019.
+
+Huggingface’s transformers: State-of-the-art natural language processing.
+
+arXiv preprint arXiv:1910.03771 (2019).
+
+Wu et al. (2024)
+
+Xuyang Wu, Ajit Puthenputhussery, Hongwei Shang, Changsung Kang, and Yi Fang. 2024.
+
+Meta Learning to Rank for Sparsely Supervised Queries.
+
+arXiv preprint arXiv:2409.19548 (2024).
+
+Yao et al. (2022)
+
+Shaowei Yao, Jiwei Tan, Xi Chen, Juhao Zhang, Xiaoyi Zeng, and Keping Yang. 2022.
+
+ReprBERT: distilling BERT to an efficient representation-based relevance model for e-commerce. In Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining. 4363–4371.
+
+Yates et al. (2021)
+
+Andrew Yates, Rodrigo Nogueira, and Jimmy Lin. 2021.
+
+Pretrained transformers for text ranking: BERT and beyond. In Proceedings of the 14th ACM International Conference on web search and data mining. 1154–1156.
+
+Ye et al. (2022)
+
+Eric Ye, Xiao Bai, Neil O’Hare, Eliyar Asgarieh, Kapil Thadani, Francisco Perez-Sorrosal, and Sujyothi Adiga. 2022.
+
+Multilingual taxonomic web page classification for contextual targeting at Yahoo. In Proceedings of the 28th ACM SIGKDD Conference on Knowledge Discovery and Data Mining. 4372–4380.
+
+Ye et al. (2024)
+
+Eric Ye, Xiao Bai, Neil O’Hare, Eliyar Asgarieh, Kapil Thadani, Francisco Perez-Sorrosal, and Sujyothi Adiga. 2024.
+
+Multilingual Taxonomic Web Page Categorization Through Ensemble Knowledge Distillation.
+
+IEEE Transactions on Knowledge and Data Engineering (2024).
+
+Zheng et al. (2022)
+
+Yukun Zheng, Jiang Bian, Guanghao Meng, Chao Zhang, Honggang Wang, Zhixuan Zhang, Sen Li, Tao Zhuang, Qingwen Liu, and Xiaoyi Zeng. 2022.
+
+Multi-Objective Personalized Product Retrieval in Taobao Search.
+
+arXiv preprint arXiv:2210.04170 (2022).
+
+Experimental support, please
+view the build logs
+for errors. Generated by
+
+L
+A
+T
+E
+
+xml
+
+.
+
+Instructions for reporting errors
+
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+
+Click the "Report Issue" (
+
+) button, located in the page header.
+
+Tip: You can select the relevant text first, to include it in your report.
+
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+
+Major funding support from
+

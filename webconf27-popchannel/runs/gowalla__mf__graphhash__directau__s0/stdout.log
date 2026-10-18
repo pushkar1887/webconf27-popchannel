@@ -1,0 +1,14 @@
+{"event": "data_ready", "dataset": "Gowalla", "users": 29858, "items": 40981, "user_id_max": 29857, "item_id_max": 40980, "interactions": 1027370, "split_counts": [821896, 102737, 102737], "file_sha256": {"train": "6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8", "val": "18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc", "test": "d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa"}, "user_buckets": 5792, "item_buckets": 5806, "compressed_parameters": 742272, "full_parameters": 4533696}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 5, "val_recall": 0.0710839903120844, "best": 0.0710839903120844, "elapsed": 184.0}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 10, "val_recall": 0.07187639352338666, "best": 0.07187639352338666, "elapsed": 369.1}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 15, "val_recall": 0.07398543691775236, "best": 0.07398543691775236, "elapsed": 554.0}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 20, "val_recall": 0.07402599670984175, "best": 0.07402599670984175, "elapsed": 739.0}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 25, "val_recall": 0.07439979108212878, "best": 0.07439979108212878, "elapsed": 924.0}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 30, "val_recall": 0.07460644816702959, "best": 0.07460644816702959, "elapsed": 1108.9}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 35, "val_recall": 0.07427648715335729, "best": 0.07460644816702959, "elapsed": 1293.7}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 40, "val_recall": 0.07455846113626186, "best": 0.07460644816702959, "elapsed": 1478.6}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 45, "val_recall": 0.07415993996606754, "best": 0.07460644816702959, "elapsed": 1663.3}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 50, "val_recall": 0.07476355156991052, "best": 0.07476355156991052, "elapsed": 1848.1}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 55, "val_recall": 0.0749579630407138, "best": 0.0749579630407138, "elapsed": 2032.7}
+{"event": "val", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "epoch": 60, "val_recall": 0.07483132709289532, "best": 0.0749579630407138, "elapsed": 2217.6}
+{"event": "seed_done", "tag": "gowalla__mf__graphhash__directau__s0", "seed": 0, "best_epoch": 55, "stop_reason": "patience", "test_raw": 0.07545796225142916, "test_cosine": 0.07566607733443931, "test_cos_prior": 0.13304719003934126, "test_raw_prior": 0.10326259518490931}

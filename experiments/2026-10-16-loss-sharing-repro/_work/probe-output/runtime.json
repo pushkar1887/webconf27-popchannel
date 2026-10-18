@@ -1,0 +1,15 @@
+{
+  "cuda_available": true,
+  "torch_version": "2.11.0+cu128",
+  "gpu": "Tesla T4",
+  "modules": {
+    "sknetwork": false,
+    "numpy": true,
+    "scipy": true,
+    "hydra": false,
+    "omegaconf": true,
+    "wandb": true,
+    "h5py": true,
+    "requests": true
+  }
+}

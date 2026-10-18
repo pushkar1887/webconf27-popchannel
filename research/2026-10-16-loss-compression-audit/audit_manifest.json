@@ -1,0 +1,215 @@
+{
+  "created_utc": "2026-10-16T11:40:10.265976+00:00",
+  "scope": "Read-only paper and code audit plus deterministic synthetic algebra. No real recommender training.",
+  "real_data_training_runs_launched_for_this_audit": 0,
+  "package_installations_for_this_audit": 0,
+  "kaggle_operations_for_this_audit": 0,
+  "source_code_files": [
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__commands.sh",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "commands.sh",
+      "sha256": "44e73c47f900304a3c60b546ddfa80609e83efd7d18f5631e48298f013c3ea5c",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/commands.sh"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__configs__dataset__Gowalla.yaml",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "configs/dataset/Gowalla.yaml",
+      "sha256": "0c4ae7f8a90a182054d0f10b54554601da5a06fde2005c303b723ad3d59e0cf5",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/configs/dataset/Gowalla.yaml"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__configs__default.yaml",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "configs/default.yaml",
+      "sha256": "69ad4ad90b3c1d3a49fce9b2f64aff253870657d05d9b1b8c2b31564eb82cafb",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/configs/default.yaml"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__configs__model__MF.yaml",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "configs/model/MF.yaml",
+      "sha256": "a5cedda0acadc7cd6884ca7cca77d44e2337e072f9f4533a1908614cb4cdff1c",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/configs/model/MF.yaml"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__configs__model__MFDAU.yaml",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "configs/model/MFDAU.yaml",
+      "sha256": "a2098488fbb64763056899b254e63b7e9b6c4125ad6f49fee1f3f3f890799e32",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/configs/model/MFDAU.yaml"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__loss.py",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "loss.py",
+      "sha256": "21c074584f4241d85e92a2bc87866bc0a6968c7774270b400dfe0c4c63317978",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/loss.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__models__lightgcn.py",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "models/lightgcn.py",
+      "sha256": "c1160d01ffa2b1852ba3f2ee6ef5190d69fb9d9c590af52095247aaba066fdf8",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/models/lightgcn.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__models__mf.py",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "models/mf.py",
+      "sha256": "fb74b3a9e752f4375fce184b1f8e276e04efa71c4a40b1edc1451518b2db5417",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/models/mf.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__models__mfdau.py",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "models/mfdau.py",
+      "sha256": "b34d58c5a0f9dc53821945aa86968525bcd3a7578be4a38429c0e2aa249826f9",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/models/mfdau.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__train.py",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "train.py",
+      "sha256": "753a4fbb310579bade8187987ac2466fce3c1c407793b7befd0f30b788de90a4",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/train.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__GraphHash__training__train_test_dau.py",
+      "repo": "snap-research/GraphHash",
+      "commit": "7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467",
+      "path": "training/train_test_dau.py",
+      "sha256": "b770685354b6d574d6c766994c39952029b80c0dbfba8fdc263700e05d1012f4",
+      "url": "https://github.com/snap-research/GraphHash/blob/7a1d5eb48dce9ab4c4a453d4482dd0d3bdec4467/training/train_test_dau.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\snap-research__improving-inductive-oov-recsys__RecBole__recbole__model__general_recommender__directau.py",
+      "repo": "snap-research/improving-inductive-oov-recsys",
+      "commit": "982bd7e67e25209551da0edd13b90b698e0d39ae",
+      "path": "RecBole/recbole/model/general_recommender/directau.py",
+      "sha256": "42b5b6e5d3a8d3f43c8ca5b7b9f51ec3c0b5aa1de1c63228586efd71b6ae2113",
+      "url": "https://github.com/snap-research/improving-inductive-oov-recsys/blob/982bd7e67e25209551da0edd13b90b698e0d39ae/RecBole/recbole/model/general_recommender/directau.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\THUwangcy__DirectAU__recbole__model__general_recommender__directau.py",
+      "repo": "THUwangcy/DirectAU",
+      "commit": "60c964bb07abc0eda9b5044b6843fd9c4476a167",
+      "path": "recbole/model/general_recommender/directau.py",
+      "sha256": "2193ad2598c7941761c37275c74e5c46ddbb0bd937d00d5ba67b80db000138ef",
+      "url": "https://github.com/THUwangcy/DirectAU/blob/60c964bb07abc0eda9b5044b6843fd9c4476a167/recbole/model/general_recommender/directau.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\ZzYUuuu__SUAU__README.md",
+      "repo": "ZzYUuuu/SUAU",
+      "commit": "d1062bd7fedc137894dcd02bf846dd1e1261aec7",
+      "path": "README.md",
+      "sha256": "43e7f8e0eca1213d2c3d30dd2c70b5717eebfddc7372865415f8703c198b3bc2",
+      "url": "https://github.com/ZzYUuuu/SUAU/blob/d1062bd7fedc137894dcd02bf846dd1e1261aec7/README.md"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\ZzYUuuu__SUAU__SUAU-main__model__SUAU.py",
+      "repo": "ZzYUuuu/SUAU",
+      "commit": "d1062bd7fedc137894dcd02bf846dd1e1261aec7",
+      "path": "SUAU-main/model/SUAU.py",
+      "sha256": "d5c0a73138b79fbba4956733f960f6165a95f448e46d0bb2a86eea9e55e8d85b",
+      "url": "https://github.com/ZzYUuuu/SUAU/blob/d1062bd7fedc137894dcd02bf846dd1e1261aec7/SUAU-main/model/SUAU.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\ZzYUuuu__SUAU__SUAU-main__utility__losses.py",
+      "repo": "ZzYUuuu/SUAU",
+      "commit": "d1062bd7fedc137894dcd02bf846dd1e1261aec7",
+      "path": "SUAU-main/utility/losses.py",
+      "sha256": "96912bc439c146d90e2aefeb698bb5caa4d81bbee68eb100524e2c24404f2f44",
+      "url": "https://github.com/ZzYUuuu/SUAU/blob/d1062bd7fedc137894dcd02bf846dd1e1261aec7/SUAU-main/utility/losses.py"
+    },
+    {
+      "local": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\ZzYUuuu__SUAU__SUAU-main__utility__trainer.py",
+      "repo": "ZzYUuuu/SUAU",
+      "commit": "d1062bd7fedc137894dcd02bf846dd1e1261aec7",
+      "path": "SUAU-main/utility/trainer.py",
+      "sha256": "d21f15de53c6ca99547e4edc73b18780bb93c399a698c106b1ca88e01fabd972",
+      "url": "https://github.com/ZzYUuuu/SUAU/blob/d1062bd7fedc137894dcd02bf846dd1e1261aec7/SUAU-main/utility/trainer.py"
+    }
+  ],
+  "supplied_pdfs": [
+    {
+      "file": "D:\\web_2\\papers\\2412.09243v3.pdf",
+      "pages": 10,
+      "sha256": "4a1114cb66c5d01a4d6c009e1edf58fcdea666a0cf9fedbc02c109b91b048647"
+    },
+    {
+      "file": "D:\\web_2\\papers\\2412.17245v2.pdf",
+      "pages": 13,
+      "sha256": "ff6ba79c71cd9a6b38680465033256cb397c5aba1876f27f3161fdc621d90a6f"
+    },
+    {
+      "file": "D:\\web_2\\papers\\2502.12586v1.pdf",
+      "pages": 12,
+      "sha256": "cf3307dafe953be949cc67f10358935cd956954c8c56f93cc92b2d5afaf713cb"
+    },
+    {
+      "file": "D:\\web_2\\papers\\2604.18351v1.pdf",
+      "pages": 14,
+      "sha256": "32e8124f463f57f95036a496527f1408fc4a7b79c10138fc1e47d6d265a8e057"
+    },
+    {
+      "file": "D:\\web_2\\papers\\NeurIPS-2023-clustering-the-sketch-dynamic-compression-for-embedding-tables-Paper-Conference.pdf",
+      "pages": 26,
+      "sha256": "799333add2f62af3a139df94475db070f29c4c23a747680bb9d856884791e015"
+    }
+  ],
+  "proposal_attachments": [
+    {
+      "file": "C:\\Users\\PUSHKAR\\.codex\\attachments\\23a36442-a7c4-4d56-afa1-03126c9d1b55\\Pasted text.txt",
+      "sha256": "20f6df912030caeef59ae1fc2990a9bb3f417e06d92378e2872601743002a48e"
+    },
+    {
+      "file": "C:\\Users\\PUSHKAR\\.codex\\attachments\\5c70c619-cc36-4126-9bb1-66be62bd8d40\\Pasted text.txt",
+      "sha256": "20f6df912030caeef59ae1fc2990a9bb3f417e06d92378e2872601743002a48e"
+    }
+  ],
+  "attachments_byte_identical": true,
+  "generated_artifacts": [
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\AUDIT_REPORT.md",
+      "sha256": "372a9b6dc39f539334843bf98cfcb4b8b704dbd5b2312f9d868903d7ce4f79fd"
+    },
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\check_collision_algebra.py",
+      "sha256": "0fc0374cf43aa5a3cfe77cbc115e795343b0c5fd52ccba10115151bed3ed4958"
+    },
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\algebra_checks.json",
+      "sha256": "9cdbf876127292e3ed9c7b4078477ba2677d597e189aeacb6b2ecf5b0f3ef377"
+    },
+    {
+      "file": "D:\\web_2\\research\\2026-10-16-loss-compression-audit\\graphhash-table1.png",
+      "sha256": "685f92212e315ccea8520e8180bc41b25b990d0f1713c9784e0fd62f053745f6"
+    }
+  ],
+  "verification": {
+    "pdf_receipts_verified": 5,
+    "initial_source_receipts_verified": 9,
+    "algebra_checks_status": "synthetic_algebra_checks_passed",
+    "factorization_max_error": 5.551115123125783e-17,
+    "adaptive_rescaling_max_error": 6.661338147750939e-16
+  },
+  "unresolved": [
+    "real-data reproduction",
+    "repair efficacy",
+    "runtime",
+    "complete novelty clearance",
+    "submission readiness"
+  ]
+}

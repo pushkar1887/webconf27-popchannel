@@ -1,0 +1,13 @@
+[{"stream_name":"stdout","time":54.945259201,"data":"{\"event\": \"clustering_ready\", \"version\": \"0.32.1\", \"artifact\": \"scikit_network-0.32.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\", \"mode\": \"source_rebuild\"}\n"}
+,{"stream_name":"stdout","time":61.15978828,"data":"{\"event\": \"data_ready\", \"dataset\": \"Gowalla\", \"users\": 29858, \"items\": 40981, \"user_id_max\": 29857, \"item_id_max\": 40980, \"interactions\": 1027370, \"split_counts\": [821896, 102737, 102737], \"file_sha256\": {\"train\": \"6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8\", \"val\": \"18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc\", \"test\": \"d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa\"}, \"user_buckets\": 5792, \"item_buckets\": 5806, \"compressed_parameters\": 742272, \"full_parameters\": 4533696}\n"}
+,{"stream_name":"stdout","time":76.45150449,"data":"{\"event\": \"fast_val\", \"run\": \"bpr_long\", \"epoch\": 5, \"val_recall\": 0.054629293671066906, \"elapsed\": 8.8}\n"}
+,{"stream_name":"stdout","time":84.602493116,"data":"{\"event\": \"fast_val\", \"run\": \"bpr_long\", \"epoch\": 10, \"val_recall\": 0.05173312358224435, \"elapsed\": 16.9}\n"}
+,{"stream_name":"stdout","time":92.657349043,"data":"{\"event\": \"fast_val\", \"run\": \"bpr_long\", \"epoch\": 15, \"val_recall\": 0.05132501366262772, \"elapsed\": 25.0}\n"}
+,{"stream_name":"stdout","time":94.43357149,"data":"{\"event\": \"fast_done\", \"run\": \"bpr_long\", \"test_recall\": 0.05453624269308248, \"test_ndcg\": 0.0313086978375407, \"train_seconds\": 26.767977470999995}\n"}
+,{"stream_name":"stderr","time":99.584185299,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":99.584219699,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":99.833957576,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":99.833996653,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":100.665044787,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":101.607404394,"data":"[NbConvertApp] Writing 315266 bytes to __results__.html\n"}
+]

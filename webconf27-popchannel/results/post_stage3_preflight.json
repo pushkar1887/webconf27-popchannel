@@ -1,0 +1,18 @@
+{
+  "PREREG.md": {
+    "sha256": "a3c1b585f8f3b1f3e5c4bd7033c799345955999ffc406313980b939909775392",
+    "bytes": 29123
+  },
+  "PLAN.md": {
+    "sha256": "20d69ae9ec7ec908c22270043e720cede5a99b97a7240a9198c861a34fa6c278",
+    "bytes": 46956
+  },
+  "RESULTS.md": {
+    "sha256": "77db11f159248811336b6763ee5954c9fbccbfd1451844ed21059eaddc1ad398",
+    "bytes": 46041
+  },
+  "TASKS.md": {
+    "sha256": "279c7a8ec4bec890fb9a3317bbd99495857493f452ac460f17b8c160e5921a47",
+    "bytes": 17390
+  }
+}

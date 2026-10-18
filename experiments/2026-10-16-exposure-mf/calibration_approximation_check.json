@@ -1,0 +1,1559 @@
+{
+  "draws": 10,
+  "exact_bootstrap_gaps": {
+    "random_s11": [
+      4.107539025333118e-05,
+      4.3066154699622494e-05,
+      5.786645069338903e-06,
+      4.892015289192919e-05,
+      3.341973803216991e-05,
+      4.995826052245356e-05,
+      4.0757577762229324e-05,
+      6.993240163633008e-05,
+      1.4445476421709458e-05,
+      6.198954279001967e-05
+    ],
+    "random_s29": [
+      3.6876860285195434e-05,
+      8.32645699065937e-05,
+      1.3842957122478516e-05,
+      7.17865954060759e-05,
+      7.770717636201852e-05,
+      5.4981363519224224e-05,
+      4.489679616370701e-05,
+      0.00015228220740737264,
+      -3.0727226502769156e-05,
+      9.70386211482932e-05
+    ],
+    "random_s47": [
+      -9.944686444773865e-06,
+      2.2733307749711607e-05,
+      5.2948970626354175e-05,
+      4.0262813093550065e-05,
+      2.2163005802045e-05,
+      5.4758498785445475e-05,
+      5.418675299173614e-05,
+      7.882519196944493e-05,
+      7.573128227034154e-05,
+      6.707879545142514e-05
+    ],
+    "frequency_s11": [
+      3.878608756058277e-05,
+      4.465732612868312e-05,
+      7.623220928398844e-06,
+      5.0814380378350066e-05,
+      2.9485723569422362e-05,
+      5.213950011062618e-05,
+      4.3833288527972414e-05,
+      7.271928175089926e-05,
+      1.5987892060698172e-05,
+      7.188870619034837e-05
+    ],
+    "frequency_s29": [
+      3.528308183042839e-05,
+      8.157818920562221e-05,
+      1.49372941649073e-05,
+      6.950679057182718e-05,
+      7.334257891766782e-05,
+      4.7188966172950764e-05,
+      4.145679118594536e-05,
+      0.00014429981927521762,
+      -3.318059886392444e-05,
+      9.616370157994325e-05
+    ],
+    "frequency_s47": [
+      -5.0963793614133834e-06,
+      2.3752325484460712e-05,
+      5.512195409818066e-05,
+      4.310168955823368e-05,
+      2.4133826330596797e-05,
+      5.9526079729144143e-05,
+      5.309283160004341e-05,
+      8.15282245952842e-05,
+      7.797886212113081e-05,
+      6.94791305472231e-05
+    ],
+    "rank2_s11": [
+      4.75979972474061e-05,
+      4.9122146916880105e-05,
+      1.2163646544771645e-05,
+      5.48421324748638e-05,
+      3.8771203881737826e-05,
+      5.9293614851241294e-05,
+      4.434925040319726e-05,
+      8.147213309794843e-05,
+      2.026472704530491e-05,
+      7.23041826129478e-05
+    ],
+    "rank2_s29": [
+      3.8855962636308305e-05,
+      8.009592298241497e-05,
+      1.0904981797010826e-05,
+      6.848544631943287e-05,
+      6.90441743296244e-05,
+      3.9800491000163696e-05,
+      4.741921955742079e-05,
+      0.00014911786841731445,
+      -3.747772100592961e-05,
+      8.850121790904275e-05
+    ],
+    "rank2_s47": [
+      -7.688311925990732e-06,
+      2.1624409699994018e-05,
+      5.467838405259773e-05,
+      4.1604243252058026e-05,
+      2.2072482775636892e-05,
+      5.971251241820852e-05,
+      5.1287528026522367e-05,
+      7.773709960423592e-05,
+      7.53980929786291e-05,
+      7.106940743761836e-05
+    ]
+  },
+  "exact_intercepts": [
+    {
+      "draw": 0,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.04095576819180598
+    },
+    {
+      "draw": 0,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.04099266590695126
+    },
+    {
+      "draw": 0,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.04102510360041677
+    },
+    {
+      "draw": 0,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.040997487128836746
+    },
+    {
+      "draw": 0,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.06792532415380914
+    },
+    {
+      "draw": 0,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.06866212295078723
+    },
+    {
+      "draw": 0,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.06863702110231111
+    },
+    {
+      "draw": 0,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.06863292495123728
+    },
+    {
+      "draw": 0,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.0650364919939069
+    },
+    {
+      "draw": 0,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.06564496860250561
+    },
+    {
+      "draw": 0,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.0656997585180755
+    },
+    {
+      "draw": 0,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.06563966313908622
+    },
+    {
+      "draw": 0,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -1.9688987449402946
+    },
+    {
+      "draw": 0,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -1.9695258150907324
+    },
+    {
+      "draw": 0,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -1.9695321845071039
+    },
+    {
+      "draw": 0,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -1.9694609793780093
+    },
+    {
+      "draw": 0,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.0338870714217014
+    },
+    {
+      "draw": 0,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.034967211188525
+    },
+    {
+      "draw": 0,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.034981955789672
+    },
+    {
+      "draw": 0,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.03484346158754
+    },
+    {
+      "draw": 0,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.0289141550176453
+    },
+    {
+      "draw": 0,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.029858965908918
+    },
+    {
+      "draw": 0,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.0298678221514286
+    },
+    {
+      "draw": 0,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.029792758048778
+    },
+    {
+      "draw": 1,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.10855415308061908
+    },
+    {
+      "draw": 1,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.10883763294960404
+    },
+    {
+      "draw": 1,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.1089195950749078
+    },
+    {
+      "draw": 1,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.10887031262136224
+    },
+    {
+      "draw": 1,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.1372731941159811
+    },
+    {
+      "draw": 1,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.1379993699090341
+    },
+    {
+      "draw": 1,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.13798585982218428
+    },
+    {
+      "draw": 1,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.1379241872385316
+    },
+    {
+      "draw": 1,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.1379043977080035
+    },
+    {
+      "draw": 1,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.1387432301808038
+    },
+    {
+      "draw": 1,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.13877384138431476
+    },
+    {
+      "draw": 1,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.1387368298245946
+    },
+    {
+      "draw": 1,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -2.006958034522683
+    },
+    {
+      "draw": 1,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -2.007575055088683
+    },
+    {
+      "draw": 1,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -2.0076336401651123
+    },
+    {
+      "draw": 1,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -2.007548749422435
+    },
+    {
+      "draw": 1,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.0741826819130367
+    },
+    {
+      "draw": 1,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.0751362170941414
+    },
+    {
+      "draw": 1,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.075134928008082
+    },
+    {
+      "draw": 1,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.0749168162304223
+    },
+    {
+      "draw": 1,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.072724789537228
+    },
+    {
+      "draw": 1,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.073721093038456
+    },
+    {
+      "draw": 1,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.0737540056145645
+    },
+    {
+      "draw": 1,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.0737032077701314
+    },
+    {
+      "draw": 2,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.037078617603806874
+    },
+    {
+      "draw": 2,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.03743514755339657
+    },
+    {
+      "draw": 2,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.03747768944917699
+    },
+    {
+      "draw": 2,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.03743684893063339
+    },
+    {
+      "draw": 2,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.07226768168391062
+    },
+    {
+      "draw": 2,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.07293950905255162
+    },
+    {
+      "draw": 2,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.07293860381058943
+    },
+    {
+      "draw": 2,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.07286272046420443
+    },
+    {
+      "draw": 2,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.07112898052002428
+    },
+    {
+      "draw": 2,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.07155392683882376
+    },
+    {
+      "draw": 2,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.07160084494134723
+    },
+    {
+      "draw": 2,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.07158227964999488
+    },
+    {
+      "draw": 2,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -1.9527337638883602
+    },
+    {
+      "draw": 2,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -1.953257217514101
+    },
+    {
+      "draw": 2,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -1.9533069716961327
+    },
+    {
+      "draw": 2,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -1.9532337114193796
+    },
+    {
+      "draw": 2,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.0319780056230727
+    },
+    {
+      "draw": 2,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.0330822659852648
+    },
+    {
+      "draw": 2,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.0330959299241287
+    },
+    {
+      "draw": 2,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.0329161247516416
+    },
+    {
+      "draw": 2,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.027585769008949
+    },
+    {
+      "draw": 2,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.028519710332558
+    },
+    {
+      "draw": 2,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.028558702900264
+    },
+    {
+      "draw": 2,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.0285085819865576
+    },
+    {
+      "draw": 3,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.032838728984961284
+    },
+    {
+      "draw": 3,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.033059101170593304
+    },
+    {
+      "draw": 3,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.0330924589197854
+    },
+    {
+      "draw": 3,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.03298673020613305
+    },
+    {
+      "draw": 3,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.05886993627057035
+    },
+    {
+      "draw": 3,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.059704870646998365
+    },
+    {
+      "draw": 3,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.059735815892155625
+    },
+    {
+      "draw": 3,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.05970050836971676
+    },
+    {
+      "draw": 3,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.05474275695245341
+    },
+    {
+      "draw": 3,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.05555289702947027
+    },
+    {
+      "draw": 3,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.0555811520953294
+    },
+    {
+      "draw": 3,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.055540688354588676
+    },
+    {
+      "draw": 3,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -1.982923957157928
+    },
+    {
+      "draw": 3,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -1.9835721384638976
+    },
+    {
+      "draw": 3,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -1.9836018940603304
+    },
+    {
+      "draw": 3,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -1.983471657976726
+    },
+    {
+      "draw": 3,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.0486252522218615
+    },
+    {
+      "draw": 3,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.049750679003013
+    },
+    {
+      "draw": 3,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.049788253462041
+    },
+    {
+      "draw": 3,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.0495732821648804
+    },
+    {
+      "draw": 3,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.042766640994949
+    },
+    {
+      "draw": 3,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.043672517311864
+    },
+    {
+      "draw": 3,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.0436653382644736
+    },
+    {
+      "draw": 3,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.0436261009095724
+    },
+    {
+      "draw": 4,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.030774286155928424
+    },
+    {
+      "draw": 4,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.031057362976744607
+    },
+    {
+      "draw": 4,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.031040566298310205
+    },
+    {
+      "draw": 4,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.031035359054669556
+    },
+    {
+      "draw": 4,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.05579733407547137
+    },
+    {
+      "draw": 4,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.056590825132213196
+    },
+    {
+      "draw": 4,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.056591542139084426
+    },
+    {
+      "draw": 4,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.056590654982936334
+    },
+    {
+      "draw": 4,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.05668851989091258
+    },
+    {
+      "draw": 4,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.05714424937780815
+    },
+    {
+      "draw": 4,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.05717605398983848
+    },
+    {
+      "draw": 4,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.05715251398139206
+    },
+    {
+      "draw": 4,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -1.9869636485242084
+    },
+    {
+      "draw": 4,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -1.987672609466503
+    },
+    {
+      "draw": 4,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -1.987613908876208
+    },
+    {
+      "draw": 4,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -1.9875793620898132
+    },
+    {
+      "draw": 4,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.052620506057819
+    },
+    {
+      "draw": 4,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.0535531660705404
+    },
+    {
+      "draw": 4,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.0535945214395865
+    },
+    {
+      "draw": 4,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.0534659616869613
+    },
+    {
+      "draw": 4,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.0523272701886155
+    },
+    {
+      "draw": 4,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.053076243085897
+    },
+    {
+      "draw": 4,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.053099816627129
+    },
+    {
+      "draw": 4,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.05308725086417
+    },
+    {
+      "draw": 5,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.03836222332817261
+    },
+    {
+      "draw": 5,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.038984917641390456
+    },
+    {
+      "draw": 5,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.039063364407498045
+    },
+    {
+      "draw": 5,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.039005175837707504
+    },
+    {
+      "draw": 5,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.06178095363609606
+    },
+    {
+      "draw": 5,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.06261117925725873
+    },
+    {
+      "draw": 5,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.0625741609499676
+    },
+    {
+      "draw": 5,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.06252665859499884
+    },
+    {
+      "draw": 5,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.06459834364110684
+    },
+    {
+      "draw": 5,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.06504496483863827
+    },
+    {
+      "draw": 5,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.06507040481108191
+    },
+    {
+      "draw": 5,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.06507227490042897
+    },
+    {
+      "draw": 5,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -2.0100636320524696
+    },
+    {
+      "draw": 5,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -2.0108551129257886
+    },
+    {
+      "draw": 5,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -2.01089667355024
+    },
+    {
+      "draw": 5,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -2.0108216728257973
+    },
+    {
+      "draw": 5,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.075230016389613
+    },
+    {
+      "draw": 5,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.0764160289818028
+    },
+    {
+      "draw": 5,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.0764056398045136
+    },
+    {
+      "draw": 5,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.0762178306255477
+    },
+    {
+      "draw": 5,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.075933861338004
+    },
+    {
+      "draw": 5,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.076823101650947
+    },
+    {
+      "draw": 5,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.0768296316829753
+    },
+    {
+      "draw": 5,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.076803605431996
+    },
+    {
+      "draw": 6,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.06832224509003594
+    },
+    {
+      "draw": 6,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.06858931761704558
+    },
+    {
+      "draw": 6,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.06864346321227206
+    },
+    {
+      "draw": 6,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.06859643664016313
+    },
+    {
+      "draw": 6,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.09961712677928362
+    },
+    {
+      "draw": 6,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.10072564643007532
+    },
+    {
+      "draw": 6,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.10070629565852306
+    },
+    {
+      "draw": 6,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.10062952693556333
+    },
+    {
+      "draw": 6,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.10053994056820727
+    },
+    {
+      "draw": 6,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.10127700395027306
+    },
+    {
+      "draw": 6,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.10131366654012547
+    },
+    {
+      "draw": 6,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.101324385906925
+    },
+    {
+      "draw": 6,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -2.010203516228931
+    },
+    {
+      "draw": 6,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -2.010735900532497
+    },
+    {
+      "draw": 6,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -2.0107611611946856
+    },
+    {
+      "draw": 6,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -2.0106887291625943
+    },
+    {
+      "draw": 6,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.0799280187844005
+    },
+    {
+      "draw": 6,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.0808980826502834
+    },
+    {
+      "draw": 6,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.0809040353604664
+    },
+    {
+      "draw": 6,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.0806389817512843
+    },
+    {
+      "draw": 6,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.078101745113013
+    },
+    {
+      "draw": 6,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.0789449172916696
+    },
+    {
+      "draw": 6,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.078958558975671
+    },
+    {
+      "draw": 6,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.078960002230599
+    },
+    {
+      "draw": 7,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.02864961800866376
+    },
+    {
+      "draw": 7,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.028732605643349198
+    },
+    {
+      "draw": 7,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.028764597692865768
+    },
+    {
+      "draw": 7,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.028737156342770517
+    },
+    {
+      "draw": 7,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.05181520988279574
+    },
+    {
+      "draw": 7,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.05228346097584723
+    },
+    {
+      "draw": 7,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.052245207976302846
+    },
+    {
+      "draw": 7,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.052239823820202945
+    },
+    {
+      "draw": 7,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.05413263685200671
+    },
+    {
+      "draw": 7,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.05475438205986073
+    },
+    {
+      "draw": 7,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.054784802273057535
+    },
+    {
+      "draw": 7,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.05476776372505354
+    },
+    {
+      "draw": 7,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -1.947300438518223
+    },
+    {
+      "draw": 7,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -1.947835836558252
+    },
+    {
+      "draw": 7,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -1.9478414263590569
+    },
+    {
+      "draw": 7,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -1.947757328659476
+    },
+    {
+      "draw": 7,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.009188804168362
+    },
+    {
+      "draw": 7,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.0103562720911916
+    },
+    {
+      "draw": 7,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.010329198149892
+    },
+    {
+      "draw": 7,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.0101802271937648
+    },
+    {
+      "draw": 7,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.011875221775184
+    },
+    {
+      "draw": 7,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.012989996637164
+    },
+    {
+      "draw": 7,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.0129969511768993
+    },
+    {
+      "draw": 7,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.0129693207391925
+    },
+    {
+      "draw": 8,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.024158165966762363
+    },
+    {
+      "draw": 8,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.02421927606359467
+    },
+    {
+      "draw": 8,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.02428798808476405
+    },
+    {
+      "draw": 8,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.024253962536966787
+    },
+    {
+      "draw": 8,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.04990814306112906
+    },
+    {
+      "draw": 8,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.050869919033810045
+    },
+    {
+      "draw": 8,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.05088517458290922
+    },
+    {
+      "draw": 8,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.05088129268764931
+    },
+    {
+      "draw": 8,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.05061115563514883
+    },
+    {
+      "draw": 8,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.05149400082584578
+    },
+    {
+      "draw": 8,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.051510015993431364
+    },
+    {
+      "draw": 8,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.051483898192969675
+    },
+    {
+      "draw": 8,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -2.0134178610859013
+    },
+    {
+      "draw": 8,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -2.0141075528440378
+    },
+    {
+      "draw": 8,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -2.0141587853092657
+    },
+    {
+      "draw": 8,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -2.0140751232869425
+    },
+    {
+      "draw": 8,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.0805207993336583
+    },
+    {
+      "draw": 8,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.081738896821212
+    },
+    {
+      "draw": 8,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.081745525475461
+    },
+    {
+      "draw": 8,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.0815479975811435
+    },
+    {
+      "draw": 8,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.078510906740818
+    },
+    {
+      "draw": 8,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.079509292673017
+    },
+    {
+      "draw": 8,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.0795291655504453
+    },
+    {
+      "draw": 8,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.0794812725340583
+    },
+    {
+      "draw": 9,
+      "model": "full_s11",
+      "policy": "standard",
+      "exact_shift": -0.015516211451495296
+    },
+    {
+      "draw": 9,
+      "model": "random_s11",
+      "policy": "standard",
+      "exact_shift": -0.015670566112814123
+    },
+    {
+      "draw": 9,
+      "model": "frequency_s11",
+      "policy": "standard",
+      "exact_shift": -0.015752085794382715
+    },
+    {
+      "draw": 9,
+      "model": "rank2_s11",
+      "policy": "standard",
+      "exact_shift": -0.015688495847700237
+    },
+    {
+      "draw": 9,
+      "model": "full_s29",
+      "policy": "standard",
+      "exact_shift": -0.04116188391744315
+    },
+    {
+      "draw": 9,
+      "model": "random_s29",
+      "policy": "standard",
+      "exact_shift": -0.04174140167775913
+    },
+    {
+      "draw": 9,
+      "model": "frequency_s29",
+      "policy": "standard",
+      "exact_shift": -0.041725362649404345
+    },
+    {
+      "draw": 9,
+      "model": "rank2_s29",
+      "policy": "standard",
+      "exact_shift": -0.04164887460910628
+    },
+    {
+      "draw": 9,
+      "model": "full_s47",
+      "policy": "standard",
+      "exact_shift": -0.041575883714788694
+    },
+    {
+      "draw": 9,
+      "model": "random_s47",
+      "policy": "standard",
+      "exact_shift": -0.04200596618036042
+    },
+    {
+      "draw": 9,
+      "model": "frequency_s47",
+      "policy": "standard",
+      "exact_shift": -0.04203640884546073
+    },
+    {
+      "draw": 9,
+      "model": "rank2_s47",
+      "policy": "standard",
+      "exact_shift": -0.042048361269900456
+    },
+    {
+      "draw": 9,
+      "model": "full_s11",
+      "policy": "random",
+      "exact_shift": -1.992611945095282
+    },
+    {
+      "draw": 9,
+      "model": "random_s11",
+      "policy": "random",
+      "exact_shift": -1.9933470792738834
+    },
+    {
+      "draw": 9,
+      "model": "frequency_s11",
+      "policy": "random",
+      "exact_shift": -1.9934111600500632
+    },
+    {
+      "draw": 9,
+      "model": "rank2_s11",
+      "policy": "random",
+      "exact_shift": -1.993299470124843
+    },
+    {
+      "draw": 9,
+      "model": "full_s29",
+      "policy": "random",
+      "exact_shift": -2.058901383426351
+    },
+    {
+      "draw": 9,
+      "model": "random_s29",
+      "policy": "random",
+      "exact_shift": -2.0600418016322775
+    },
+    {
+      "draw": 9,
+      "model": "frequency_s29",
+      "policy": "random",
+      "exact_shift": -2.0600672961746325
+    },
+    {
+      "draw": 9,
+      "model": "rank2_s29",
+      "policy": "random",
+      "exact_shift": -2.059830253413671
+    },
+    {
+      "draw": 9,
+      "model": "full_s47",
+      "policy": "random",
+      "exact_shift": -2.058707322011413
+    },
+    {
+      "draw": 9,
+      "model": "random_s47",
+      "policy": "random",
+      "exact_shift": -2.059701604145617
+    },
+    {
+      "draw": 9,
+      "model": "frequency_s47",
+      "policy": "random",
+      "exact_shift": -2.0597210074316603
+    },
+    {
+      "draw": 9,
+      "model": "rank2_s47",
+      "policy": "random",
+      "exact_shift": -2.05972672713133
+    }
+  ],
+  "maximum_absolute_exact_vs_first_order_gap_error": 4.2458324783745626e-06,
+  "guard_threshold": 0.0005,
+  "guard_pass": true,
+  "scope": "Finite spot check of a first-order approximation, not exact CI coverage."
+}

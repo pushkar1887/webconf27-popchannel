@@ -1,0 +1,42 @@
+[{"stream_name":"stdout","time":65.140942249,"data":"{\"event\": \"clustering_ready\", \"version\": \"0.32.1\", \"artifact\": \"scikit_network-0.32.1-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl\", \"mode\": \"source_rebuild\"}\n"}
+,{"stream_name":"stdout","time":71.282125939,"data":"{\"event\": \"data_ready\", \"dataset\": \"Gowalla\", \"users\": 29858, \"items\": 40981, \"user_id_max\": 29857, \"item_id_max\": 40980, \"interactions\": 1027370, \"split_counts\": [821896, 102737, 102737], \"file_sha256\": {\"train\": \"6c14aa059709aa8fe1c0f8f5b3f624d0320564a58903e465265549c5e7dca9d8\", \"val\": \"18f263af248eb0b898aab05c411e66db0faa5b72a7e4e2e940ec1d054d2bf0cc\", \"test\": \"d20eb91da03d2e9133843cf8505b2f7c4402f8a9b57b28a24420eead15dcafaa\"}, \"user_buckets\": 5792, \"item_buckets\": 5806, \"compressed_parameters\": 742272, \"full_parameters\": 4533696}\n"}
+,{"stream_name":"stdout","time":78.13475709,"data":"{\"event\": \"run_started\", \"dataset\": \"Gowalla\", \"method\": \"Full\", \"loss\": \"DirectAU\", \"seed\": 0, \"status\": \"running\", \"lr\": 0.01, \"weight_decay\": 1e-08, \"batch_size\": 1024, \"gamma\": 1.0, \"parameters\": 4533696}\n"}
+,{"stream_name":"stdout","time":118.080053159,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 0, \"val_recall\": 0.07651575843900343, \"best\": 0.07651575843900343, \"elapsed_seconds\": 46.74}\n"}
+,{"stream_name":"stdout","time":508.223694798,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 10, \"val_recall\": 0.15712846091090532, \"best\": 0.15712846091090532, \"elapsed_seconds\": 436.89}\n"}
+,{"stream_name":"stdout","time":897.653824602,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 20, \"val_recall\": 0.1642469625395631, \"best\": 0.1642469625395631, \"elapsed_seconds\": 826.32}\n"}
+,{"stream_name":"stdout","time":1287.09714636,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 30, \"val_recall\": 0.167726638063387, \"best\": 0.167726638063387, \"elapsed_seconds\": 1215.76}\n"}
+,{"stream_name":"stdout","time":1676.502078417,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 40, \"val_recall\": 0.16985907857891663, \"best\": 0.16985907857891663, \"elapsed_seconds\": 1605.16}\n"}
+,{"stream_name":"stdout","time":2066.769763043,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 50, \"val_recall\": 0.17155679269856827, \"best\": 0.17155679269856827, \"elapsed_seconds\": 1995.43}\n"}
+,{"stream_name":"stdout","time":2456.492626182,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 60, \"val_recall\": 0.17219406338181698, \"best\": 0.17219406338181698, \"elapsed_seconds\": 2385.16}\n"}
+,{"stream_name":"stdout","time":2846.661863511,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 70, \"val_recall\": 0.17337508461751758, \"best\": 0.17337508461751758, \"elapsed_seconds\": 2775.32}\n"}
+,{"stream_name":"stdout","time":3236.521544447,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 80, \"val_recall\": 0.17323351672174273, \"best\": 0.17337508461751758, \"elapsed_seconds\": 3165.18}\n"}
+,{"stream_name":"stdout","time":3626.262150529,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 90, \"val_recall\": 0.17416006261880992, \"best\": 0.17416006261880992, \"elapsed_seconds\": 3554.92}\n"}
+,{"stream_name":"stdout","time":4016.125798971,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 100, \"val_recall\": 0.17492007759089148, \"best\": 0.17492007759089148, \"elapsed_seconds\": 3944.79}\n"}
+,{"stream_name":"stdout","time":4406.000381133,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 110, \"val_recall\": 0.17612549620346185, \"best\": 0.17612549620346185, \"elapsed_seconds\": 4334.66}\n"}
+,{"stream_name":"stdout","time":4795.66045364,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 120, \"val_recall\": 0.17621450387636384, \"best\": 0.17621450387636384, \"elapsed_seconds\": 4724.32}\n"}
+,{"stream_name":"stdout","time":5185.639127343,"data":"{\"event\": \"validation\", \"run\": \"Gowalla_Full_DirectAU_seed0\", \"epoch\": 130, \"val_recall\": 0.17542310903293762, \"best\": 0.17621450387636384, \"elapsed_seconds\": 5114.3}\n"}
+,{"stream_name":"stdout","time":5471.386036586,"data":"{\"event\": \"run_finished\", \"dataset\": \"Gowalla\", \"method\": \"Full\", \"loss\": \"DirectAU\", \"seed\": 0, \"status\": \"timeout\", \"lr\": 0.01, \"weight_decay\": 1e-08, \"batch_size\": 1024, \"gamma\": 1.0, \"parameters\": 4533696, \"error\": \"90-minute training cap reached\", \"wall_seconds\": 5400.047497997, \"peak_cuda_mib\": 380.24365234375}\n"}
+,{"stream_name":"stdout","time":5471.587838838,"data":"{\"event\": \"stopped\", \"error_type\": \"TimeoutError\", \"message\": \"90-minute training cap reached\"}\n"}
+,{"stream_name":"stderr","time":5471.588460739,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":5471.589206663,"data":"  File \"/kaggle/src/script.py\", line 7, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":5471.589218695,"data":"    runpy.run_path(str(p/'repro_run.py'),run_name='__main__')\n"}
+,{"stream_name":"stderr","time":5471.589224144,"data":"    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":5471.589229139,"data":"  File \"\u003cfrozen runpy\u003e\", line 294, in run_path\n"}
+,{"stream_name":"stderr","time":5471.589235155,"data":"  File \"\u003cfrozen runpy\u003e\", line 98, in _run_module_code\n"}
+,{"stream_name":"stderr","time":5471.589248252,"data":"  File \"\u003cfrozen runpy\u003e\", line 88, in _run_code\n"}
+,{"stream_name":"stderr","time":5471.589253811,"data":"  File \"/kaggle/working/_work/repro_run.py\", line 431, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":5471.58925904,"data":"    main()\n"}
+,{"stream_name":"stderr","time":5471.589263666,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":5471.589268574,"data":"  File \"/kaggle/working/_work/repro_run.py\", line 410, in main\n"}
+,{"stream_name":"stderr","time":5471.589279239,"data":"    run_one(\"Gowalla\", \"Full\", \"DirectAU\", data, classes)\n"}
+,{"stream_name":"stderr","time":5471.589283146,"data":"    ~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":5471.589286364,"data":"  File \"/kaggle/working/_work/repro_run.py\", line 341, in run_one\n"}
+,{"stream_name":"stderr","time":5471.589289731,"data":"    raise TimeoutError(\"90-minute training cap reached\")\n"}
+,{"stream_name":"stderr","time":5471.589293099,"data":"TimeoutError: 90-minute training cap reached\n"}
+,{"stream_name":"stderr","time":5478.323715126,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":5478.323765002,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":5478.635192034,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":5478.635219965,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":5479.525773982,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":5480.632339874,"data":"[NbConvertApp] Writing 308153 bytes to __results__.html\n"}
+]

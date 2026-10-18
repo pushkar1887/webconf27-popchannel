@@ -1,0 +1,29 @@
+[2026-10-17T06:20:34] QUEUE_START jobs=9
+[2026-10-17T06:20:37] PUSHED p1-bpr-ext account-3 gh-exp-p1-bpr-ext-1017
+[2026-10-17T06:20:39] PUSHED p2-gh-dau-s0 account-3 gh-exp-p2-gh-dau-s0-1017
+[2026-10-17T06:20:43] PUSHED p2-gh-dau-s1 account-4 gh-exp-p2-gh-dau-s1-1017
+[2026-10-17T06:20:45] PUSHED p3-random-dau account-3 gh-exp-p3-random-dau-1017
+[2026-10-17T06:20:48] PUSHED p3-dfreq-dau account-4 gh-exp-p3-dfreq-dau-1017
+[2026-10-17T06:22:57] DONE p1-bpr-ext COMPLETE saved=['p1-bpr-ext.log', 'p1_bpr_ext.json']
+[2026-10-17T06:34:09] QUEUE_START jobs=10
+[2026-10-17T06:41:39] DONE p2-gh-dau-s0 COMPLETE saved=['p2-gh-dau-s0.log', 'exp_p2-gh-dau-s0.json']
+[2026-10-17T06:41:45] PUSHED p1-bpr-ext-gpu account-3 gh-exp-p1-bpr-ext-gpu-1017
+[2026-10-17T06:42:48] DONE p2-gh-dau-s1 COMPLETE saved=['p2-gh-dau-s1.log', 'exp_p2-gh-dau-s1.json']
+[2026-10-17T06:42:52] DONE p3-random-dau COMPLETE saved=['p3-random-dau.log', 'exp_p3-random-dau.json']
+[2026-10-17T06:42:55] DONE p3-dfreq-dau COMPLETE saved=['p3-dfreq-dau.log', 'exp_p3-dfreq-dau.json']
+[2026-10-17T06:42:59] PUSHED p4-amz-gh-dau account-4 gh-exp-p4-amz-gh-dau-1017
+[2026-10-17T06:43:02] PUSHED p4-amz-full-dau account-3 gh-exp-p4-amz-full-dau-1017
+[2026-10-17T06:43:05] PUSHED p4-amz-gh-bpr account-4 gh-exp-p4-amz-gh-bpr-1017
+[2026-10-17T06:44:10] DONE p1-bpr-ext-gpu ERROR saved=['p1-bpr-ext-gpu.log']
+[2026-10-17T06:44:13] PUSHED p5-gh-dau-bias account-3 gh-exp-p5-gh-dau-bias-1017
+[2026-10-17T06:44:33] QUEUE_START jobs=11
+[2026-10-17T06:47:50] DONE p4-amz-gh-bpr COMPLETE saved=['p4-amz-gh-bpr.log', 'exp_p4-amz-gh-bpr.json']
+[2026-10-17T06:48:10] QUEUE_START jobs=12
+[2026-10-17T06:48:15] PUSHED p4-amz-gh-bpr-long account-4 gh-exp-p4-amz-gh-bpr-long-1017
+[2026-10-17T07:05:20] DONE p4-amz-gh-bpr-long COMPLETE saved=['p4-amz-gh-bpr-long.log', 'exp_p4-amz-gh-bpr-long.json']
+[2026-10-17T07:06:25] DONE p5-gh-dau-bias COMPLETE saved=['p5-gh-dau-bias.log', 'exp_p5-gh-dau-bias.json']
+[2026-10-17T07:06:28] PUSHED p1-bpr-ext-gpu2 account-3 gh-exp-p1-bpr-ext-gpu2-1017
+[2026-10-17T07:08:38] DONE p1-bpr-ext-gpu2 COMPLETE saved=['p1-bpr-ext-gpu2.log', 'p1_bpr_ext.json']
+[2026-10-17T07:56:11] DONE p4-amz-full-dau COMPLETE saved=['p4-amz-full-dau.log', 'exp_p4-amz-full-dau.json']
+[2026-10-17T08:02:20] DONE p4-amz-gh-dau COMPLETE saved=['p4-amz-gh-dau.log', 'exp_p4-amz-gh-dau.json']
+[2026-10-17T08:02:20] QUEUE_DONE {"p1-bpr-ext": "done", "p2-gh-dau-s0": "done", "p2-gh-dau-s1": "done", "p3-random-dau": "done", "p3-dfreq-dau": "done", "p4-amz-gh-dau": "done", "p4-amz-full-dau": "done", "p4-amz-gh-bpr": "done", "p5-gh-dau-bias": "done", "p1-bpr-ext-gpu": "failed", "p1-bpr-ext-gpu2": "done", "p4-amz-gh-bpr-long": "done"}

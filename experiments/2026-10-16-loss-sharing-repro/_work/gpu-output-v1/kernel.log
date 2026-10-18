@@ -1,0 +1,27 @@
+[{"stream_name":"stdout","time":9.37142934,"data":"{\"event\": \"stopped\", \"error_type\": \"StopIteration\", \"message\": \"\"}\n"}
+,{"stream_name":"stderr","time":9.371810711,"data":"Traceback (most recent call last):\n"}
+,{"stream_name":"stderr","time":9.372396273,"data":"  File \"/kaggle/src/script.py\", line 7, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":9.372406293,"data":"    runpy.run_path(str(p/'repro_run.py'),run_name='__main__')\n"}
+,{"stream_name":"stderr","time":9.372410582,"data":"    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n"}
+,{"stream_name":"stderr","time":9.372413955,"data":"  File \"\u003cfrozen runpy\u003e\", line 294, in run_path\n"}
+,{"stream_name":"stderr","time":9.37241757,"data":"  File \"\u003cfrozen runpy\u003e\", line 98, in _run_module_code\n"}
+,{"stream_name":"stderr","time":9.372421074,"data":"  File \"\u003cfrozen runpy\u003e\", line 88, in _run_code\n"}
+,{"stream_name":"stderr","time":9.372426234,"data":"  File \"/kaggle/working/_work/repro_run.py\", line 399, in \u003cmodule\u003e\n"}
+,{"stream_name":"stderr","time":9.372433057,"data":"    main()\n"}
+,{"stream_name":"stderr","time":9.372435188,"data":"    ~~~~^^\n"}
+,{"stream_name":"stderr","time":9.372437289,"data":"  File \"/kaggle/working/_work/repro_run.py\", line 374, in main\n"}
+,{"stream_name":"stderr","time":9.372439643,"data":"    MF, MFDAU, BPRLoss, DAULoss, namespace = prepare()\n"}
+,{"stream_name":"stderr","time":9.372441845,"data":"                                             ~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":9.372444055,"data":"  File \"/kaggle/working/_work/repro_run.py\", line 111, in prepare\n"}
+,{"stream_name":"stderr","time":9.372446275,"data":"    ensure_clustering()\n"}
+,{"stream_name":"stderr","time":9.372448476,"data":"    ~~~~~~~~~~~~~~~~~^^\n"}
+,{"stream_name":"stderr","time":9.372450682,"data":"  File \"/kaggle/working/_work/repro_run.py\", line 87, in ensure_clustering\n"}
+,{"stream_name":"stderr","time":9.37245293,"data":"    source = next(x for x in metadata[\"urls\"] if x[\"packagetype\"] == \"sdist\")\n"}
+,{"stream_name":"stderr","time":9.372455363,"data":"StopIteration\n"}
+,{"stream_name":"stderr","time":14.251117761,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":14.251146211,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":14.532979561,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":14.533006614,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":15.295494097,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":16.273720994,"data":"[NbConvertApp] Writing 305657 bytes to __results__.html\n"}
+]

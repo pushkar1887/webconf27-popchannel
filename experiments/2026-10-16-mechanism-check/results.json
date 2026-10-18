@@ -1,0 +1,384 @@
+{
+  "completed_utc": "2026-10-16T07:40:03.989095+00:00",
+  "status": "exploratory_mechanism_diagnostic_executed",
+  "protocol_sha256": "9f11a4c9a62a690ad7a61f18792c0e38e92aa3b52f6e04b2bf671a3acb573d3f",
+  "fit_manifest_sha256": "1758f863f187c8b955246c0568a545478660efc8ad6109f11086c45a4df4b8e9",
+  "primary_seed": 11,
+  "gate_conditions": {
+    "adequate_support": true,
+    "B_repeatability": false,
+    "extra_sharing_damage": false,
+    "useful_grouping": false,
+    "adjusted_association": true,
+    "direction_repeats_at_least_two_seeds": false
+  },
+  "gate_pass": false,
+  "pairing_results": [
+    {
+      "seed": 11,
+      "matched_blocks": 287,
+      "matched_users": 1148,
+      "observed_validation_users": 1005,
+      "validation_events": 5287,
+      "contrasts": {
+        "high_minus_low": {
+          "estimate": 0.002634124946902381,
+          "block_bootstrap_95": [
+            -0.0014545962140130205,
+            0.006267161238557279
+          ],
+          "adjusted_one_sided_lower": -0.001900485072168577,
+          "user_bootstrap_95_sensitivity": [
+            -0.0009514499194717122,
+            0.006515077768661263
+          ]
+        },
+        "neutral_minus_low": {
+          "estimate": 0.0013257413446210488,
+          "block_bootstrap_95": [
+            -0.0008199195502243535,
+            0.0033306595727010816
+          ],
+          "adjusted_one_sided_lower": -0.001126031150938337,
+          "user_bootstrap_95_sensitivity": [
+            -0.0008085716454712178,
+            0.003502443769224059
+          ]
+        },
+        "high_minus_individual": {
+          "estimate": 0.0020294629643226956,
+          "block_bootstrap_95": [
+            -0.0011776748806214775,
+            0.005377781929490292
+          ],
+          "adjusted_one_sided_lower": -0.0014610883511057572
+        },
+        "adjusted_context_coefficient_per_feature_sd": {
+          "estimate": 0.003256508192576468,
+          "block_bootstrap_95": [
+            0.0007883520510702019,
+            0.005885692888637349
+          ],
+          "adjusted_one_sided_lower": 0.0005538703660849194,
+          "features": [
+            "context_disagreement_sq",
+            "marginal_difference_sq",
+            "overall_difference_sq",
+            "activity_mismatch",
+            "mean_log_activity",
+            "mean_marginal",
+            "item_overlap_jaccard"
+          ],
+          "coefficients_per_feature_sd": [
+            0.003256508192576468,
+            -0.0005914456782846083,
+            -0.00015001285251098247,
+            -0.0002690653647217195,
+            0.0012572865386569305,
+            -0.0006854439559344791,
+            -0.002255799602489292
+          ],
+          "design_rank": 7
+        },
+        "B_profile_repeatability": {
+          "estimate": 0.04963434369622896,
+          "block_bootstrap_95": [
+            -0.11179275188777042,
+            0.2200080059313866
+          ],
+          "adjusted_one_sided_lower": -0.12496155864609315
+        }
+      }
+    },
+    {
+      "seed": 29,
+      "matched_blocks": 288,
+      "matched_users": 1152,
+      "observed_validation_users": 1013,
+      "validation_events": 5346,
+      "contrasts": {
+        "high_minus_low": {
+          "estimate": -0.00040695184501863196,
+          "block_bootstrap_95": [
+            -0.0035918712002901546,
+            0.0029087921634581076
+          ],
+          "adjusted_one_sided_lower": -0.003964999332334993,
+          "user_bootstrap_95_sensitivity": [
+            -0.00389320969794371,
+            0.0029716547155508337
+          ]
+        },
+        "neutral_minus_low": {
+          "estimate": 1.8525129836160384e-05,
+          "block_bootstrap_95": [
+            -0.001833062135678563,
+            0.0019261663425398723
+          ],
+          "adjusted_one_sided_lower": -0.0020672649315847083,
+          "user_bootstrap_95_sensitivity": [
+            -0.0019800114321724648,
+            0.0018814729720243878
+          ]
+        },
+        "high_minus_individual": {
+          "estimate": -0.0005347907676269175,
+          "block_bootstrap_95": [
+            -0.003287162870490477,
+            0.002368840408812779
+          ],
+          "adjusted_one_sided_lower": -0.0037048016257928093
+        },
+        "adjusted_context_coefficient_per_feature_sd": {
+          "estimate": -0.0007965600095806483,
+          "block_bootstrap_95": [
+            -0.0038217887429413525,
+            0.0019912446451180957
+          ],
+          "adjusted_one_sided_lower": -0.004111647060409372,
+          "features": [
+            "context_disagreement_sq",
+            "marginal_difference_sq",
+            "overall_difference_sq",
+            "activity_mismatch",
+            "mean_log_activity",
+            "mean_marginal",
+            "item_overlap_jaccard"
+          ],
+          "coefficients_per_feature_sd": [
+            -0.0007965600095806483,
+            -0.0021424791338589054,
+            -0.0014036785112817932,
+            -0.00044579887988954677,
+            -0.0005699652719910661,
+            0.0015315755233844101,
+            0.0007195591777333344
+          ],
+          "design_rank": 7
+        },
+        "B_profile_repeatability": {
+          "estimate": 0.10871641269157752,
+          "block_bootstrap_95": [
+            -0.06608365197427524,
+            0.26184058084651624
+          ],
+          "adjusted_one_sided_lower": -0.08337042257853211
+        }
+      }
+    },
+    {
+      "seed": 47,
+      "matched_blocks": 286,
+      "matched_users": 1144,
+      "observed_validation_users": 1006,
+      "validation_events": 5341,
+      "contrasts": {
+        "high_minus_low": {
+          "estimate": -0.0028239901663634575,
+          "block_bootstrap_95": [
+            -0.0064040825951971,
+            0.0007640039928704014
+          ],
+          "adjusted_one_sided_lower": -0.006721583349804698,
+          "user_bootstrap_95_sensitivity": [
+            -0.0063309605067100524,
+            0.0010624702045716299
+          ]
+        },
+        "neutral_minus_low": {
+          "estimate": -0.0018620166886723392,
+          "block_bootstrap_95": [
+            -0.004007511207394058,
+            0.00015214063271020112
+          ],
+          "adjusted_one_sided_lower": -0.00417473936621538,
+          "user_bootstrap_95_sensitivity": [
+            -0.004010447451936936,
+            0.00043695831509216903
+          ]
+        },
+        "high_minus_individual": {
+          "estimate": -0.001518090068370201,
+          "block_bootstrap_95": [
+            -0.004841339848898228,
+            0.0016043791093081066
+          ],
+          "adjusted_one_sided_lower": -0.0052281975506270496
+        },
+        "adjusted_context_coefficient_per_feature_sd": {
+          "estimate": 0.0005996496991155032,
+          "block_bootstrap_95": [
+            -0.0025183632803303735,
+            0.0033691871475393783
+          ],
+          "adjusted_one_sided_lower": -0.002814644625650224,
+          "features": [
+            "context_disagreement_sq",
+            "marginal_difference_sq",
+            "overall_difference_sq",
+            "activity_mismatch",
+            "mean_log_activity",
+            "mean_marginal",
+            "item_overlap_jaccard"
+          ],
+          "coefficients_per_feature_sd": [
+            0.0005996496991155032,
+            -0.0006463257706974905,
+            -0.002527324971769354,
+            -0.0011141392928365533,
+            0.005553264853514683,
+            0.0024898764826540762,
+            -0.0003005209867749053
+          ],
+          "design_rank": 7
+        },
+        "B_profile_repeatability": {
+          "estimate": 0.03175848377647475,
+          "block_bootstrap_95": [
+            -0.11915248035557487,
+            0.18559843012738342
+          ],
+          "adjusted_one_sided_lower": -0.14693834498666025
+        }
+      }
+    }
+  ],
+  "optimizer_results": [
+    {
+      "name": "optimizer_frequency_B64_s11",
+      "budget": 64,
+      "seed": 11,
+      "lambda": null,
+      "rounds": 31,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5417752107537718,
+      "final_validation_loss": 0.5417556925839287,
+      "validation_loss_change_after_round12": -1.951816984302468e-05
+    },
+    {
+      "name": "optimizer_tilted_L0.3_B64_s11",
+      "budget": 64,
+      "seed": 11,
+      "lambda": 0.3,
+      "rounds": 26,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5415136945015447,
+      "final_validation_loss": 0.5414046183706762,
+      "validation_loss_change_after_round12": -0.00010907613086852397
+    },
+    {
+      "name": "optimizer_frequency_B64_s29",
+      "budget": 64,
+      "seed": 29,
+      "lambda": null,
+      "rounds": 69,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5414911273977548,
+      "final_validation_loss": 0.541736692581252,
+      "validation_loss_change_after_round12": 0.00024556518349716505
+    },
+    {
+      "name": "optimizer_tilted_L0.3_B64_s29",
+      "budget": 64,
+      "seed": 29,
+      "lambda": 0.3,
+      "rounds": 14,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5417424523155596,
+      "final_validation_loss": 0.5417130763429173,
+      "validation_loss_change_after_round12": -2.9375972642298187e-05
+    },
+    {
+      "name": "optimizer_frequency_B64_s47",
+      "budget": 64,
+      "seed": 47,
+      "lambda": null,
+      "rounds": 35,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.541459118716704,
+      "final_validation_loss": 0.5417342997194082,
+      "validation_loss_change_after_round12": 0.00027518100270418344
+    },
+    {
+      "name": "optimizer_tilted_L0.3_B64_s47",
+      "budget": 64,
+      "seed": 47,
+      "lambda": 0.3,
+      "rounds": 20,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5417027751362549,
+      "final_validation_loss": 0.5418492398518951,
+      "validation_loss_change_after_round12": 0.00014646471564028207
+    },
+    {
+      "name": "optimizer_frequency_B256_s11",
+      "budget": 256,
+      "seed": 11,
+      "lambda": null,
+      "rounds": 16,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5415918908470713,
+      "final_validation_loss": 0.5417376189922043,
+      "validation_loss_change_after_round12": 0.00014572814513302834
+    },
+    {
+      "name": "optimizer_tilted_L0.3_B256_s11",
+      "budget": 256,
+      "seed": 11,
+      "lambda": 0.3,
+      "rounds": 10,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5413610112777086,
+      "final_validation_loss": 0.5413610112777086,
+      "validation_loss_change_after_round12": 0.0
+    },
+    {
+      "name": "optimizer_frequency_B256_s29",
+      "budget": 256,
+      "seed": 29,
+      "lambda": null,
+      "rounds": 23,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5416110139507541,
+      "final_validation_loss": 0.541422161305919,
+      "validation_loss_change_after_round12": -0.00018885264483503583
+    },
+    {
+      "name": "optimizer_tilted_L0.3_B256_s29",
+      "budget": 256,
+      "seed": 29,
+      "lambda": 0.3,
+      "rounds": 28,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5413704212114826,
+      "final_validation_loss": 0.5414794016658426,
+      "validation_loss_change_after_round12": 0.00010898045436003034
+    },
+    {
+      "name": "optimizer_frequency_B256_s47",
+      "budget": 256,
+      "seed": 47,
+      "lambda": null,
+      "rounds": 17,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5413684347947652,
+      "final_validation_loss": 0.5415915842894694,
+      "validation_loss_change_after_round12": 0.0002231494947042556
+    },
+    {
+      "name": "optimizer_tilted_L0.3_B256_s47",
+      "budget": 256,
+      "seed": 47,
+      "lambda": 0.3,
+      "rounds": 30,
+      "termination": "heuristic_no_accepted_proposal",
+      "round12_validation_loss": 0.5413852944809375,
+      "final_validation_loss": 0.5414433971886611,
+      "validation_loss_change_after_round12": 5.810270772355075e-05
+    }
+  ],
+  "fit_seconds": 28.6960368,
+  "evaluation_seconds": 51.18096620000006,
+  "test_standard_or_random_labels_accessed": false,
+  "scientific_scope": "Logged-response association and count-sharing intervention on validation; not intrinsic preferences, causal effect of context conflict, new-method novelty, independent confirmation, or main-track readiness."
+}

@@ -1,0 +1,172 @@
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 2, "of": 2, "cells": 2, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 2, "users": 2, "seconds": 0.0}
+PASS test_lexicographic_tiebreak_never_reorders_unequal_scores
+{"event": "progress", "tag": "", "split": "val", "users": 2, "of": 2, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 2, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 1, "of": 1, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 1, "seconds": 0.0}
+PASS test_tie_statistics_known_case
+PASS test_bucket_level_scores_are_bit_identical_within_buckets
+PASS test_mu_eps_identity
+PASS test_shapley_plus_interaction_reconstruct_delta_both_exactly
+PASS test_metrics_match_repro_core
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 2, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 2, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 2, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 2, "users": 24, "seconds": 0.0}
+PASS test_legacy_matches_repro_core_rank_topk_and_lexicographic_when_no_ties
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "test", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "test", "cells": 1, "users": 24, "seconds": 0.0}
+{"event": "progress", "tag": "", "split": "val", "users": 24, "of": 24, "cells": 1, "seconds": 0.0}
+{"event": "run_done", "tag": "", "split": "val", "cells": 1, "users": 24, "seconds": 0.0}
+PASS test_masking_val_vs_test_and_test_scored_once
+PASS test_plan_dedupes_equal_cells_and_beta_zero_is_the_base
+PASS test_beta_selection_ties_go_to_smaller_beta
+PASS test_within_bucket_shuffle_keeps_bucket_multisets
+PASS test_u8_quantization
+PASS test_length_variants
+PASS test_group_labels_and_sha
+PASS test_double_freq_author_functions
+{"event": "alias_assert_ok", "users_equal": true, "items_equal": true, "other_users_sha256": "6d817100fa90a69d36b34e3383e880801d9c79388377555f857ec5823a13e2ef", "other_items_sha256": "dc5184684d47b392dbd492fe9d14da9a7ab7cae242a94415991cfd8389140560", "equal": true}
+{"event": "start", "run_id": "gh_cos", "dataset": "Gowalla", "method": "GraphHash", "base": "cos", "mapping_source": "stored", "device": "cpu", "mapping_items_sha256": "dc5184684d47b392dbd492fe9d14da9a7ab7cae242a94415991cfd8389140560"}
+{"event": "progress", "tag": "val", "split": "val", "users": 60, "of": 60, "cells": 58, "seconds": 0.0}
+{"event": "run_done", "tag": "val", "split": "val", "cells": 58, "users": 60, "seconds": 0.0}
+{"event": "selected", "beta_star": 2.0, "beta_legacy_cos": 2.0, "beta_legacy_raw": 5.0, "beta_full_prior": 2.0, "beta_other_prior": 5.0, "beta_mu": 5.0, "beta_eps": 5.0}
+{"event": "progress", "tag": "test", "split": "test", "users": 60, "of": 60, "cells": 33, "seconds": 0.0}
+{"event": "run_done", "tag": "test", "split": "test", "cells": 33, "users": 60, "seconds": 0.0}
+{"event": "done", "out": "C:\\Users\\PUSHKAR\\AppData\\Local\\Temp\\t3t4_qeaa5zvt\\e2e1\\out\\gh_cos\\controls.json"}
+{"event": "alias_assert_failed", "users_equal": true, "items_equal": false, "other_users_sha256": "6d817100fa90a69d36b34e3383e880801d9c79388377555f857ec5823a13e2ef", "other_items_sha256": "188717aab0a0234d6472ba6d5011093f01970e8d036abcab8f0cdbf0c59c2005", "equal": false}
+PASS test_end_to_end_cos_graphhash_with_stored_aliases_and_alias_assert
+{"event": "start", "run_id": "df_raw", "dataset": "Gowalla", "method": "DoubleFreq", "base": "raw", "mapping_source": "stored", "device": "cpu", "mapping_items_sha256": "a723b9af4e032c87822bb204827bc1e5a992abb9bab4ed9cd3c09ee290efeabe"}
+{"event": "progress", "tag": "val", "split": "val", "users": 60, "of": 60, "cells": 58, "seconds": 0.0}
+{"event": "run_done", "tag": "val", "split": "val", "cells": 58, "users": 60, "seconds": 0.0}
+{"event": "selected", "beta_star": 5.0, "beta_legacy_cos": 5.0, "beta_legacy_raw": 5.0, "beta_full_prior": 5.0, "beta_other_prior": 5.0, "beta_mu": 5.0, "beta_eps": 5.0}
+{"event": "progress", "tag": "test", "split": "test", "users": 60, "of": 60, "cells": 20, "seconds": 0.0}
+{"event": "run_done", "tag": "test", "split": "test", "cells": 20, "users": 60, "seconds": 0.0}
+{"event": "done", "out": "C:\\Users\\PUSHKAR\\AppData\\Local\\Temp\\t3t4_qeaa5zvt\\e2e2\\out\\df_raw\\controls.json"}
+PASS test_end_to_end_raw_doublefreq_two_d_aliases
+{"event": "start", "run_id": "full_e2e", "dataset": "Gowalla", "method": "Full", "base": "cos", "mapping_source": "identity", "device": "cpu", "mapping_items_sha256": "3d6724f7c01af075e838298ecbdf764cd0681c6a7dc3ce5174a7d08fa0cfbf2a"}
+{"event": "progress", "tag": "val", "split": "val", "users": 60, "of": 60, "cells": 64, "seconds": 0.0}
+{"event": "run_done", "tag": "val", "split": "val", "cells": 64, "users": 60, "seconds": 0.0}
+{"event": "selected", "beta_star": 5.0, "beta_legacy_cos": 5.0, "beta_legacy_raw": 5.0, "beta_full_prior": 5.0, "beta_other_prior": 5.0, "beta_mu": 5.0, "beta_eps": 0.0}
+{"event": "progress", "tag": "test", "split": "test", "users": 60, "of": 60, "cells": 26, "seconds": 0.0}
+{"event": "run_done", "tag": "test", "split": "test", "cells": 26, "users": 60, "seconds": 0.0}
+{"event": "done", "out": "C:\\Users\\PUSHKAR\\AppData\\Local\\Temp\\t3t4_qeaa5zvt\\e2e3\\out\\full_e2e\\controls.json"}
+{"event": "start", "run_id": "bad_e2e", "dataset": "Gowalla", "method": "GraphHash", "base": "cos", "mapping_source": "stored", "device": "cpu", "mapping_items_sha256": "66a20271836d926b80707017d23d9add10ef39ee7bc6f4449d8139bc1cfbe1b2"}
+PASS test_end_to_end_full_with_e2e_and_plain_state_dict
+{"event": "start", "run_id": "rnd", "dataset": "Gowalla", "method": "Random", "base": "cos", "mapping_source": "modulo(table rows)", "device": "cpu", "mapping_items_sha256": "7cf687fff43901447c000c748ba9d52f0fb473f483e62a96e25ad30e4b86c90a"}
+{"event": "progress", "tag": "val", "split": "val", "users": 60, "of": 60, "cells": 58, "seconds": 0.0}
+{"event": "run_done", "tag": "val", "split": "val", "cells": 58, "users": 60, "seconds": 0.0}
+{"event": "selected", "beta_star": 2.0, "beta_legacy_cos": 2.0, "beta_legacy_raw": 5.0, "beta_full_prior": 2.0, "beta_other_prior": 5.0, "beta_mu": 0.0, "beta_eps": 2.0}
+{"event": "progress", "tag": "test", "split": "test", "users": 60, "of": 60, "cells": 13, "seconds": 0.0}
+{"event": "run_done", "tag": "test", "split": "test", "cells": 13, "users": 60, "seconds": 0.0}
+{"event": "done", "out": "C:\\Users\\PUSHKAR\\AppData\\Local\\Temp\\t3t4_qeaa5zvt\\map\\out\\rnd\\controls.json"}
+PASS test_mapping_resolution_rules
+PASS test_eta_squared_identity_and_hand_example
+PASS test_traffic_proxy_and_rho_proxy
+PASS test_summarize_map_toy
+{"event": "resolution_done", "dataset": "Gowalla", "resolution": 400, "buckets": [6, 7]}
+{"event": "resolution_done", "dataset": "Gowalla", "resolution": 800, "buckets": [10, 11]}
+{"event": "map_done", "key": "gowalla__graphhash", "eta2_p": 0.05162184985649931, "rho_proxy": 0.10303697548864885}
+{"event": "map_done", "key": "gowalla__random", "eta2_p": 0.05162184985649931, "rho_proxy": 0.10303697548864885}
+{"event": "map_done", "key": "gowalla__dfreq", "eta2_p": 0.7023099556145525, "rho_proxy": 0.045255475577581285}
+{"event": "map_done", "key": "gowalla__graphhash-r400", "eta2_p": 0.02063456074182999, "rho_proxy": 0.10475543961514731}
+{"event": "map_done", "key": "gowalla__graphhash-r800", "eta2_p": 0.050371472430136566, "rho_proxy": 0.11532268506913734}
+{"event": "assert_aliases", "name": "gowalla__graphhash", "equal": true}
+{"event": "assert_aliases", "name": "gowalla__random", "equal": false}
+{"event": "assert_aliases", "name": "gowalla__dfreq", "equal": null}
+{"event": "assert_aliases", "name": "gowalla__nope", "equal": null}
+{"event": "done", "out": "C:\\Users\\PUSHKAR\\AppData\\Local\\Temp\\t3t4_qeaa5zvt\\maps\\out\\maps_summary.json", "errors": []}
+PASS test_make_maps_end_to_end_with_fake_repro
+PASS test_parse_assert_aliases
+ALL PASSED 0

@@ -1,0 +1,82 @@
+
+amazonbook__mf__full__directau__s0-legacy  [Full/cos, map=stored, assert=None]
+  legacy base 8.70 / +prior 11.05 | random-key base 8.70 | full beta*=0.1 11.05
+  tie-break d -0.00 (share -0.00) | index-random -0.000
+  fixed-beta dmu +2.34 deps +0.00 dboth +2.34 I +0.00 | Shapley mu 1.00 eps 0.00
+  shuffle gain +2.34 vs full +2.34 (share lost 0.00)
+  boundary-tie users 0.00, tied group 1.0 | u8 d -0.004
+  Var(mu)/Var(p) 1.000, groups 91599
+  e2e: {"fit_log_length_on_p": {"a": 0.3251585035696145, "g": 0.06320343725313554, "r2": 0.4914965343501888, "n_items_fit": 91599}, "scoring": "raw dot product, directions kept, lengths modified", "unmodified": {"val": {"recall": 0.09509905586123803, "ndcg": 0.061956169538307744}, "test": {"recall": 0.09574035048202643, "ndcg": 0.06452977931295195}}, "len_shuffle_decile": {"val": {"n_seeds": 10, "recall": {"mean": 0.09175836983263197, "sd": 0.00034617677896228477, "per_seed": [0.0917402101596212, 0.09187322167140918, 0.09132930633207999, 0.0918511391564902, 0.09161151472490424, 0.09126031414871977, 0
+
+gowalla__mf__full__directau__s0-legacy120  [Full/cos, map=identity, assert=None]
+  legacy base 13.00 / +prior 19.54 | random-key base 13.00 | full beta*=0.1 19.54
+  tie-break d +0.00 (share 0.00) | index-random +0.000
+  fixed-beta dmu +6.55 deps +0.00 dboth +6.55 I +0.00 | Shapley mu 1.00 eps 0.00
+  shuffle gain +6.55 vs full +6.55 (share lost 0.00)
+  boundary-tie users 0.00, tied group 1.0 | u8 d +0.026
+  Var(mu)/Var(p) 1.000, groups 40981
+  e2e: {"fit_log_length_on_p": {"a": 1.4911406339938127, "g": 0.23079079983685996, "r2": 0.7094193671578101, "n_items_fit": 40981}, "scoring": "raw dot product, directions kept, lengths modified", "unmodified": {"val": {"recall": 0.17621450387636384, "ndcg": 0.11112458041989863}, "test": {"recall": 0.1789506497615332, "ndcg": 0.11520997365558536}}, "len_shuffle_decile": {"val": {"n_seeds": 10, "recall": {"mean": 0.13432389821832075, "sd": 0.0010023692199961937, "per_seed": [0.13368634925926073, 0.1356385989170088, 0.1348428709271115, 0.13417196265532425, 0.13450503073466777, 0.13538966472638017, 0.13
+
+gowalla__mf__graphhash__bpr__s0-legacy  [GraphHash/raw, map=recomputed_on_gpu_image, assert=True]
+  legacy base 9.34 / +prior 11.24 | random-key base 9.29 | full beta*=0.5 11.25
+  tie-break d +0.67 (share 0.34) | index-random +0.055
+  fixed-beta dmu -0.76 deps +3.23 dboth +1.96 I -0.50 | Shapley mu -0.52 eps 1.52
+  shuffle gain -1.25 vs full +1.96 (share lost 1.64)
+  boundary-tie users 0.78, tied group 11.2 | u8 d -0.004
+  Var(mu)/Var(p) 0.359, groups 5806
+
+gowalla__mf__graphhash__directau__s0-legacy30  [GraphHash/cos, map=recomputed_on_gpu_image, assert=True]
+  legacy base 7.58 / +prior 13.26 | random-key base 7.54 | full beta*=0.2 13.27
+  tie-break d +0.67 (share 0.12) | index-random +0.037
+  fixed-beta dmu +1.72 deps +4.16 dboth +5.73 I -0.15 | Shapley mu 0.29 eps 0.71
+  shuffle gain -0.39 vs full +5.73 (share lost 1.07)
+  boundary-tie users 0.87, tied group 14.7 | u8 d -0.017
+  Var(mu)/Var(p) 0.359, groups 5806
+
+gowalla__mf__random__directau__s0-legacy30  [Random/cos, map=modulo(table rows), assert=None]
+  legacy base 0.31 / +prior 3.85 | random-key base 0.30 | full beta*=0.2 3.85
+  tie-break d +0.04 (share 0.01) | index-random +0.009
+  fixed-beta dmu +0.14 deps +3.43 dboth +3.56 I -0.02 | Shapley mu 0.04 eps 0.96
+  shuffle gain +0.31 vs full +3.56 (share lost 0.91)
+  boundary-tie users 0.84, tied group 6.9 | u8 d -0.008
+  Var(mu)/Var(p) 0.142, groups 5806
+
+amazonbook__mf__graphhash__bpr__s0-legacy  [GraphHash/raw, map=stored, assert=None]
+  legacy base 4.10 / +prior 4.81 | random-key base 4.10 | full beta*=0.2 4.81
+  tie-break d +0.43 (share 0.60) | index-random +0.001
+  fixed-beta dmu -0.17 deps +0.91 dboth +0.71 I -0.02 | Shapley mu -0.26 eps 1.26
+  shuffle gain -0.23 vs full +0.71 (share lost 1.32)
+  boundary-tie users 0.87, tied group 17.2 | u8 d +0.001
+  Var(mu)/Var(p) 0.358, groups 9804
+
+amazonbook__mf__graphhash__directau__s0-legacy41  [GraphHash/cos, map=stored, assert=None]
+  legacy base 4.64 / +prior 6.33 | random-key base 4.62 | full beta*=0.1 6.33
+  tie-break d +0.42 (share 0.25) | index-random +0.015
+  fixed-beta dmu +0.38 deps +1.25 dboth +1.70 I +0.07 | Shapley mu 0.24 eps 0.76
+  shuffle gain -0.17 vs full +1.70 (share lost 1.10)
+  boundary-tie users 0.89, tied group 17.6 | u8 d +0.000
+  Var(mu)/Var(p) 0.358, groups 9804
+
+gowalla__mf__dfreq__directau__s0-legacy30  [DoubleFreq/cos, map=recomputed_on_gpu_image, assert=None]
+  legacy base 2.18 / +prior 5.15 | random-key base 2.18 | full beta*=0.2 5.15
+  tie-break d +0.00 (share 0.00) | index-random +0.000
+  fixed-beta dmu +2.96 deps -0.00 dboth +2.97 I +0.00 | Shapley mu 1.00 eps 0.00
+  shuffle gain +2.97 vs full +2.97 (share lost 0.00)
+  boundary-tie users 0.00, tied group 1.0 | u8 d -0.001
+  Var(mu)/Var(p) 0.999, groups 40902
+
+gowalla__mf__graphhash__directau__s1-legacy30  [GraphHash/cos, map=recomputed_on_gpu_image, assert=True]
+  legacy base 7.56 / +prior 13.31 | random-key base 7.51 | full beta*=0.2 13.32
+  tie-break d +0.70 (share 0.12) | index-random +0.049
+  fixed-beta dmu +1.76 deps +4.25 dboth +5.81 I -0.20 | Shapley mu 0.29 eps 0.71
+  shuffle gain -0.35 vs full +5.81 (share lost 1.06)
+  boundary-tie users 0.87, tied group 14.7 | u8 d -0.005
+  Var(mu)/Var(p) 0.359, groups 5806
+
+gowalla__mf__graphhash__directau__s2-legacy30  [GraphHash/cos, map=recomputed_on_gpu_image, assert=True]
+  legacy base 7.55 / +prior 13.30 | random-key base 7.49 | full beta*=0.2 13.31
+  tie-break d +0.71 (share 0.12) | index-random +0.055
+  fixed-beta dmu +1.74 deps +4.24 dboth +5.82 I -0.16 | Shapley mu 0.29 eps 0.71
+  shuffle gain -0.34 vs full +5.82 (share lost 1.06)
+  boundary-tie users 0.87, tied group 14.8 | u8 d -0.001
+  Var(mu)/Var(p) 0.359, groups 5806

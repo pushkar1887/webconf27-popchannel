@@ -1,0 +1,134 @@
+# PREREG: predictions and decision rules, written before the runs (v3)
+
+**Rules:**
+- An entry is written **before** the first push of any job it covers, and **never edited** after that push.
+- Outcomes go to `RESULTS.md` under the same ID.
+- Before each stage's first push, this file is copied to `results/snapshots/PREREG_<YYYYMMDD-HHMM>.txt`, and its sha256 goes in the PLAN §11 LOG.
+- Entries marked "TBD before push" are completed **once**, with a timestamp, before their own push.
+
+**Labels:**
+- **[P] prospective:** no related test result had been seen when the prediction was written.
+- **[I] informed:** written after seeing related test results (our own or the published ones), so it has limited confirmatory value. It is still a falsifiable check.
+- **[H] hypothesis test:** of a statement PLAN §4 marks as Hypothesis.
+- **[X] exploratory:** uses a heuristic (product rule, erasure index). Never evidence for a claim.
+
+**Conventions:**
+- Metric = test Recall@20 in % (authors' min(20, |T_u|) denominator) unless stated.
+- "Gap" = raw − cosine on the same checkpoint (validation unless stated).
+- ρ = Spearman(item length, training count).
+- p_i = log(1+c_i); μ_b = mean of p over bucket b; ε_i = p_i − μ_{a(i)}.
+- "CI" = 95% paired user bootstrap, 10,000 resamples.
+- Hardware: Kaggle GPU T4 x2, one condition per GPU.
+- Theory: PLAN §4.
+
+**Calibration** [I], measured before this registration:
+
+| | Full-DirectAU val gap G | ρ_full → ρ_GraphHash | E = G·(1 − ρ_c²/ρ_f²) | GraphHash: DirectAU − BPR (raw) |
+|---|---|---|---|---|
+| Gowalla | 5.00 | 0.815 → 0.27 | 4.45 | −1.78 |
+| AmazonBook | 1.09 | 0.786 → 0.19 | 1.03 | +0.53 |
+
+---
+
+## Registered Sat 17 Oct 2026, 17:45 IST; amended 18:00 IST (tie-break, decomposition, I1 scope, cap rule), still before any push
+
+### Stage 1 (no training)
+
+#### PR-TIE [P]: how much tying does sharing create? (Lemma 2, H-tie)
+- **Checkpoints:** Gowalla GraphHash × DirectAU s0/s1/s2; Gowalla GraphHash × BPR; AmazonBook GraphHash × DirectAU / BPR.
+- **T-i:** for Gowalla GraphHash × DirectAU, the share of evaluated test users whose 20th slot falls inside a tied group that also has excluded members is ≥ 50% [Guessing].
+- **Method:** scores are computed **per bucket** and copied to items (exact ties). Rankings use a lexicographic sort: score first, then a secondary key (random, default index, or popularity).
+- **T-ii:** |Recall with random secondary key (mean of 10) − Recall with default index order| ≤ 0.2.
+  - If larger, the default index order carries information. All compressed baselines are then reported with the random key (both versions shown).
+- **T-iii (tie-break-only gain):** reported as (popularity-key − random-key)/(full repair − random-key) on Gowalla GraphHash × DirectAU. No prediction; it feeds G1.
+
+#### PR-DEC [P]: decomposition of the repair (Identity 3, K1, K3)
+- **The score decomposes exactly; Recall does not.** So the primary analysis is a 2×2 design at **fixed β\*** = the full prior's validation-tuned β.
+- **Cells** (base = cos for DirectAU, raw for BPR; random secondary key for ties): base; base + β\*μ; base + β\*ε; base + β\*p (= full repair).
+- **Report:**
+  - main effects Δ_μ and Δ_ε;
+  - the interaction I = Δ_both − Δ_μ − Δ_ε;
+  - two-factor Shapley shares φ_μ = [Δ_μ + (Δ_both − Δ_ε)]/2 and φ_ε = [Δ_ε + (Δ_both − Δ_μ)]/2, each as a fraction of Δ_both.
+- **Secondary:** the same cells with β re-tuned per cell on validation (labelled "re-tuned"). Test is scored once per cell.
+- **D-i (K3):** for Gowalla GraphHash × DirectAU (mean of 3 seeds), the within-bucket shuffle (at β\*) keeps ≤ 70% of Δ_both. Correct item attachment carries ≥ 30% [Guessing].
+- **D-ii:** no prediction on which term dominates. Framing follows PLAN §9 G1 (Shapley share ≥ 0.5 leads; |I| ≥ 25% of Δ_both means "mixed").
+- **D-iii:** the same quantities are reported for BPR and AmazonBook, with no prediction.
+
+#### PR-E2e [P]: what the length carries in Full models (K5, exploratory)
+- **Checkpoints:** Full × DirectAU Gowalla (epoch 120, legacy) and AmazonBook. Validation metric, raw dot; 10 seeds per shuffle; test reported once.
+
+| | Gowalla prediction | AmazonBook prediction |
+|---|---|---|
+| Within-popularity-decile length shuffle | \|Δ\| ≤ 0.5 | \|Δ\| ≤ 0.3 |
+| Global length shuffle | drop ≥ 3.0 | drop ≥ 0.5 |
+| Length replaced by exp(â + γ̂·p_i) | \|Δ\| ≤ 0.7 | \|Δ\| ≤ 0.3 |
+
+- **K5 [Guessing]:** once Full × BPR (A8) exists, DirectAU's global-shuffle drop as a fraction of its raw recall exceeds BPR's.
+
+#### PR-M1 [P]: mapping statistics and the theorem check (Theorem 2, K4)
+- **M-i (code check):** for every compressed checkpoint, ρ_item² ≤ η²_{rank(c)|B} + 0.005, with B the full alias tuple. A violation means a code bug: stop and fix.
+- **M-ii (descriptive):** η²_{rank(c)|B} for Gowalla GraphHash r200 ≤ 0.5 [Guessing].
+- **M-iii [X]:** product rule |ρ_item − ρ_proxy·ρ_full| ≤ 0.10 for 1-D maps.
+
+#### PR-A6 [P]: popularity-only baselines
+- Yelp and AmazonBook popularity-only are each ≥ 2.0 points below the same dataset's GraphHash × DirectAU cos+prior.
+
+#### PR-N1: novelty check (G1.d)
+- **Read first:**
+  - PRISM: Loveland et al., *On the Role of Weight Decay in Collaborative Filtering: A Popularity Perspective*, KDD 2025, arXiv 2505.11318. Record its optimizer, lr, wd, epochs and its DirectAU results without weight decay, to explain our ρ = 0.815 at wd = 1e-8.
+  - DNA: Choi et al., *GCNs meet long-tail: Embedding norm bias in GCN-based recommendations*, Applied Soft Computing 186 (2026).
+- **Then:** Menon et al. ICLR 2021 (logit adjustment); Yi et al. RecSys 2019 (logQ); Zhang et al. SIGIR 2021 (PDA); Chen et al. WWW 2023 (Adap-τ); Park et al. CIKM 2023; Wu et al. TOIS 2024; Wei et al. KDD 2021 (MACR); Heo et al. ICLR 2021 (AdamP); Wan et al. NeurIPS 2021 (SMD); SUAU (ESWA 2024); all papers citing GraphHash, PRISM or DNA.
+- **Kill rule:** a paper showing that sharing or hashing destroys item-level popularity information **and** repairs it with a per-item popularity term. The contribution then shrinks to the decomposition + DirectAU-vs-BPR explanation + controlled comparisons. If those are also covered, **stop** (human decides).
+
+### Stage 2 (small training; caps ≤ 3 h)
+
+#### PR-A1 [I]: does the anomaly survive convergence? (G2.a)
+- **Run:** `gowalla__mf__graphhash__directau__s0`.
+- **Prediction:** raw ∈ [7.55, 7.85] (paper 7.66); |raw − cos| < 0.15; cos+prior ∈ [13.3, 13.7], best β 0.2; ρ ∈ [0.25, 0.32].
+- **PASS:** raw ≤ 9.04 (= GraphHash-BPR 9.34 − 0.30) **and** stop_reason = patience.
+- **INCONCLUSIVE:** the run hit its time cap or max epochs. It may then be reported only as "the gap persists within a 3 h budget", and a longer A1 is queued for Stage 3.
+
+#### PR-I1 [P]: initialization-sensitivity control for GraphHash (L2, G2.b)
+- **Run:** `gowalla__mf__graphhash__directau__s0-initmatch`. Rows are rescaled after Xavier to Full's RMS norms (items × 0.378, users × 0.442). Everything else is identical to A1.
+- **Scope:** this tests whether **GraphHash** results depend on init scale. It does **not** isolate sharing vs Full. The controlled Full-vs-GraphHash comparison is **I1 vs A2**, both trained under the same stopping rule and budget (A2 registered at G2). The legacy capped Full checkpoint is not a valid partner.
+- **Prediction / PASS:** |I1 raw − A1 raw| ≤ 0.3 **and** |I1 cos+prior − A1 cos+prior| ≤ 0.3, with **both** stopped by patience. Otherwise INCONCLUSIVE.
+- If I1 raw ≥ A1 raw + 1.0, GraphHash results depend on init scale (G2 outcome "G2.b fails").
+
+#### PR-A8 [I]: Full × BPR reproduces the paper
+- `gowalla__mf__full__bpr__s0` ∈ [15.4, 15.8] (paper 15.617). If outside [15.0, 16.2], audit BPR before using any BPR row.
+
+#### PR-Y: Yelp2018 (A3 Full × DirectAU, A4 GraphHash × DirectAU, A5 GraphHash × BPR, A7 Full × BPR)
+- **Y1 [I]:** A4 raw < A5 raw (the published direction).
+- **Y3 [P]:** |A4 raw − A4 cos| < 0.3 and ρ(A4) ≤ 0.4.
+- **Y4 [P] (G2.c, K2):** A4 cos+prior − A5 raw+prior ≥ +0.3, and the CI excludes 0.
+- **Y2 [X]:** erasure index E_Yelp = G(A3)·(1 − ρ(A4)²/ρ(A3)²) ≥ 2.5. Heuristic, reported only.
+- **Record:** Yelp evaluated val/test users and the C0 bucket counts.
+
+#### PR-H [H]: mechanism hypotheses on Stage 2 norm logs
+- **H-pool (E2b):** ρ_bucket = Spearman(‖θ_b‖, N_b) ≥ 0.6 on A1 and A4. If < 0.3, H-pool is rejected.
+- **H-Adam (E3):** per-quintile mean item r² never decreases by more than 1% between consecutive evaluations, in A1, A3 and A4. The slope γ̂ (log r on p, items with c ≥ 5) is reported **descriptively** with no target.
+- **H-dir (E2c):** ρ_dir(BPR) > ρ_dir(DirectAU) on the same dataset and compression [Guessing].
+
+### Stage 3: registered intentions. Final predictions are added "TBD before push" at G2
+- **PR-B:** main-grid directions, for each compressed DirectAU run:
+  - B-i: cos+prior ≥ max(raw, cos) + 1.0;
+  - B-ii: best β ∈ {0.1, 0.2} [I];
+  - B-iii: ρ ≤ ρ_full − 0.3;
+  - for BPR, B-iv: best raw+prior β ∈ [0.2, 0.5] [I].
+  - Anchors [I]: Gowalla Random BPR 0.766 / DirectAU 0.478; Double-freq 3.888 / 3.440.
+- **PR-E8 (K2, primary):** per dataset, GraphHash × DirectAU cos+prior vs GraphHash × BPR raw+prior. PASS needs:
+  - Holm-adjusted p < 0.05 with Δ > 0 on all 3 datasets;
+  - on Gowalla, every seed's Δ > 0 with its own CI excluding 0.
+- **PR-E5:** for the GraphHash prior gains, ≥ 60% of the added hits fall in the top-20%-popularity items; bottom-80% recall changes by ≤ 0.5 points [Guessing]. Reported regardless.
+- **PR-E7:** |cos_prior_u8 − cos_prior| ≤ 0.02 on the Stage 1 checkpoints. The "one byte per item" claim is made **only** if this passes. Until then the stated cost is float32: 163,924 B = 5.52% of the Gowalla GraphHash table.
+- **PR-E9 (popularity-reweighted evaluation, not IPS):**
+  - Weights w_i = (1+c_i)^{−1/2}; the per-user weighted recall equals standard recall when weights are equal.
+  - Report the original β and a β re-tuned on reweighted validation.
+  - Prediction [Guessing]: re-tuned β ≤ original β, and the K2 ordering is kept on Gowalla.
+- **PR-C3 (regularized residual bias):** score = cos + β·p_i + r_i, with β learnable (init 0.2) and r_i per original item (init 0, L2 weight decay 1e-2, its own Adam group). Loss = DirectAU + BPR on that score; checkpoint selected on validation. Prediction: within ±0.5 of the post-hoc cos+prior; "better" only if ≥ +0.3. One try.
+- **PR-C1 [X]:** budget sweep at other Louvain resolutions. Partitions are **not nested**, so no monotonicity is guaranteed; reported as dose-response, exploratory.
+- **PR-C4 (optional, descriptive):** equal-item-length training of Full × DirectAU Gowalla. Rescaling changes the optimizer dynamics, so this is **not** a decisive causal test. Report raw (= cos by construction), cos+prior, and the change in cosine recall versus A2.
+- **PR-D7 (PRISM check, optional):** Full × DirectAU Gowalla with wd = 0 and wd = 1e-4 (Adam, lr 0.01). Prediction [Guessing]: ρ ≥ 0.7 at wd = 0. If so, our optimizer setting, not weight decay, creates the link, and it is reported as a difference from PRISM.
+
+---
+<!-- New registrations go below this line, each under its own timestamp header. -->

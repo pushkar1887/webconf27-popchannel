@@ -1,0 +1,76 @@
+{
+ "slug": "pc-s3b-1017",
+ "state": "complete",
+ "started": "2026-10-17T18:22:41+00:00",
+ "ended": "2026-10-17T20:58:40+00:00",
+ "device_count": 2,
+ "mode": "parallel_2gpu",
+ "inputs": {},
+ "jobs": {
+  "gowalla__mf__graphhash__directau__s1": {
+   "run_id": "gowalla__mf__graphhash__directau__s1",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 180 --epochs 200 --lr 0.01 --wd 1e-08 --seeds 1 --run-id gowalla__mf__graphhash__directau__s1",
+   "state": "done",
+   "started": "2026-10-17T18:23:49+00:00",
+   "ended": "2026-10-17T19:15:21+00:00",
+   "duration_s": 3092.1,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash__directau__s1.log"
+  },
+  "gowalla__mf__graphhash__directau__s2": {
+   "run_id": "gowalla__mf__graphhash__directau__s2",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method GraphHash --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 180 --epochs 200 --lr 0.01 --wd 1e-08 --seeds 2 --run-id gowalla__mf__graphhash__directau__s2",
+   "state": "done",
+   "started": "2026-10-17T18:23:49+00:00",
+   "ended": "2026-10-17T19:03:32+00:00",
+   "duration_s": 2382.8,
+   "exit_code": 0,
+   "log": "logs/gowalla__mf__graphhash__directau__s2.log"
+  },
+  "amazonbook__mf__graphhash__directau__s0-initmatch": {
+   "run_id": "amazonbook__mf__graphhash__directau__s0-initmatch",
+   "gpu": 1,
+   "script": "exp_run.py",
+   "args": "--dataset AmazonBook --method GraphHash --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 300 --epochs 150 --lr 0.001 --wd 1e-08 --seeds 0 --run-id amazonbook__mf__graphhash__directau__s0-initmatch --init-match",
+   "state": "done",
+   "started": "2026-10-17T19:03:32+00:00",
+   "ended": "2026-10-17T20:58:40+00:00",
+   "duration_s": 6908.6,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__graphhash__directau__s0-initmatch.log"
+  },
+  "amazonbook__mf__dfreq__directau__s0": {
+   "run_id": "amazonbook__mf__dfreq__directau__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset AmazonBook --method DoubleFreq --loss dau --eval-every 5 --patience 30 --min-delta 0.0005 --cap-min 300 --epochs 150 --lr 0.001 --wd 1e-06 --seeds 0 --run-id amazonbook__mf__dfreq__directau__s0",
+   "state": "done",
+   "started": "2026-10-17T19:15:21+00:00",
+   "ended": "2026-10-17T20:31:12+00:00",
+   "duration_s": 4550.6,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__dfreq__directau__s0.log"
+  },
+  "amazonbook__mf__full__bpr__s0": {
+   "run_id": "amazonbook__mf__full__bpr__s0",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset AmazonBook --method Full --loss bpr_author --eval-every 10 --patience 500 --min-delta 0 --cap-min 90 --epochs 3000 --lr 0.01 --wd 1e-08 --seeds 0 --run-id amazonbook__mf__full__bpr__s0",
+   "state": "done",
+   "started": "2026-10-17T20:31:12+00:00",
+   "ended": "2026-10-17T20:57:14+00:00",
+   "duration_s": 1562.3,
+   "exit_code": 0,
+   "log": "logs/amazonbook__mf__full__bpr__s0.log"
+  }
+ },
+ "errors": [],
+ "prepare_exit_code": 0,
+ "n_jobs": 5,
+ "n_failed": 0,
+ "failed_run_ids": []
+}

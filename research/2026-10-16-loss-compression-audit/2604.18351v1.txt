@@ -1,0 +1,1075 @@
+=== PDF PAGE 1 ===
+BalancedCo-ClusteringofUsersandItemsforEmbeddingTable
+                              CompressioninRecommenderSystems
+                                                                 Technical Report
+
+                 Runhao Jiang                                       Renchi Yang∗                                      Donghao Wu†
+        Hong Kong Baptist University                       Hong Kong Baptist University                  TheChineseUniversityofHongKong
+            Hong Kong SAR, China                               Hong Kong SAR, China                                    Shenzhen, China
+        csrhjiang@comp.hkbu.edu.hk                               renchi@hkbu.edu.hk                           donghaowu@link.cuhk.edu.cn
+Abstract                                                                          ACMReferenceFormat:
+Recommender systems have advanced markedly over the past                          RunhaoJiang,RenchiYang,andDonghaoWu.2018.BalancedCo-Clustering
+decadebytransformingeachuser/itemintoadenseembeddingvec-                          of Users and Items for Embedding Table Compression in Recommender
+torwithdeeplearningmodels.Atindustrialscale,embeddingtables                       Systems:TechnicalReport.In.ACM,NewYork,NY,USA,14pages.https:
+constitutedbysuchvectorsofallusers/itemsdemandavastamount                         //doi.org/XXXXXXX.XXXXXXX
+
+ofparametersandimposeheavycomputeandmemoryoverhead                                1   Introduction
+during training and inference, hindering model deployment under                   In modernrecommender systems, deeplearning models [68] have
+resource constraints. Existing solutions towards embedding com-                   becomethego-toapproachforrecommendations,typicallyworking
+pressioneithersufferfromseverelycompromisedrecommendation                         withembeddingtablesthatmap eachcategoryfeaturevalue,e.g.,
+accuracy or incur considerable computational costs.                               theIDofauseroritem,toauniquevectorrepresentation.However,
+   To mitigate these issues, this paper presents BACO, a fast and                 in industrial-scale scenarios, these embedding tables consume a
+effectiveframeworkforcompressingembeddingtables.Unliketra-                        vast amount of parameters, often reaching hundreds of GB or even
+ditional ID hashing, BACO is built on the idea of exploiting collabo-             TB, due to the need to represent billions of users/items [18]. For
+rativesignalsinuser-iteminteractionsforuseranditemgroupings,                      instance,embeddingtablesdeployedinBaidu’sadvertisingsystems
+such that similar users/items share the same embeddings in the                    may occupy up to 10 TB of storage [60],while at Meta’s scale, i.e.,
+codebook. Specifically, we formulate a balanced co-clustering ob-                 3billionmonthlyactiveusersworldwide[19],theuserembedding
+jective that maximizes intra-cluster connectivity while enforcing                 tableinarecommendermodelcaneasilyreach715GBofspacefor
+cluster-volumebalance,and unifycanonicalgraph clusteringtech-                     64-dimensionalvectorsin32-bitfloatingpoint.As aconsequence,
+niquesintotheframeworkthroughrigoroustheoreticalanalyses.To                       theexpansionofembeddingtablesintensifiesstorageandhardware
+produceeffectivegroupingswhileavertingcodebookcollapse,BACO                       demands,thusimpedingmodelscalabilityanddeploymentinreal
+instantiates this framework with a principled weighting scheme                    production environments [9,66].
+for users and items, an efficient label propagation solver, as well                  In recent years,embedding table compression(ETC) [                31], which
+assecondaryuserclusters.Ourextensiveexperimentscomparing                          seekstoreducethe sizesofembeddingtableswithminimaldegra-
+BACOagainstfullmodelsand18baselinesoverbenchmarkdatasets                          dation in precision, has emerged as a popular choice in indus-
+demonstratethatBACOcutsembeddingparametersbyover75%with                           try[7,49,56,57]andisgainingincreasingtractioninrecommender
+a drop of at most 1.85% in recall, while surpassing the strongest                 systems [6, 9, 66]. Most existing works towards ETC generally fol-
+baselines by being up to346×faster.                                               low three compression paradigms:pre-training,in-training, and
+CCSConcepts                                                                       post-trainingcompressions,wheretheformergeneratesthemap-
+•Informationsystems → Clustering;Recommendersystems;                              pingsfor users/itemsinembeddingtables beforetrainingrecom-
+•Mathematicsofcomputing→Graph algorithms.                                         mendation models, while the latter two strategies compress the
+                                                                                  full embeddingswhen they are partially or fullylearned. Despite
+Keywords                                                                          being effective, the in-training/post-training scheme additionally
+                                                                                  introduces considerable training overhead, and still suffers from
+RecommenderSystems,EmbeddingTableCompression,Co-clustering                        substantial memory footprint.
+
+∗Corresponding Author                                                                Acommontreatmentforpre-trainingETCistohashtheuser/item
+†Work done while an intern at HKBU                                                IDsdowntoa setofbucketswitha manageablesizethroughhash-
+                                                                                  ing functions[9,16,54,66]. Theusers/items mapped tothe same
+Permission to make digital or hard copies of all or part of this work for personal orbucket will share the same embedding vectors in the reduced em-
+classroom use isgranted without fee providedthat copies are notmade or distributed
+forprofitorcommercialadvantageandthatcopiesbearthisnoticeandthefullcitation       bedding tables (a.k.a.codebooks). Although this methodology is
+onthefirstpage.CopyrightsforcomponentsofthisworkownedbyothersthanACM              computationally efficient, it relies on hashing that is essentially
+mustbehonored.Abstractingwithcreditispermitted.Tocopyotherwise,orrepublish,       random, which will represent unrelated users/items by the same
+topostonserversortoredistributetolists,requirespriorspecificpermissionand/ora
+fee. Request permissions from permissions@acm.org.                                embeddings,andhence,engenderingsevereembedding collisions
+Conference’17, Washington, DC, USA                                                andperformancedegradation[16,66].Subsequentstudiesalleviate
+©2018 ACM.                                                                        embeddingcollisionissuesthroughthe(i)employmentofmultiple
+ACM ISBN 978-1-4503-XXXX-X/18/06
+https://doi.org/XXXXXXX.XXXXXXX                                                   hashfunctions [41,66],(ii) incorporationof feature andfrequency
+                                                                              1
+
+=== PDF PAGE 2 ===
+Conference’17, July 2017, Washington, DC, USA                                                                                                                                          Runhao Jiang, Renchi Yang, & Donghao Wu
+
+statistics [9, 16, 67], and (iii)learned hashingtechniques [                  34, 49]. embeddings.Furthermore,xLightFM[23]proposesallocatingvari-
+These methods either still incur subpar recommendation perfor-                         ousnumbersofembeddingstodifferentfeaturecategories.Within
+mance,orrequireadditionaluser/iteminformationortrainingcosts.                          multi-codebookframeworks,LightRec[32]andLISA[58]aimto
+Most importantly, the collaborative signals underlying the user-                       differentiatecodebooksusingdistinctmechanisms.Incontrastto
+item interactions are largely overlooked for ETC. Very recently,                       earliermethodsthatfocusonlow-dimensionaldenseembeddings,
+Wu et al. [56]      made an attempt to exploit the collaborative infor-                recentworkCompresSAE[26]introducesaradicallydifferentstrat-
+mationofusers/itemsbyreframingtheETCtaskasagraphclus-                                  egy by converting original embeddings into high-dimensional but
+tering problem. They simply apply the highly-efficientLouvain                          sparserepresentations,combiningexpressivecapacitywithcom-
+algorithm[5]overtheuser-iteminteractiongraphtoderiveclusters                           pression.Vector quantizationintroducessignificant computational
+ofusers/itemsastheirbuckets,whichsurprisinglyyieldremarkable                           andmemoryoverheadduringtraining,primarilyduetothenearest
+improvementsinrecommendationquality.Unfortunately,Louvain                              neighborsearchandtherequirementtoretainoriginalembeddings.
+suffersfromaninherentdrawbackofresolution limit[          27],leading                  Decomposition-based Methods.Decomposition methods per-
+to suboptimal results.                                                                 formsoftselection,whereeachfeatureaggregatesallcodebookem-
+   Inspired by the efficacy of leveraging collaborative signals, we                    beddingsusingareal-valuedindexvector.DHE[25]decomposesthe
+make further inroads by presenting BACO, a fast and effective so-                      embeddingtableviahashfunctionsandneuralnetworks,whereas
+lution for ETC via BAlanced CO-clustering. Specifically, we first                      ANT [33] uses anchor vectors and sparse transformation. Recently,
+reveal two factors, i.e.,intra-cluster connectivityandcluster-size                     tensortraindecomposition(TTD)hasbeenemployedtoenhance
+balance,thatarecrucialtoclusteringforETC,throughanempiri-                              compression by expressing multidimensional data as a product of
+cal study, which in essence correspond to the embedding collision                      smallertensors[53,59,65].However,achievingsuchhighcompres-
+andcodebook collapse[                  49],respectively. Basedthereon, wedevelop       sionratios entailsadditionalcomputationalcosts duringdecompo-
+a theoretically-grounded balanced co-clustering framework aim-                         sition and lookup, potentially slowing down inference.
+ing at optimizing these two factors, and establish its theoretical
+connections to classic graph clustering algorithms. Building on
+the framework, we propose a well-thought-outhybrid weighting                           3   Preliminaries
+scheme(HWS)forusersanditems,anddevelopafastoptimization                                3.1   SymbolsandTerminology
+solverthroughlocalgreedylabelpropagation[                   38]tocircumventthe
+resolution limit.To account forthe multiple andevolving interests                      Symbols.We model the interactions between a user set      U=
+of users, BACO further constructssecondary clusters for users(SCU)                     {𝑢  1,𝑢2,...,𝑢|U|} and an item set V={𝑣           1,𝑣2,...,𝑣|V|} as abi-
+rapidlybasedupontheprimaryclusters,therebyovercomingthe                                partite networkG=(U∪V,E)          , where the edge setE ⊆ U×V
+representation limitation of each user without inducing additional                     consists of all the user-item interactions.The neighbors of user𝑢𝑖
+spaceoverhead.Ourcomprehensiveempiricalevaluationsandab-                               (resp.item𝑣𝑗)arerepresented byN(𝑢 𝑖) (resp.N(𝑣  𝑗)).Wedenote
+lation studies manifest that (i) our BACO can consistently achieve                     byB    ∈ {0,1}|U|×|V| thebi-adjacencymatrixofG,whereB  𝑖,𝑗 =1if
+markedly superior recommendation quality over 18 ETC baselines,                        user𝑢𝑖 hasinteractedwithitem𝑣𝑗,i.e.,(𝑢 𝑖,𝑣𝑗) ∈ E,and0otherwise.  0
+whileoftenbeinghighlyefficient,and(ii)ourproposedHWS and                               WeuseA    =             B  ∈ {0,1}(|U|+|V|)×(|U|+|V|) torepresentthe
+SCUstrategies canconspicuouslyenhance recommendationaccu-                                               B⊤     0
+racies even when working with other clustering baselines.                              completeadjacencymatrix ofG.Thedegree ofuser𝑢𝑖 (resp.item
+                                                                                       𝑣𝑗) is symbolized by 𝑑(𝑢    𝑖) (resp. 𝑑(𝑣    𝑗)) and the diagonal degree
+2   RelatedWork                                                                        matrix is denoted byD∈R          (|U|+|V|)×(|U|+|V|).
+We review existing studies on ETC in the sequel and defer reviews                         Throughout this paper, we use ®u  𝑖 (resp. ®v  𝑗) to denote the em-
+on co-clustering and bipartite graph clustering to AppendixB.                          bedding vectorof user𝑢        𝑖 (item𝑣           𝑗). Fornotation convenience,U∈
+Hashing-basedMethods.Hashing methods offer a straightfor-                              R|U|×𝑑   andV     ∈R  |V|×𝑑   representtheembeddingvectorsofusers
+wardandefficientmeansofcompressingembeddingtablesbymap-                                inU anditemsinV,respectively,wherein the𝑖-throwofU(resp.
+ping IDs into a smaller index space using hash functions. For in-                      V) isU      𝑖 =®u     𝑖 (resp.V𝑖 =®v     𝑖). In recommender systems,UandVare
+stance, the basic hashing method [54] simply employs random                            often referred to as embedding tables of users and items, respec-
+function to achieve compression. Although efficient, this approach                     tively. Given a cluster C𝑘 containing users and items, we define
+may introduce collisions. [67] increases the probability that collid-                  U𝑘 =C  𝑘 ∩U andV𝑘 =C  𝑘 ∩V. We use [𝐾]     to denote the set of
+ing objects are similar through LSH, while [41, 66] employ double                      integers{1,2,...,𝐾}  . Table1lists frequently used notions in our
+hashing combined with other techniques to mitigatecollisions. In                       paper.
+contrast, ROBE [11] employs a more flexible indexing mechanism                         ModularityandCPM.Themodularity[                             36]quantifiesthe good-
+within compositional embeddings. Although these hash methods                           ness of a particular division of a network. Formally, given a uni-
+are generally efficient,their weak association withthe data makes                      partite networkG and clusters{C1,C2,...,C𝐾}, the modularity is Í 2!
+it difficult to maintain accuracy.                                                     defined by    1   Í𝐾      𝑠𝑘 −𝛾·      𝑣𝑖∈C𝑘 𝑑(𝑣   𝑖) , where𝛾>   0stands
+                                                                                                     |E|   𝑘=1                   |E|
+Vector Quantization.Vector quantization (VQ) maps original                             foraresolutionparameter[39],and𝑠𝑘 =|{(𝑣     𝑖,𝑣𝑗) ∈ E|𝑣 𝑖,𝑣𝑗 ∈ C𝑘}|
+embeddings to their most similar meta-embeddings, thereby bridg-                       is the actual number of edges within clusterC𝑘. Intuitively speak-
+inghashrepresentationsandtheoriginaldata[69].Saec[57]and                                     Í               2/|E|canbeinterpretedastheexpectednumber
+MGQE [24] utilize feature frequency to guide the quantization of                       ing,     𝑣𝑖∈C𝑘 𝑑(𝑣    𝑖)
+
+                                                                                  2
+
+=== PDF PAGE 3 ===
+                                        Balanced Co-Clustering of Users and Items for Embedding Table Compression in Recommender Systems                                      Conference’17, July 2017, Washington, DC, USA
+
+                                                          Table1:Frequentlyusedsymbols.
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                       (a)#cross-clusterlinks      (b)Ginicoefficient(users)     (c)Ginicoefficient(items)
+                                                                                                                                       Figure1:Recommendationperformance(Recall@20)v.s.av-
+                                                                                                                                       eraged#cross-clusterlinksandGinicoefficientsonGowalla
+                                                                                                                                       for mappings and codebooks. Given a space budget𝐵 for the code-
+                                                                                                                                       books,i.e.,thetotalnumberofembeddingvectorsincodebooksfor
+                                                                                                                                       users and items, the ETC task ensures𝐾    (𝑢)   +𝐾   (𝑣)   ≤𝐵.
+                                                                                                                                          Inmodeltraining,givenauser𝑢𝑖 (resp.item𝑣𝑗),thecompressed
+                                        ofedgesinclusterC𝑘.Inparticular,higher(resp.lower)resolutions                                  embeddingZ          (𝑢)𝑓(𝑖)    (resp.Z (𝑣)ℎ(𝑗)   )isfirstretrievedbeforeenteringinto
+                                        lead to more (resp. fewer) communities, and a larger modularity                                training.Forexample,thepredictedratingforuser𝑢𝑖 anditem𝑣𝑗 is
+                                       valueindicatesabetterpartitioningofthenetworkG.Barber[2]                                        obtained as ˆ𝑦𝑖,𝑗 =⟨  Z(𝑢)𝑓(𝑖)   ,Z(𝑣)ℎ(𝑗)   ⟩, and theloss function likeLBPR=
+                                        extended modularity to bipartite networks, formulatingbipartite                                −Í𝑢𝑖∈UÍ𝑣𝑘∈N(𝑢)  Í𝑣𝑗∉N(𝑢)    ln𝜎(      ˆ𝑦𝑖,𝑘 − ˆ𝑦𝑖,𝑗)+𝜆·    ∥U∥      2+∥V∥      2,is
+                                        modularityas follows:                                                                          computed withU=Y              (𝑢)  Z(𝑢)    andV=Y            (𝑣)  Z(𝑣)   accordingly.
+                                                                       𝐾∑︁                         !
+                                                                  1         𝑠𝑘 −𝛾·     𝜎(𝑢)𝑘   ·𝜎 (𝑣)𝑘,                             (1)
+                                                                 |E|                      |E|                                          3.3   ConstructionofSketchingMatrices
+                                                                      𝑘=1
+                                                                                                                                       Therearegenerallythreecategoriesofapproachesforconstructing
+                                         where 𝜎(𝑢)𝑘   =Í𝑢𝑖∈U𝑘 𝑑(𝑢    𝑖) (resp. 𝜎(𝑣)𝑘   =Í𝑣𝑖∈V𝑘 𝑑(𝑣    𝑖)) denotes                     the sketching matricesY               (𝑢)    andY       (𝑣)  :random sketching,learned
+                                        the sums of degrees of nodes inC   𝑘 and setU(resp.V).                                         sketching, andclustering-based sketching.
+                                           Analternativequalityfunctionlikethemodularityiscalledthe                                       Random sketching simply employs hashing functions as map-
+                                        Constant Potts Model(CPM) [    47], whose mathematical formula-                               pings 𝑓: U → [𝐾  (𝑢)  ] and ℎ: V → [𝐾  (𝑣)  ]. Each user or item is
+                                        tionisdefinedbyÍ𝐾𝑘=1           𝑠𝑘 −𝛾·    |C𝑘|2    ,whichcanalsobeextended                      assignedtoarandomsketch(arandomone-hotvector)[54].Subse-
+                                        to bipartite networks by substituting |U𝑘| · |V𝑘| for  |C𝑘|, i.e.,                            quent works [11, 41, 46, 66] resort to compositional embeddings,
+                                        Í𝐾                                                                          2                  which basically apply two or more hashing functions to the IDs
+                                          𝑘=1   (𝑠𝑘 −𝛾·|U    𝑘|·|V𝑘|). Inthe literature [48], bothquality func-                        ofusersanditems,suchthateachuseroritemisassociatedwith
+                                        tions canbeefficiently and effectivelyoptimizedby the prominent                                twoormoreembeddingsinthecodebook,whichcanbecombined
+                                        Louvainalgorithm invented by Blondel et al. [5].                                               viasummation,element-wisemultiplication,orconcatenation,etc.
+                                        3.2   ProblemStatement                                                                         Note that this approach yields denser sketching matrices as each
+                                                                                                                                       rowY   (𝑢)𝑖    andY      (𝑣)𝑗    comprise multiple non-zero entries.
+                                        LetZ      (𝑢)   ∈R  𝐾(𝑢)   ×𝑑   (resp.Z (𝑣)   ∈R  𝐾(𝑣)  ×𝑑  ) be thecodebook(a.k.a.               Insteadofgeneratingrandomsketches,thelearnedsketching[34,
+                                        compressedembeddingtable)forusers(resp.items),where𝐾(𝑢)   ≪                                    49]methodologylearnthesketchofeachuseroritembytraining
+                                        |U|, 𝐾(𝑣)   ≪ |V|, and each row vector stands for an embedding                                 modelsto reconstructsketchingmatrices.After everyfewepochs,
+                                       vector. Theembedding table compression        1 (ETC) in recommender                            sketching matricesY               (𝑢)    andY       (𝑣)    are regenerated upon current
+                                        systemsaimstofindamapping 𝑓:U → [𝐾  (𝑢)  ] andamappingℎ:                                       embeddingsY            (𝑢)  Z(𝑢)    andY      (𝑣)  Z(𝑣)   to achieve a better fit.
+                                        V → [𝐾  (𝑣)  ] such that each user𝑢𝑖 (resp. item 𝑣𝑗) can be repre-                                ByinterpretingsketchingmatricesY               (𝑢)   andY      (𝑣)   asnode-cluster
+                                        sented by an embedding vectorZ       (𝑢)𝑓(𝑖)    (resp.Z (𝑣)ℎ(𝑗)   ).                           indicator matrices, e.g.,Y     (𝑢)𝑖,𝑘  = 1if   𝑢𝑖 belongs to the 𝑘-th user
+                                           The foregoing mappings 𝑓  and ℎ can be equivalently repre-                                  clusterand0otherwise,therationaleofclustering-basedsketching
+                                        sented bysketching matricesY                    (𝑢)    ∈  {0,1}|U|×𝐾   (𝑢)    andY       (𝑣)    ∈is to group “similar” users inU and items in V into 𝐾(𝑢)    and
+                                        {0,1}|V|×𝐾   (𝑣)  ,respectively. EachrowY   (𝑢)𝑖    (resp.Y (𝑣)𝑗   )therein isa                𝐾(𝑣)   clusters,respectively.GraphHash[56]implementsthisideaby
+                                        one-hot vector, usually called “sketch of user𝑖 (resp. item𝑣𝑗)” [49].                          clustering users and items over the bipartite network structureG,
+                                       Accordingly,U=Y       (𝑢)  Z(𝑢)    andV=Y            (𝑣)  Z(𝑣)  .                               attainingmarkedlysuperioreffectivenessoverrandomsketching
+                                           NoticethatgivensketchingmatricesY               (𝑢)   andY      (𝑣)  ,recommenda-           and significantly higher efficiency than learned sketching.
+                                        tionmodelsonlyneedtolearncodebookZ    (𝑢)   andZ      (𝑣)   inthecourse                        EmpiricalStudy.Togaindeeperinsights,weempiricallystudythe
+                                        oftraining.Assuch,thespaceoverheadoriginallyincurredforstor-                                   correlation between final recommendation performance and the
+                                        ingtheembeddingtablesUandVintherecommendersystemsis                                            characteristicsofsketchingmatricesproducedbyvariousmethods
+                                        reducedfrom𝑂((|U|+|V|)·𝑑)      to𝑂(|U|+|V|+(𝐾     (𝑢)  +𝐾   (𝑣)  )·𝑑)                          fromtheperspectiveofclustering.Specifically,wegeneratesketch-
+                                                                                                                                       ingmatricesusinghashing-basedmethods(RandomandFrequency)
+                                       1We follow the “pre-training” compression setting for parameter efficiency [49].                andclustering-basedmethods(GraphHash,LP,EMBD,SCC,SBC,and
+                      Symbol           Description                                                                                3
+                      U,V,E            The user set, item set and edge set.
+                      |U|,|V|,|E|      The number of users, items, and all the edges.
+                   Recall@20Recall@20Recall@20𝑢𝑖,𝑣𝑖A user inU, and a item inV.
+                 161616G,B             The bipartite network and its bi-adjacency matrix.
+                      A                The complete adjacency matrix ofG.
+Random          Frequency141414D   GraphHashThe diagonal degree matrix ofA.LP
+EBMD             121212SCCU,V          SBCThe embedding tables of users and items.BACO
+                 101010®u 𝑖,®v   𝑗     The embedding vector of user𝑢       𝑖 and item𝑣       𝑗.
+                  888 C𝑘               A cluster containing users and items.
+                      U𝑘,V𝑘            The user set and the item set of clusterC           𝑘.
+                      0.02000.20.20.030.40.40.60.60.040.80.80.0511
+                      [𝐾]              The set of integers{1,2,...,𝐾}.
+                      Z(𝑢)   ,Z (𝑣)    The compressed embedding table for users and items.
+                      𝐾(𝑢)   ,𝐾(𝑣)     The numbers of clusters for users and items.
+                      Y(𝑢)   ,Y (𝑣)    The sketching matrices of users and items.
+                      𝑤(𝑢)𝑖   ,𝑤(𝑣)𝑗   The weights for user𝑢       𝑖 and item𝑣       𝑗.
+                      ®w               The vector containing the weights of users and items.
+                      𝑊 (𝑢)   ,𝑊 (𝑣)   The total weight of the users and items inG.
+                      𝛾                The coefficients for objective term in Eq. (6)
+
+=== PDF PAGE 4 ===
+Conference’17, July 2017, Washington, DC, USA                                                                                                                                          Runhao Jiang, Renchi Yang, & Donghao Wu
+
+   Table2:Theunifiedbalancedco-clusteringframework.                                           thatYcanbeconvertedintoY                 (𝑢)    andY      (𝑣)   bymappingtheclusters
+     Method                             𝛾       𝑤   (𝑢)                                       of users and items into consecutive column indices, respectively.
+                                                𝑖         𝑤(𝑣)𝑗          Opt. solver
+                                                         𝑑(𝑣   𝑗)                             MaximizingIntra-clusterConnectivity.The firstobjectivein
+     Louvain(Modularity) [5]  >0                            𝑑(𝑢   𝑖)√|E|√|E|        Louvain   ourBACOaimstoidentifyclusters{C1,...,C𝐾} suchthattheintra-
+     Louvain(CPM)        >0        1            1         Louvain                             cluster connectivityismaximized.Moreconcretely,usersanditems
+     Leiden(Modularity) [48]  >0                            𝑑(𝑢   𝑖)√𝑑(𝑣   𝑗)√                that are densely connected via interactions in E should fall into
+                                                 |E|       |E|        Louvain
+     Leiden(CPM) [48]          >0        1            1         Louvain                       thesameclusterssinceitconnotes ahighcorrelationorsimilarity
+     LP[38]                                    0          -            -               LP     between users(resp. items). This leadsto the maximizationof the
+     LPAb[3]                      >0                      𝑑(𝑢   𝑖)√𝑑(𝑣   𝑗)√                  number of connections within the same clusters, i.e., intra-cluster
+                                                 |E|       |E|             LP
+     SCC[12]                                  0          -            -        Eigensolver    connectivity, which can be formulated as follows:
+     OurBACO                >0                        𝑑(𝑢   𝑖)√√1
+                                                 |E|       |V|           BACO
+                                                                                                                                     𝐾∑︁   ∑︁
+                                                                                                                          C1,...,C𝐾max             B𝑖,𝑗.                              (2)
+                                                                                                                                    𝑘=1 𝑢𝑖,𝑣𝑗∈C𝑘
+
+our proposed BACO) on theGowalladataset. Figure1plots the re-                                 Theobjectivecanbefurthertransformedintoatracemaximization
+call@20 scores(𝑦-axis) achievedby theabove methods,and their                                  problem with indicator matrixYand adjacency matrixAofG:
+respectiveaveragenumberofcross-clusterlinksandtheGinicoeffi-
+cientsoftheiruseranditemclustersizes(𝑥-axis).Particularly,fewer                                                   𝐾∑︁   ∑︁                          𝐾∑︁   ∑︁
+cross-clusterlinksconnections suggestthatrelatedusers/itemsare                                           max                   B𝑖,𝑗 ⇔max                         A𝑖,|U|+𝑗
+wellgrouped,implyingrareembeddingcollisions.AlowGinico-                                                C1,...,C𝐾 𝑘=1 𝑢𝑖,𝑣𝑗∈C𝑘            C1,...,C𝐾 𝑘=1 𝑢𝑖,𝑣𝑗∈C𝑘
+efficient signals that clusters are nearly equal in size, indicating                                               𝐾∑︁ ∑︁     ∑︁
+codebook embeddings are used evenly across users or items (i.e.,                                       ⇔maxY                        Y𝑖,𝑘 ·A 𝑖,|U|+𝑗   ·Y |U|+𝑗,𝑘
+mild codebook collapse).                                                                                          𝑘=1 𝑢𝑖∈U   𝑣𝑗∈V
+   FromFigure1(a),wheninter-clusterconnectivityisexcessively                                                       𝐾∑︁
+high (see methods circled in red), recommendation performance                                          ⇔maxY           (Y ⊤AY)   𝑘,𝑘 ⇔maxY   Trace(Y         ⊤AY).                  (3)
+suffersregardlessofwhethercodebookusage(measuredbytheGini
+coefficient)isuniformoruneven(Figures1(b)and1(c)).Incontrast,                                                     𝑘=1
+LP generates clusters of users and items with a minimal number of
+cross-clusterlinks,butcauseshighGinicoefficientsthatindicate                                  Such an optimization task is equivalent to the mincut problem for
+severeembeddingcollisionandcodebookcollapse,andhence,result                                   graphpartitioning inthe literature[43], whichis provedNP-hard.
+inpoorrecommendations.GraphHashandBACOobtainmuchbetter                                        WeightedExclusiveLassoforSizeBalance.Asremarkedearlier
+recall scores by balancing these two factors. From the foregoing                              in §3.3,in overly imbalanced clusters,substantial users/items with
+observations, wecan derive the following insight:the underlying                               lowrelevancearelikelytobegroupedtogether,whichyieldssevere
+clusters of high-quality sketching matrices should minimize inter-                            embeddingcollisionandcodebookcollapse,andthus,degradesper-
+cluster connectivity while avoiding imbalanced cluster sizes.                                 formance.Asaremedy,inBACO,weadditionallyincludeaweighted
+                                                                                              exclusive lasso to balance the sizes/volumes of the𝐾clusters.
+4   Methodology                                                                                   Specifically, instead of treating all users and items equally, we
+Inthissection,wefirstpresentourframeworkBACOforco-clustering                                  assign a weight 𝑤(𝑢)𝑖     (resp. 𝑤(𝑣)𝑗   ) to each user 𝑢𝑖 (item 𝑣𝑗). Let
+users and items in §4.1and unify classic graph clustering algo-                               𝑊 (𝑢)   =Í𝑢𝑖∈U𝑤(𝑢)𝑖    and𝑊 (𝑣)  =Í𝑣𝑗∈V𝑤(𝑣)𝑗    bethetotalweightof
+rithmsinto thisframework throughrigorous theoretical analyses                                 theusersanditemsinG,respectively.Accordingly,wedefinethe
+in§4.2.Buildingonthisframework,weproposethehybridweight-                                      volume of a clusterC             𝑘 as
+ing scheme(HWS) specialized for users and items in the context                                                                    ∑︁               ∑︁
+of e-commerce in §4.3, followed by constructing co-clusters via                                                   vol(𝐶     𝑘)=         𝑤(𝑢)             𝑤(𝑣)
+an efficient optimization solver in §4.4. Lastly, to alleviate the                                                                        𝑖   +             𝑗   ,                    (4)
+                                                                                                                                𝑢𝑖∈U𝑘            𝑣𝑗∈V𝑘
+embedding collision and codebook collapse issues in co-clusters,
+§4.5introducesasimplebuteffectiveapproachtocreatesecondary                                    whichisasummationoftheweightsoftheusersanditemstherein.
+clusters for users(SCU).                                                                          Ideally,thevolumesofallclustersshouldbecomparabletoeach
+4.1   TheBalancedCo-ClusteringFramework                                                       other, i.e., minimizing the weighted exclusive lasso:
+
+We frame the construction of sketching matricesY               (𝑢)    andY       (𝑣)                          𝐾∑︁                                  2
+as co-clustering users and items in G into 𝐾 disjoint co-clusters                                   min            vol(𝐶     𝑘)− 𝑊 (𝑢)   +𝑊   (𝑣)     ⇔ min
+{C1,...,C𝐾}.Particularly,werepresentthenode-clustermember-                                      𝐶1,𝐶2,...,𝐶𝐾 𝑘=1                        𝐾                 𝐶1,𝐶2,...,𝐶𝐾 ∥®w  ⊤Y∥   22
+shipsby anindicatormatrixY         ∈ {0,1}(|U|+|V|)×𝐾  ,whereY  𝑖,𝑘 =1                                               ⇔ min            (Y            ⊤®w®w       ⊤Y).                       (5)
+if user𝑢        𝑖 ∈ C𝑘,Y |U|+𝑗,𝑘  =1if item𝑣               𝑗 ∈ C𝑘, and0otherwise. Note                                   𝐶1,𝐶2,...,𝐶𝐾 Trace
+
+                                                                                         4
+
+=== PDF PAGE 5 ===
+Balanced Co-Clustering of Users and Items for Embedding Table Compression in Recommender Systems                                      Conference’17, July 2017, Washington, DC, USA
+
+where ®w∈R        |U|+|V| is a vector containing the weights of users                               Algorithm1:The BasicBACOAlgorithm
+and items, e.g., ®w  𝑖 =𝑤   (𝑢)𝑖     for user𝑢𝑖 ∈ U and ®w  |U|+𝑗  =𝑤   (𝑣)𝑗    for                   Input:Bipartite graphG, space budget𝐵, integer𝑇, and
+item𝑣         𝑗 ∈V.                                                                                             coefficient𝛾
+OverallObjective.Combining theforegoingintra-clusterconnec-                                           Output:Sketching matricesY                               (𝑢)    andY      (𝑣)
+tivity maximization (Eq. (3)   ) and weighted exclusive lasso mini-                                   /*Initializing labels of users and items           */
+mization (Eq. (5)) leads to the overall objective ofBACO:                                          1ℓ(𝑢     𝑖) ←𝑖∀𝑢         𝑖 ∈Uandℓ(𝑣               𝑗) ← |U|+𝑗∀𝑣        𝑗 ∈V;
+
+                                                                                                   2𝑡←0;
+               maxY   Trace(Y            ⊤AY)−𝛾·Trace(Y                     ⊤®w®w       ⊤Y),             (6)/*Updating labels of users and items                   */
+
+                                                                                                   3while𝐾             (𝑢)   +𝐾   (𝑣)   >𝐵and𝑡<𝑇do
+wherethe coefficient𝛾 can be usedto strengthenthe weight ofthe                                      4      for𝑥        𝑖 ∈ Gdo
+cluster size balance term.                                                                          5          L 𝑖 ←{ℓ(𝑦     𝑗)|𝑦 𝑗 ∈N(𝑥 𝑖)∪𝑥   𝑖};
+
+                                                                                                    6           for𝑘∈ L          𝑖 do
+4.2   TheoreticalInsights                                                                           7                 if𝑥     𝑖 ∈Uthen
+Next, we conduct a theoretical investigation of BACO framework,                                     8                        Compute𝑝(𝑘)according to Eq. (13);
+so as to (i) establish its connections to several classic clustering                                9                 else
+algorithmsoverbipartitegraphs,and(ii)uncoveritsindirectimpact                                      10                       Compute𝑝(𝑘)according to Eq. (14);
+on the downstream user and item embeddingsUandV.
+                                                                                                   11           ℓ(𝑥      𝑖) ←arg max     𝑝(𝑘);
+ConnectionstoOtherClusteringMethods.We define the Kro-                                                                         𝑘∈L 𝑖
+necker𝛿function as follows:
+                            (                                                                     12     𝑡←𝑡+1;
+             𝛿(𝑢   𝑖,𝑣𝑗)=     1  if𝑢     𝑖,𝑣𝑗 ∈ C𝑘,i.e.,Y   𝑖 =Y   |U|+𝑗  ,                           /*Re-labeling users and items                                 */
+                              0  otherwise.                                                     (7)13ℓ   (𝑢)    :{ℓ(𝑢      𝑖)|𝑢 𝑖 ∈U}→ [𝐾  (𝑢)  ];
+
+                                                                                                  14𝑓(𝑢      𝑖) ←ℓ     (𝑢)  (ℓ(𝑢     𝑖))∀𝑢  𝑖 ∈U;
+The first intra-cluster connectivity term in Eq.(6)    can be equiva-                             15ℓ   (𝑣)   :{ℓ(𝑣       𝑗)|𝑣 𝑗 ∈V}→ [𝐾  (𝑣)  ];
+lently expressed by                                                                               16ℎ(𝑣        𝑗) ←ℓ     (𝑣)  (ℓ(𝑣     𝑗))∀𝑣   𝑗 ∈V;
+
+                             𝐾∑︁                    𝐾∑︁   ∑︁                                          /*Constructing sketching matrices                         */
+    Trace(Y            ⊤AY)=     (Y ⊤AY)   𝑘,𝑘 =                  B𝑖,𝑗                            17Y   (𝑢)𝑖,𝑓(𝑢  𝑖) ←1∀𝑢          𝑖 ∈UandY          (𝑣)𝑗,ℎ(𝑣   𝑗) ←1∀𝑣          𝑗 ∈V;
+                           𝑘=1                     𝑘=1 𝑢𝑖,𝑣𝑗∈C𝑘
+         ∑︁     ∑︁                           ∑︁       ∑︁
+     =                B𝑖,𝑗 ·𝛿(𝑢     𝑖,𝑣𝑗)=                     B𝑖,𝑗 ·𝛿(𝑢     𝑖,𝑣𝑗).    (8)
+        𝑢𝑖∈U   𝑣𝑗∈V                         𝑢𝑖∈U   𝑣𝑗∈N(𝑢 𝑖)
+Analogously, the second term−𝛾·Trace(Y                           ⊤®w®w       ⊤Y)is equal to           It can be observed that the key differences of these algorithms
+                           ∑︁     ∑︁                                                               lieinthechoicesofparameter𝛾,weightsofusersanditems,aswell
+                   −𝛾·                  ®w  𝑖 · ®w |U|+𝑗  ·𝛿(𝑢     𝑖,𝑣𝑗).                          as the solver used for optimization.
+
+                          𝑢𝑖∈U   𝑣𝑗∈V                                                              ImpactonUserandItemEmbeddings.Theoverallobjecivein
+Along this line, our overall objective in Eq. (6) can be rewritten as                              Eq. (9) can be rewritten as
+
+                   ∑︁     ∑︁                                                                                                 𝐾∑︁  ∑︁       ∑︁
+            max                   B𝑖,𝑗 −𝛾·𝑤      (𝑢)𝑖    ·𝑤  (𝑣)𝑗·𝛿(𝑢     𝑖,𝑣𝑗).         (9)                        max                          B𝑖,𝑗 −𝛾·𝑤      (𝑢)𝑖    ·𝑤  (𝑣)𝑗   .
+              Y   𝑢𝑖∈U   𝑣𝑗∈V                                                                                     C1,...,C𝐾 𝑘=1  𝑢𝑖∈U𝑘   𝑣𝑗∈V𝑘
+
+   Together with the above formulation, we are enabled to unify                                    From the perspective of each user𝑢𝑖, if we are given fixed item
+existing clustering algorithms tailored to bipartite graphs includ-                                clusters{V1,...,V𝐾},𝑢𝑖 is assigned to the user clusterU𝑘 when
+ing the modularity- and CPM-based Louvain [5] and Leiden [48],                                     itstotalpenalizedinteractionweightwithitemsin        V𝑘 isminimized,
+LabelPropagation(LP)[38],SpectralCo-clustering(SCC)[12],and                                        i.e.,                                ∑︁
+LPAb[3]intoourBACOframework,assummarizedinTable2,based                                                         𝜅(𝑢    𝑖)=arg max              B𝑖,𝑗 −𝛾·𝑤      (𝑢)
+ontheirrespectiveoptimizationfunctionstheoreticallyanalyzed                                                                 1≤ℓ≤𝐾                            𝑖    ·𝑤  (𝑣)𝑗   =𝑘.        (10)
+in the following lemmata.                                                                                                             𝑣𝑗∈Vℓ
+
+   Lemma 4.1.Given bipartite graph     G, the adoption of Louvain,                                Accordingly, users𝑢𝑖 and𝑢𝑙 are assignedto thesame clusterU𝑘 if
+Leiden, or LPAb overG can maximize the following form of the bi-                                   and onlyif𝜅(𝑢    𝑖)=𝜅(𝑢         𝑙)=𝑘    . Recallthat inthe resultinguser and
+                                                                                                   item embeddingsUandV, users or items from the same clusters
+partite modularity:Í𝑢𝑖∈UÍ𝑣𝑗∈V                   B𝑖,𝑗 −𝛾·      𝑑(𝑢   𝑖)·𝑑(𝑣    𝑗)|E|·𝛿(𝑢     𝑖,𝑣𝑗),will share the same embedding vector in the codebookZ    (𝑢)    and
+orthefollowingformoftheCPM:Í𝑢𝑖∈UÍ𝑣𝑗∈V B𝑖,𝑗 −𝛾  ·𝛿(𝑢     𝑖,𝑣𝑗).                                    Z(𝑣)   (see §3.2). The above Eq.       (10)     implies that users with similar
+                                                                                                   interaction patterns with 𝐾 sets of items are likely to have the
+   Lemma4.2.The optimization objective of both      LP and SCC can be                              same embedding vectors. A similar conclusion can be made for
+expressed asmax    YÍ𝑢𝑖∈UÍ𝑣𝑗∈V B𝑖,𝑗 ·𝛿(𝑢     𝑖,𝑣𝑗).                                                item embeddings when the user clusters are fixed.
+                                                                                             5
+
+=== PDF PAGE 6 ===
+Conference’17, July 2017, Washington, DC, USA                                                                                                                                          Runhao Jiang, Renchi Yang, & Donghao Wu
+
+4.3   HybridWeightingScheme                                                                  Algorithm2:The CompleteBACOAlgorithm
+Aspinpointed inTable2,previousclusteringmethods unifiedinto                                    Input, output, and Lines 1-2 are the same as Algorithm1
+the BACO framework all adopt the same weighting functions for                               3while𝐾             (𝑢)   +𝐾   (𝑣)   >𝐵   ′ and𝑡<𝑇do
+users and items inG, either a degree-related function  𝑑(𝑥)√                                   Lines 4-17 are the same as Algorithm1;
+                                                                         |E| used
+in the bipartite modularity or a constant (e.g.,1) used in the CPM.                        18Rerun Lines 4-10 in Algorithm1for each𝑥                                    𝑖 ∈U;
+However,thissimplestrategyneglectstheintrinsicdistinctionof                                19ℓ   (𝑢)scu  :{ℓ(𝑢      𝑖)|𝑢 𝑖 ∈U}→ [𝐾  (𝑢)  ];
+users and items in the context of recommendation systems, and                              20𝑓   scu(𝑢 𝑖) ←ℓ     (𝑢)scu (ℓ(𝑢     𝑖))∀𝑢  𝑖 ∈U;
+hence, causes flawed cluster assignments.                                                  21Y   (𝑢)
+   Moreprecisely, recallthat inEq. (10)    ,user𝑢𝑖 isassignedto clus-                            𝑖,𝑓scu(𝑢 𝑖) ←1∀𝑢          𝑖 ∈U;
+terC𝑘 ifÍ𝑣𝑗∈C𝑘 B𝑖,𝑗 −𝛾·𝑤      (𝑢)𝑖    ·𝑤  (𝑣)𝑗    ismaximal.Whentheweight
+𝑤(𝑣)𝑗   =  𝑑(𝑣   𝑗)√|E|  is adopted for items, user 𝑢𝑖 will be prone to join               if𝑥  𝑖 is a user inU, and by
+theclusterofitsinteracted itemswithlowdegrees(i.e.,unpopular                                                            ∑︁                    ∑︁
+items)duetothepenaltyterm−𝛾·𝑤      (𝑢)                √                                                 𝑝(𝑘) ←                    B𝑗,𝑖 −𝛾           𝑤(𝑢)𝑗   ·𝑤  (𝑣)𝑖              (14)
+                                               𝑖    ·𝑑(𝑣   𝑗)|E|,whichiscounter-                                   𝑢𝑗∈N(𝑥 𝑖)∩C𝑘             𝑢𝑗∈U𝑘
+intuitive. In BACO, we view all items interacted by user𝑢𝑖 equally
+instead, leading to the following weight for item𝑣         𝑗                               if it isan item inV (Lines 6-10). Next,at Line 11, the newlabel of
+                                                                                           𝑥𝑖 issettotheonewiththemaximumlikelihood.Notethatthefirst
+                                𝑤(𝑣)      √︁                                               terminthelikelihood𝑝(𝑘)      measurestheintra-clusterconnectivity
+                                   𝑗   =     1|V|.                                   (11)  of𝑥𝑖 toitsadjacentitems(resp.users)withlabel𝑘,whilethesecond
+   On the other hand, item 𝑣𝑗 will be merged to cluster C𝑘 with                            term considers thepenalty𝛾·𝑤    (𝑢)𝑗   ·𝑤  (𝑣)𝑖    for all items(resp. users)
+                                                                                           withlabel𝑘.Inessence,thislabelupdatingruleistomaximizethe
+maximalÍ𝑢𝑖∈C𝑘 B𝑖,𝑗 −𝛾·𝑤      (𝑢)𝑖    ·𝑤  (𝑣)𝑗   . In this case, item𝑣𝑗 will pri-           objectiveEq.(9)    locallyforeachtargetnode        𝑥𝑖 inagreedyfashion.
+oritize the cluster of users with lower weights 𝑤(𝑢)𝑖    . Recall that                         Afterthat,Algorithm1mapstheclusterlabelsofusersanditems
+in real-world scenarios, compared to those who interacted with                             toconsecutiveintegers[𝐾  (𝑢)  ] and[𝐾  (𝑣)  ],respectively,followedby
+plenty of items, the interaction with item 𝑣𝑗 from a user𝑢𝑖 with                           relabeling all the users and items accordingly (Lines 13-16). Based
+fewerinteractionsconveysastrongerpreferenceandinterest.Intu-                               thereon,wecanconstructsketchingmatricesY               (𝑢)    andY      (𝑣)   atLine
+itively,𝑣𝑗 should bemorelikely to be grouped with𝑢𝑖. Given this                            17 with the new labels.
+observation, we resort to the degree-related weight for users, as                          Remark.Although                Louvaincanbeappliedtooptimizeourobjec-
+exemplified below:                                                                         tiveinEq. (9)    withminorchanges,itsoptimization strategytends
+                                                                                           to merge small clusters, leading to theresolution limitissue [             27]
+                     𝑤(𝑢)𝑖   =        𝑑(𝑢    𝑖)√︁Í    √︁                                   onbipartitenetworks.Inotherwords,Louvainwillgreedilygroup
+                                    𝑢ℓ∈U𝑑(𝑢    ℓ) = 𝑑(𝑢    𝑖)|E|.                    (12)  nodes with low connectivity for higher overall modularity. The
+                                                                                           empiricalclustersizedistributionsreportedinFigure7confirmthis
+4.4   TheOptimizationAlgorithm                                                             problem, and Table5manifests its detrimental effects on recom-
+The pseudo-code of our optimization solver forBACOis illustrated                           mendation performance.
+inAlgorithm1.Giventhebipartitegraph               G=(U,V,E)              ,thespace
+budget 𝐵 for codebooks, the maximum number 𝑇 of iterations,                                4.5   GeneratingSecondaryClustersforUsers
+and a coefficient𝛾, BACO begins by assigning auniquecluster label                          Although our basic BACO in Algorithm1can achieve an effective
+ℓ(𝑢   𝑖) ←𝑖     (resp. ℓ(𝑣   𝑗) ← |U|+𝑗  ) to each user𝑢𝑖 (item 𝑣𝑗) (Line                  balance and optimization of two terms in Eq. (6)   , and thus, pro-
+1) and reset the iteration count (Line 2). Afterwards, Algorithm1                          ducegooddivisionsofusersanditems,asempiricallyvalidatedin
+starts an iterative procedure (Lines 3-12) to update the labels of                         §5.4and §5.5, it suffers from a fundamental deficiency of repre-
+usersanditemsuntilthetotalnumberoflabelsforusersanditems                                   senting each user via exactly one embedding in codebooks, whilst
+𝐾(𝑢)   +𝐾   (𝑣)   reaches the space budget𝐵, where𝐾(𝑢)    and𝐾(𝑣)   are                    e-commerceusershavemultiple,evolvinginterestsandoftenshare
+defined as                                                                                 taste similarities with various user groups.
+       𝐾(𝑢)   ← |{ℓ(𝑢     𝑖)|𝑢 𝑖 ∈U}|,    𝐾 (𝑣)   ← |{ℓ(𝑣      𝑗)|𝑣 𝑗 ∈V}|.                    Toremedythisissuewhilemaintainingparameterefficiency,we
+                                                                                           proposetoassigneachusertotwoclusters,whichdemandsasmall
+   In each iteration, BACO picks each user or item fromG and up-                           spaceof𝑂(|U|)   foradditionalusersketches,leadingtoanewspace
+dates its label to the one with the highest likelihood among all                           budget for the codebooks: 𝐵′ ←  𝐵·𝑑−|U|𝑑     . Accordingly, the loop
+the labels of its adjacent neighbors, akin to thelabel propagation                         conditionatLine3inAlgorithm1willbechangedto                   𝐾(𝑢)   +𝐾   (𝑣)   >
+scheme[38].Specifically,foreachnode𝑥𝑖 ∈ G,BACOfirstcollects                                𝐵′. Next,the taskis to constructthe secondary clusters forusers.
+itscandidatelabelsetL𝑖 fromtheneighborsand𝑥𝑖 atLine5.Then,                                 Specifically, as displayed in Algorithm2, we employ a simple but
+for every label𝑘∈ L     𝑖, we calculate its likelihood by                                  effectiveSCUstrategy,whichonlyrepeatsLines4-10inAlgorithm1
+                             ∑︁                   ∑︁                                       for each user inU for once to generate updated cluster labels as
+             𝑝(𝑘) ←                    B𝑖,𝑗 −𝛾          𝑤(𝑢)𝑖    ·𝑤  (𝑣)𝑗              (13)their secondary clusters (Line 18). BACO then maps users to 𝐾(𝑢)
+                        𝑣𝑗∈N(𝑥 𝑖)∩C𝑘             𝑣𝑗∈V𝑘                                     consecutive integers based on the secondary cluster labels, i.e.,
+                                                                                       6
+
+=== PDF PAGE 7 ===
+Balanced Co-Clustering of Users and Items for Embedding Table Compression in Recommender Systems                                      Conference’17, July 2017, Washington, DC, USA
+
+      Table3:Statisticsofdatasetsusedinexperiments.                                   •  Hashingmethods:Random,Frequency Hashing[16,66],Double
+       Dataset        #Users    #Items    #Interactions    Density                       Hashing[66],Hybrid Hashing[66],LSH[10],CCE[49],LEGCF[34].
+        Beauty         22,363      12,101            198,502            0.073%        •  Graphclusteringmethods:(Double)GraphHash[56],Leiden[48],
+       Gowalla         29,858      40,981          1,027,370           0.084%            LP[38],EBMD[27],infomap[40],BiMLPA[45],BRIM[37].
+       Yelp2018        31,668      38,048          1,561,406           0.130%         •Co-clustering methods:SCC[12],SBC[29],ITCC[13].
+    AmazonBook         52,643      91,599          2,984,108           0.062%
+                                                                                      EvaluationProtocol.Weevaluatetop-      𝐾 itemrecommendation
+𝑓scu :U → [𝐾  (𝑢)  ] atLines19-20.Eventually,foreachuser𝑢𝑖 ∈U,                        performanceusingtwowidelyadoptedrankingmetrics:Recall@𝐾
+wesettheentryY  (𝑢)                                                                   and NDCG@𝐾, with𝐾=   20by default. The metrics are averaged
+                     𝑖,𝑓scu(𝑢 𝑖) thatcorrespondstoitssecondarycluster                 over all users in the test set. For faircomparison, all methods are
+in its sketch to1(Line 21).                                                           implementedwithanidenticalexperimentalprotocol,employing
+4.6   ComplexityAnalysis                                                              theclassicalLightGCN[22]modelasthebackboneandtheBPRloss
+                                                                                      function. Furtherexperimental detailsare provided in AppendixC.
+In Algorithm1,each iteration accesses the labels of neighbors in
+𝑂(|E|)   time at Lines 3-4. Since only one label is updated at each                   5.2   RecommendationPerformanceEvaluation
+step (Line 11), at most two clusters are affected. By maintaining                     Table4reports the mean Recall@20 and NDCG@20 performance
+global sumsof clusterweights andupdating them wheneverlabel                           of BACO and the baselines across four datasets, averaged over 5
+changes,thecomputationofEq.(13)     orEq.(14)     canbedonein𝑂(  1).                  independentrunsusingthebesthyperparameters.Theresultsunder
+ToensureterminationoverdisconnectedG,weimposeamaximum                                 other top-𝐾 (10, 50) values are quantitatively similar, and thus, are
+number𝑇 (typically8)ofiterationsontheiterativeprocedure(Lines                         deferred to appendix. We can make the following observations.
+4-11). In practice, the label propagation process (Lines 3-12) can                       Firstly,ourproposedalgorithmconsistentlyoutperformsallbase-
+usuallyconvergeandterminaterapidly[38],i.e.,theactualnumber                           linesacrossalltesteddatasets,withmarkedimprovements.Forin-
+of iterations is less than𝑇.2 Therefore, Algorithm1takes                   𝑂(𝑇|E|)    stance, our algorithm surpasses the best baselines by considerable
+time.Similarly,obtainingthesecondaryclusterlabelsrequiresonly                         margins of0   .28%,1       .29%,0       .88%, and0            .47%in terms of Recall@20
+𝑂(|E|)   time.AtLines 13-17and19-21, clustersaremappedto sets                         onBeauty,Gowalla,Yelp2018,andAmazonBook,respectively.Par-
+of consecutive integers, which takes𝑂(|U|+|V|)   time. Overall,                       ticularly,BACOattainsanaverageimprovementof0   .96%inrecall
+the time complexity of the completeBACOis𝑂(|U|+|V|+𝑇|E|).                             and0      .56%in NDCG over state-of-the-art community detection
+Thespacecomplexityisboundedby𝑂(|U|+|V|+|E|)   duetothe                                methods,andofferssignificantlyfasterruntime.Additionally,BACO
+storage ofGand clusters.                                                              consistently maintains outstanding performance, while SCC and
+5   Experiments                                                                       Leiden tend to fail on certain datasets. These results demonstrate
+This section experimentally evaluates BACO against 18 ETC base-                       theeffectivenessof ourBACO inexploiting andintegratingcollab-
+linesinrecommendations,andconductsrelatedablationstudiesand                           orativeinformationforrecommendationacrossdiversecontexts,
+component analyses to answer the following research questions:                        enabled by its hybrid weighting schemes and refined secondary
+                                                                                      cluster design.
+• RQ1:How does        BACOperform interms ofaccuracy comparedto                          Moreover,comparedwithsimplehashmethods(e.g.,Randomand
+  full modelsand ETC baselines inrecommendation tasks? (§5.2)                         Frequency), which rely solely on statistical probabilities, graph-
+• RQ2:Howdoes        BACOperformintermsofcomputationefficiency                        basedmethods(e.g.,GraphHashandLP)consistentlydemonstrate
+  and parameter reduction compared to ETC baselines? (§5.3)                           superiorperformanceacrossmostdatasetsbecauseoftheirability
+• RQ3: How effectively do the HWS and SCU enhance the perfor-                         toincorporategraphstructuralinformation.Unlikeconventional
+  mance ofBACO? (§5.4and §5.5)                                                        clusteringalgorithms(e.g.,𝑘-means),mostcommunitydetection
+AllexperimentsareconductedonaLinuxmachineequippedwith                                 methods(suchasInfomap,BiMLPA,andBRIM)donotprovidecon-
+anNVIDIAAmpereA100GPU(80GB),AMDEPYC7513CPUs(2.6                                       trol over the clusternumber, which leads to fewer parametersbut
+GHz), and 1 TB RAM. The codes and datasets are made publicly                          inferior performance in our experiments. In addition, SCC, as a
+available athttps://github.com/HKBU-LAGAS/BACO.                                       classical co-clustering method, serves as the strongest baseline on
+                                                                                      BeautyandYelp2018,butincursamuchhighercomputationalcost.
+5.1   ExperimentalSetup                                                               5.3   EfficiencyandParameterReduction
+
+Datasets.Table3summarizesthefourdatasetsusedintheretrieval                            Figure2presentstheruntimecostsof    BACOandfourtop-performing
+task, includingBeauty[                           51],Gowalla[           8],Yelp2018[              56],Amazon-baselines,aslistedinTables3.Notethatthe          𝑦-axisisinlogarithmic
+Book[   21], each representing a specific recommendation domain                       scale,andtherunningtimeismeasuredinseconds(sec).Baselines
+andallpubliclyavailable.Foreachdataset,werandomlydividethe                            with the best clustering quality are marked with★.
+data into 80% for training, 10% for validation, and 10% for testing.                     AsshowninFigure2,    BACOconsistentlyofferssuperiorefficiency
+Baselines.Forathoroughevaluation,weinclude18ETCbaselines                              whileattainingthebestperformanceacrossalldatasets.Compared
+in the experiments, broadly categorized into three groups:                            to the best baselines in Table4,         BACO achieves speedups of400  ×,
+                                                                                      2.1×,346×, and1      .7× onBeauty,Gowalla,Yelp2018, andAmazon-
+2As validated by our empirical results in AppendixC.2.                                Book, respectively. Specifically,    BACO is at least346      × faster than
+
+                                                                                  7
+
+=== PDF PAGE 8 ===
+                                               Conference’17, July 2017, Washington, DC, USA                                                                                                                                          Runhao Jiang, Renchi Yang, & Donghao Wu
+
+                                                             Table4:RecommendationPerformance(𝑘=20).Bestresultshighlightedinblueandrunner-upunderlined                                                                                   .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                              (a)Beauty                                (b)Gowalla
+                                                  (a)Beauty              (b)Gowalla              (c)Yelp2018           (d)AmazonBook
+                                               Figure2:Efficiencyofstrongmethodsinconstructingsketch-
+                                               ingmatrices.(bestbaselinesinTable4aremarkedwith★)
+
+                                               coclustering methods. Furthermore, when compared to highly ef-
+                                               ficient modularity maximization approaches (e.g.,GraphHash and
+                                               Leiden),BACOsurpassesthembothinspeedandinclusteringqual-
+                                               ity.WhileLPisslightlymoreefficientowingtoitslightweightlabel                                                                  (c)Yelp2018                           (d)AmazonBook
+                                               propagation,ourmethodconsistentlyoutperformsLPinclustering                                                   Figure3:Performancewhenvaryingparameterratios.
+                                               quality,achievingrecallimprovementsintherangeof1   .2%to4       .9%.
+                                                   Figure3presents the Recall@20 results under varying compres-                                                          Table5:ImpactofWeightingSchemes.
+                                               sion ratios ranging from1    /2to1    /6. As the ratio increases,   BACO
+                                               and other graph-based algorithms exhibit distinct trends in per-
+                                               formanceacross differentdatasets,with anoverall trendofinitial
+                                               improvement followed by a decline. Specifically, forYelp2018and
+                                               AmazonBook,     BACO’s performance hits a nadir at ratio1     /2and
+                                               peaks around1      /4or1    /5, while forBeautyandGowalla, it rises
+                                               initially then drops as the ratio increases. Unlike hashing methods,
+                                               graph-basedapproachesrelyonsufficientlylargecommunitiesto
+                                               leverageuser/itemhomogeneitybeforecollisionsinfluenceperfor-Beauty                                      Gowalla                                    Yelp2018                                AmazonBook
+                                       Methodmance. Therefore, we recommend setting the compression ratio to
+                                               atleast1      /5,aslowervaluescandegradeperformancetorandom#Params↓R@20↑N@20↑#Params↓R@20↑N@20↑#Params↓R@20↑N@20↑#Params↓R@20↑N@20↑
+                                     Full Modelhashing levels.2.206M      10.931     5.769       4.534M      18.204     11.600      4.462M       8.867      5.526       9.231M       8.416      5.487
+                                        Random                    0.529M       4.696      2.347       0.742M       9.214      5.909       0.977M       4.894      3.114       1.255M       2.485      1.7048
+                        R@20R@20R@20R@20Frequency  Hashing[16]    0.529M       4.367      2.194       0.742M       8.574      5.480       0.977M       4.931      3.142       1.255M       2.184      1.497
+                    17.07.78.5timetimetimetime(sec)(sec)(sec)(sec)Double  Hashing[66]0.529M       4.132      2.080       0.742M       9.215      5.994       0.977M       5.293      3.366       1.255M       2.398      1.687
+                     1039.6★Hybrid  Hashing[66]                   0.529M       4.564      2.307       0.742M      10.182     6.581       0.977M       6.090      3.884       1.255M       2.800      1.884
+                     102   ★
+                    16.41037.48.0
+                     1039.2   WeightingLSH[10]     Beauty            Gowalla           Yelp2018        AmazonBook1.049M       5.566      2.787       1.049M       9.768      6.253       1.049M       4.707      2.952       2.097M       3.214      2.167
+                    15.81027.17.5Scheme
+BACO               GraphHash1028.810   CCE[49]LeidenR@20↑N@20↑R@20↑N@20↑R@20↑N@20↑R@20↑N@20↑0.529M       7.400      3.699       0.742M      10.455     6.851       0.977M       5.505      3.538       1.255M       3.233      2.124SCC
+               SCC  15.21026.87.010GraphHash                LP
+                     8.410 Louvain(HWS)★LEGCF[34]8.551    4.480   15.844   9.974    6.504    4.088    7.754    5.3140.529M       7.908      3.738       0.742M       8.463      5.125       0.977M       4.349      2.685        OOM            -              -
+               Leiden14.66.56.5101★  EBMD                BACO
+                       1
+                     8.01  Louvain(CPM)GraphHash[56]8.489    4.417   16.008   10.364   7.211    4.588    6.999    4.7470.529M       8.167      4.272       0.742M      15.325     9.658       0.977M       6.244      3.882       1.255M       7.261      5.033
+                    14.06.26.0
+                    13.45.97.65.50.10.10.11Leiden(HWS)DoubleGraphHash[56]8.559    4.455   15.705   10.007   6.563    4.1580.529M       6.266      3.198       0.742M      12.377     7.905       0.977M       5.134      3.236       1.255M       5.194      3.5017.7605.314
+                        1/21/21/21/2Leiden(CPM)1/31/31/31/31/41/41/41/4LP[38]1/51/51/51/58.7251/61/61/61/64.492   15.888   10.258   7.152    4.576    7.066    4.8250.530M       7.883      4.088       0.743M      11.749     7.464       0.977M       5.423      3.391       1.255M       3.483      2.275
+                             ModularityLeiden[48]8.452    4.380   16.246   10.355   7.296    4.661    7.566    5.1640.529M       7.943      4.141       0.743M      15.4069.7380.979M       6.230      3.852       1.256M       7.4265.115
+                                 CPMEBMD[27]   8.159    4.169   16.009   10.262   6.849    4.341    7.322    5.1110.536M       8.095      4.037       0.746M      10.313     6.564       0.996M       4.947      3.088       1.261M       3.332      2.199
+                            reverseHWSinfomap[40]8.159    4.169   15.935   10.147   7.116    4.461    7.261    5.0280.025M       4.614      2.252       0.016M       5.893      3.590       0.037M       4.335      2.688       0.018M       1.166      0.736
+                            BACOw/oSCUBiMLPA[45]8.619    4.406   16.3930.001M       3.765      1.708       0.007M       6.397      3.920       0.008M       4.462      2.767       0.001M       3.765      1.70810.5377.3444.679    7.669    5.237
+                                      BRIM[37]                    0.003M       8.253      4.013       0.002M       8.074      5.150       0.001M       4.483      2.789       0.001M       2.302      1.440
+                                       SCC[12]                    0.529M       8.801          4.476        0.743M      13.792     8.817       0.977M       6.633               4.124        1.255M       5.558      3.615
+                                       SBC[29]                    0.529M       6.816      3.345       0.742M      10.458     6.715       0.977M       4.831      3.023       1.255M       3.556      2.372
+                                      ITCC[13]                    0.529M       4.812      2.437       0.742M       7.685      5.156       0.977M       4.375      2.844       1.255M       2.610      1.790
+                                         BACO                     0.529M          9.079       4.574       0.742M         16.692       10.674      0.976M           7.510       4.763       1.255M          7.892        5.240
+                                    v.s. Baselines                     -           +0.278    +0.098           -           +1.286    +0.936           -           +0.877    +0.639           -           +0.466    +0.125
+                                   v.s. Full Model                 -76.0%       -1.852     -1.195       -83.6%       -1.512     -0.926       -78.1%       -1.357     -0.763       -86.4%       -0.524     -0.247
+
+=== PDF PAGE 9 ===
+                  Balanced Co-Clustering of Users and Items for Embedding Table Compression in Recommender Systems                                      Conference’17, July 2017, Washington, DC, USA
+
+                           Table6:ImpactofSecondaryClustersforUsers.                                               capacity.Ourexperimentsandablationsdemonstratecompetitive
+                                                                                                                   recommendation quality, substantial parameter reductions, and
+                                                                                                                   considerable speedups against strong baselines.
+
+                                                                                                                   Acknowledgments
+                                                                                                                   ThisworkispartiallysupportedbytheNationalNaturalScience
+                                                                                                                   FoundationofChina(No.62302414),theHongKongRGCYCRG(No.
+                                                                                                                   C2003-23Y), and Guangdong and Hong Kong Universities “1+1+1”
+                                                                                                                   JointResearchCollaborationScheme,projectNo.:2025A0505000002.
+
+                  5.4   ImpactofWeightingSchemes                                                                   References
+                                                                                                                    [1]  ArindamBanerjee,InderjitDhillon,JoydeepGhosh,SrujanaMerugu,andDhar-
+                  Table5presents the recall and NDCG results achieved by         BACO,                                   mendra S Modha. 2004. A generalized maximum entropy approach to bregman
+                  integrated withvarious weighting schemesas summarized inTa-                                            co-clustering and matrix approximation. InSIGKDD. 509–514.
+                  ble2, within our unified framework. Overall, HWS consistently                                     [2]  Michael J Barber. 2007. Modularity and community detection in bipartite net-
+                                                                                                                         works.Physical Review E76, 6 (2007), 066102.
+                  outperformscompetingmethodsin mostcases,indicating thatour                                        [3]  Michael JBarber and JohnW Clark.2009. Detecting networkcommunitiesby
+                  scheme is better suited for real-world recommendationscenarios.                                        propagating labels under constraints.Physical Review E80, 2 (2009), 026129.
+                                                                                                                    [4]  Elena Battaglia, Federico Peiretti, and Ruggero Gaetano Pensa. 2024.    Co-
+                  Specifically, when combined with HWS, BACO achieves average                                            clustering: A survey of the main methods, recent trends, and open problems.
+                  improvementsof0   .12%inrecalland0            .07%inNDCGacrossdatasets                                 CSUR57, 2 (2024), 1–33.
+                  compared to other strategies. Notably, onAmazonBook, all algo-                                    [5]  VincentDBlondel,Jean-LoupGuillaume,Renaud Lambiotte, andEtienneLefeb-
+                                                                                                                         vre.2008. Fastunfoldingofcommunitiesinlargenetworks.Journal of statistical
+                  rithms achieve their best performance when combined with HWS.                                          mechanics2008, 10 (2008), P10008.
+                  In particular, the Leiden algorithm achieves the highest perfor-                                  [6]  Ting Chen, Martin Renqiang Min, and Yizhou Sun. 2018.  Learning k-way d-
+                                                                                                                         dimensional discrete codes for compact embedding representations. InICML.
+                  mance,demonstratingthatHWScanbeeffectivelyintegratedinto                                               PMLR, 854–863.
+                  variousframeworkstofurtherenhancetheireffectiveness.Theonly                                       [7]  Yizhou Chen, Guangda Huzhang, Anxiang Zeng, Qingtao Yu, Hui Sun, Heng-Yi
+                  exception occurs on the small-scaleBeautydataset, where HWS is                                         Li, JingyiLi, YaboNi, HanYu,and Zhiming Zhou.2023. Clustered embedding
+                                                                                                                         learning for recommender systems. InTheWebConf. 1074–1084.
+                  slightly outperformed by CPM, yet it still surpasses the baselines                                [8]  EunjoonCho,SethAMyers,andJureLeskovec.2011. Friendshipandmobility:
+                  in Table4.                                                                                             user movement in location-based social networks. InSIGKDD. 1082–1090.
+                                                                                                                    [9]  BenjaminColeman,Wang-ChengKang,MatthewFahrbach,RuoxiWang,Lichan
+                                                                                                                         Hong, Ed Chi, and Derek Cheng. 2023. Unified Embedding: Battle-tested feature
+                  5.5   ImpactofSecondaryClustersforUsers                                                                representations for web-scale ML systems.NeurIPS36 (2023), 56234–56255.
+                                                                                                                   [10]  MayurDatar,NicoleImmorlica,PiotrIndyk,andVahabSMirrokni.2004.Locality-
+                  As illustratedinTable6, theintegration ofsecondary clustersfor                                         sensitive hashing scheme based on p-stable distributions. InSCG. 253–262.
+                  users in BACO significantly reduces hash collisions, resulting in av-                            [11]  Aditya Desai, Li Chou, and Anshumali Shrivastava. 2022. Random Offset Block
+                  erage improvements of0   .29%in recall and0            .10%in NDCG over                                Embedding (ROBE) for compressed embedding tables in deep learning recom-
+                                                                                                                         mendation systems.MLSys4 (2022), 762–778.
+                  theversionwithout secondaryclusters(w/o SCU).Particularly,on                                     [12]  Inderjit S Dhillon. 2001.  Co-clustering documents and words using bipartite
+                  Beauty,           GraphHashequippedwithSCUyieldsnotablegainsof0   .9%                                  spectral graph partitioning. InSIGKDD. 269–274.
+                  inrecalland0     .5%inNDCG,whereasusingrandomsecondarylabels                                     [13]  Inderjit S Dhillon, Subramanyam Mallela, and Dharmendra S Modha. 2003.
+                                                                                                                         Information-theoretic co-clustering. InSIGKDD. 89–98.
+                  in DoubleGraph leads to a drop in performance. Notably, introduc-                                [14]  LiangFeng,QianchuanZhao,andCangqiZhou.2020. Improvingperformances
+                  ingsecondaryitemclusters(w/SCI)generallyresultsindiminished                                            of Top-N recommendations with co-clustering method.ESA143 (2020), 113078.
+                  performance,likelyduetothedilutionofuser-levelpersonalization                                    [15]  Bin Gao, Tie-Yan Liu, Xin Zheng, Qian-Sheng Cheng, and Wei-Ying Ma. 2005.
+                                                                                                                         Consistent bipartite graph co-partitioning for star-structured high-order hetero-
+                  as numerous items are added to clusters. In contrast, SCU sharp-                                       geneous data co-clustering. InSIGKDD. 41–50.
+                  ens user differentiation. Including both SCU and SCI decreases                                   [16]  BenjaminGhaemmaghami,MustafaOzdal,RakeshKomuravelli,DmitriyKorchev,
+                                                                                                                         DheevatsaMudigere,KrishnakumarNair,andMaximNaumov.2022. Learningto
+                  performance versus SCU alone, since excessive secondary labels                                         collide:Recommendationsystemmodelcompressionwithlearnedhashfunctions.
+                  may lead to potential conflicts. An exception occurs onYelp2018,                                       arXiv(2022).
+                  where BACO with both SCU and SCI fortuitously aligns with the                                    [17]  Gérard Govaert. 1995. Simultaneous clustering of rows and columns.Control
+                                                                                                                         and Cybernetics24 (1995), 437–458.
+                  dataset’sstructure.OurresultsindicatethatemployingSCUalone                                       [18]  Huifeng Guo, Wei Guo, Yong Gao, Ruiming Tang, Xiuqiang He, and Wenzhi Liu.
+                  is both sufficient and appropriate for all methods, offering a more                                    2021. Scalefreectr: Mixcache-based distributed training system for ctr models
+                                                                                                                         with huge embedding table. InSIGIR. 1269–1278.
+                  reasonable approach than employing the double hash trick.                                        [19]  Udit Gupta, Carole-Jean Wu, Xiaodong Wang, Maxim Naumov, Brandon Reagen,
+                                                                                                                         DavidBrooks,BradfordCottel,KimHazelwood,MarkHempstead,BillJia,etal.
+                  6   Conclusion                                                                                         2020. The architecturalimplications of facebook’sdnn-based personalized rec-
+                                                                                                                         ommendation. InHPCA. IEEE, 488–501.
+                  ThispaperpresentsBACO,asimple,fast,andeffectiveframeworkto                                       [20]  JohnAHartigan.1972. Directclusteringofadatamatrix.JASA67,337(1972),
+                  compressembeddingtablesthroughbalancedco-clusteringofusers                                             123–129.
+                                                                                                                   [21]  Ruining He and Julian McAuley. 2016.  Ups and downs: Modeling the visual
+                  and items. Through maximizing intra-cluster connectivity and en-                                       evolutionoffashiontrendswithone-classcollaborativefiltering.InTheWebConf.
+                  forcingbalancedclustersizes,BACOalleviatesembeddingcollisions                                          507–517.
+                                                                                                                   [22]  Xiangnan He, Kuan Deng, Xiang Wang, Yan Li, Yongdong Zhang, and Meng
+                  and codebook collapse, as well as aligns with established graph                                        Wang.2020. Lightgcn:Simplifyingandpoweringgraphconvolutionnetworkfor
+                  clusteringmethodologies.Wefurtherintroduceahybridweighting                                             recommendation. InSIGIR. 639–648.
+                  scheme, an efficient label-propagation solver that sidesteps resolu-                             [23]  GangweiJiang,HaoWang,JinChen,HaoyuWang,DefuLian,andEnhongChen.
+                                                                                                                         2021. xLightFM: Extremely memory-efficient factorization machine. InSIGIR.
+                  tionlimits,andsecondaryuserclustersthatexpandrepresentational                                          337–346.
+                                                                                                              9
+
+
+
+
+    Weighting           Beauty            Gowalla           Yelp2018       AmazonBook
+     Scheme         R@20↑N@20↑R@20↑N@20↑R@20↑N@20↑R@20↑N@20↑
+
+GraphHashw/SCU       9.073   4.725   15.856   9.930    6.567    4.117    7.655    5.108
+ Leidenw/SCU         8.910    4.670   15.924  10.041   6.530    4.084    7.605    5.101
+    LPw/SCU          8.428    4.366   11.517   7.292    5.120    3.186    3.540    2.323
+  BACOw/oSCU         8.619    4.406   16.393  10.537   7.344    4.679    7.669    5.237
+   BACOw/SCI         8.530    4.306   15.892  10.195   7.209    4.544    7.393    5.084
+BACOw/SCU&SCI        8.982    4.555   16.503  10.476  7.648    4.844    7.801    5.214
+       BACO          9.079    4.574  16.692  10.674   7.510    4.763   7.892   5.240
+
+=== PDF PAGE 10 ===
+Conference’17, July 2017, Washington, DC, USA                                                                                                                                          Runhao Jiang, Renchi Yang, & Donghao Wu
+
+
+[24]  Wang-Cheng Kang, Derek Zhiyuan Cheng, Ting Chen, Xinyang Yi, Dong Lin,                                [48]  Vincent A Traag, Ludo Waltman, and Nees Jan Van Eck. 2019. From Louvain to
+      LichanHong,andEdHChi.2020. Learningmulti-granularquantizedembeddings                                        Leiden: guaranteeing well-connected communities.Scientific reports9, 1 (2019),
+      for large-vocab categorical features in recommender systems. InTheWebConf.                                  1–12.
+      562–566.                                                                                              [49]HenryTsangandThomasAhle.2023. Clusteringthesketch:dynamiccompres-
+[25]  Wang-Cheng Kang, Derek Zhiyuan Cheng, Tiansheng Yao, Xinyang Yi, Ting                                       sion for embedding tables.NeurIPS36 (2023), 72155–72180.
+      Chen, Lichan Hong, and Ed H Chi. 2021. Learning to embed categorical features                         [50]  Ulrike Von Luxburg. 2007.   A tutorial on spectral clustering.Statistics and
+      without embedding tables for recommendation. InSIGKDD. 840–850.                                             computing17, 4 (2007), 395–416.
+[26]  Petr Kasalický, Martin Spišák, Vojtěch Vančura, Daniel Bohuněk,Rodrigo Alves,                         [51]  Chenyang Wang, Yuanqing Yu, Weizhi Ma, Min Zhang, Chong Chen, Yiqun Liu,
+      and Pavel Kordík. 2025.  The Future is Sparse: Embedding Compression for                                    and Shaoping Ma. 2022. Towards representation alignment and uniformity in
+      Scalable Retrieval in Recommender Systems. InRecSys. 1099–1103.                                             collaborative filtering. InSIGKDD. 1816–1825.
+[27]  JunghoonKim,KaiyuFeng,GaoCong,DiwenZhu,WenyuanYu,andChunyan                                           [52]  HongjunWang,YiSong,WeiChen,ZhipengLuo,ChongshouLi,andTianruiLi.
+      Miao.2022. ABC:attributedbipartiteco-clustering.PVLDB15,10(2022),2134–                                      2024. A SurveyofCo-Clustering.TKDE18,9, Article224(Nov.2024),28 pages.
+      2147.                                                                                                 [53]  Qinyong Wang, Hongzhi Yin, Tong Chen, Zi Huang, Hao Wang, Yanchang
+[28]  Diederik P Kingma and Jimmy Ba. 2014. Adam: A method for stochastic opti-                                   Zhao, Nguyen Quoc Viet Hung, Maarten van Steen, Tie-Yan Liu, Yennun Huang,
+      mization.arXiv(2014).                                                                                       and Irwin King. 2020.  Next Point-of-Interest Recommendation on Resource-
+[29]  YuvalKluger,RonenBasri,JosephTChang,andMarkGerstein.2003. Spectral                                    [54]  Kilian Weinberger, Anirban Dasgupta, John Langford, Alex Smola, and JoshConstrained Mobile Devices. InTheWebConf. 906–916.
+      biclustering of microarray data: coclustering genes and conditions.Genome                                   Attenberg. 2009.  Feature hashing for large scale multitask learning. InICML.
+      research13, 4 (2003), 703–716.                                                                              1113–1120.
+[30]  Daniel B Larremore, Aaron Clauset, and Abigail Z Jacobs. 2014.   Efficiently                          [55]  Chao-YuanWu,AlexBeutel,AmrAhmed,andAlexanderJSmola.2016. Explain-
+      inferring community structure in bipartite networks.Physical Review E90, 1                                  ingreviewsandratingswithpaco:Poissonadditiveco-clustering.InTheWebConf.
+      (2014), 012805.                                                                                             127–128.
+[31]  Shiwei Li, HuifengGuo, Xing Tang, Ruiming Tang, Lu Hou, Ruixuan Li,and Rui                            [56]  XinyiWu,DonaldLoveland,RunjinChen,YozenLiu,XinChen,LeonardoNeves,
+      Zhang.2024. Embeddingcompressioninrecommendersystems:Asurvey.CSUR
+      56, 5 (2024), 1–21.                                                                                         AliJadbabaie, MingxuanJu, NeilShah,and Tong Zhao.2025. GraphHash:Graph
+[32]  Defu Lian, Haoyu Wang, Zheng Liu, Jianxun Lian, Enhong Chen, and Xing                                       Clustering Enables Parameter Efficiency in Recommender Systems. InTheWeb-
+      Xie. 2020.  Lightrec: A memory and search-efficient recommender system. In                                  Conf. 357–369.
+      TheWebConf. 695–705.                                                                                  [57]  Xiaorui Wu, Hong Xu, Honglin Zhang, Huaming Chen, and Jian Wang. 2020.
+[33]  Paul Pu Liang, Manzil Zaheer, Yuan Wang, and Amr Ahmed. 2021. Anchor &                                      Saec: similarity-aware embedding compression in recommendation systems. In
+      Transform: Learning Sparse Embeddings for Large Vocabularies. InICLR.                                       SIGOPS. 82–89.
+[34]  XurongLiang,TongChen,LizhenCui,YangWang,MengWang,andHongzhi                                           [58]  YongjiWu,DefuLian,NeilZhenqiangGong,LuYin,MingyangYin,JingrenZhou,
+      Yin. 2024. Lightweight embeddings for graph collaborative filtering. InSIGIR.                               and Hongxia Yang. 2021. Linear-time self attention with codeword histogram
+      1296–1306.                                                                                                  for efficient recommendation. InTheWebConf. 1262–1273.
+[35]  David Melamed. 2014.  Community structures in bipartite networks: A dual-                             [59]  Xin Xia, Hongzhi Yin, Junliang Yu, Qinyong Wang, Guandong Xu, and Quoc
+      projection approach.PloS one9, 5 (2014), e97823.                                                            Viet Hung Nguyen. 2022.  On-Device Next-Item Recommendation with Self-
+[36]  MarkEJNewmanandMichelleGirvan.2004. Findingandevaluatingcommunity                                           SupervisedKnowledgeDistillation.InSIGIR.ACM,NewYork,NY,USA,546–555.
+      structure in networks.Physical review E69, 2 (2004), 026113.                                          [60]  Zhiqiang Xu, Dong Li, Weijie Zhao, Xing Shen, Tianbo Huang, Xiaoyun Li, and
+[37]  JohnPlatig,PeterJCastaldi,DawnDeMeo,andJohnQuackenbush.2016.Bipartite                                       PingLi.2021. AgileandaccurateCTRpredictionmodeltrainingformassive-scale
+      communitystructureofeQTLs.PLoScomputationalbiology12,9(2016),e1005033.                                      online advertising systems. InSIGMOD. 2404–2409.
+[38]  Usha NandiniRaghavan, Réka Albert,and Soundar Kumara.2007. Near linear                                [61]  Renchi Yang and Jieming Shi. 2024. Efficient high-quality clustering for large
+      time algorithm to detect community structures in large-scale networks.Physical                              bipartite graphs.SIGMOD2, 1 (2024), 1–27.
+      Review E76, 3 (2007), 036106.                                                                         [62]  Renchi Yang, Jieming Shi, Keke Huang, and Xiaokui Xiao. 2022. Scalable and
+[39]  JörgReichardtand StefanBornholdt.2006. Statisticalmechanicsofcommunity                                      effective bipartite network embedding. InSIGMOD. 1977–1991.
+      detection.Physical Review E74, 1 (2006), 016110.                                                      [63]  RenchiYang,YiduWu,XiaoyangLin,QichenWang,TszNamChan,andJieming
+[40]  MartinRosvalland CarlTBergstrom.2008. Mapsof randomwalksoncomplex                                           Shi. 2024.   Effective clustering on large attributed bipartite graphs. InKDD.
+      networks reveal community structure.PNAS105, 4 (2008), 1118–1123.                                           3782–3793.
+[41]  Hao-JunMichaelShi,DheevatsaMudigere,MaximNaumov,andJiyanYang.2020.                                    [64]  Tzu-Chi Yen and Daniel B Larremore. 2020. Community detection in bipartite
+      Compositionalembeddingsusingcomplementarypartitionsformemory-efficient                                      networks with stochastic block models.Physical Review E102, 3 (2020), 032309.
+      recommendation systems. InSIGKDD. 165–175.                                                            [65]  Chunxing Yin, Bilge Acun, Carole-Jean Wu, and Xing Liu. 2021. Tt-rec: Tensor
+[42]  XiaoxiaoShi,WeiFan,andSYuPhilip.2010. Efficientsemi-supervisedspectral                                      train compression fordeep learning recommendation models.MLSys3 (2021),
+      co-clustering with constraints. InICDM. IEEE, 1043–1048.                                                    448–462.
+[43]  MechthildStoerandFrankWagner.1997. Asimplemin-cutalgorithm.JACM44,                                    [66]  Caojin Zhang, Yicun Liu, Yuanpu Xie, Sofia Ira Ktena, Alykhan Tejani, Akshay
+      4 (1997), 585–591.                                                                                          Gupta,Pranay KumarMyana, DeepakDilipkumar, SuvadipPaul,Ikuhiro Ihara,
+[44]  Raphael Tackx, Fabien Tarissan, and Jean-Loup Guillaume. 2017.  ComSim: a                                   et al. 2020.  Model size reduction using frequency based double hashing for
+      bipartite community detection algorithm using cycle and node’s similarity. In                               recommender systems. InRecSys. 521–526.
+      CNA. Springer, 278–289.                                                                               [67]  Kunpeng Zhang, Shaokun Fan, and Harry Jiannan Wang. 2018.  An Efficient
+[45]  HibikiTaguchi,TsuyoshiMurata,andXinLiu.2020.Bimlpa:communitydetection                                       Recommender System Using Locality Sensitive Hashing. InHICSS. 780–789.
+      in bipartite networks by multi-label propagation. InICNS. Springer, 17–31.                            [68]  Shuai Zhang, Lina Yao, Aixin Sun, and Yi Tay. 2019. Deep learning based recom-
+[46]  DanTitoSvenstrup,JonasHansen,andOleWinther.2017. Hashembeddingsfor                                          mender system: A survey and new perspectives.CSUR52, 1 (2019), 1–38.
+      efficient word representations.NeurIPS30 (2017).                                                      [69]  Taiyan Zhang, Hongtao Wang, Yunqian Fan, Kunda Yang, Jichuan Zeng, and
+[47]  Vincent A Traag, Paul Van Dooren, and Yurii Nesterov. 2011.  Narrow scope                                   RenchiYang.2026. ASurveyofItemIdentifiersinGenerativeRecommendation:
+      for resolution-limit-free community detection.Physical Review E84, 1 (2011),                                Construction, Alignment, and Generation.TechRxiv2026, 0126 (2026).
+      016114.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                      10
+
+=== PDF PAGE 11 ===
+Balanced Co-Clustering of Users and Items for Embedding Table Compression in Recommender Systems                                      Conference’17, July 2017, Washington, DC, USA
+
+A   TheoreticalProofs                                                              2:        Trace(      Y⊤AY),whichcanbesimplifiedasmaxYTraceÍ            (      Y⊤AY) since
+   ProofofEq.(5).           First,weexpandÍ𝐾            vol(𝐶     𝑘)− 𝑊 (𝑢)   +𝑊   (𝑣)       Trace(      Y⊤DY)= Í𝐾𝑘=1       𝑥∈C 𝑘 𝑑(𝑥)=|E|          is a constant. This objec-
+                                                  𝑘=1                      𝐾                 tive can also be rewritten as maxYÍ𝑢𝑖∈UÍ𝑣𝑗∈N(𝑢 𝑖) B𝑖,𝑗 ·𝛿(𝑢     𝑖,𝑣𝑗)
+
+     𝐾∑︁                                                                                     by Eq. (8).                                                                   □
+         vol(𝐶    𝑘)2+ (𝑊  (𝑢)   +𝑊   (𝑣)  )2𝐾2          − 2vol(𝐶      𝑘) · (𝑊 (𝑢)   +𝑊   (𝑣)  )𝐾.
+    𝑘=1                                                                                      B   DetailedRelatedWorks
+It can be further reorganized as                                                             B.1   Co-Clustering
+     𝐾∑︁               𝐾∑︁(𝑊  (𝑢)   +𝑊   (𝑣)  )2  𝐾∑︁
+  =     vol(𝐶    𝑘)2+                                2vol(𝐶      𝑘) (𝑊  (𝑢)   +𝑊   (𝑣)  )    Co-clusteringseekstorevealassociationsbetweenrowandcolumn
+    𝑘=1               𝑘=1         𝐾2          −  𝑘=1                    𝐾                    clustersthroughthesimultaneousclusteringofbothdimensions
+
+     𝐾∑︁                                                                                     in a data matrix. Initially, Hartigan [20]      advocated co-clustering
+  =     vol(𝐶    𝑘)2+ (𝑊  (𝑢)   +𝑊   (𝑣)  )2𝐾           − 2(𝑊    (𝑢)   +𝑊   (𝑣)  )2𝐾            ,of variables and cases, enabling direct interpretation of the result-
+    𝑘=1                                                                                      ing clusters. Dhillon [12]      established a connection between co-
+ i.e.,Í𝐾𝑘=1    vol(𝐶     𝑘)2 −  2(𝑊    (𝑢)   +𝑊   (𝑣)  )2 𝐾          . Since  2(𝑊    (𝑢)   +𝑊   (𝑣)  )2 2 ⇔min𝐾           is a con-clustering and spectral graph partitioning. Regarding the spectral
+stant,   min    Í𝐾      vol(𝐶     𝑘)− 𝑊 (𝑢)   +𝑊   (𝑣)             Í𝐾                        co-clustering algorithm, Kluger et al. [29]      enabled different clus-
+       𝐶1,...,𝐶𝐾  𝑘=1                      𝐾              𝐶1,...,𝐶𝐾   𝑘=1    vol(𝐶     𝑘)2.  ternumbersperdimension,Gaoetal.[15]      resolvedhigher-order
+                                                                                  !2         problems, and Shi et al. [42]      integrated constraint information.
+By Eq. (4)   ,Í𝐾                                Í                                            Employinginformationtheorytransformsco-clusteringintoanop-
+                𝑘=1    vol(𝐶     𝑘)2 =Í𝐾𝑘=1 𝑢𝑖∈C𝑘∩U𝑤(𝑢)𝑖   +   Í𝑣𝑗∈C𝑘∩V𝑤(𝑣)𝑗   ,
+=∥®w    ⊤Y∥   22=Trace(Y               ⊤®w®w       ⊤Y),which completes the proof.  □         timization problem, where different association measures yield dis-
+                                                                                             tinctalgorithms:[17,20]utilizesaleast-squarescriterion,ITCC[13]
+   ProofofLemma4.1.                    By the definition of bipartite modularity             maximizesmutualinformation,andBCC[1]optimizestheBregman
+
+                                                                       𝑘   ·𝜎 (𝑣)𝑘           divergence.Numerousmodel-basedandmatrixfactorization-based
+byBarber[2]    (Eq.(1)   ),wecanderivethatÍ𝐾𝑘=1            𝑠𝑘 −𝛾·      𝜎(𝑢)|E|    =          algorithms have also beenproposed,as reviewed in detailin previ-
+Í𝐾      Í                        Í                                                           ous surveys[4,52]. Recently,co-clustering techniques haveaccel-
+                                   𝑢𝑖∈U𝑘 𝑑(𝑢   𝑖)·Í𝑣𝑗∈V𝑘 𝑑(𝑣   𝑗)
+  𝑘=1      𝑢𝑖,𝑣𝑗∈C𝑘 B𝑖,𝑗 −𝛾·                  |E|               , leading to                 eratedimprovementsinrecommendersystems.Forinstance,Wu
+
+     𝐾∑︁                        !     𝐾∑︁                                                    etal. [55]      incorporatedsamplingtechniquestoacceleraterecom-
+                     𝑘   ·𝜎 (𝑣)𝑘            ∑︁                                               mendations, while Feng et al. [14]      improved accuracy by limiting
+         𝑠𝑘 −𝛾·     𝜎(𝑢)|E|       =                 B𝑖,𝑗 −𝛾·    𝑑(𝑢   𝑖) ·𝑑(𝑣     𝑗)|E|      recommendeditemstothesamecluster.However,thesemethods
+    𝑘=1                              𝑘=1 𝑢𝑖,𝑣𝑗∈C𝑘
+       ∑︁     ∑︁                                                                             are typically employed to supplement information and enhance
+    =               B𝑖,𝑗 −𝛾·    𝑑(𝑢   𝑖) ·𝑑(𝑣     𝑗)|E|·𝛿(𝑢    𝑖,𝑣𝑗).                        accuracy,withlimitedfocusonaddressingthememoryconstraints
+      𝑢𝑖∈U   𝑣𝑗∈V                                                                            of embedding tables.
+Likewise,fromthedefinitionofbipartiteCPM[47],itfollowsthat
+   𝐾∑︁                               𝐾∑︁    ∑︁                 ∑︁         ∑︁                 B.2   BipartiteGraphClustering
+       (𝑠𝑘 −𝛾· |U    𝑘| · |V𝑘|) =       ©­         B𝑖,𝑗 −𝛾·          1·         1ª®          Bipartite graph clustering is a method for uncovering underly-
+
+  𝑘=1                               𝑘=1 «𝑢𝑖,𝑣𝑗∈C𝑘             𝑢𝑖∈U𝑘      𝑣𝑖∈V𝑘   ¬           ing structural properties in diverse relationship networks [63]. A
+      𝐾∑︁   ∑︁      B𝑖,𝑗 −𝛾·1    =   ∑︁    ∑︁    B𝑖,𝑗 −𝛾  ·𝛿(𝑢    𝑖,𝑣𝑗).                   straightforward approachis totransform the bipartite graph intoa
+   =                                                                                         unipartitegraph,therebyallowingtheapplicationofconventional
+     𝑘=1 𝑢𝑖,𝑣𝑗∈C𝑘                   𝑢𝑖∈U𝑣𝑗∈V                                                 graphclusteringmethods,e.g.,[36,50].Moreover,projection-based
+   As for LPAb [3], it basically leverages label propagation to op-                          methods [35, 44, 61] generate a unipartite graph to yield higher-
+timize the modularity by assigning a new label to 𝑢𝑖 as follows:Í                            qualityclusters,butthisoftenresultsinamuchdensergraphstruc-
+𝑙(𝑢   𝑖)=arg max        𝑣𝑗∈C𝑘 B𝑖,𝑗 − 𝛾E ·𝑑(𝑢     𝑖)·𝑑(𝑣     𝑗). It is equivalent to          ture. Approaches specifically developed for bipartitegraph cluster-
+           1≤𝑘≤𝐾                                                                             ingincludespectralclustering[12,29],statisticalmodeling[30,64],
+maxÍ𝑢𝑖∈UÍ𝑣𝑗∈V             B𝑖,𝑗 −𝛾·      𝑑(𝑢   𝑖)·𝑑(𝑣    𝑗)E,whichlocallymaximizes            and graph embeddings [62]. However, the aforementioned meth-
+thefunctionandtogethersumuptoanoverallobjectivematching                                      ods often involve considerable computational overhead, whereas
+our final form.                                                        □                     modularitymaximization[5,27,48]andlabelpropagation[38,45]
+   ProofofLemma4.2.                    Accordingto[3,38],eachstepin LPde-                    methodsarerecognizedfortheircomputationalefficiency.Itsinflu-
+termines thecluster labelof targetnode𝑢𝑖 by thefollowing way:Í                               ence diffusion-based structure enables continuous and enhanced
+𝑘∗=arg max          𝑣𝑗∈C𝑘∩N(𝑢 𝑖)𝛿(𝑢   𝑖,𝑣𝑗), which is to locally maximize                    information exchange between users and items, making it particu-
+Í       1≤𝑘≤𝐾                                                                                larlywell-suited forrecommendation systems.Recently,Wu etal.
+  𝑣𝑗∈N(𝑢 𝑖) B𝑖,𝑗 ·𝛿(𝑢     𝑖,𝑣𝑗) for node𝑢𝑖. Ifwe considerall nodes inU,                      [56]      innovatively exploited user-item interaction graphs to com-
+it leads to an overall objective ofLP:∑︁∑︁         ∑︁     ∑︁                                 pressembeddingtablesforrecommendationtasks.However,their
+    max                  B𝑖,𝑗 ·𝛿(𝑢    𝑖,𝑣𝑗)=maxY               B𝑖,𝑗 ·𝛿(𝑢    𝑖,𝑣𝑗).           approach simply applies modularity maximization, without ade-
+     Y   𝑢𝑖∈U  𝑣𝑗∈N(𝑢 𝑖)                          𝑢𝑖∈U   𝑣𝑗∈V                                quately considering the unique data characteristics and clustering
+   SinceSCCistheversionofspectralclusteringonbipartitegraphs,                                biases of recommender systems.
+whose objective function is often framed as a trace minimiza-
+tion problem: minYTrace(      Y⊤(D−A)Y) ⇔min     YTrace(      Y⊤DY)−
+
+
+                                                                                       11
+
+=== PDF PAGE 12 ===
+                                           Conference’17, July 2017, Washington, DC, USA                                                                                                                                          Runhao Jiang, Renchi Yang, & Donghao Wu
+
+                                                                                                                                       In this section, we present the parameters not detailed in the
+                                                                                                                                    main text. We utilize the Adam [28] optimizer with a learning rate
+                                                                                                                                    of0.001andamini-batchsizeof1024,andanembeddingdimension
+                                                                                                                                    of64acrossalldatasets.Trainingisconductedforupto1000epochs,
+                                                                                                                                    withearlystopping(patienceof50epochs)andvalidationstrategies
+                                                                                                                                    employed to prevent overfitting.
+                                                                                                                                       Following the settings in [56], weassign half ofthe hash binsto
+                                                       (a)Gowalla(Recall)                  (b)Gowalla(NDCG)                         thehighest-frequencyentitiesinboththeFrequency Hashing[16]
+                                                                                                                                    and Hybrid Hashing, and employ the user-item interaction graph
+                                                                                                                                    asthefeature inLSH[10].Inaddition,CCE[49]andLEGCF[34]re-
+                                                                                                                                    quiredynamicupdates,butforfairness,theirsketchingmatricesare
+                                                                                                                                    updatedonlyinthefirstepoch,whilehashlabelsforothermethods
+                                                                                                                                    arefixedbeforetraining.Weretaintheoriginalimplementationsof
+                                                                                                                                    infomap[40],BiMLPA[45],BRIM[37],as thesemethods inherently
+                                                       (c)Yelp2018(Recall)                (d)Yelp2018(NDCG)                         perform adaptive cluster detection without explicit control over
+                                             Figure5:Performancebreakdownbytestuserfrequency.                                       the number of communities.
+                                                                                                                                       Forafaircomparison,weadjustourparameter𝛾 tomatchthe
+                                                                                                                                    targetsizeofthe embedding table,asinTable7.Asshownin Fig-
+                                                                                                                                    ure4, our empirical study confirms that the parameter converges
+                                                                                                                                    at an exponential rate. The parameter achieves around 20% com-
+                                                                                                                                    pressionratio andtendsto bestable after5iterations. Thereon,we
+                                                                                                                                    fix the parameter𝑇to5.
+                                                                                                                                    C.3   EvaluationMetrics
+                                                               (a)Recall                        (b)NDCG                             Given a set ofC={C      1,C2,...,C𝐾} of𝐾 disjoint co-clusters, each
+                                                       Figure6:Impactofresolutionparamater𝛾.                                        containingbothusers anditems, we providethe formalmathemat-
+                                           C   AdditionalExperimentalDetails                                                        ical definitions of theaveraged cross-cluster links(ACCL) and the
+                                                                                                                                    Gini coefficientin Figure1as follows:ÍÍ
+                                           C.1   DatasetsDetails                                                                                                     B𝑖,𝑗                𝐾∑︁        Í𝑖𝑗=1   |C𝑗|!
+                                                                                                                                                C𝑘,Cℓ∈C  𝑢𝑖∈C𝑘,𝑣𝑗∈Cℓ                          𝑖
+                                           We conduct our experiments on four benchmark datasets, each                                ACCL=                 𝐾               ,Gini=          2𝐾 ·𝐾 −Í𝐾𝑘=1   |C𝑘| .
+                                           widely utilized in recommendation research [22, 51, 56] and real-                                                2                           𝑖=1
+                                           world scenarios. The datasets are detailed as follows:                                   D   AdditionalExperimentalResults
+                                           •  Beauty:AsubsetofAmazonproductreviews,encompassinguser                                 D.1   RecommendationPerformanceEvaluation
+                                              interactions of beauty products.
+                                           •  Gowalla: A check-indataset capturing user location-sharing be-                        To comprehensively assess the performance of BACO, we addition-
+                                              haviors on the Gowalla platform.                                                      ally reportRecall@𝐾 and NDCG@𝐾 for𝐾=   10and    𝐾=   50, using
+                                           •  Yelp2018: Extracted from the 2018 Yelp Challenge, this dataset                        the same embedding table size as shown in Table4. As shown
+                                              contains user interactions with local businesses.                                     inTable8,         BACO consistentlyoutperformsallbaselineapproaches
+                                           •  AmazonBook:AsubsetofAmazonproductreviews,containing                                   acrossalldatasets,withimprovementsofupto1   .987%inRecalland
+                                              user interactions with books.                                                         1.192%inNDCG,achievingsubstantialimprovementsinbotheval-
+                                                                                                                                    uation settings. Overall,these results demonstrate thesubstantial
+                                           C.2   ParameterSettings                                                                  effectiveness ofBACOunder both strict and relaxed scenarios.
+
+                                                             Table7:ParametersettinginBACO                                          D.2   UserSubgroupEvaluation
+                                                     ParameterBeauty   Gowalla   Yelp2018   AmazonBook                              This experimentinvestigates the efficacy ofalgorithms across user
+                                                          𝛾           0.13         7.57          5.50              4.73             groups, which are categorized by their activity frequency per-
+                                                                                                                                    centiles in the training data. In the Figure5, we report the average
+                                                                                                                                    metrics of each degree subgroup for both the top-performing base-
+                                                                                                                                    lines and the full model. All methods follow the trend of the full
+                                                                                                                                    model and perform better with power users. Notably, BACO, which
+                                                                                                                                    achievesthebestoverallperformance,substantiallymitigatesthe
+                                                                                                                                    shortcomingsofexistingalgorithmswithrespecttotailusers.These
+                                                                                                                                    observations indicate that substantial improvements can still be
+
+
+
+                                           Figure4:Embeddingtableparametersratioof BACOversus
+                                           iterationcount.                                                                     12
+
+                    100%Paras ratioN@20R@20
+                     11.017.0N@20N@20R@20R@20
+                     75%12.011.02210
+                     10.7
+                     16.611.5209
+Beauty           GowallaBACO10.410.5 Yelp2018GraphHash  AmazonBook
+     GraphHash       16.2 Leiden            BACO            full
+                     50%11.0188
+                     10.110.510.0
+                     15.89.8167
+                     25%10.09.5
+                     15.49.59.5146
+                     15.09.20%9.09.01250440-25%0-25%0-25%0-25%15525-50%25-50%25-50%25-50%66277350-75%50-75%50-75%50-75%88499575-100%75-100%75-100%75-100%1010678
+
+=== PDF PAGE 13 ===
+                                Balanced Co-Clustering of Users and Items for Embedding Table Compression in Recommender Systems                                      Conference’17, July 2017, Washington, DC, USA
+
+                                         Table8:RecommendationPerformance(𝑘=10or50).Bestresultshighlightedinblueandrunner-upunderlined                                                                                    .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                madefor low-frequencyusers,and ourframeworkprovidesapo-                                                more uniform size, thereby failing to fully leverage the inherent
+                                tential solution to address this challenge.                                                            graph structure.
+                                D.3   ParameterAnalysis                                                                               Table9:Averagedistanceoffullembeddingsandcodebooks.
+                                InFigure6,wevary    𝛾 intherange [4,10] onGowalla,wherethe                                                                                    Gowalla                Yelp2018
+                                compressionratioparameterspans [1/10,1/5].BACOconsistently                                                              Method
+                                surpassesGraphHashacrossallresolutions.Furthermore,increas-                                                                             user  item    all    user  item    all
+                                ingtheresolution(withacorrespondingincreaseintheembedding                                                             GraphHash         5.444 4.976 5.174 5.291 4.894 5.074
+                                table size) leads to an improvement in Recall for BACO, whereas                                                          Leiden         5.401 4.951 5.141 5.449 4.970 5.188
+                                GraphHash fails to achieve further performance gains. Regard-                                                              SCC          5.405 4.872 5.097 5.038 4.794 4.905
+                                                                                                                                                    BACOw/o SCU         5.069 4.909 4.977 5.180 4.847 4.998
+                                ing NDCG, BACO maintains stable performance,while GraphHash                                                               BACO          4.854 4.980 4.927 4.751 4.982 4.877
+                                demonstrates a decline, due to its coarse clustering strategy.
+                                D.4   ClusteringResultAnalysis                                                                            Table9presentsthe average distancesbetween the hashing em-
+                                                                                                                                       beddings and the full model embeddings for users, items, and the
+                                                                                                                                       combined set. The results indicate that embeddings produced by
+                                                                                                                                       BACOaremorecloselyalignedwiththoseofthefullmodel,corrobo-
+                                                                                                                                       ratingitssuperiorperformanceasreportedinTable9.Moreover,the
+                                                                                                                                       SCU strategy in BACO substantially reduces the user-side distance,
+                                                                                                                                      withonly minimalimpactonitem-side conflicts.Nevertheless,the
+                                                                                                                                       overall improvement for both users and items is more significant.
+
+
+                                       (a)GraphHash                       (b)Leiden                        (c)BACO                     D.5   AdditionalLarge-scaleDatasets
+                                Figure7:ClustersizedistributionsofGraphHash,Leiden,BACO.                                                  Table10:Summarystatisticsaboutlarge-scaledatasets.
+                                    Wefurther examinethe differencesinclustering betweenBACO
+                                and strong baselines by analyzing cluster size distribution and                                               Dataset           #Users     #Items    #Interactions    Density
+                                embedding distance.                                                                                          MovieLens          200,808       65,032         20,228,336          0.155%
+                                    As illustrated in Figure7,    BACO exhibits a more heterogeneous                                        SteamGame          2,567,538      15,474          7,793,069           0.020%
+                                clustersize distributioncomparedto GraphHash and Leiden,with                                              We further evaluate BACO onMovieLensandSteamGame, two
+                                agreater prevalenceof bothsmall andlarge clusters.Thispattern                                          large-scale datasets with 20M interaction edges and 2M nodes,
+                                arises because our method groups low-degree nodes into large                                           respectively, as shown in Table10. We select the three optimal
+                                clusters,facilitatingmutualinformationsharing,whileassigningBeauty                                        Gowalla                                       Yelp2018                                   AmazonBookbaselines, namely GraphHash, Leiden, and SCC, for performance
+                       Methodhigh-degree nodes to smaller or singleton clusters to minimize                                            evaluation on large-scale datasets. Note that since SCC relies on
+                                conflicts. In contrast, other methods tend to produce clusters ofR@10↑N@10↑R@50↑N@50↑R@10↑N@10↑R@50↑N@50↑R@10↑N@10↑R@50↑N@50↑R@10↑N@10↑R@50↑N@50↑
+                     FullModel                7.619     4.814    16.343    6.998    12.917    9.837    29.010   14.538    5.602     4.334    16.334    7.796     5.689     4.542    15.093    7.60313
+                       Random                 3.054     1.874     7.555     3.009     6.368     5.015    15.097    7.588     3.048     2.414     9.055     4.375     1.677     1.445     4.679     2.448
+            Frequency Hashing[16]             2.926     1.763     7.637     2.945     5.852     4.597    14.331    7.108     3.071     2.451     9.262     4.482     1.459     1.243     4.095     2.127
+               Double Hashing[66]             2.872     1.717     7.035     2.779     6.491     5.133    15.172    7.705     3.170     2.504     9.542     4.587     1.626     1.374     4.393     2.304
+               Hybrid Hashing[66]             3.028     1.786     7.704     2.976     6.901     5.451    16.061    8.151     3.856     3.112    11.172    5.486     1.726     1.418     4.892     2.471
+                       LSH[10]                3.613     2.179     8.720     3.470     6.481     5.191    14.244    7.511     2.858     2.255     8.274     4.033     2.287     1.899     6.260     3.212
+user              itemCCE[49]        total    4.953     2.993    11.478    4.629     7.391     5.844    16.710    8.586     3.533     2.808    10.148    4.960     2.117     1.710     5.937     2.975
+                     LEGCF[34]                4.989     2.914    12.391    4.754     5.413     4.046    13.230    6.319     2.747     2.071     8.060     3.795        -           -           -           -
+                  GraphHash[56]               5.776     3.579    12.294    5.224    10.672    8.074    24.442       12.112    3.863     3.013    11.709    5.542     5.081     4.264    11.851    6.477
+              DoubleGraphHash[56]             3.883     2.439     9.307     3.826     8.711     6.720    19.949   10.007    3.245     2.529     9.708     4.635     3.708     2.778     9.221     4.519
+                        LP[38]                5.465     3.415    12.162    5.094     8.026     6.253    19.144    9.481     3.358     2.636    10.291    4.868     2.278     1.830     6.435     3.181
+                     Leiden[48]               5.540     3.446    12.165    5.108    10.753       8.203    24.245   12.152      3.898     3.000    11.764    5.536     5.174       4.300    11.927     6.513
+                      EBMD[27]                5.443     3.290    11.961    4.949     7.061     5.501    16.816    8.352     3.080     2.407     9.628     4.525     2.182     1.780     6.052     3.058
+                    infomap[40]               2.922     1.767     7.521     2.893     4.085     2.997     9.511     4.556     2.690     2.081     8.074     3.827     0.749     0.584     2.248     1.067
+                     BiMLPA[45]               2.293     1.295     6.806     2.381     4.423     3.262    10.430    4.986     2.751     2.140     8.284     3.930     0.699     0.545     2.106     0.996
+                      BRIM[37]                5.418     3.236    12.875    5.082     5.595     4.378    12.935    6.518     2.702     2.080     8.025     3.809     1.438     1.121     4.387     2.081
+                       SCC[12]                5.920     3.640    13.072     5.456     9.667     7.467    21.880   11.016    4.167        3.224     12.246    5.832      3.622     2.909     9.869     4.941
+                       SBC[29]                4.360     2.630    10.506    4.192     7.220     5.665    17.084    8.522     3.060     2.377     9.164     4.354     2.389     1.944     6.508     3.300
+                      ITCC[13]                3.096     1.925     7.648     3.090     5.461     4.419    12.163    6.439     2.788     2.258     8.291     4.069     1.753     1.471     4.701     2.465
+                         BACO                 6.308     3.733    14.036     5.643     11.701     9.052    26.429    13.344     4.790     3.767     13.739    6.668      5.357     4.315    13.221     6.868
+                    v.s.Baselines            +0.388   +0.093   +0.964   +0.187   +0.948   +0.849   +1.987   +1.192   +0.623   +0.543   +1.493   +0.836   +0.183   +0.015   +1.294   +0.355
+                   v.s.FullModel             -1.311   -1.081   -2.307   -1.355   -1.216   -0.785   -2.581   -1.194   -0.812   -0.568   -2.596   -1.127   -0.332   -0.227   -1.872   -0.734
+
+=== PDF PAGE 14 ===
+Conference’17, July 2017, Washington, DC, USA                                                                                                                                          Runhao Jiang, Renchi Yang, & Donghao Wu
+
+Table11:Performancecomparisononlarge-scaledatasets.                                             Therefore,weonly presenttheresultsof GraphHash,Leiden,and
+                               MovieLens                       SteamGame                        BACO.
+        Method                                                                                      AsshowninTable11,           BACOoveralloutperformsallthebaselines
+                      Param↓R@20↑N@20↑Param↓R@20↑N@20↑                                          withfewerembeddingtableparameters.Comparedtothebestbase-
+     Full Model        17.0M   25.980   20.294   165.3M   8.004     3.752                       lines,BACOachievesimprovementofover0.4%inRecall@20across
+      GraphHash        2.26M   20.631   14.669    22.6M    6.354     2.821                      both datasets. In terms of speed, BACO saves 25% of the running
+        Leiden         2.26M   20.878   14.778    22.6M    6.439     2.830                      time relative to Leiden onMovieLensdata. OnSteamGame,                                         BACO
+          BACO         2.19M   21.362   14.802    21.7M    6.912     3.111
+     v.s. Baselines        -        +0.484   +0.024        -        +0.473   +0.281             runs1.5slongerthanLeiden,yetitachievedrelativeimprovements
+    v.s. Full Model    -87.1%   -4.618    -5.492    -86.9%   -1.092    -0.641                   of 7.3% and 9.9% in Recall@20 and NDCG@20, respectively. The
+                                                                                                reason lies in our compact weighting schemes, which are tailored
+the costly SVD technique, it failsto finish running within 10 hours.                            to the recommendation task.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                           14

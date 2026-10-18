@@ -1,0 +1,10 @@
+{
+  "recorded_utc": "2026-10-16T10:34:54.104697+00:00",
+  "stage": "before_first_new_MF_policy_evaluation",
+  "reason": "Validation-only ablation and learning curves show rapid latent-interaction overfit under initial regularization. Synthetic opposite-ranking component check passed.",
+  "original_fit_manifest_sha256": "fa2f26c42990a7480a9e22c52c1629a05203e7e270f2e3959518e7116c7b35bd",
+  "quality_check_sha256": "620a02454ab2d1f2550b5752d48da5035f2591fb79a9932a3c1f6ed08c40df4c",
+  "change": "Expand factor-regularization candidates from .0001 to [.0001,.16,1.6], equally for every method/seed. Change only factor regularization; all other initialization, optimizer, bias regularization, epoch/patience limits and cohorts fixed.",
+  "selection": "Minimum logged-validation macro-user loss across candidate/epoch; original candidate preserved. No evaluation scores or calibration outcomes accessed. No further validation-repair grid planned.",
+  "interpretation": "Still exploratory; report validation zero-interaction ablation and do not treat a weak full reference as a validated preference model."
+}

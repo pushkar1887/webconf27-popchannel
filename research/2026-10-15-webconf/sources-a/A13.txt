@@ -1,0 +1,1859 @@
+https://arxiv.org/html/2409.09253
+
+
+Unleash LLMs Potential for Sequential Recommendation by Coordinating Dual Dynamic Index Mechanism
+
+Report GitHub Issue
+
+×
+
+Title:
+
+Content selection saved. Describe the issue below:
+
+Description:
+
+Submit without GitHub
+Submit in GitHub
+
+arXiv is now an independent nonprofit!
+Learn more
+×
+
+Back to arXiv
+
+Why HTML?
+
+Report Issue
+
+Back to Abstract
+
+Download PDF
+
+Abstract.
+
+1 Introduction
+
+2 Methodology
+
+2.1 Problem Formulation
+
+2.2 End-to-End Dual Dynamic Recommender
+
+2.2.1 Semantic Information Extraction
+
+2.2.2 Dual Dynamic Index Generation
+
+2.2.3 Generative Sequential Recommendation
+
+2.3 Multi-Grained Token Regulator
+
+2.4 High-Order Interaction Pattern Exploitation
+
+3 Experiment
+
+3.1 Experimental Setup
+
+3.1.1 Baseline
+
+3.1.2 Dataset
+
+3.1.3 Evaluation Strategy
+
+3.2 Main Result
+
+3.3 Ablation Study
+
+3.3.1 Architecture
+
+3.3.2 Indexing Mechanism
+
+4 Parameter Sensitivity Analysis
+
+4.1 Weighted Hyper-Parameter
+
+4.2 Learning Rate
+
+5 Related Work
+
+6 Conclusion
+
+Acknowledgements
+
+References
+
+A Baseline
+
+B Dataset
+
+C Implementation Detail
+
+D Basic Notation
+
+E Discussion
+
+E.1 ED2 vs. ETEGRec
+
+E.2 ED2 vs. STORE
+
+E.3 ED2 vs. TokenRec
+
+F Time Complexity
+
+F.1 Dual Dynamic Indexer
+
+F.2 LLM-Backbone Sequential Recommender
+
+G LSH Indexing Mechanism
+
+H Collision Handling Mechanism
+
+I Human Instruction Prompt
+
+License: CC BY 4.0
+
+arXiv:2409.09253v2 [cs.IR] 16 Sep 2026
+
+Unleash LLMs Potential for Sequential Recommendation by Coordinating Dual Dynamic Index Mechanism
+
+Conference: Proceedings of the ACM Web Conference 2025; April 28-May 2, 2025; Sydney, NSW, AustraliaProceedings of the ACM Web Conference 2025 (WWW ’25), April 28-May 2, 2025, Sydney, NSW, AustraliaDOI: 10.1145/3696410.3714866ISBN: 979-8-4007-1274-6/25/04CCS: Information systems Recommender systemsCCS: Information systems Language modelsCCS: Information systems Personalization
+
+Jun Yin
+
+Note: This study was conducted during an internship at Microsoft AI.
+
+Affiliation: Central South University, Changsha, China
+
+email: yinjun2000@csu.edu.cn
+
+, 
+Zhengxin Zeng
+
+Affiliation: Microsoft AI, Beijing, China
+
+email: zhze@microsoft.com
+
+, 
+Mingzheng Li
+
+Affiliation: Microsoft AI, Beijing, China
+
+email: mingzhengli@microsoft.com
+
+, 
+Hao Yan
+
+Affiliation: Central South University, Changsha, China
+
+email: csuyh1999@csu.edu.cn
+
+, 
+Chaozhuo Li
+
+Affiliation: Microsoft Research Asia, Beijing, China
+
+email: lichaozhuo1991@gmail.com
+
+, 
+Weihao Han
+
+Affiliation: Microsoft AI, Beijing, China
+
+email: weihan@microsoft.com
+
+, 
+Jianjin Zhang
+
+Affiliation: Microsoft AI, Beijing, China
+
+email: jianjzh@microsoft.com
+
+, 
+Ruochen Liu
+
+Affiliation: Central South University, Changsha, China
+
+email: ruochen@csu.edu.cn
+
+, 
+Hao Sun
+
+Affiliation: Microsoft AI, Beijing, China
+
+email: hasun@microsoft.com
+
+, 
+Weiwei Deng
+
+Affiliation: Microsoft AI, Beijing, China
+
+email: dedeng@microsoft.com
+
+, 
+Feng Sun
+
+Affiliation: Microsoft AI, Beijing, China
+
+email: sunfeng@microsoft.com
+
+, 
+Qi Zhang
+
+Affiliation: Microsoft AI, Beijing, China
+
+email: qizhang@microsoft.com
+
+, 
+Shirui Pan
+
+Affiliation: Griffith University, Brisbane, Australia
+
+email: s.pan@griffith.edu.au
+
+and 
+Senzhang Wang
+
+Note: Corresponding author.
+
+Affiliation: Central South University, Changsha, China
+
+email: szwang@csu.edu.cn
+
+© acmlicensed
+
+Abstract.
+
+Owing to the unprecedented capability in semantic understanding and logical reasoning, large language models (LLMs) have shown fantastic potential in developing next-generation sequential recommender systems (RSs). However, existing LLM-based sequential RSs mostly separate index generation from sequential recommendation, leading to insufficient integration between semantic information and collaborative information. On the other hand, the neglect of user-related information hinders LLM-based sequential RSs from exploiting high-order user-item interaction patterns. In this paper, we propose the End-to-End Dual Dynamic (ED2) recommender, the first LLM-based sequential RS which adopts dual dynamic index mechanism, targeting resolving the above limitations simultaneously. The dual dynamic index mechanism can not only assembly index generation and sequential recommendation into a unified LLM-backbone pipeline, but also make it practical for LLM-based sequential recommender to take advantage of user-related information. Specifically, to facilitate the LLM comprehension ability to dual dynamic index, we propose a multigrained token regulator which constructs alignment supervision based on LLMs semantic knowledge across multiple representation granularities. Moreover, the associated user collection data and a series of novel instruction tuning tasks are specially customized to capture the high-order user-item interaction patterns. Extensive experiments on three public datasets demonstrate the superiority of ED2 , achieving an average improvement of 19.62% in Hit-Rate and 21.11% in NDCG.
+
+Keywords: 
+Sequential Recommender Systems, Large Language Models
+
+1. Introduction
+
+Sequential recommender systems (RSs) have attracted great research attention from both academia and industry, due to the splendid capability in capturing user interest within the historical behavior (Raffel et al., 2020; Covington et al., 2016; Geng et al., 2022; de Souza Pereira Moreira et al., 2021; Kang and McAuley, 2018). In current literature, sequential recommender systems introduce various deep neural network architectures, including convolutional neural networks (CNNs) (Yuan et al., 2019; Tang and Wang, 2018), recurrent neural networks (RNNs) (Tan et al., 2016; Li et al., 2017a), graph neural networks (GNNs) (Wu et al., 2019; Li et al., 2021), and transformers (Kang and McAuley, 2018; Zhang et al., 2023; Sun et al., 2019). For further improvement on recommendation performance, the pre-trained language models (PLMs) are adopted to capture the semantic information within the attached textual feature (Hou et al., 2022a; Li et al., 2023; Hou et al., 2023). Recently, the emergency of large language models (LLMs) pre-trained on large-scale natural language corpus, such as GPT (Radford et al., 2023) and LLaMA (Touvron et al., 2023), has revolutionized the sequential recommender systems community (Rajput et al., 2023; Zhu et al., 2024; Zheng et al., 2024).
+
+The cornerstone of the LLM-based sequential RSs lies in the integration of two kinds of information, i.e., the collaborative information reflected by the user historical behavior and the semantic information within the attached textual feature. Existing efforts towards developing the LLM-based sequential RSs can be categorized into two main approaches: (i) Content-based methods (Hou et al., 2024; Bao et al., 2023; Hua et al., 2023) verbalize the interaction history into textual sequence (e.g., concatenate the item titles) and then instruct the LLM to directly generate the title of the most possible item. However, such straightforward methods heavily increase the computation expenditure and fail to guarantee legitimate recommendation results (Zhu et al., 2024). (ii) Index-based methods (Rajput et al., 2023; Zhu et al., 2024; Zheng et al., 2024; Geng et al., 2022; Hua et al., 2023) incorporate RS and LLM through index mechanism, where each item is associated with an identifier. The compact indices are considered as special tokens and used to extend the LLM vocabulary, aiming to mitigate the computational overhead and guarantee the legitimacy of recommendation results. To be more specific, pseudo ID based (Geng et al., 2022; Zhu et al., 2024; Hua et al., 2023) methods11
+1
+
+Without ambiguity, the term ID and index (indices) will be used interchangeably. emulate traditional ID paradigm (Yuan et al., 2019; Tan et al., 2016; Kang and McAuley, 2018) and adopt ID-alike words (e.g., <i​t​e​m​_​1item\_1>) to represent items. Since pseudo ID loses sight of the item semantic information, semantic ID based methods (Rajput et al., 2023; Zheng et al., 2024; Jin et al., 2024a) introduce vector quantization technique (Zeghidour et al., 2021; Babenko and Lempitsky, 2014) to convert the item textual representation into discrete index (e.g., <4,1,34,1,3>), which takes the item semantic similarity into account.
+
+Figure 1. Overview of a). User interaction sequence, b). Static item index based sequential recommender systems, and c). Dual dynamic index based sequential recommender system. W/O BP represents for without back-propagation.
+
+Figure 2. The overall pipeline of the novel End-to-End Dual Dynamic (ED2) Recommender System. The proposed pipeline includes three stages, i.e., the semantic information extraction, the dual index generation, and the generative sequential recommendation. The semantic information within the user/item attached textual feature is extracted by the LLM-backbone textual encoder, and then the dual dynamic indexer condenses the semantic information into the compact user/item index.
+Based on the human instruction prompt, the LLM-backbone recommender can directly generate the recommendation result.
+
+Despite remarkable achievements, the current LLM-based sequential RSs still confront with the following limitations (Rajput et al., 2023; Zheng et al., 2024; Jin et al., 2024b; Liu et al., 2024c). (i) The static index mechanism restricts the LLMs in integrating the semantic information and the collaborative information. As illustrated in Figure 1b), existing LLM-based sequential RSs mostly adopt the static index mechanism which separates the index generation process from the sequential recommendation process. The static index remains frozen during the recommender optimization and thus disregards the item collaborative similarity (Liu et al., 2024d; Jin et al., 2024a). For example, the film Transformers (July 3, 2007) and the teaching video Transformer Detailed Elaboration (October 28, 2021) are highly similar in terms of the textual contents, yet fractionally overlap within the user interaction records. (ii) The ignorance of the user-related information hinders the LLMs from exploiting the high-order user-item interaction patterns. As shown in Figure 1b), most of the leading LLM-based sequential RSs, including FDSA(Zhang et al., 2019b), TIGER (Rajput et al., 2023), and LC-Rec(Zheng et al., 2024), conduct the next-item prediction merely depending on the item-related information (i.e., item textual content and interactive item sequence). Without the user-related information, it is impracticable for the LLM-based sequential RSs to capture and utilize the high-order user-item interaction patterns. In traditional sequential RSs (Wu et al., 2019; Ma et al., 2021; Xu et al., 2019), the high-order user-item interaction patterns are indispensable and contribute a lot to the recommendation result. For example, the user co-purchase pattern indicates the similar users that share the common interest and the user preference pattern reflects the consistent partiality over a long time-span.
+
+Aiming to address the above limitations simultaneously, we for the first time propose a novel sequential recommender system based on the dual dynamic index mechanism. As illustrated in Figure 1c), the dual dynamic index based sequential RS assemblies the indexer and the sequential recommender into an unified streamline. Moreover, the indexer adopts a dual architecture which consists of two homogeneous discrete index generators, taking charge of the index generation of users and items, respectively. Based on the dual dynamic index mechanism, on one hand, the index generation module and the sequential recommender module are conjointly optimized in an end-to-end manner, fusing the semantic information and the collaborative information into a monolithic LLM-backbone. On the other hand, the user-related information (i.e., user textual feature and user-user interaction) is taken into consideration and make it practical for the LLMs to exploit the high-order user-item interaction patterns. However, it is non-trivial to design the dual dynamic index based sequential RS due to the following challenges.
+
+Un-trained Dynamic User/Item Index Token.
+Most of the existing LLM-based RSs merely rely on the sequential recommendation task to improve the LLMs understanding of the static index tokens (Rajput et al., 2023; Wang et al., 2024; Zheng et al., 2024). Nevertheless, as to the dynamic index based sequential RS, the discrepancy of LLMs comprehension ability to the dynamic index tokens and the natural language tokens is further enlarged, since the dynamic indices are synchronously optimized with the LLM backbone. Therefore, how to boost the LLMs comprehension ability to the dynamic index tokens is challenging.
+
+Implicit High-order User-Item Interaction Pattern.
+The current LLM-based sequential RSs (Rajput et al., 2023; Zheng et al., 2024; Jin et al., 2024b; Liu et al., 2024c) mostly overlook the high-order user-item interaction patterns implicitly contained in the user historical behavior. Typically, the GNN-based sequential RSs excel at modeling the high-order interaction patterns by constructing user behavior graph (Wu et al., 2019; Ma et al., 2021; Wang et al., 2019), while the graph structure data is troublesome for the LLMs to utilize. Consequently, how to make it practical for the LLMs to exploit and capture the implicit high-order user-item interaction patterns is also challenging.
+
+In this work, we propose the End-to-End Dual Dynamic (ED2) recommender system, the first LLM-based sequential recommender system which adopts the dual dynamic index mechanism to accomplish the user/item index generation and the sequential recommendation simultaneously. Horizontally, the ED2 recommender system consists of a dual dynamic index generator and a LLM-backbone recommender. Based on the dual dynamic index mechanism, the ED2 recommender is not only able to seamlessly absorb the semantic information within the textual feature and the collaborative information within the historical interaction, but also can take full advantage of the user-related information. Specifically, to expedite the LLM comprehension ability to the dynamic user/item index tokens, a multi-grained token regulator (m-GTR) is proposed to establish different kinds of alignment supervision between the dynamic index tokens and the homologous natural language tokens. Furthermore, we painstakingly construct the associated user collection data based on the user historical behavior and customize a series of novel instruction tuning tasks, targeting at exploiting and utilizing the high-order user-item interaction patterns. Overall, the great potential of LLMs for sequential recommendation is unleashed by the ED2 recommender system.
+The main contributions of this work are summarized below:
+
+• 
+
+We for the first time investigate the dual dynamic index based sequential recommender systems and propose the End-to-End Dual Dynamic (ED2) recommender which unleashes the LLMs promising capacity for sequential recommendation task.
+
+• 
+
+We propose the multi-grained token regulator (m-GTR) to supervise the dynamic index optimization, boosting the LLM comprehension capacity towards the dynamic index tokens.
+
+• 
+
+We construct the associated user collection from the user behavior and customize several instruction tuning tasks, to sufficiently exploit the high-order user-item interaction patterns.
+
+• 
+
+Extensive experimental results on three public datasets demonstrate that the ED2 recommender outperforms the SOTA recommender systems, achieving an average improvement of 19.62% in Hit-Rate and 21.11% in NDCG metric.
+
+2. Methodology
+
+In this section, we introduce the End-to-End Dual Dynamic (ED2) recommender system in detail. As shown in Figure 2, given the user interaction sequence, the LLM-backbone textual encoder first transforms the attached textual features of user and items into textual embeddings. Afterwards, two homogeneous branches within the dual dynamic index generator discretize the embeddings into compact user/item indices. By aggregating the user index and the item indices through the sequential recommendation oriented instruction, the user interaction sequence is reorganized into a heterogeneous sequence composed of dynamic index tokens and natural language tokens. Since the LLM vocabulary has assimilated the dynamic index tokens, the LLM backbone is able to predict the most possible item in an auto-regressive generation manner.
+
+2.1. Problem Formulation
+
+We focus on the sequential recommendation task whose target is to predict the most suitable item according to the user historical behavior. Considering a system of KK items {vk|k=1,2,⋯,K}\{v_{k}|k=1,2,\cdots,K\} and JJ users {uj|j=1,2,⋯,J}\{u_{j}|j=1,2,\cdots,J\}, the historical behavior of uju_{j} can be represented by the interactive item sequence 𝒮j\mathcal{S}_{j} as follows,
+
+(1)
+
+𝒮j=[vk1,vk2,⋯,vkn],\mathcal{S}_{j}=[v_{k_{1}},v_{k_{2}},\cdots,v_{k_{n}}],
+
+where nn is the sequence length. In addition, we use Tju,TkvT_{j}^{u},T_{k}^{v} to denote the attached textual feature of user uju_{j} and item vkv_{k}, respectively. For the item branch, the attached textual content usually includes the item title, the detailed description, and other auxiliaries (e.g., brand and category). Similarly, the user-related textual feature contains the recent comment, the search query, and the holistic user profile. The key notations are summarized in Appendix D for clarity.
+
+2.2. End-to-End Dual Dynamic Recommender
+
+The end-to-end dual dynamic (ED2) recommender is composed of a shared LLM backbone and a dual dynamic index generator. The shared LLM backbone takes charge of understanding the user/item textual feature and reasoning the sequential recommendation result. The dual dynamic index generator is able to quantize the user/item representation provided by the LLM backbone into discrete index. The semantic information is extracted from the textural content with the help of the LLM backbone, and then compressed into the compact index by the dual dynamic index generator, finally integrated with the collaborative information through the sequential recommendation oriented fine-tuning.
+
+2.2.1. Semantic Information Extraction
+
+To take advantage of the semantic information related to users and items, we initialize the user/item representations on the basis of their attached textual features. For each user uju_{j} and his/her interaction sequence 𝒮j=[vk1,vk2,⋯,vkn]\mathcal{S}_{j}=[v_{k_{1}},v_{k_{2}},\cdots,v_{k_{n}}], we look up and organize the corresponding textual features as a collection 𝒯={Tju,Tk1v,Tk2v,⋯,Tknv}\mathcal{T}=\left\{T^{u}_{j},T^{v}_{k_{1}},T^{v}_{k_{2}},\cdots,T^{v}_{k_{n}}\right\}. Within the LLM-backbone textual encoder fef_{e}, the LLM tokenizer first converts the textual content into token indices, and then the token embedding layer projects the token indices into token embeddings. Eventually, the LLM transforms the token embeddings into semantic representations based on the inherent semantic knowledge. The semantic information extraction stage can be formulated as follows,
+
+(2)
+
+XT=fe​(T)=LLM⁡(Embed⁡(Tokenizer⁡(T)))∈ℝd,X_{T}=f_{e}({T})={\rm LLM}\left({\rm Embed}\left({\rm Tokenizer}\left({T}\right)\right)\right)\in\mathbbm{R}^{d},
+
+where dd denotes the LLM hidden dimension.
+
+2.2.2. Dual Dynamic Index Generation
+
+Based on the semantic representations extracted by the LLM-backbone textual encoder, the dual dynamic index generator compresses the semantic information inside to the discrete indices. Due to the discreteness of the dual dynamic index, the downstream LLM-backbone recommender is able to directly generate the index of the recommendation result, adequately stimulating the natural language generation ability of the LLM-backbone. Typically, each user/item is associated with a unique identifier, such as <u​s​e​r​_​9974user\_9974> or <i​t​e​m​_​161item\_161>. A naive strategy is appending all the unique identifiers into the LLM vocabulary (Zhu et al., 2024), which results in vocabulary exploding linearly with the numbers of users and items. Get inspiration from the sequential quantization technique (Zeghidour et al., 2021; Hou et al., 2023), we adopt a hierarchical architecture in designing the dual dynamic index generator, to represent each user/item with a composition of MM index tokens (each token has NN possible values). As illustrated in the dual dynamic index generation stage of Figure 2, <i​t​e​m​_​5175item\_5175> can be represented as Ω5175v\Omega^{v}_{{5175}}=<a​2,b​4,c​5,d​7a2,b4,c5,d7> with MM set to 4 and NN set to 8. The expressive space of the hierarchical index mechanism increases exponentially with the index length MM. The MM length hierarchical index with NN as the base can theoretically identify NMN^{M} distinct objects (Hou et al., 2023) and the new index tokens are merely N∗MN*M.
+
+In light of the remarkable performance of the variational auto-encoder architecture in representation compression (Zeghidour et al., 2021; He et al., 2022; Hou et al., 2022b), we design a hierarchical variational quantization auto-encoder (HVQAE) to generate the dynamic index. For the MM length dynamic index, the HVQAE contains MM cascade variational quantizers and quantization codebooks. Specifically, the HVQAE assumes that the dynamic index conforms to the von Mises-Fisher distribution vMF⁡(𝝁,κ){\rm vMF}(\bm{\mu},\kappa) which is suitable for the discrete data (Takida et al., 2022). The mm-th variational quantizer QmQ_{m} first deduces the statistical characteristics (the mean direction 𝝁m\bm{\mu}_{m} and the concentration κm\kappa_{m}) of the mm-th dynamic index token, and then the latent token representation XωmX_{\omega_{m}} is derived according to vMF⁡(𝝁m,κm){\rm vMF}(\bm{\mu}_{m},\kappa_{m}). Afterwards, the dynamic index token ωm\omega_{m} is sampled based on the categorical distribution over the distance between the latent token representation and the variational quantization codebook 𝒞m\mathcal{C}_{m}. As shown in Figure 3, the HVQAE module can be formulated as follows,
+
+(3)
+
+Xωm∼vMF⁡(𝝁m,κm),[𝝁m,κm]=Qm​(Xm),X_{\omega_{m}}\sim{\rm vMF}(\bm{\mu}_{m},\kappa_{m}),[\bm{\mu}_{m},\kappa_{m}]=Q_{m}(X_{m}),
+
+(4)
+
+ωm∼Cat⁡(pm),pm=Softmax⁡(𝒟⁡(Xωm,𝒞m)),\omega_{m}\sim{\rm Cat}(p_{m}),p_{m}={\rm Softmax}\left(\mathcal{D}(X_{\omega_{m}},\mathcal{C}_{m})\right),
+
+(5)
+
+Xm+1=Xm−cm,cm=One​_​Hot​(ωm)⋅𝒞m,X_{m+1}=X_{m}-c_{m},c_{m}={\rm One\_Hot(\omega_{m})}\cdot\mathcal{C}_{m},
+
+where m=1,2,⋯,Mm=1,2,\cdots,M and X1=XTX_{1}=X_{T}, Cat⁡(pm){\rm Cat}(p_{m}) is the categorical distribution over probability pmp_{m}, 𝒟\mathcal{D} is the distance metric, and One​_​Hot​(⋅){\rm One\_Hot}(\cdot) converts the scalar to a one-hot vector. The dynamic index serves as a hierarchical taxonomy which depicts the corresponding user/item from a coarse-to-fine perspective. The shallow variational quantizer focuses on capturing the general characteristics of user/item and the deep layer pays more attention to the subtle attributes. See Appendix C for the implementation details.
+
+2.2.3. Generative Sequential Recommendation
+
+By expanding the LLM vocabulary with the collection of the dual index tokens, the ED2 recommender is able to predict the most possible item in an end-to-end approach. The benefit of adopting the dual dynamic index mechanism for the LLM-based sequential RS development is threefold. (i) The dynamic index generator tightly cooperates with the LLM-backbone recommender, to integrate the collaborative information and the semantic information. (ii) The index hierarchy captures the semantic information from different granularities and thus is able to indicate the user/item semantic similarity. (iii) The index discreteness can reformulate the sequential recommendation task into the language generation task which is familiar to the LLM-backbone pre-trained on similar tasks.
+
+To make the LLM-backbone aware of the sequential recommendation task, we aggregate the dual dynamic indices and the user interaction sequence through natural language human instruction. Specifically, the vanilla user ID uju_{j} and item ID vkv_{k} in the interaction sequence are replaced with the corresponding dual dynamic indices. Accordingly, the interaction record is reorganized as a heterogeneous sequence composed of the natural language tokens and dual index tokens. An example of the heterogeneous human instruction in our implementation is presented as follows:
+
+You are an expert in sequential recommendation. On the basis of the historical interaction sequence: Ωk1v\Omega^{v}_{k_{1}},Ωk2v\Omega^{v}_{k_{2}},⋯\cdots,Ωknv\Omega^{v}_{{k_{n}}}, could you please predict the most suitable item for user Ωju\Omega^{u}_{j}?
+
+Denoting the heterogeneous human instruction as 𝒫\mathcal{P}, the LLM backbone first transforms the natural language 𝒫\mathcal{P} into the hidden representation X𝒫X_{\mathcal{P}} similar to Formula (2). Then, an extended language model head is appended to project the hidden state X𝒫X_{\mathcal{P}} into the index token vocabulary, formulated as follows,
+
+(6)
+
+Ω^=LM​_​Head​(X𝒫),\hat{\Omega}={\rm LM\_Head}(X_{\mathcal{P}}),
+
+where Ω^\hat{\Omega} is the index of the recommendation result. If necessary, an inverse look-up operation can identify the vanilla item ID. The sequential recommendation task based on the heterogeneous instruction prompt can be conveniently formulated as a language generation task (Tay et al., 2022). The optimization objective is defined as the negative log-likelihood as follows,
+
+(7)
+
+ℒLLM=−∑i=1BlogF(Ω^i|Ωi∗,𝒫i),\mathcal{L}_{\rm LLM}=-\sum_{i=1}^{B}\log F(\hat{\Omega}_{i}|\Omega^{*}_{i},\mathcal{P}_{i}),
+
+where FF is the combination of the LLM backbone and the extended LM head, BB represents the batch-size, Ωi∗\Omega^{*}_{i} and 𝒫i\mathcal{P}_{i} are the ground-truth index and the human instruction of the ii-th batch, respectively.
+
+2.3. Multi-Grained Token Regulator
+
+Since the dual index tokens are considered as special elements of the LLM vocabulary, these tokens serve as the basic notions of a special language to describe the sequential recommendation community. Existing LLM-based sequential recommender systems simply rely on the sequential recommendation oriented fine-tune to improve the LLM understanding of the index tokens. However, such a straightforward strategy is non-effective for the dynamic index token, since the supervision of sequential recommendation task is unsuitable for the dual dynamic index optimization. Therefore, we propose the multi-grained token regulator (m-GTR) to facilitate the LLM comprehension ability to the dynamic index tokens. As shown in Figure 3, the m-GTR module constructs alignment supervision in both the index level and the token level. To be more specific, given the dynamic index Ω\Omega and the corresponding textual feature TT, it is noteworthy that Ω\Omega and TT describe the same entity from two different perspectives. Hence, the LLM comprehension of the dynamic index Ω\Omega ought to be similar to that of the textual feature TT. We propose the index level alignment supervision based on the optimization objective as follows,
+
+(8)
+
+ℒID=−1B∑i=1Bexp⁡(sim⁡(XΩi,XTi))∑j=1Bexp⁡(sim⁡(XΩi,XTj)),\mathcal{L}_{\rm ID}=-\frac{1}{B}\sum_{i=1}^{B}\frac{{\rm exp}\left({\rm sim}\left(X_{\Omega}^{i},X_{T}^{i}\right)\right)}{\sum_{j=1}^{B}{\rm exp}\left({\rm sim}\left(X_{\Omega}^{i},X_{T}^{j}\right)\right)},
+
+where BB is the batch-size, XΩiX^{i}_{\Omega} and XTiX^{i}_{T} are the LLM representation of the dynamic index Ωi\Omega_{i} and the textual feature TiT_{i}, respectively. Notably, as formulated by Formulas (3)-(5), the dynamic index Ωi\Omega_{i} is composed of MM tokens <ω1i,ω2i,⋯,ωMi\omega^{i}_{1},\omega^{i}_{2},\cdots,\omega^{i}_{M}>. In the mm-th hierarchy of the variational quantization auto-encoder, the index token ωm\omega_{m} generated by the quantizer QmQ_{m} ought to maintain the user/item similarity. The users/items with similar representations tend to be allocated with similar indices that share a portion of common tokens. Accordingly, we propose the token level alignment supervision based on the optimization objective as follows,
+
+(9)
+
+ℒToken=−1B1M∑i=1B∑m=1Mexp⁡(sim⁡(Xmi,cmi))∑j=1B(wmi​j)−1⋅exp⁡(sim⁡(Xmi,cmj)),\mathcal{L}_{\rm Token}=-\frac{1}{B}\frac{1}{M}\sum_{i=1}^{B}\sum_{m=1}^{M}\frac{{\rm exp}\left({\rm sim}\left(X^{i}_{m},c^{i}_{m}\right)\right)}{\sum_{j=1}^{B}\left(w^{ij}_{m}\right)^{-1}\cdot{\rm exp}\left({\rm sim}\left(X^{i}_{m},c^{j}_{m}\right)\right)},
+
+(10)
+
+wmi​j=sim⁡(Xmi,Xmj),w^{ij}_{m}={\rm sim}\left(X^{i}_{m},X^{j}_{m}\right),
+
+where Xmi/XmjX^{i}_{m}/X^{j}_{m} is the input of the mm-th quantizer and cmi/cmjc^{i}_{m}/c^{j}_{m} is the codeword corresponding to the index token ωmi/ωmj\omega^{i}_{m}/\omega^{j}_{m}. The objective function defined in Formula (9) promotes users/items with similar representations to be assigned similar index tokens, with wmi​jw^{ij}_{m} indicating the representation similarity between in-batch samples.
+
+The overall objective function of ED2 is formulated as follows,
+
+(11)
+
+ℒAll=ℒLLM+β1∗ℒID+β2∗ℒToken,\mathcal{L}_{\rm All}=\mathcal{L}_{\rm LLM}+\beta_{1}*\mathcal{L}_{\rm ID}+\beta_{2}*\mathcal{L}_{\rm Token},
+
+where β1\beta_{1} and β2\beta_{2} are the weighted hyper-parameters. We present the hyper-parameter analysis towards β1\beta_{1} and β2\beta_{2} in Section 4.1.
+
+Figure 3. Overview of the hierarchical variational quantization auto-encoder and the multi-grained token regulator.
+
+2.4. High-Order Interaction Pattern Exploitation
+
+Most of the current LLM-based sequential recommender systems predict the suitable item merely depend on the item-related information, i.e., the textual feature and the interactive item sequence, while lose sight of the user-related information. Typically, GNN-based sequential recommender systems utilize the user-related information by constructing the user behavior graph, to mine the high-order user-item interaction patterns. Nevertheless, it is complicated for the LLM to deal with the graph structure. Hence, we contrive the high-order user-item interaction pattern exploitation, making it feasible for the LLM to capture these implicit patterns. Specifically, we first construct the associated user collection data on the basis of the historical behavior. For each item vkv_{k}, the users who historically interacted with it are recorded as an associated collection 𝒜k={uj|vk∈𝒮j}\mathcal{A}_{k}=\{u_{j}|v_{k}\in\mathcal{S}_{j}\}, 𝒮j\mathcal{S}_{j} represents the interaction sequence of uju_{j}. Afterwards, a series of instruction tuning tasks are customized for the LLM-backbone recommender to capture the high-order user-item interaction patterns. As a symmetric counterpart to the sequential recommendation task, we design the user prediction task which aims to exploit the user co-purchase pattern. The LLM-backbone recommender is prompted with several users historically interacting with the specific item, and then instructed to generate the index of another user who is fond of the same item. An example of the heterogeneous instruction is presented as follows:
+
+You are a professional recommendation system. The item Ωkv\Omega^{v}_{k} is historically purchased by the following users: Ωj1u\Omega^{u}_{j_{1}},Ωj2u\Omega^{u}_{j_{2}},⋯\cdots,Ωjnu\Omega^{u}_{j_{n}}. Could you please predict another user who may be interested in this item?
+
+To exploit the user preference pattern, we also design instruction tuning tasks based on the user recent comments, the search queries, and the holistic profile. In detail, the LLM-backbone is prompted with the user historical interaction sequence and instructed to deduce the user comment or the search query, which reflects the implicit user preference to a certain degree. Moreover, the LLM-backbone is instructed to summarize the user profile and the explicit preference based on the interaction history. A detailed summary of the human instructions for the high-order user-item interaction patterns is presented in Appendix I. The designed instruction tuning tasks to exploit the high-order user-item interaction patterns can be formatted as a language generation task as well, with a similar optimization objective to Formula (7).
+
+Table 1. Performance comparison of ED2 recommender and baselines on three public datasets. The best and the runner-up performance are indicated in bold and underlined font, respectively. For evaluation stability, the presented performance of ED2 recommender is the average result over several distinct instructions. The Improvement is defined as (Best-Second)/Second and the superscript * indicates the improvement is statistically significant with the p-value less than 0.01.
+
+Dataset
+Instruments
+Games
+Arts
+
+Metric
+HR@1
+HR@5
+HR@10
+NDCG@5
+NDCG@10
+HR@1
+HR@5
+HR@10
+NDCG@5
+NDCG@10
+HR@1
+HR@5
+HR@10
+NDCG@5
+NDCG@10
+
+FMLP-Rec
+0.0480
+0.0786
+0.0988
+0.0638
+0.0704
+0.0152
+0.0571
+0.0930
+0.0361
+0.0476
+0.0310
+0.0757
+0.1046
+0.0541
+0.0634
+
+Caser
+0.0149
+0.0543
+0.0710
+0.0355
+0.0409
+0.0085
+0.0367
+0.0617
+0.0227
+0.0307
+0.0138
+0.0379
+0.0541
+0.0262
+0.0313
+
+HGN
+0.0523
+0.0813
+0.1048
+0.0668
+0.0744
+0.0154
+0.0517
+0.0856
+0.0333
+0.0442
+0.0300
+0.0622
+0.0875
+0.0462
+0.0544
+
+GRU4Rec
+0.0571
+0.0821
+0.1031
+0.0698
+0.0765
+0.0176
+0.0586
+0.0964
+0.0381
+0.0502
+0.0421
+0.0749
+0.0964
+0.0590
+0.0659
+
+SR-GNN
+0.0538
+0.0805
+0.1022
+0.0673
+0.0743
+0.0154
+0.0554
+0.0900
+0.0355
+0.0466
+0.0419
+0.0720
+0.0926
+0.0574
+0.0638
+
+MA-GNN
+0.0296
+0.0545
+0.0735
+0.0497
+0.0569
+0.0121
+0.0371
+0.0610
+0.029
+0.0384
+0.0188
+0.0403
+0.0559
+0.0353
+0.0412
+
+BERT4Rec
+0.0435
+0.0671
+0.0822
+0.0560
+0.0608
+0.0136
+0.0482
+0.0763
+0.0311
+0.0401
+0.0337
+0.0559
+0.0713
+0.0451
+0.0500
+
+SASRec
+0.0503
+0.0751
+0.0947
+0.0627
+0.0690
+0.0145
+0.0581
+0.0940
+0.0365
+0.0481
+0.0225
+0.0757
+0.1016
+0.0508
+0.0592
+
+FDSA
+0.0520
+0.0834
+0.1046
+0.0681
+0.0750
+0.0161
+0.0644
+0.1041
+0.0404
+0.0531
+0.0451
+0.0734
+0.0933
+0.0595
+0.0660
+
+S3-Rec
+0.0367
+0.0863
+0.1136
+0.0626
+0.0714
+0.0119
+0.0606
+0.1002
+0.0364
+0.0491
+0.0245
+0.0767
+0.1051
+0.0521
+0.0612
+
+P5-CID
+0.0587
+0.0827
+0.1016
+0.0708
+0.0768
+0.0177
+0.0506
+0.0803
+0.0342
+0.0437
+0.0485
+0.0724
+0.0902
+0.0607
+0.0664
+
+TIGER
+0.0608
+0.0863
+0.1064
+0.0738
+0.0803
+0.0188
+0.0599
+0.0939
+0.0392
+0.0501
+0.0465
+0.0788
+0.1012
+0.0631
+0.0703
+
+CLLM4Rec
+0.0336
+0.0666
+0.0845
+0.0516
+0.0574
+0.0142
+0.0421
+0.0650
+0.0282
+0.0355
+0.0369
+0.0724
+0.0933
+0.0555
+0.0621
+
+LC-Rec LoRA
+0.0576
+0.0817
+0.1009
+0.0698
+0.0760
+0.0165
+0.0520
+0.0835
+0.0342
+0.0443
+0.0367
+0.0637
+0.0837
+0.0504
+0.0569
+
+ED2 (Ours)
+0.0714*
+0.1028*
+0.1281*
+0.0872*
+0.0947*
+0.0254*
+0.0704*
+0.1083*
+0.0480*
+0.0597*
+0.0639*
+0.1002*
+0.1260*
+0.0823*
+0.0906*
+
+Improvement
+17.43%
+19.12%
+12.76%
+18.16%
+17.93%
+35.11%
+9.32%
+4.03%
+18.81%
+12.43%
+31.75%
+27.16%
+19.89%
+30.43%
+28.88%
+
+3. Experiment
+
+In this section, we present and analyse the sequential recommendation performance of the ED2 recommender system on three public datasets. Furthermore, we investigate the effectiveness of the novel ED2 recommender architecture and the superiority of the dual dynamic index mechanism. Finally, we conduct case studies to provide intuitive understanding of the ED2 recommender system. The repository is available at https://github.com/Esperanto-mega/ED2.
+
+3.1. Experimental Setup
+
+3.1.1. Baseline
+
+To comprehensively demonstrate the multifaceted superiority of ED2 recommender, the evaluation includes the following baselines based on various methodologies. MLP-Based: FMLP-Rec (Zhou et al., 2022), CNN-Based: Caser (Yuan et al., 2019), RNN-Based: HGN (Ma et al., 2019) and GRU4Rec (Jannach and Ludewig, 2017), GNN-Based: SR-GNN (Wu et al., 2019) and MA-GNN (Ma et al., 2021), Transformer-Based: BERT4Rec (Sun et al., 2019), SASRec (Kang and McAuley, 2018), FDSA (Zhang et al., 2019b) and S3-Rec (Zhou et al., 2020), and PLM/LLM-Based: P5-CID (Geng et al., 2022), TIGER (Rajput et al., 2023), CLLM4Rec (Zhu et al., 2024) and LC-Rec (Zheng et al., 2024). A detailed introduction to the above baselines is presented in Appendix A.
+
+3.1.2. Dataset
+
+We evaluate the proposed ED2 recommender system and all the baseline models on public benchmarks from the Amazon Product Review dataset (He and McAuley, 2016), containing user review data from May 1996 to October 2018. Particularly, we extract three categories for the sequential recommendation task, i.e., "Musical Instruments", "Video Games", and "Arts, Crafts and Sewing". Following standard procedure (Rajput et al., 2023; Zheng et al., 2024), inactive users/items with less then 5 interactions are filtered out and the user interactive sequence is created according to the chronological order. The dataset statistics and detailed pre-processing are presented in Appendix B.
+
+3.1.3. Evaluation Strategy
+
+We adopt the Top-K Hit-Rate (HR@K) with K = 1, 5, 10 and the Normalized Discounted Cumulative Gain (NDCG@K) with K = 5, 10 to evaluate the sequential recommendation performance. Following standard setting, the leave-one-out strategy is adopted (Rajput et al., 2023; Zheng et al., 2024). Specifically, the most recent item serves as the evaluation data, the second most recent item servers as the validation data, and the remaining interactive items form the training data. The implementation detail and the hardware environment of the ED2 recommender are presented in Appendix C.
+
+3.2. Main Result
+
+The evaluation results of ED2 recommender system and the SOTA baselines on three public datasets are presented in Table 1 and the following conclusions can be derived.
+
+First, integrating semantic information and collaborative information is effective to improve sequential recommendation performance. For the evaluated models, the sequential recommender systems incorporating the semantic information with the collaborative information (i.e., FDSA, S3-Rec, P5-CID, TIGER, CLLM4Rec, LC-Rec, and ED2 ) achieve an overall superiority, compared with the traditional sequential recommender systems which merely rely on the collaborative information (i.e., FMLP-Rec, Caser, HGN, GRU4Rec, SR-GNN, MA-GNN, BERT4Rec, and SASRec). Compared with the best traditional sequential recommender system GRU4Rec, ED2 ameliorates the recommendation performance up to 29.67% in Hit-Rate and 28.44% in NDCG metric.
+
+Second, dual dynamic index mechanism unleashes LLM potential for sequential recommendation. In general, the proposed ED2 recommender system constantly outperforms the comparison baselines across the three datasets. Compared with the SOTA LLM-based sequential recommender systems that adopt the static index mechanism (i.e., P5-CID, TIGER, CLLM4Rec, and LC-Rec), ED2 recommender achieves an average improvement of 19.56% in Hit-Rate and 21.11% in NDCG metric. The superiority of ED2 demonstrates that the index generator ought to cooperate with the sequential recommender, unleashing the LLM potential for sequential recommendation.
+Third, specific instruction tuning for high-order user-item interaction patterns is crucial. As to the baselines fusing the semantic information and the collaborative information, only CLLM4Rec underscores the user-related information. However, the CLLM4Rec recommender fails to achieve a significant performance improvement. The degradation can be attributed to the absence of instruction tuning task which specifically exploits the high-order user-item interaction patterns. The ED2 recommender outperforms CLLM4Rec by 72.80% in Hit-Rate and 66.97% in NDCG metric, which reveals the importance of specially customized tuning tasks in utilizing the high-order user-item interaction patterns.
+
+3.3. Ablation Study
+
+3.3.1. Architecture
+
+To demonstrate the effectiveness of the innovative architecture, including the dual dynamic index mechanism, the multi-grained token regulator, and the high-order user-item interaction pattern exploitation, we conduct ablation study to investigate the contribution of each module. Accordingly, ED2 refers to the unabridged model, w/o user removes the user related modules including the user dynamic index generator and the high-order user-item interaction pattern exploitation tasks, w/o dynamic freezes the user/item indices during the sequential recommendation optimization, w/o m-GTR removes the multi-grained token regulator, w/o exploit removes the specific tuning tasks for the high-order user-item interaction patterns, and w/o u&m removes both the user related modules and the multi-grained token regulator.
+
+According to the result in Table 2, we derive the following three conclusions. (i) m-GTR module facilitates the LLM comprehension on the dynamic index tokens. The 4.13% performance reduction of the w/o m-GTR variant demonstrates the effectiveness of m-GTR in facilitating the LLM understanding to the index tokens. The same conclusion can be drawn from the performance gap between the w/o user variant and the w/o u&m variant as well. (ii) Introduction of user-related information aggravates the limitation of static index mechanism. The w/o dynamic variant that replaces the dynamic index mechanism with static counterpart is the most inferior among all the variants, even worse than the best baseline performance. Compared with the single-branch variants (i.e., w/o user and w/o u&m), the user branch makes it further difficult for the static index mechanism to fuse the semantic information with the collaborative information, leading to the severe performance degradation up to 17.57%. (iii) Naive utilization of user-related information is profitless to sequential recommendation task. Moreover, comparing the w/o exploit variant with the w/o user variant, one may notice that simply introducing the user-related information without corresponding instruction tuning task fails to improve the recommendation performance, yet increases the difficulty of sequential recommender optimization.
+
+Table 2. Ablation study towards the architecture innovation. P-Baseline records the prime baseline performance which is the best among all the evaluated baselines. Avg.D is the average performance degradation over the evaluated metrics.
+
+Metric
+HR@1
+HR@5
+HR@10
+NDCG@5
+NDCG@10
+Avg.D
+
+ED2
+0.0714
+0.1028
+0.1281
+0.0872
+0.0947
+N/A
+
+w/o user
+0.0701
+0.1010
+0.1230
+0.0860
+0.0929
+2.17%
+
+w/o dynamic
+0.0621
+0.0828
+0.1005
+0.0727
+0.0784
+17.57%
+
+w/o m-GTR
+0.0685
+0.0986
+0.1224
+0.0835
+0.0911
+4.13%
+
+w/o exploit
+0.0696
+0.1007
+0.1236
+0.0852
+0.0926
+2.52%
+
+w/o u&m
+0.0610
+0.0919
+0.1159
+0.0769
+0.0845
+11.46%
+
+P-Baseline
+0.0608
+0.0863
+0.1136
+0.0738
+0.0803
+14.56%
+
+Table 3. Ablation study towards the index mechanism.
+
+Metric
+HR@1
+HR@5
+HR@10
+NDCG@5
+NDCG@10
+Avg.D
+
+ED2
+0.0714
+0.1028
+0.1281
+0.0872
+0.0947
+N/A
+
+3-ED2
+0.0686
+0.1004
+0.1222
+0.0844
+0.0914
+3.51%
+
+5-ED2
+0.0697
+0.1007
+0.1233
+0.0853
+0.0926
+2.51%
+
+Static
+0.0621
+0.0828
+0.1005
+0.0727
+0.0784
+17.57%
+
+D-LSH
+0.0677
+0.0976
+0.1228
+0.0829
+0.0909
+4.66%
+
+S-LSH
+0.0660
+0.0918
+0.1131
+0.0790
+0.0859
+9.73%
+
+P-Baseline
+0.0608
+0.0863
+0.1136
+0.0738
+0.0803
+14.56%
+
+Figure 4. Parameter sensitivity analysis on the weighted hyper-parameters 𝜷1\bm{\beta}_{1} and 𝜷2\bm{\beta}_{2}.
+
+Figure 5. Parameter sensitivity analysis on the ED2 recommender learning rate 𝜼\bm{\eta}.
+
+3.3.2. Indexing Mechanism
+
+Furthermore, we investigate the impact of different index mechanisms. First, we implement an ED2 variant that adopts static index mechanism, denoted as Static. Then, we introduce dynamic locality sensitive hashing (LSH) index and static LSH (Indyk et al., 1997) index (denoted as D-LSH and S-LSH) as the comparison variants. Moreover, since the ED2 recommeder in main experiment adopts dynamic index consisting of 4 tokens, we further implement two ED2 variants with the dynamic index length set to 3 and 5 respectively (denoted as 3-ED2 and 5-ED2). The evaluation result on Instruments dataset is presented in Table 3. See Appendix G for the details of the different indexing mechanisms.
+
+We can summarize the following conclusions from the presented result.
+(i) Representing each item/user with 4 index tokens is appropriate in such a data magnitude (10K ∼\sim 45K). 3-ED2 (3.51%↓\downarrow) with less semantic index length may suffer from inadequate expressiveness and 5-ED2 (2.51%↓\downarrow) with larger representation space will increase the difficulty of target item generation.
+(ii) Superiority of dynamic index mechanism is loosely coupled with the indexing method. Similar to the predominance of ED2 over the Static variant, the improvement of D-LSH over the static counterpart S-LSH further verifies the effectiveness of the dynamic index mechanism, which is feasible to the LSH index as well.
+
+4. Parameter Sensitivity Analysis
+
+In this section, we conduct analysis towards the weighted parameters β1\beta_{1} and β2\beta_{2} of the index level alignment supervision and the token level alignment supervision, and the ED2 learning rate η\eta, .
+
+4.1. Weighted Hyper-Parameter
+
+In Formula (11), β1\beta_{1} and β2\beta_{2} adjust the magnitude of the alignment supervision loss ℒID\mathcal{L}_{\rm ID} and ℒToken\mathcal{L}_{\rm Token}. We investigate the sensitivity of ED2 recommender towards β1\beta_{1} and β2\beta_{2} and the evaluation result is presented in Figure 4. With β1\beta_{1} and β2\beta_{2} set as {0.1, 0.5, 1.0, 1.5, 2.0}, we notice that the best performance tends to be achieved when β1\beta_{1} is less the β2\beta_{2} (i.e., the lower triangle of the heatmap). This phenomenon implies that the token level alignment supervision (corresponding to β2\beta_{2}) is more difficult than the index level alignment supervision (corresponding to β1\beta_{1}). Furthermore, we note that the standard deviation of the sequential recommendation performance is less than 9.7×10-4, indicating that the ED2 recommender is non-sensitive to the weighted parameter.
+
+4.2. Learning Rate
+
+As shown in Figure 5, we evaluate the sequential recommendation performance of ED2 recommender with the learning rate set as {1e-3, 5e-4, 1e-4, 5e-5, 1e-5}. The result reveals that the most suitable learning rate for ED2 is around 1e-4. When the learning rate is larger than 5e-4 or less than 5e-5, the overall sequential recommendation performance depresses sharply. Different from other metrics, the Hit-Rate@1 keeps increasing with the learning rate growing. The phenomenon can be attributed to the difficulty of the Top-1 recommendation task which necessitates a large learning rate.
+
+5. Related Work
+
+Sequential Recommendation. Artificial neural network based deep sequential recommender systems have dominated the current leaderboard (Fang et al., 2020). GRU4Rec (Jannach and Ludewig, 2017) for the first time incorporates GRU module (Chung et al., 2014) with sequential recommendation. NARM (Li et al., 2017b; Zhang et al., 2019a) further enhances the long-term user preference memory through attention mechanism.
+On the other hand, generative recommendation models based on index learning technique have attracted significant research attention, due to the efficient inference. DSI (Tay et al., 2022) for the first time proposes an end-to-end generative model for document retrieval, NCI (Wang et al., 2022) further supplements the indexing mechanism of DSI by proposing a specific prefix decoder.
+
+LLM-based Recommender System. As the LLMs demonstrating comprehensive capacity in language modeling tasks (Xu et al., 2024; Liu et al., 2024a; Yan et al., 2023), P5 (Geng et al., 2022) for the first time attempts to fine-tune LLM for a sequential recommendation oriented model, M6-Rec (Cui et al., 2022) replaces the pseudo index in P5 with the corresponding linguistic description, and TALLRec (Bao et al., 2023) combines both the pseudo index and textual description. CLLM4Rec (Zhu et al., 2024) extends the LLM vocabulary with pseudo item index and proposes a mixed prompting strategy to adapt the extended LLM. Furthermore, TIGER (Rajput et al., 2023) for the first time adopts hierarchical vector quantization technique to generate semantic item index and LC-Rec (Zheng et al., 2024) substitutes the T5X backbone with LLaMA (Touvron et al., 2023) for superior recommendation performance.
+
+6. Conclusion
+
+We for the first time investigate the LLM-based sequential recommender systems that adopts dual dynamic index mechanism and propose the End-to-End Dual Dynamic (ED2) recommender system. To unleash the LLM capacity for sequential recommendation, ED2 jointly optimizes the index generator and the sequential recommender. We further design a multi-grained token regulator to facilitate the LLM comprehension ability to the dual dynamic index tokens. Moreover, we construct an associated user collection and customize a series of instruction tuning tasks, to exploit and utilize the high-order user-item interaction patterns. Extensive experiments on three public datasets demonstrate the superiority of the proposed ED2 recommender over the SOTA baselines.
+
+Acknowledgements.
+
+This research was funded by the National Natural Science Foundation of China (No.62172443).
+
+References
+
+Babenko and Lempitsky (2014)
+A. Babenko and V. Lempitsky
+
+Additive quantization for extreme vector compression.
+
+In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition,
+
+Cited by: §1.
+
+Bao et al. (2023)
+K. Bao, J. Zhang, Y. Zhang, W. Wang, F. Feng, and X. He
+
+TALLRec: an effective and efficient tuning framework to align large language model with recommendation.
+
+In Proceedings of the ACM Conference on Recommender Systems,
+
+Cited by: §1,
+§5.
+
+Chung et al. (2014)
+J. Chung, C. Gulcehre, K. Cho, and Y. Bengio
+
+Empirical evaluation of gated recurrent neural networks on sequence modeling.
+
+In Proceedings of the International Conference on Neural Information Processing System,
+
+Cited by: 3rd item,
+§5.
+
+Covington et al. (2016)
+P. Covington, J. Adams, and E. Sargin
+
+Deep neural networks for youtube recommendations.
+
+In Proceedings of the ACM conference on recommender systems,
+
+Cited by: §1.
+
+Cui et al. (2022)
+Z. Cui, J. Ma, C. Zhou, J. Zhou, and H. Yang
+
+M6-rec: generative pretrained language models are open-ended recommender systems.
+
+External Links: 2205.08084
+
+Cited by: §5.
+
+de Souza Pereira Moreira et al. (2021)
+G. de Souza Pereira Moreira, S. Rabhi, J. M. Lee, R. Ak, and E. Oldridge
+
+Transformers4Rec: bridging the gap between nlp and sequential / session-based recommendation.
+
+In Proceedings of the ACM conference on recommender systems,
+
+Cited by: §1.
+
+Fang et al. (2020)
+H. Fang, D. Zhang, Y. Shu, and G. Guo
+
+Deep learning for sequential recommendation: algorithms, influential factors, and evaluations.
+
+ACM Transactions on Information Systems 39(1).
+
+Cited by: §5.
+
+Geng et al. (2022)
+S. Geng, S. Liu, Z. Fu, Y. Ge, and Y. Zhang
+
+Recommendation as language processing (rlp): a unified pretrain, personalized prompt & predict paradigm (p5).
+
+In Proceedings of the ACM conference on recommender systems,
+
+Cited by: 6th item,
+§1,
+§1,
+§3.1.1,
+§5.
+
+Gomez-Uribe and Hunt (2016)
+C. A. Gomez-Uribe and N. Hunt
+
+The netflix recommender system: algorithms, business value, and innovation.
+
+ACM Transactions on Management Information Systems 6(4).
+
+Cited by: 6th item.
+
+He et al. (2022)
+K. He, X. Chen, S. Xie, Y. Li, P. Dollár, and R. Girshick
+
+Masked autoencoders are scalable vision learners.
+
+In Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition,
+
+Cited by: §2.2.2.
+
+He and McAuley (2016)
+R. He and J. McAuley
+
+Ups and downs: modeling the visual evolution of fashion trends with one-class collaborative filtering.
+
+In Proceedings of the International Conference on World Wide Web,
+
+Cited by: Appendix B,
+§3.1.2.
+
+Hou et al. (2023)
+Y. Hou, Z. He, J. McAuley, and W. X. Zhao
+
+Learning vector-quantized item representation for transferable sequential recommenders.
+
+In Proceedings of the ACM Web Conference,
+
+Cited by: §1,
+§2.2.2.
+
+Hou et al. (2022a)
+Y. Hou, S. Mu, W. X. Zhao, Y. Li, B. Ding, and J. Wen
+
+Towards universal sequence representation learning for recommender systems.
+
+In Proceedings of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining,
+
+Cited by: §1.
+
+Hou et al. (2024)
+Y. Hou, J. Zhang, Z. Lin, H. Lu, R. Xie, J. McAuley, and W. X. Zhao
+
+Large language models are zero-shot rankers for recommender systems.
+
+In Proceedings of the Advances in Information Retrieval: European Conference on Information Retrieval Engineering,
+
+Cited by: §1.
+
+Hou et al. (2022b)
+Z. Hou, X. Liu, Y. Cen, Y. Dong, H. Yang, C. Wang, and J. Tang
+
+GraphMAE: self-supervised masked graph autoencoders.
+
+In Proceedings of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining,
+
+Cited by: §2.2.2.
+
+Hu et al. (2022)
+E. J. Hu, Y. Shen, P. Wallis, Z. Allen-Zhu, Y. Li, S. Wang, L. Wang, and W. Chen
+
+LoRA: low-rank adaptation of large language models.
+
+In Proceedings of the International Conference on Learning Representations,
+
+Cited by: Appendix C.
+
+Hua et al. (2023)
+W. Hua, S. Xu, Y. Ge, and Y. Zhang
+
+How to index item ids for recommendation foundation models.
+
+In Proceedings of the Annual International ACM SIGIR Conference on Research and Development in Information Retrieval in the Asia Pacific Region,
+
+Cited by: §1.
+
+Indyk et al. (1997)
+P. Indyk, R. Motwani, P. Raghavan, and S. Vempala
+
+Locality-preserving hashing in multidimensional spaces.
+
+In Proceedings of the Annual ACM Symposium on Theory of Computing,
+
+Cited by: §3.3.2.
+
+Jannach and Ludewig (2017)
+D. Jannach and M. Ludewig
+
+When recurrent neural networks meet the neighborhood for session-based recommendation.
+
+In Proceedings of the ACM Conference on Recommender Systems,
+
+Cited by: 3rd item,
+§3.1.1,
+§5.
+
+Jin et al. (2024a)
+B. Jin, H. Zeng, G. Wang, X. Chen, T. Wei, R. Li, Z. Wang, Z. Li, Y. Li, H. Lu, S. Wang, J. Han, and X. Tang
+
+Language models as semantic indexers.
+
+In Proceedings of the International Conference on Machine Learning,
+
+Cited by: §1,
+§1.
+
+Jin et al. (2024b)
+M. Jin, Z. Qiu, J. Zhu, Z. Dong, and X. Li
+
+Contrastive quantization based semantic code for generative recommendation.
+
+External Links: 2404.14774
+
+Cited by: §1,
+§1.
+
+Kang and McAuley (2018)
+W. Kang and J. McAuley
+
+Self-attentive sequential recommendation.
+
+In Proceedings of the IEEE International Conference on Data Mining,
+
+Cited by: 5th item,
+§1,
+§1,
+§3.1.1.
+
+Kingma and Ba (2015)
+D. P. Kingma and J. Ba
+
+Adam: a method for stochastic optimization.
+
+In Proceedings of the International Conference on Learning Representations,
+
+Cited by: Appendix C.
+
+Li et al. (2021)
+C. Li, B. Pang, Y. Liu, H. Sun, Z. Liu, X. Xie, T. Yang, Y. Cui, L. Zhang, and Q. Zhang
+
+Adsgnn: behavior-graph augmented relevance modeling in sponsored search.
+
+In Proceedings of the international ACM SIGIR conference on research and development in information retrieval,
+
+Cited by: §1.
+
+Li et al. (2023)
+J. Li, M. Wang, J. Li, J. Fu, X. Shen, J. Shang, and J. McAuley
+
+Text is all you need: learning language representations for sequential recommendation.
+
+In Proceedings of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining,
+
+Cited by: §1.
+
+Li et al. (2017a)
+J. Li, Z. C. Pengjie Ren, Z. Ren, T. Lian, and J. Ma
+
+Neural attentive session-based recommendation.
+
+In Proceedings of the ACM on Conference on Information and Knowledge Management,
+
+Cited by: §1.
+
+Li et al. (2017b)
+J. Li, P. Ren, Z. Chen, Z. Ren, T. Lian, and J. Ma
+
+Neural attentive session-based recommendation.
+
+In Proceedings of the ACM on Conference on Information and Knowledge Management,
+
+Cited by: §5.
+
+Liu et al. (2024a)
+C. Liu, S. Yang, Q. Xu, Z. Li, C. Long, Z. Li, and R. Zhao
+
+Spatial-temporal large language model for traffic prediction.
+
+In Proceedings of the IEEE International Conference on Mobile Data Management,
+
+Cited by: §5.
+
+Liu et al. (2024b)
+E. Liu, B. Zheng, C. Ling, L. Hu, H. Li, and W. X. Zhao
+
+End-to-end learnable item tokenization for generative recommendation.
+
+External Links: 2409.05546
+
+Cited by: Table 6,
+§E.1,
+Appendix E.
+
+Liu et al. (2024c)
+H. Liu, Y. Wei, X. Song, W. Guan, Y. Li, and L. Nie
+
+MMGRec: multimodal generative recommendation with transformer model.
+
+External Links: 2404.16555
+
+Cited by: Appendix H,
+§1,
+§1.
+
+Liu et al. (2024d)
+Q. Liu, J. Zhu, L. Fan, Z. Zhao, and X. Wu
+
+STORE: streamlining semantic tokenization and generative recommendation with a single llm.
+
+External Links: 2409.07276
+
+Cited by: Table 6,
+§E.2,
+Appendix E,
+§1.
+
+Ma et al. (2019)
+C. Ma, P. Kang, and X. Liu
+
+Hierarchical gating networks for sequential recommendation.
+
+In Proceedings of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining,
+
+Cited by: 3rd item,
+§3.1.1.
+
+Ma et al. (2021)
+C. Ma, L. Ma, Y. Zhang, J. Sun, X. Liu, and M. Coates
+
+Memory augmented graph neural networks for sequential recommendation.
+
+In Proceedings of the AAAI Conference on Artificial Intelligence,
+
+Cited by: 4th item,
+§1,
+§1,
+§3.1.1.
+
+Qu et al. (2024)
+H. Qu, W. Fan, Z. Zhao, and Q. Li
+
+TokenRec: learning to tokenize id for llm-based generative recommendation.
+
+External Links: 2406.10450
+
+Cited by: Table 6,
+§E.3,
+Appendix E.
+
+Radford et al. (2023)
+A. Radford, K. Narasimhan, T. Salimans, and I. Sutskever
+
+Improving language understanding by generative pre-rraining.
+
+In ,
+
+Cited by: §1.
+
+Raffel et al. (2020)
+C. Raffel, N. Shazeer, A. Roberts, K. Lee, S. Narang, M. Matena, Y. Zhou, W. Li, and P. J. Liu
+
+Exploring the limits of transfer learning with a unified text-to-text transformer.
+
+The Journal of Machine Learning Research 21(1).
+
+Cited by: §1.
+
+Rajput et al. (2023)
+S. Rajput, N. Mehta, A. Singh, R. Keshavan, T. Vu, L. Heidt, L. Hong, Y. Tay, V. Q. Tran, J. Samost, M. Kula, E. H. Chi, and M. Sathiamoorthy
+
+Recommender systems with generative retrieval.
+
+In Proceedings of the International Conference on Neural Information Processing Systems,
+
+Cited by: 6th item,
+Table 6,
+Appendix H,
+§1,
+§1,
+§1,
+§1,
+§1,
+§3.1.1,
+§3.1.2,
+§3.1.3,
+§5.
+
+Sun et al. (2019)
+F. Sun, J. Liu, J. Wu, C. Pei, X. Lin, W. Ou, and P. Jiang
+
+BERT4Rec: sequential recommendation with bidirectional encoder representations from transformer.
+
+In Proceedings of the ACM International Conference on Information and Knowledge Management,
+
+Cited by: 5th item,
+§1,
+§3.1.1.
+
+Takida et al. (2022)
+Y. Takida, T. Shibuya, W. Liao, C. Lai, J. Ohmura, T. Uesaka, N. Murata, S. Takahashi, T. Kumakura, and Y. Mitsufuji
+
+SQ-vae: variational bayes on discrete representation with self-annealed stochastic quantization.
+
+In Proceedings of the International Conference on Machine Learning,
+
+Cited by: §2.2.2.
+
+Tan et al. (2016)
+Y. K. Tan, X. Xu, and Y. Liu
+
+Improved recurrent neural networks for session-based recommendations.
+
+In Proceedings of the Workshop on Deep Learning for Recommender Systems,
+
+Cited by: §1,
+§1.
+
+Tang and Wang (2018)
+J. Tang and K. Wang
+
+Personalized top-n sequential recommendation via convolutional sequence embedding.
+
+In Proceedings of the ACM International Conference on Web Search and Data Mining,
+
+Cited by: §1.
+
+Tay et al. (2022)
+Y. Tay, V. Q. Tran, M. Dehghani, J. Ni, D. Bahri, H. Mehta, Z. Qin, K. Hui, Z. Zhao, J. Gupta, T. Schuster, W. W. Cohen, and D. Metzler
+
+Transformer memory as a differentiable search index.
+
+In Proceedings of the International Conference on Neural Information Processing System,
+
+Cited by: §2.2.3,
+§5.
+
+Touvron et al. (2023)
+H. Touvron, T. Lavril, G. Izacard, X. Martinet, M. Lachaux, T. Lacroix, B. Rozière, N. Goyal, E. Hambro, and F. Azhar
+
+LlaMA: open and efficient foundation language models.
+
+In ,
+
+Cited by: 6th item,
+Appendix C,
+§1,
+§5.
+
+Wang et al. (2024)
+W. Wang, H. Bao, X. Lin, J. Zhang, Y. Li, F. Feng, S. Ng, and T. Chua
+
+Learnable item tokenization for generative recommendation.
+
+In Proceedings of the ACM International Conference on Information and Knowledge Management,
+
+Cited by: §1.
+
+Wang et al. (2019)
+X. Wang, X. He, M. Wang, F. Feng, and T. Chua
+
+Neural graph collaborative filtering.
+
+In Proceedings of the International ACM SIGIR Conference on Research and Development in Information Retrieval,
+
+Cited by: §1.
+
+Wang et al. (2022)
+Y. Wang, Y. Hou, H. Wang, Z. Miao, S. Wu, H. Sun, Q. Chen, Y. Xia, C. Chi, G. Zhao, Z. Liu, X. Xie, H. A. Sun, W. Deng, Q. Zhang, and M. Yang
+
+A neural corpus indexer for document retrieval.
+
+In Proceedings of the International Conference on Neural Information Processing System,
+
+Cited by: §5.
+
+Wu et al. (2019)
+S. Wu, Y. Tang, Y. Zhu, L. Wang, X. Xie, and T. Tan
+
+Session-based recommendation with graph neural networks.
+
+In Proceedings of the AAAI Conference on Artificial Intelligence,
+
+Cited by: 4th item,
+§1,
+§1,
+§1,
+§3.1.1.
+
+Xu et al. (2019)
+C. Xu, P. Zhao, Y. Liu, V. S. Sheng, J. Xu, F. Zhuang, J. Fang, and X. Zhou
+
+Graph contextualized self-attention network for session-based recommendation.
+
+In Proceedings of the International Joint Conference on Artificial Intelligence,
+
+Cited by: §1.
+
+Xu et al. (2024)
+R. Xu, H. Miao, S. Wang, P. S. Yu, and J. Wang
+
+PeFAD: a parameter-efficient federated framework for time series anomaly detection.
+
+In Proceedings of the ACM SIGKDD Conference on Knowledge Discovery and Data Mining,
+
+Cited by: §5.
+
+Yan et al. (2023)
+H. Yan, C. Li, R. Long, C. Yan, J. Zhao, W. Zhuang, J. Yin, P. Zhang, W. Han, H. Sun, et al.
+
+A comprehensive study on text-attributed graphs: benchmarking and rethinking.
+
+In Proceedings of the Annual Conference on Neural Information Processing Systems,
+
+Cited by: §5.
+
+Yuan et al. (2019)
+F. Yuan, A. Karatzoglou, I. Arapakis, J. M. Jose, and X. He
+
+A simple convolutional generative network for next item recommendation.
+
+In Proceedings of the ACM International Conference on Web Search and Data Mining,
+
+Cited by: 2nd item,
+§1,
+§1,
+§3.1.1.
+
+Zeghidour et al. (2021)
+N. Zeghidour, A. Luebs, A. Omran, J. Skoglund, and M. Tagliasacchi
+
+SoundStream: an end-to-end neural audio codec.
+
+IEEE/ACM Transactions on Audio, Speech, and Language Processing 31.
+
+Cited by: §1,
+§2.2.2,
+§2.2.2.
+
+Zhang et al. (2023)
+P. Zhang, J. Guo, C. Li, Y. Xie, J. B. Kim, Y. Zhang, X. Xie, H. Wang, and S. Kim
+
+Efficiently leveraging multi-level user intent for session-based recommendation via atten-mixer network.
+
+In Proceedings of the ACM international conference on web search and data mining,
+
+Cited by: §1.
+
+Zhang et al. (2019a)
+S. Zhang, Y. Tay, L. Yao, A. Sun, and J. An
+
+Next item recommendation with self-attentive metric learning.
+
+In Proceedings of the AAAI Conference on Artificial Intelligence,
+
+Cited by: §5.
+
+Zhang et al. (2019b)
+T. Zhang, P. Zhao, Y. Liu, V. S. Sheng, J. Xu, D. Wang, G. Liu, and X. Zhou
+
+Feature-level deeper self-attention network for sequential recommendation.
+
+In Proceedings of the International Joint Conference on Artificial Intelligence,
+
+Cited by: 5th item,
+§1,
+§3.1.1.
+
+Zheng et al. (2024)
+B. Zheng, Y. Hou, H. Lu, Y. Chen, W. X. Zhao, and J. Wen
+
+Adapting large language models by integrating collaborative semantics for recommendation.
+
+In Proceedings of the IEEE International Conference on Data Engineering,
+
+Cited by: 6th item,
+Table 6,
+Appendix H,
+§1,
+§1,
+§1,
+§1,
+§1,
+§3.1.1,
+§3.1.2,
+§3.1.3,
+§5.
+
+Zhou et al. (2020)
+K. Zhou, H. Wang, W. X. Zhao, Y. Zhu, S. Wang, F. Zhang, Z. Wang, and J. Wen
+
+S3-rec: self-supervised learning for sequential recommendation with mutual information maximization.
+
+In Proceedings of the ACM International Conference on Information and Knowledge Management,
+
+Cited by: 5th item,
+§3.1.1.
+
+Zhou et al. (2022)
+K. Zhou, H. Yu, W. X. Zhao, and J. Wen
+
+Filter-enhanced mlp is all you need for sequential recommendation.
+
+In Proceedings of the ACM Web Conference,
+
+Cited by: 1st item,
+§3.1.1.
+
+Zhu et al. (2024)
+Y. Zhu, L. Wu, Q. Guo, L. Hong, and J. Li
+
+Collaborative large language model for recommender systems.
+
+In Proceedings of the ACM Web Conference,
+
+Cited by: 6th item,
+Table 6,
+§1,
+§1,
+§2.2.2,
+§3.1.1,
+§5.
+
+Appendix A Baseline
+
+Here we introduce the leading baseline recommendation models evaluated in the main experiment.
+
+• 
+
+MLP-Based: FMLP-Rec (Zhou et al., 2022) proposes an all-MLP model with learnable filters for sequential recommendation, ensuring efficiency and reduces noise signals.
+
+• 
+
+CNN-Based: Caser (Yuan et al., 2019) captures user behaviors by applying horizontal and vertical convolutional filters.
+
+• 
+
+RNN-Based: HGN (Ma et al., 2019) utilizes hierarchical gating networks to capture both long-term and short-term user interests from historical behaviors. GRU4Rec (Jannach and Ludewig, 2017) is an sequential recommendation model that utilizes GRU (Chung et al., 2014) to encode the item sequence.
+
+• 
+
+GNN-Based: SR-GNN (Wu et al., 2019) models session sequences as graph structured data, to capture complex transitions of items. MA-GNN (Ma et al., 2021) applies GNN to model the item contextual information within a short-term period and utilize a shared memory network to capture the long-range item dependencies.
+
+• 
+
+Transformer-Based: BERT4Rec (Sun et al., 2019) adopts a bidirectional Transformer model and combines it with a mask prediction task for the item sequences modeling. SASRec (Kang and McAuley, 2018) exploits a unidirectional transformer model to capture the item sequences and predict the next item. FDSA (Zhang et al., 2019b) focuses on the transformation patterns between item features, modeling both item-level and feature-level sequences separately through self-attention networks. S3-Rec (Zhou et al., 2020) utilizes mutual information maximization to pre-train a self-supervised sequential recommendation model, learning the correlation between items and attributes.
+
+• 
+
+PLM/LLM-Based: P5-CID (Geng et al., 2022) organizes multiple recommendation tasks in a text-to-text format and models different tasks uniformly using the T5 (Gomez-Uribe and Hunt, 2016) model. TIGER (Rajput et al., 2023) adopts the generative retrieval paradigm for sequential recommendation and introduces a semantic ID to uniquely identify items. CLLM4Rec (Zhu et al., 2024) proposes mixed prompting strategy based on heterogeneous tokens to fulfill sequential recommendation task. LC-Rec (Zheng et al., 2024) extends the TIGER framework and further adopts LLaMA (Touvron et al., 2023) as the recommender backbone.
+
+Appendix B Dataset
+
+We present the dataset statistics in Table 4. The three sequential recommendation datasets originate from the Amazon Product Review dataset (He and McAuley, 2016), which contains user review data from May 1996 to October 2018. Particularly, three categories for the sequential recommendation task, i.e., "Musical Instruments", "Video Games", and "Arts, Crafts and Sewing", are extracted and organized into individual dataset Instruments, Games, and Arts, respectively. Within the above datasets, each item is associated with a series of textual contents, including the item title, the detailed description, the item category, and so on. Similarly, the associated textual contents of the user entity include the user comment, the search query, and so on. Following standard procedure, inactive users/items with less then 5 interactions are filtered out and the user interactive sequence is created according to the chronological order.
+
+Table 4. Statistics of the evaluated datasets. Avg.L is the average length of the user interaction sequences.
+
+Dataset
+#User
+#Item
+#Interaction
+Sparsity
+Avg.L
+
+Instruments
+24,772
+9,922
+206,153
+99.92%
+8.32
+
+Games
+50,546
+16,859
+452,989
+99.95%
+8.96
+
+Arts
+45,141
+20,956
+390,832
+99.96%
+8.66
+
+Appendix C Implementation Detail
+
+All the experiments are finished on a machine with 8 NVIDIA Tesla V100-SXM2-32GB GPUs, 40 Intel Xeon Platinum 8168 2.70GHz CPUs, and Linux Ubuntu 20.04.6 operating system.
+
+We employ the open source large language model LLaMA (Touvron et al., 2023) developed by Meta and introduce low-rank adaption technique (LoRA) (Hu et al., 2022) for LLaMA efficient fine-tuning. The representation dimension of LLaMA model is 4096 and the original LLaMA vocabulary size is 32000. A language model head is appended to translating the hidden representation into the extended vocabulary. For the dual dynamic index generator, the dual index length LL is set as 4, and thus both the item and the user branch have 4 hierarchically cascade quantization codebooks, respectively. Each quantization codebook consists of 256 quantization embeddings whose dimension is set to 64. Therefore, the total number of the dual dynamic index tokens equals 2×4×256=20482\times 4\times 256=2048. The hierarchical variational quantization auto-encoder within the dual dynamic index generator contains a series of linear layers [4096,2048,1024,512,256,128,64][4096,2048,1024,512,256,128,64], gradually projecting the LLaMA representation into the codebook hidden space and deducing the latent token distribution. We prepare a warm-up phase with a learning rate of 1e-3 for the dual dynamic index generator, by freezing the LLaMA-backbone recommender. For the ED2 recommender training phase, we adopt the AdamW (Kingma and Ba, 2015) optimizer with a learning rate of 5e-4.
+
+Appendix D Basic Notation
+
+The basic notations and descriptions are summarized in Table 5.
+
+Table 5. Basic notations and descriptions in the manuscript.
+
+Notation
+Description
+
+vk,Kv_{k},K
+kk-th item, number of items
+
+uj,Ju_{j},J
+jj-th user, number of users
+
+𝒮j\mathcal{S}_{j}
+Interaction sequence of the jj-th user
+
+Tkv,TjuT_{k}^{v},T_{j}^{u}
+Textual feature of the kk-th item, jj-th user
+
+fef_{e}
+LLM-backbone textual encoder
+
+dd
+LLM hidden dimension
+
+Ω\Omega
+Dynamic index
+
+MM
+Index length, layers of HVQAE module
+
+NN
+Index base
+
+𝝁,κ\bm{\mu},\kappa
+vMF mean direction and concentration
+
+ωm\omega_{m}
+mm-th dynamic index token
+
+QmQ_{m}
+mm-th variational quantizer
+
+𝒞,c\mathcal{C},c
+Learnable codebook, codeword
+
+𝒫\mathcal{P}
+Human instruction prompt
+
+X𝒫X_{\mathcal{P}}
+LLM Representation of human instruction
+
+FF
+LLM backbone with a language model head
+
+BB
+Batch-size
+
+wi​jw^{ij}
+In-batch representation similarity
+
+β1,β2\beta_{1},\beta_{2}
+Weight of index/token level alignment
+
+𝒜k\mathcal{A}_{k}
+Associated user collection of item vkv_{k}
+
+Table 6. Comparison of the ED2 recommender with several leading LLM-based generative recommender systems.
+
+Method
+Backbone
+Index Mechanism
+Interaction Pattern
+Token Alignment
+Collision Handle
+
+CLLM4Rec (Zhu et al., 2024)
+GPT-2
+Static Pseudo User/Item Index
+
+Item co-occurrence pattern
+
+User preference pattern
+
+✘
+N/A
+
+TIGER (Rajput et al., 2023)
+N/A
+Static Semantic User/Item Index
+Item co-occurrence pattern
+✘
+✔
+
+LC-Rec (Zheng et al., 2024)
+LLaMA-2
+Static Semantic Item Index
+Item co-occurrence pattern
+✘
+✘
+
+ETEGRec (Liu et al., 2024b)
+T5
+Dynamic Semantic Item Index
+Item co-occurrence pattern
+✔
+✘
+
+STORE (Liu et al., 2024d)
+OPT-Base
+Dynamic Semantic Item Index
+Item co-occurrence pattern
+✘
+✘
+
+TokenRec (Qu et al., 2024)
+T5
+Static Semantic User/Item Index
+
+Item co-occurrence pattern
+
+User preference pattern
+
+✘
+✘
+
+ED2 (Ours)
+LLaMA-2
+Dynamic Semantic User/Item Index
+
+Item co-occurrence pattern
+
+User preference pattern
+
+User co-purchase pattern
+
+✔
+✔
+
+Appendix E Discussion
+
+In this section, we compare ED2 with three concurrent LLM-based RSs, i.e., ETEGRec (Liu et al., 2024b), STORE (Liu et al., 2024d), and TokenRec (Qu et al., 2024).
+
+E.1. ED2 vs. ETEGRec
+
+The concurrent work ETEGRec (Liu et al., 2024b) introduces iterative training strategy to optimize the item index generator (i.e., indexer) and the generative sequential recommender. In addition, ETEGRec designs alignment between the target item and the historical items, to regulate the iterative optimization. Compared with ED2 , the limitations of ETEGRec is twofold. On one hand, the iterative optimization leads to insufficient integration of the semantic information and the collaborative information. On the other hand, ETEGRec still neglects the impact of the user-related information.
+
+E.2. ED2 vs. STORE
+
+Similar to the ED2 recommender, the concurrent work STORE (Liu et al., 2024d) also constructs a unified pipeline that streamlines the item index generation and the sequential recommendation using a single LLM. However, STORE loses sight of the user-related information as well, failing to capture the high-order user-item interaction patterns within the historical behavior.
+
+E.3. ED2 vs. TokenRec
+
+Another concurrent work TokenRec (Qu et al., 2024) emphasizes the high-order user-item knowledge and proposes a twin-tower tokenizer which is similar to the dual dynamic indexer in ED2 recommender system. Nevertheless, TokenRec fails to break through the constraint of the static index mechanism, freezing the user/item indices during the sequential recommender optimization.
+To sum up, we present an overall comparison against several leading LLM-based recommender systems in Table 6.
+
+Appendix F Time Complexity
+
+The ED2 recommender mainly consists of the dual dynamic indexer and the LLM-backbone sequential recommender. Therefore, the time complexity of ED2 includes the following two cascade portions.
+
+F.1. Dual Dynamic Indexer
+
+The dual dynamic indexer contains two homogeneous branches for the index generation of users and items. Taking the user indexer as example, the shape of the input matrix XX is ℝB×d\mathbbm{R}^{B\times d}, where BB is the input batch-size and dd is the LLM representation dimension. Within the variational quantizer, the input matrix XX is transformed into the statistic characteristics, i.e., the mean value μ\mu and the variance Σ\Sigma, of the dynamic index token distribution, defined as follows,
+
+(12)
+
+μ=MLPμ​(X),Σ=MLPΣ​(X).\mu={\rm MLP}_{\mu}(X),\Sigma={\rm MLP}_{\Sigma}(X).
+
+The overall complexity of Formula (12) is 2×B​d2\times Bd. The stochastic sampling operation according to the Guassian distribution 𝒩⁡(μ,Σ)\mathcal{N}(\mu,\Sigma) consumes constant time in regard with BB and dd. Therefore, the time complexity of the dual dynamic indexer is
+
+(13)
+
+ΘIndexer=2​B​d.\Theta_{\rm Indexer}=2Bd.
+
+F.2. LLM-Backbone Sequential Recommender
+
+Given the batch-size BB, the sequence length LL, the shape of the input token sequence SS is ℝB×L\mathbbm{R}^{B\times L}. The token embedding layer converts the token index to the continuous embedding XX via the matrix multiplication defined as follows,
+
+(14)
+
+X=One​_​Hot​(S)⋅E,E∈ℝV×d,X={\rm One\_Hot}(S)\cdot E,E\in\mathbbm{R}^{V\times d},
+
+where EE is the token emebedding matrix, VV is the LLM vocabulary size, and dd is the LLM representation dimension. The time complexity of Formula (14) is B​L​V​dBLVd. Taking the LLaMA model in our implementation as example, the embedding matrix XX is fed into the attention module defined as follows,
+
+(15)
+
+X=Softmax⁡(Q​KTd)​V,X=X​O,X={\rm Softmax}\left(\frac{QK^{T}}{\sqrt{d}}\right)V,X=XO,
+
+(16)
+
+Q=WQ​X,K=WK​X,V=WV​X,O=WO​X.Q=W_{Q}X,K=W_{K}X,V=W_{V}X,O=W_{O}X.
+
+The time complexity of the LLaMA attention is
+
+(17)
+
+ΘAtt=4​B​L​d2+3​B2​L2​d.\Theta_{\rm Att}=4BLd^{2}+3B^{2}L^{2}d.
+
+Afterwards, the language model head projects the hidden state X∈ℝB×L×dX\in\mathbbm{R}^{B\times L\times d} into the LLM vocabulary via a linear projection whose time complexity is B​L​dBLd. Overall, the time complexity of the ED2 recommender is
+
+(18)
+
+ΘED2=2​B​d+B​L​V​d+4​B​L​d2+3​B2​L2​d.\Theta_{\rm ED^{2}}=2Bd+BLVd+4BLd^{2}+3B^{2}L^{2}d.
+
+According to the Formula (18), the ED2 time complexity is linear to the LLM vocabulary VV and is quadratic to the batch-size BB, the sequence length LL, and the LLM representation dimension dd.
+
+Appendix G LSH Indexing Mechanism
+
+To justify the superiority of the dynamic index mechanism, we introduce the dynamic locality sensitive hashing (LSH) index and the static LSH index as the compared variants. The locality sensitive hashing technique is design for the approximate nearest neighbor search, which is able to generate discrete index effortlessly. Specifically, we introduce hh random hyper-planes ϕ,ϕ2,⋯,ϕh\phi,\phi_{2},\cdots,\phi_{h} to conduct random projection towards the input embedding XX (i.e., the textual representation provided by LLM). Based on the inner production result, we compute the LSH token of XX as follows,
+
+(19)
+
+ω′=∑i=0h−12i⋅𝕀⁡(ϕiT​X>0),\omega^{\prime}=\sum_{i=0}^{h-1}2^{i}\cdot\mathbb{I}\left(\phi_{i}^{T}X>0\right),
+
+with ω′\omega^{\prime} ranging from 0 to 2h−12^{h}-1. By repeating the operation of Formula (19) for MM times, we obtain the LSH index of XX as follows,
+
+(20)
+
+ΩLSH=<ω′1,ω′2,⋯,ω′M>.\Omega^{{}^{\rm LSH}}=<\omega^{\prime}_{1},\omega^{\prime}_{2},\cdots,\omega^{\prime}_{M}>.
+
+In our implementation, hh and MM are set as 8 and 4 respectively, to ensure the same expressive cardinality to the dual dynamic index.
+
+Appendix H Collision Handling Mechanism
+
+It is worth noting that the hierarchical variational quantization formulated by Formulas (3)-(5) is unable to guarantee the index uniqueness, i.e., different items/users are allocated with distinct indices. Through the Gaussian sampling operation may result in index collision, the corresponding recommender system is still practicable with a fairly low collision rate (Zheng et al., 2024). In our practice, the collision rate is around 3×10−43\times 10^{-4}. However, on one hand, the collision rate is affected by the dataset scale, the model architecture, the optimization parameters, and so on, which is extremely uncontrollable. On the other hand, within some special recommender systems, the index uniqueness is significant and must be guaranteed (Rajput et al., 2023; Liu et al., 2024c). Inspired by the rehashing method in hash collision, we append an additional token into the dual dynamic index, representing the order inside the collision set (Rajput et al., 2023; Liu et al., 2024c). For example, two different items share the same dynamic index <a​1,b​2,c​3a1,b2,c3>. Then, the dynamic indices will be remapped to <a​1,b​2,c​3,p0a1,b2,c3,p_{0}> and <a​1,b​2,c​3,p1a1,b2,c3,p_{1}>, which scrupulously guarantee the index uniqueness.
+
+Appendix I Human Instruction Prompt
+
+We summarize the human instruction prompts which are specially designed to utilize the high-order user-item interaction patterns.
+
+(i) User Co-Purchase Pattern
+
+Prompt 1: The item <item> has been historically clicked by users <users>. Can you predict another possible user which will click this item?.
+Prompt 2: According to the users <users> that have clicked the item <item>, can you determine the next possible user wanting the same item?
+Prompt 3: After clicked by these users <users>, who is the next user that may be keen on the item <item>?
+
+(ii) Implicit User Preference Pattern
+
+Prompt 1: The user <user> searches for <query>, could you deduce what item he will like?
+Prompt 2: Based on the user <user> current query <query>, please select the most suitable item for him.
+Prompt 3: As a search engine, please answer the query <query> of user <user> by providing the possible item.
+
+Experimental support, please
+view the build logs
+for errors. Generated by
+
+L
+A
+T
+E
+
+xml
+
+.
+
+Instructions for reporting errors
+
+We are continuing to improve HTML versions of papers, and your feedback helps enhance accessibility and mobile
+support. To report errors in the HTML that will help us improve conversion and rendering, choose any of the
+methods listed below:
+
+Click the "Report Issue" (
+
+) button, located in the page header.
+
+Tip: You can select the relevant text first, to include it in your report.
+
+Our team has already identified the following issues. We appreciate your time reviewing and reporting rendering errors we
+may not have found yet. Your efforts will help us improve the HTML versions for all readers, because disability
+should not be a barrier to accessing research. Thank you for your continued support in championing open access for
+all.
+
+Have a free development cycle? Help support accessibility at arXiv! Our collaborators at LaTeXML maintain a list of packages that need conversion, and welcome developer contributions.
+
+We gratefully acknowledge support from
+our major funders,
+member institutions, ,
+and all contributors.
+
+About
+·
+Help
+·
+Contact
+·
+Subscribe
+·
+Copyright
+·
+Privacy
+·
+Accessibility
+·
+Operational Status (opens in new tab)
+
+Major funding support from
+

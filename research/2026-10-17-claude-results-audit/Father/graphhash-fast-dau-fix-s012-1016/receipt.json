@@ -1,0 +1,31 @@
+{
+  "alias": "Father",
+  "slug": "graphhash-fast-dau-fix-s012-1016",
+  "files": [
+    {
+      "file": "_work/sknetwork_vendor/scikit_network-0.32.1.dist-info/top_level.txt",
+      "bytes": 10,
+      "sha256": "7e4c2ca5643d07772ca9be443443a855c89163a5dfb6732ecf832f4c341e4ac8"
+    },
+    {
+      "file": "fast_dau_fix_seed0.json",
+      "bytes": 1951,
+      "sha256": "ebd2613eac4d2f53023078403e7aee963058140468e6420821526ffab667d563"
+    },
+    {
+      "file": "fast_dau_fix_seed1.json",
+      "bytes": 1940,
+      "sha256": "fa8ff6b9e47989730f7f3257f81ebc2944bb6fdb608880e6cf64adf7b9ed09a2"
+    },
+    {
+      "file": "fast_dau_fix_seed2.json",
+      "bytes": 1943,
+      "sha256": "75774603c4cd5a45d078c9270f7607713598f6b2fb552b1e68f5f21f10132a2c"
+    }
+  ],
+  "status": {
+    "status": "COMPLETE",
+    "failureMessage": ""
+  },
+  "source_sha256": "ccc66597099c2bae4123410c9741206bed64f59bb2361b596abf226f44533fac"
+}

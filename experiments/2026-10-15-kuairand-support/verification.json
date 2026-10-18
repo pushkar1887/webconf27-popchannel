@@ -1,0 +1,16 @@
+{
+  "status": "saved_artifact_checks_passed",
+  "checks": [
+    "All three extracted CSV sizes and SHA256 receipts verified",
+    "Protocol and pre-evaluation validation-selection lineage verified",
+    "Row conservation, nonoverlapping event-time bounds, and clean-key receipts verified",
+    "All 18 metric rows recomputed independently from saved probabilities",
+    "Saved model replay checked on 101 records per model/policy, including scalar hash implementation",
+    "Hyperparameter selections are minima of the recorded validation-only grid"
+  ],
+  "max_metric_recomputation_error": 8.326672684688674e-17,
+  "max_saved_model_replay_error": 2.971351265035338e-08,
+  "documented_target_rule_check": "FAILED on native source data; preserved and reported rather than repaired",
+  "exact_documentation_consistency": false,
+  "scientific_scope": "component feasibility evidence only; no claim that the proposed compression mechanism or method is validated"
+}

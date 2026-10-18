@@ -1,0 +1,38 @@
+{
+  "retrieved_at_utc": "2026-10-15T17:09:55.077452+00:00",
+  "record": 10439422,
+  "doi": "10.1145/3511808.3557624",
+  "license": {
+    "id": "cc-by-4.0"
+  },
+  "archive": {
+    "name": "KuaiRand-Pure.tar.gz",
+    "bytes": 47432272,
+    "published_checksum": "md5:0820331067a3784d9691136f772b35a7",
+    "verified_md5": "0820331067a3784d9691136f772b35a7",
+    "sha256": "c814bf6f3624c0cfae83c57de3df26b2ed206e5c57bab4c4dcbfabbabe20cbf0",
+    "url": "https://zenodo.org/api/records/10439422/files/KuaiRand-Pure.tar.gz/content"
+  },
+  "files": [
+    {
+      "archive_member": "KuaiRand-Pure/data/log_standard_4_08_to_4_21_pure.csv",
+      "path": "D:\\web_2\\experiments\\2026-10-15-kuairand-support\\raw\\log_standard_4_08_to_4_21_pure.csv",
+      "bytes": 83961282,
+      "sha256": "5bb6eb0b3d9f47e5436cb5dc82ee1899b845ebf9750a5560b801e929e18bd41c"
+    },
+    {
+      "archive_member": "KuaiRand-Pure/data/log_random_4_22_to_5_08_pure.csv",
+      "path": "D:\\web_2\\experiments\\2026-10-15-kuairand-support\\raw\\log_random_4_22_to_5_08_pure.csv",
+      "bytes": 87086116,
+      "sha256": "60b80994da969cd53da4d50c37ba3dafd6fb185df804c92c8410df34845a9d2c"
+    },
+    {
+      "archive_member": "KuaiRand-Pure/data/log_standard_4_22_to_5_08_pure.csv",
+      "path": "D:\\web_2\\experiments\\2026-10-15-kuairand-support\\raw\\log_standard_4_22_to_5_08_pure.csv",
+      "bytes": 21765075,
+      "sha256": "429e3b948828942e572f2c3a5be5a25799ffe75591d22d18cf417b9b534d31fd"
+    }
+  ],
+  "download_seconds": 69.81966980000288,
+  "total_seconds": 71.92541750000237
+}
