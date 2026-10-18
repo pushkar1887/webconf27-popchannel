@@ -107,3 +107,23 @@ Embedding sharing, which hashes many items into one table row, is a standard way
 Embedding sharing hashes many items into one row and makes recommender tables **4.6–7.4× smaller**. What does it cost? We show that sharing erases **item-level popularity**, and that this reverses which training loss wins. With full tables, DirectAU beats BPR (Gowalla **18.02 vs 16.55** Recall@20; Yelp2018 **11.10 vs 8.02**); under GraphHash sharing the order flips (**7.55 vs 9.37**; **2.41 vs 3.78**), a gap reported before but never explained. Building on evidence that embedding length tracks popularity (PRISM), we trace the flip to pooling: a shared row's length follows its bucket's total traffic (**Spearman 0.93–0.94**), not the item's own. A capacity bound limits what any per-bucket quantity can encode, and because DirectAU is scale-invariant, a learned per-item scale gets **zero gradient**. A validation-tuned β·log(1+count) term at scoring time, a known score form costing **4–7% extra storage**, serves as a minimal test. It lifts compressed DirectAU by **+76%** (Gowalla) and **+136%** (Yelp2018). **71–76%** of the gain is within-bucket item-level popularity. Repaired DirectAU then beats equally repaired BPR on **all 9 dataset–seed pairs** (+0.83 to +2.13 points, every paired CI above zero), and the same holds under three other sharing schemes. The gain comes from popular items: tail recall and coverage fall.
 
 (The bold marks the headline numbers for review; the submitted text is plain.)
+
+---
+
+## v4 (2026-10-19 00:25 IST): human's structure (problem → prior work → recent work → gap → what we do → numbers)
+
+**Title (human kept the question; shorter subtitle options)**
+1. *If Sharing Saves Memory, What Does It Cost? Popularity Lost in Shared Embeddings* ← recommended
+2. *If Sharing Saves Memory, What Does It Cost? The Popularity Shared Embeddings Forget*
+3. *If Sharing Saves Memory, What Does It Cost? Forgotten Popularity in Recommenders*
+4. *If Sharing Saves Memory, What Does It Cost? Item Popularity*
+
+**Abstract v4 (≈ 225 words)**
+
+Embedding sharing cuts recommender memory, but we show it also erases item-level popularity information. Sharing methods map many items to one embedding row: first by random or frequency-aware hashing, and recently by clustering the user–item graph (GraphHash), which shrinks embedding tables 4.6–7.4× in our settings. A separate line of work finds that embedding length encodes item popularity (PRISM) and that normalized losses such as DirectAU gain from an explicit popularity bias (DNA). The two lines have not met. Sharing studies report accuracy and memory, not what a shared row loses. And DirectAU, the stronger loss on full tables (Gowalla 18.02 vs 16.55 Recall@20 against BPR), falls behind under GraphHash (7.55 vs 9.37); this has been observed but never explained. We explain it. A shared row's length tracks its bucket's total traffic (Spearman 0.93–0.94), not the item's own. A capacity bound limits what any per-bucket quantity can encode. And because DirectAU is scale-invariant, a learned per-item scale gets no gradient. As a minimal, training-free test we add a validation-tuned β·log(1+count) term at scoring time, costing 4–7% extra storage. It lifts compressed DirectAU by 76% on Gowalla and 136% on Yelp2018, with 71–76% of the gain coming from within-bucket item-level popularity. Repaired DirectAU then beats equally repaired BPR on all 9 dataset–seed pairs (+0.83 to +2.13 points, every paired CI above zero), and the same holds under three other sharing schemes. The gain comes from popular items: tail recall and coverage fall.
+
+**Checks:**
+- Every number traces to RESULTS (PR-Y, PR-H, PR-DEC, PR-E8, S4-SEED, S4-DG, S3-E5) or the parameter counts in metrics.json.
+- "4.6–7.4×" is our measured table size, not GraphHash's claim.
+- No "first" or "novel".
+- The score form is a known one (Cheng eq. 53), cited in the paper.
