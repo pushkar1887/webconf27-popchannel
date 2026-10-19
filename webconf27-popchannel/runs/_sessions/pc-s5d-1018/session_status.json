@@ -1,0 +1,28 @@
+{
+ "slug": "pc-s5d-1018",
+ "state": "complete",
+ "started": "2026-10-18T16:48:00+00:00",
+ "ended": "2026-10-18T22:10:10+00:00",
+ "device_count": 2,
+ "mode": "sequential_gpu0",
+ "inputs": {},
+ "jobs": {
+  "gowalla__lightgcn__full__bpr__s0-2gpu-v2": {
+   "run_id": "gowalla__lightgcn__full__bpr__s0-2gpu-v2",
+   "gpu": 0,
+   "script": "exp_run.py",
+   "args": "--dataset Gowalla --method Full --lr 0.001 --wd 1e-8 --seeds 0 --model LightGCN --lightgcn-layers 2 --batch 1024 --multi-gpu --loss bpr_author --epochs 3000 --eval-every 5 --patience 50 --min-delta 0 --cap-min 690 --run-id gowalla__lightgcn__full__bpr__s0-2gpu-v2",
+   "state": "done",
+   "started": "2026-10-18T16:49:12+00:00",
+   "ended": "2026-10-18T22:10:10+00:00",
+   "duration_s": 19257.5,
+   "exit_code": 0,
+   "log": "logs/gowalla__lightgcn__full__bpr__s0-2gpu-v2.log"
+  }
+ },
+ "errors": [],
+ "prepare_exit_code": 0,
+ "n_jobs": 1,
+ "n_failed": 0,
+ "failed_run_ids": []
+}

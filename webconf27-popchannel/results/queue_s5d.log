@@ -32,3 +32,6 @@ GPU slots full on account-5; pc-s5e-1018 stays pending
 GPU slots full on account-5; pc-s5e-1018 stays pending
 GPU slots full on account-5; pc-s5e-1018 stays pending
 [2026-10-18T22:47:51] PUSHED pc-s5e-1018 account-5
+[2026-10-19T03:41:25] DONE pc-s5d-1018 COMPLETE files=17 runs=1 jobs=1 failed_jobs=[] device_count=2
+[2026-10-19T06:26:40] DONE pc-s5e-1018 COMPLETE files=17 runs=1 jobs=1 failed_jobs=[] device_count=2
+[2026-10-19T06:26:40] QUEUE_DONE {"pc-s5d-1018": "done", "pc-s5e-1018": "done"}

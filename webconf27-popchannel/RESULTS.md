@@ -46,7 +46,7 @@
 | S4-DG | DoubleGraph (BACO substitute) repair; DirectAU > BPR | I | 10.91 vs 7.27; 5.52 vs 2.78 | PASS |
 | S4-C1 | gain falls and ρ_item rises with resolution | P | Spearman −0.90 / +0.70 | gain PASS, ρ FAIL |
 | S4-C4 | equal norms (exploratory) | X | Full 12.77 → 19.32; GraphHash 13.27 | as predicted |
-| S5-LGNFULL | LightGCN Gowalla Full, 11.5 h on 2 GPUs | H | — | running |
+| S5-LGNFULL | LightGCN Gowalla Full, 11.5 h on 2 GPUs | H | both converged; BPR 18.48 > DAU 18.02 raw; repaired DAU 19.76 > BPR 18.46 | PASS (no 2-GPU speedup) |
 
 ---
 
@@ -552,3 +552,14 @@ Observed after network access was opened (full PDFs):
 
 | Verdict: kill rule **not triggered**. Recommended G1.d PASS with narrowed contribution stands, now on full texts. Cite Cheng eq. (53) as the score form and MEmCom as the per-item-parameter precedent. | Details: results/N1_novelty.md §(h)
 
+
+### S5-LGNFULL, 2026-10-19 06:35 IST (snapshot PREREG_20261018-2210)
+Prediction: both raw ≥ their 4 h values (BPR 18.44, DirectAU 17.94); repaired Full DirectAU ≥ repaired Full BPR | Label: H | Observed (test R@20), **both converged on patience**, each on both T4s (`--multi-gpu`):
+| Run | stop | best / run epochs | wall | raw | cos | cos+prior | raw+prior | ρ |
+|---|---|---|---|---|---|---|---|---|
+| `gowalla__lightgcn__full__bpr__s0-2gpu-v2` | patience | 410 / 460 | 321 min | 18.48 | 13.65 | 19.04 | 18.46 | 0.87 |
+| `gowalla__lightgcn__full__directau__s0-2gpu-v2` | patience | 215 / 215 | 286 min | 18.02 | 13.33 | 19.76 | 18.02 | 0.70 |
+| Verdict: **PASS** (18.48 ≥ 18.44; 18.02 ≥ 17.94; repaired DirectAU 19.76 > repaired BPR 18.46, and > BPR cos+prior 19.04).
+Notes:
+- **Raw ordering on full tables:** with LightGCN, BPR beats DirectAU (18.48 vs 18.02), unlike MF (DirectAU 18.02 vs BPR 16.55). So the flip premise ("DirectAU wins on full tables") holds for MF, not for LightGCN on Gowalla. Under GraphHash, LightGCN DirectAU still loses raw (11.29 vs 16.22) and wins after repair (17.06 vs 16.27).
+- **2-GPU speed:** 0.70 min/epoch (BPR) and 1.33 min/epoch (DirectAU), the same as the 1-GPU Stage 4 runs (0.70 / 1.33). The row-split gave **no speedup**: per-step overhead and the GPU-to-GPU copies dominate the sparse matmul. These runs converged because of the longer cap, not the second GPU.

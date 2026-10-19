@@ -155,8 +155,8 @@ Builder `make_sessions_s4.py` → `sessions_s4.py`; 35 jobs in 4 sessions (pc-s4
 |---|---|---|
 | pc-s5a-1018 | 1-GPU version | cut (cancelled by the human; replaced by the 2-GPU plan) |
 | pc-s5b-1018, pc-s5c-1018 | 2-GPU, first try | cut (bug: `"gpus"` dropped from the bundle, so the job saw 1 GPU; pc-s5b failed in 7 s, pc-s5c cancelled) |
-| pc-s5d-1018 | `gowalla__lightgcn__full__bpr__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | running (pushed 22:15) |
-| pc-s5e-1018 | `gowalla__lightgcn__full__directau__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | running (pushed 22:47) |
+| pc-s5d-1018 | `gowalla__lightgcn__full__bpr__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | done (03:41, patience) |
+| pc-s5e-1018 | `gowalla__lightgcn__full__directau__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | done (06:26, patience) |
 
 ### Analyses
 | ID | What (PLAN) | Owner | After | Status |

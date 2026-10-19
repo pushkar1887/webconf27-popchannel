@@ -1,0 +1,12 @@
+[{"stream_name":"stdout","time":13.864918255,"data":"[2026-10-18T20:08:13+00:00] session pc-s5e-1018: device_count=2 mode=sequential_gpu0\n"}
+,{"stream_name":"stdout","time":64.725164891,"data":"[2026-10-18T20:09:04+00:00] warm-up prepare exit code 0\n"}
+,{"stream_name":"stdout","time":64.7259393,"data":"[2026-10-18T20:09:04+00:00] gowalla__lightgcn__full__directau__s0-2gpu-v2: start on GPU 0: exp_run.py\n"}
+,{"stream_name":"stdout","time":17240.597561796,"data":"[2026-10-19T00:55:20+00:00] gowalla__lightgcn__full__directau__s0-2gpu-v2: exit code 0 after 17176s\n"}
+,{"stream_name":"stdout","time":17240.597858765,"data":"[2026-10-19T00:55:20+00:00] session finished: state=complete jobs=1 failed=[]\n"}
+,{"stream_name":"stderr","time":17242.860285793,"data":"/usr/local/lib/python3.13/dist-packages/mistune.py:435: SyntaxWarning: invalid escape sequence '\\|'\n"}
+,{"stream_name":"stderr","time":17242.860313996,"data":"  cells[i][c] = re.sub('\\\\\\\\\\|', '|', cell)\n"}
+,{"stream_name":"stderr","time":17243.175529328,"data":"/usr/local/lib/python3.13/dist-packages/nbconvert/filters/filter_links.py:36: SyntaxWarning: invalid escape sequence '\\_'\n"}
+,{"stream_name":"stderr","time":17243.175552098,"data":"  text = re.sub(r'_', '\\_', text) # Escape underscores in display text\n"}
+,{"stream_name":"stderr","time":17243.998711691,"data":"[NbConvertApp] Converting notebook __script__.ipynb to html\n"}
+,{"stream_name":"stderr","time":17245.122469975,"data":"[NbConvertApp] Writing 515995 bytes to __results__.html\n"}
+]
