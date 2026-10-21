@@ -100,7 +100,7 @@
 | G0 | T1–T4 tests + A0 smoke OK; `device_count`, co-location speed → LOG | claude | Sat ~19:00 | done (18:36) |
 | G1 | Mechanism framing + novelty (PLAN §9) | human + claude | Sat ~20:30 | done (19:50, framing confirmed; G1.d pending N1) |
 | G2 | Abstract framing + Stage 3 scope (PLAN §9) | human + claude | Sat ~22:30 | done (21:15 all PASS; scope approved; Stage 3 pushed 23:52) |
-| G3 | Abstract numbers frozen | human | Sun 12:00 | todo (package prompts/g3_abstract_numbers.md, incl. the orchestrator's revised abstract; **human sign-off pending**) |
+| G3 | Abstract numbers frozen | human | Sun 12:00 | done (abstract submitted; numbers frozen as in prompts/g3_abstract_numbers.md v4) |
 | G4 | Paper numbers frozen | human | Fri 23, 18:00 | todo |
 
 ### Stage 3: candidates (final list and predictions registered at G2). PLAN §5
@@ -178,8 +178,8 @@ Builder `make_sessions_s4.py` → `sessions_s4.py`; 35 jobs in 4 sessions (pc-s4
 | ID | What | Owner | When | Status |
 |---|---|---|---|---|
 | W0 | `paper/` skeleton (acmart sigconf,anonymous,review) | codex | Sat–Sun | todo |
-| W1 | Abstract (G1/G2 framing, real numbers, PRISM/DNA positioned, both authors) | human | Sun 12:00–20:00 | todo |
-| W1s | **Submit abstract** | human | Mon 19 by 12:00 | todo |
+| W1 | Abstract (G1/G2 framing, real numbers, PRISM/DNA positioned, both authors) | human | Sun 12:00–20:00 | done (v4 structure) |
+| W1s | **Submit abstract** | human | Mon 19 by 12:00 | done (human confirmed 21 Oct) |
 | W2 | §1–§6 drafts | human + codex | Mon–Thu | todo |
 | W3 | 8 pages, anonymity, number check | human | Sat 24 | todo |
 | W3s | **Submit paper** | human | Mon 26 by 12:00 | todo |
