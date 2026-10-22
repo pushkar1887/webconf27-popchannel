@@ -1,0 +1,49 @@
+\section{Problem Formulation and Preliminaries}\label{sec:problem}
+
+\subsection{Notation}
+Let $\mathcal{U}$ and $\mathcal{I}$ be the users and items, and let $c_i$ be the number of training interactions of item $i$. We write $p_i=\log(1+c_i)$ for its log-count. A matrix-factorisation (MF) model assigns user $u$ an embedding $\mathbf{e}_u\in\mathbb{R}^d$ and item $i$ an embedding $\mathbf{q}_i\in\mathbb{R}^d$, with $d=64$. We call $\|\mathbf{q}_i\|_2$ the item's \emph{magnitude} and $\mathbf{q}_i/\|\mathbf{q}_i\|_2$ its \emph{direction}.
+
+\subsection{Embedding sharing}
+A sharing scheme maps items to buckets, $b:\mathcal{I}\to\mathcal{B}$ with $|\mathcal{B}|\ll|\mathcal{I}|$, and stores one row per bucket: $\mathbf{q}_i=\mathbf{E}_{b(i)}$ (\emph{single-row sharing}). Two-row schemes such as double hashing sum two rows, $\mathbf{q}_i=\mathbf{E}^{(1)}_{b_1(i)}+\mathbf{E}^{(2)}_{b_2(i)}$. Users are shared in the same way. The \emph{traffic} of bucket $b$ is $C_b=\sum_{i:b(i)=b}c_i$.
+Our main scheme is GraphHash~\cite{wu2025graphhash}, which clusters the user--item graph with Louvain modularity optimisation~\cite{blondel2008louvain} at resolution 200. On Gowalla, Yelp2018 and AmazonBook it yields 5{,}806, 7{,}656 and 9{,}804 item buckets (mean 7.06, 4.97 and 9.34 items per bucket; largest 124, 183 and 343), and the shared tables hold 16.4\%, 21.9\% and 13.6\% of the full tables' parameters.
+
+\subsection{Training objectives}
+BPR~\cite{rendle2009bpr} minimises $-\sum\log\sigma\big(\langle\mathbf{e}_u,\mathbf{q}_i\rangle-\langle\mathbf{e}_u,\mathbf{q}_j\rangle\big)$ over observed items $i$ and sampled items $j$. DirectAU~\cite{wang2022directau} minimises an alignment term and two uniformity terms on $\ell_2$-normalised embeddings $\hat{\mathbf{e}}_u,\hat{\mathbf{q}}_i$:
+\begin{equation}
+\mathcal{L}_{\mathrm{DAU}}=\E\|\hat{\mathbf{e}}_u-\hat{\mathbf{q}}_i\|^2+\tfrac{\gamma}{2}\Big[\log\E e^{-t\|\hat{\mathbf{e}}_u-\hat{\mathbf{e}}_{u'}\|^2}+\log\E e^{-t\|\hat{\mathbf{q}}_i-\hat{\mathbf{q}}_{i'}\|^2}\Big],
+\end{equation}
+with $t=2$ and $\gamma=1$. The distinction that matters here: BPR's loss sees magnitude; DirectAU's loss does not.
+
+\subsection{Scoring modes}
+A trained model can rank items in four ways:
+\emph{raw}, $\langle\mathbf{e}_u,\mathbf{q}_i\rangle$;
+\emph{cosine}, $\cos(\mathbf{e}_u,\mathbf{q}_i)$;
+the \emph{\crs}, $\cos(\mathbf{e}_u,\mathbf{q}_i)+\beta p_i$;
+and \emph{raw}${}+\beta p$, $\langle\mathbf{e}_u,\mathbf{q}_i\rangle+\beta p_i$.
+The \crs{} has the form of Cheng~\cite{cheng2026rankone} (eq.~53), who adds a log-popularity term to dot-product scores on full tables. We use it as a diagnostic test, not as a new method (\S\ref{sec:intervention}).
+
+\subsection{Diagnostic quantities}
+We measure how magnitude relates to popularity at two levels: $\rho_{\mathrm{item}}=\mathrm{Spearman}(\|\mathbf{q}_i\|,c_i)$ over items and $\rho_{\mathrm{bucket}}=\mathrm{Spearman}(\|\mathbf{E}_b\|,C_b)$ over buckets. For any item-level target $t$ we define the \emph{correlation ratio}
+\begin{equation}
+\eta^2(t)=\frac{\Var\big(\mu_{b}(t)\big)}{\Var(t)},\qquad \mu_b(t)=\frac{1}{|b|}\sum_{j:b(j)=b}t_j,
+\end{equation}
+with variances taken over items with uniform weight. We use $t=p$ (log-count variance) and $t=\mathrm{rank}(c)$ (for Spearman correlations).
+
+\subsection{Problem statement}
+Table~\ref{tab:problem} shows the observation this paper explains. With full tables, DirectAU leads BPR on all three datasets; under GraphHash, it trails BPR on Gowalla and Yelp2018. The same behaviour has been reported for hashing-based tables~\cite{wu2025graphhash,shiao2025oov}, without an explanation. We ask: \emph{why does sharing remove DirectAU's advantage, and what does sharing erase?}
+
+\begin{table}[t]
+\caption{Raw Recall@20 (\%) of MF models, BPR vs DirectAU (DAU).}\label{tab:problem}
+\centering\small
+\begin{tabular}{lcc}
+\toprule
+Dataset & Full table: DAU vs BPR & GraphHash: DAU vs BPR\\
+\midrule
+Gowalla & 18.02 $>$ 16.55 & 7.55 $<$ 9.37\\
+Yelp2018 & 11.10 $>$ 8.02 & 2.41 $<$ 3.78\\
+AmazonBook & 9.57 $>$ 8.38 & 4.63 $>$ 4.10\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Two boundaries hold from the start. On AmazonBook, DirectAU's lead shrinks from $+1.19$ to $+0.53$\pp{} but does not reverse. With a LightGCN backbone~\cite{he2020lightgcn}, BPR already leads on the full Gowalla table (18.48 vs 18.02), so the full-table premise is specific to MF. We therefore claim that sharing \emph{removes} DirectAU's advantage, not that it reverses the order everywhere.

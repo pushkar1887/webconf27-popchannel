@@ -563,3 +563,14 @@ Prediction: both raw ≥ their 4 h values (BPR 18.44, DirectAU 17.94); repaired 
 Notes:
 - **Raw ordering on full tables:** with LightGCN, BPR beats DirectAU (18.48 vs 18.02), unlike MF (DirectAU 18.02 vs BPR 16.55). So the flip premise ("DirectAU wins on full tables") holds for MF, not for LightGCN on Gowalla. Under GraphHash, LightGCN DirectAU still loses raw (11.29 vs 16.22) and wins after repair (17.06 vs 16.27).
 - **2-GPU speed:** 0.70 min/epoch (BPR) and 1.33 min/epoch (DirectAU), the same as the 1-GPU Stage 4 runs (0.70 / 1.33). The row-split gave **no speedup**: per-step overhead and the GPU-to-GPU copies dominate the sparse matmul. These runs converged because of the longer cap, not the second GPU.
+
+### MAG-INT (post hoc, not preregistered) — magnitude × sharing interaction, 2026-10-22
+Question: how much of the Full→GraphHash drop for MF DirectAU is the loss of magnitude's value? | Label: **post hoc [X-analysis]**: defined after all results were seen; reported as a decomposition, never as a confirmed prediction. | Method: four cells per dataset (Full/GraphHash × raw/cosine, seed-0 DirectAU runs), same evaluated users; paired user bootstrap 2,000, seed 0. Identity: drop_raw = D + I exactly, with D = Full cos − GH cos and I = (Full raw − Full cos) − (GH raw − GH cos).
+
+| Dataset | Drop (raw) | M_full | M_shared | D (direction) | I (interaction) [95% CI] |
+|---|---|---|---|---|---|
+| Gowalla | 10.47 | 4.96 | −0.02 [−0.18, +0.15] | 5.49 [5.17, 5.79] | **4.98 [4.57, 5.37]** |
+| Yelp2018 | 8.69 | 4.13 | +0.44 [+0.33, +0.55] | 5.00 [4.81, 5.20] | **3.68 [3.44, 3.93]** |
+| AmazonBook | 4.94 | 0.87 | −0.00 [−0.03, +0.02] | 4.06 [3.91, 4.22] | **0.88 [0.77, 0.99]** |
+
+Reading: sharing removes almost all of magnitude's value (I/M_full = 100% / 89% / 100%). Yelp keeps 0.44 pp, consistent with its higher ρ_item (0.52) and η²_p (0.48). Replaces the three-term path decomposition in OUTLINE v5 §4.4 (same cells; no residual term). Script `scripts/analyze_magnitude_interaction.py`; output `results/MAGNITUDE_INTERACTION.json`.

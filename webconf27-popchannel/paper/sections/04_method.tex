@@ -1,0 +1,90 @@
+\section{Diagnostic Methodology}\label{sec:method}
+Our method is a diagnosis: research questions, theory that fixes what sharing can and cannot represent, one main hypothesis with testable predictions, and tests for the alternatives. The \crs{} is one of these tests.
+
+\subsection{Research questions}
+\begin{description}
+\item[RQ1] Is the Full$\to$shared accuracy drop of DirectAU a loss of what magnitude contributes, of what direction contributes, or both?
+\item[RQ2] Under sharing, does magnitude follow buckets instead of items?
+\item[RQ3] Do alternative explanations account for the magnitude part of the drop?
+\item[RQ4] Does restoring item counts let DirectAU outperform BPR again under the same table, and is the gain item-specific?
+\item[RQ5] Does the pattern hold for other sharing schemes, bucket resolutions and LightGCN?
+\end{description}
+Costs and robustness are treated in \S\ref{sec:tradeoffs}.
+
+\subsection{What a shared table can represent}\label{sec:theory}
+Each result states its assumptions in its first clause; proofs are in Appendix~\ref{app:proofs}.
+
+\begin{lemma}[User scale]\label{lem:user}
+Under raw, cosine and count-restored scoring, rescaling $\mathbf{e}_u$ by any $a>0$ leaves the ranking of user $u$ unchanged. Under raw${}+\beta p$ it does not.
+\end{lemma}
+Under the first three scorings, popularity can therefore reach a ranking only through item-side quantities: magnitude, direction, or an explicit item term.
+
+\begin{lemma}[Intra-bucket score ties]\label{lem:ties}
+Under single-row sharing in MF, items with $b(i)=b(j)$ receive identical scores for every user under any scoring that depends on the item only through $\mathbf{q}_i$.
+\end{lemma}
+The lemma does not cover two-row schemes unless both rows coincide, nor LightGCN, whose propagated item embeddings differ within a bucket. Any item term, such as $\beta p_i$, breaks these \emph{intra-bucket score ties}. They are common: on Gowalla, 87\% of evaluated users have a tie that straddles rank 20, and the mean tied group at that boundary has 14.7 items.
+
+\begin{proposition}[Scale invariance]\label{prop:scale}
+$\mathcal{L}_{\mathrm{DAU}}$ depends on each item embedding only through $\mathbf{q}_i/\|\mathbf{q}_i\|$.
+\end{proposition}
+\begin{corollary}[A learned per-item scale receives no gradient]\label{cor:scale}
+Let $\mathbf{q}_i=w_i\,\mathbf{E}_{b(i)}$ with a learned scalar $w_i>0$, the form used by MEmCom~\cite{pansare2022memcom}. Then $\partial\mathcal{L}_{\mathrm{DAU}}/\partial w_i=0$, and $w_i$ does not affect cosine or count-restored scores.
+\end{corollary}
+The corollary is limited to the DirectAU loss: a weight-decay term on $w_i$ still shrinks it, and BPR is not scale-invariant.
+
+\begin{remark}[Norm dynamics]
+Under plain SGD without weight decay, Proposition~\ref{prop:scale} and Euler's identity give $\langle\nabla_{\mathbf{q}}\mathcal{L}_{\mathrm{DAU}},\mathbf{q}\rangle=0$, so $\|\mathbf{q}_{k+1}\|^2=\|\mathbf{q}_k\|^2+\eta^2\|\mathbf{g}_k\|^2$ and magnitudes cannot shrink. The same holds for a shared row, whose gradient is a sum of terms orthogonal to it. Adam's per-coordinate scaling and weight decay break this argument, so we report magnitude growth under our optimiser as an observation (\S\ref{sec:rq2}), not as a theorem.
+\end{remark}
+
+\begin{proposition}[Correlation-ratio bound]\label{prop:bound}
+For any item-level target $t$ with $\Var(t)>0$ and any bucket-level quantity $f_i=g(b(i))$ with $\Var(f)>0$, $\corr(f,t)^2\le\eta^2(t)$, with correlations over items with uniform weight. Equality holds for $g=\mu_b(t)$.
+\end{proposition}
+The proof is one line: write $t=\mu_{b}(t)+\varepsilon$; then $\sum_{j:b(j)=b}\varepsilon_j=0$ for every bucket, so $\varepsilon$ is orthogonal to every bucket-level quantity and $\mathrm{Cov}(f,t)=\mathrm{Cov}(f,\mu_b(t))$; Cauchy--Schwarz finishes it. Two readings follow.
+With $t=p$, no bucket-level quantity, including a shared row's magnitude, a learned bucket bias or a bucket-level prior, can explain more than $\eta^2_p=0.36$, $0.48$ and $0.36$ of log-count variance under GraphHash on Gowalla, Yelp2018 and AmazonBook.
+With $t=\mathrm{rank}(c)$, a bucket-level magnitude has bucket-level average ranks, so $\rho_{\mathrm{item}}^2\le\eta^2(\mathrm{rank}\,c)=0.271$, $0.437$ and $0.303$. The bound is sufficient, not necessary: under double-frequency hashing on Gowalla $\eta^2_p=0.999$, yet $\rho_{\mathrm{item}}$ is only $0.03$.
+We call the item-specific part $\varepsilon_i=p_i-\mu_{b(i)}(p)$ the \emph{within-bucket residual}. By Lemma~\ref{lem:ties} and Proposition~\ref{prop:bound}, a single-row shared table cannot store it.
+
+\subsection{Main hypothesis and its predictions}\label{sec:hypothesis}
+\textbf{H\textsubscript{pool} (\pooling).} Under sharing, a row's magnitude is set by its bucket's traffic, so magnitude stops carrying item popularity, and DirectAU, which on full tables relies on magnitude at scoring time, loses that contribution.
+H\textsubscript{pool} predicts:
+(P1)~$\rho_{\mathrm{bucket}}\gg\rho_{\mathrm{item}}$ under sharing;
+(P2)~for DirectAU, cosine $\approx$ raw under sharing but cosine $\ll$ raw on full tables;
+(P3)~restoring $p_i$ at scoring time recovers a gain carried mostly by $\varepsilon$;
+(P4)~datasets where magnitude contributes more on the full table lose more under sharing.
+P4 rests on three datasets and is checked post hoc.
+
+\subsection{Separating magnitude from direction}\label{sec:decomposition}
+Let $R(s,m)$ be Recall@20 of a table $s\in\{\mathrm{full},\mathrm{shared}\}$ under scoring $m\in\{\mathrm{raw},\cos\}$, all measured on the same users. Define the value of magnitude on each table, $M_s=R(s,\mathrm{raw})-R(s,\cos)$, and the drop under direction-only scoring, $D=R(\mathrm{full},\cos)-R(\mathrm{shared},\cos)$. Then, exactly,
+\begin{equation}\label{eq:decomp}
+\underbrace{R(\mathrm{full},\mathrm{raw})-R(\mathrm{shared},\mathrm{raw})}_{\text{raw drop}}
+= D + \underbrace{(M_{\mathrm{full}}-M_{\mathrm{shared}})}_{I}.
+\end{equation}
+$I$ is the interaction between sharing and magnitude (a difference in differences): the part of the drop that exists only because sharing removes what magnitude contributed. We call $M_{\mathrm{full}}$ the \emph{magnitude channel} and $D$ the \emph{direction channel}. The decomposition takes cosine scoring as the reference, and we say so; it is an accounting identity, not a unique causal attribution. All four cells come from the same users, so each term gets a paired user-bootstrap interval.
+
+\subsection{Alternative explanations}\label{sec:alternatives}
+Table~\ref{tab:alternatives} lists nine alternatives to H\textsubscript{pool} and how each is tested: six by controlled scoring or training contrasts, two by protocol, and one by theory. Results are in \S\ref{sec:rq3}.
+
+\begin{table}[t]
+\caption{Alternatives to H\textsubscript{pool} and their tests.}\label{tab:alternatives}
+\centering\small
+\begin{tabular}{@{}p{0.40\columnwidth}p{0.54\columnwidth}@{}}
+\toprule
+Alternative & Test\\
+\midrule
+A1 Lost capacity explains all of it & Full table trained with equal item magnitudes (all parameters kept)\\
+A2 Ties alone & Break ties by popularity, without the prior\\
+A3 Bucket-level popularity suffices & Fixed-$\beta$ $\mu/\varepsilon$ decomposition; shuffle counts within buckets\\
+A4 Magnitude carries other information & Full table: replace magnitude by a fitted function of $p$; global and within-decile shuffles\\
+A5 Undertraining & Protocol: only runs stopped by patience\\
+A6 Initialisation scale & Init-matched reruns\\
+A7 Weight decay & Training with weight decay 0\\
+A8 Generic popularity & Popularity-only ranking\\
+A9 A learned scale would suffice & Corollary~\ref{cor:scale}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{The intervention as a test}\label{sec:intervention}
+If H\textsubscript{pool} holds, replacing pooled magnitude with item counts should let DirectAU outperform BPR again \emph{under the same shared table}. We test this with the \crs{} for DirectAU, which matches its normalised training geometry, and with raw${}+\beta p$ for BPR, which matches its dot-product training. These pairings were fixed and registered before the final runs, after pilot runs on earlier checkpoints. Only $\beta$ is selected, on validation Recall@20, from $\{0,0.01,0.02,0.05,0.1,0.2,0.5,1,2,5\}$; the test set is scored once. The other two pairings score lower on test (BPR with the \crs{}: 9.96; DirectAU with raw${}+\beta p$: 10.33, Gowalla) and are reported in Appendix~C.
+
+To separate bucket-level from item-specific popularity (A3), we split the prior at the selected $\beta^\ast$ as $\beta^\ast p_i=\beta^\ast\mu_{b(i)}+\beta^\ast\varepsilon_i$ and score the four cells base, $+\beta^\ast\mu$, $+\beta^\ast\varepsilon$ and $+\beta^\ast p$. Scores decompose exactly but Recall does not, so we report main effects, their interaction, and two-factor Shapley shares of the \emph{correction gain}. All cells rank with exact intra-bucket ties broken by a random key, never by adding a tiny $\beta p$.

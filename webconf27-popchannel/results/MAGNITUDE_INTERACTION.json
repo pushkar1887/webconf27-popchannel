@@ -1,0 +1,134 @@
+{
+  "gowalla": {
+    "n_users": 25789,
+    "cells": {
+      "full_raw": 18.0167,
+      "full_cosine": 13.0579,
+      "graphhash_raw": 7.5458,
+      "graphhash_cosine": 7.5666
+    },
+    "drop_raw": {
+      "mean": 10.4709,
+      "ci95": [
+        10.0718,
+        10.8356
+      ]
+    },
+    "M_full": {
+      "mean": 4.9587,
+      "ci95": [
+        4.5754,
+        5.3305
+      ]
+    },
+    "M_shared": {
+      "mean": -0.0208,
+      "ci95": [
+        -0.1835,
+        0.152
+      ]
+    },
+    "D_direction": {
+      "mean": 5.4913,
+      "ci95": [
+        5.1664,
+        5.7942
+      ]
+    },
+    "I_interaction": {
+      "mean": 4.9795,
+      "ci95": [
+        4.5681,
+        5.3745
+      ]
+    }
+  },
+  "yelp2018": {
+    "n_users": 30304,
+    "cells": {
+      "full_raw": 11.098,
+      "full_cosine": 6.9725,
+      "graphhash_raw": 2.4093,
+      "graphhash_cosine": 1.9675
+    },
+    "drop_raw": {
+      "mean": 8.6887,
+      "ci95": [
+        8.4501,
+        8.923
+      ]
+    },
+    "M_full": {
+      "mean": 4.1256,
+      "ci95": [
+        3.9053,
+        4.36
+      ]
+    },
+    "M_shared": {
+      "mean": 0.4418,
+      "ci95": [
+        0.3321,
+        0.5543
+      ]
+    },
+    "D_direction": {
+      "mean": 5.0049,
+      "ci95": [
+        4.8073,
+        5.1991
+      ]
+    },
+    "I_interaction": {
+      "mean": 3.6838,
+      "ci95": [
+        3.4395,
+        3.9295
+      ]
+    }
+  },
+  "amazonbook": {
+    "n_users": 50407,
+    "cells": {
+      "full_raw": 9.574,
+      "full_cosine": 8.7012,
+      "graphhash_raw": 4.633,
+      "graphhash_cosine": 4.6366
+    },
+    "drop_raw": {
+      "mean": 4.9411,
+      "ci95": [
+        4.7788,
+        5.1122
+      ]
+    },
+    "M_full": {
+      "mean": 0.8728,
+      "ci95": [
+        0.7688,
+        0.9786
+      ]
+    },
+    "M_shared": {
+      "mean": -0.0036,
+      "ci95": [
+        -0.0287,
+        0.0232
+      ]
+    },
+    "D_direction": {
+      "mean": 4.0647,
+      "ci95": [
+        3.9063,
+        4.2224
+      ]
+    },
+    "I_interaction": {
+      "mean": 0.8764,
+      "ci95": [
+        0.7688,
+        0.9878
+      ]
+    }
+  }
+}
