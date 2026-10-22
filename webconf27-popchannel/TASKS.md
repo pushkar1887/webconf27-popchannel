@@ -100,7 +100,7 @@
 | G0 | T1–T4 tests + A0 smoke OK; `device_count`, co-location speed → LOG | claude | Sat ~19:00 | done (18:36) |
 | G1 | Mechanism framing + novelty (PLAN §9) | human + claude | Sat ~20:30 | done (19:50, framing confirmed; G1.d pending N1) |
 | G2 | Abstract framing + Stage 3 scope (PLAN §9) | human + claude | Sat ~22:30 | done (21:15 all PASS; scope approved; Stage 3 pushed 23:52) |
-| G3 | Abstract numbers frozen | human | Sun 12:00 | todo (package prompts/g3_abstract_numbers.md, incl. the orchestrator's revised abstract; **human sign-off pending**) |
+| G3 | Abstract numbers frozen | human | Sun 12:00 | done (abstract submitted; numbers frozen as in prompts/g3_abstract_numbers.md v4) |
 | G4 | Paper numbers frozen | human | Fri 23, 18:00 | todo |
 
 ### Stage 3: candidates (final list and predictions registered at G2). PLAN §5
@@ -155,8 +155,8 @@ Builder `make_sessions_s4.py` → `sessions_s4.py`; 35 jobs in 4 sessions (pc-s4
 |---|---|---|
 | pc-s5a-1018 | 1-GPU version | cut (cancelled by the human; replaced by the 2-GPU plan) |
 | pc-s5b-1018, pc-s5c-1018 | 2-GPU, first try | cut (bug: `"gpus"` dropped from the bundle, so the job saw 1 GPU; pc-s5b failed in 7 s, pc-s5c cancelled) |
-| pc-s5d-1018 | `gowalla__lightgcn__full__bpr__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | running (pushed 22:15) |
-| pc-s5e-1018 | `gowalla__lightgcn__full__directau__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | running (pushed 22:47) |
+| pc-s5d-1018 | `gowalla__lightgcn__full__bpr__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | done (03:41, patience) |
+| pc-s5e-1018 | `gowalla__lightgcn__full__directau__s0-2gpu-v2`, `--multi-gpu`, cap 690 min | done (06:26, patience) |
 
 ### Analyses
 | ID | What (PLAN) | Owner | After | Status |
@@ -177,9 +177,12 @@ Builder `make_sessions_s4.py` → `sessions_s4.py`; 35 jobs in 4 sessions (pc-s4
 ### Writing
 | ID | What | Owner | When | Status |
 |---|---|---|---|---|
-| W0 | `paper/` skeleton (acmart sigconf,anonymous,review) | codex | Sat–Sun | todo |
-| W1 | Abstract (G1/G2 framing, real numbers, PRISM/DNA positioned, both authors) | human | Sun 12:00–20:00 | todo |
-| W1s | **Submit abstract** | human | Mon 19 by 12:00 | todo |
-| W2 | §1–§6 drafts | human + codex | Mon–Thu | todo |
+| W0a | Section plan: `paper/OUTLINE.md` v5 (claim ledger, review fixes, two-channel decomposition, per-section framing) | claude | Thu 22 | done (23 Oct, 3fc39f5) |
+| W0 | `paper/` skeleton (acmart sigconf,anonymous,review) | codex | Thu–Fri | todo |
+| F1b | Fig 1b data: per-item norms from stored checkpoint + stored mapping on CPU; reproduces ρ_item 0.275 (GraphHash) / 0.815 (Full) | claude | before G4 | done (23 Oct; no GPU job needed) |
+| W1 | Abstract (G1/G2 framing, real numbers, PRISM/DNA positioned, both authors) | human | Sun 12:00–20:00 | done (v4 structure) |
+| W1s | **Submit abstract** | human | Mon 19 by 12:00 | done (human confirmed 21 Oct) |
+| W2 | §1–§8 drafts per `paper/OUTLINE.md` | human + codex | Thu 22–Sun 25 | todo |
 | W3 | 8 pages, anonymity, number check | human | Sat 24 | todo |
-| W3s | **Submit paper** | human | Mon 26 by 12:00 | todo |
+| W3s | **Submit paper** | human | Mon 26 by 15:00 (deadline 17:29 IST) | todo |
+| W4 | Scrubbed anonymous repository (no sessions, slugs, usernames, git history) | claude | Sun 25 | todo |
