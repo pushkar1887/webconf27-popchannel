@@ -168,7 +168,7 @@
   - Corrected (hatched): 11.31 / 13.30.
 - **(b)** Scatter of log(1+c_i) against ‖q_i‖: Full DirectAU (ρ 0.81) next to GraphHash DirectAU (ρ 0.28). Bucket plateaus should show as horizontal stripes.
 - **Caption:** "Under sharing, DirectAU loses its lead, consistent with magnitude no longer following the item."
-- **[FLAG]** Panel (b) needs per-item norms from stored checkpoints and mappings. Never recompute the mappings on CPU. Confirm the data exists before G4 (Fri 18:00); if it does not, run one GPU job.
+- **Data: confirmed (23 Oct).** Panel (b) is computed on CPU from `runs/gowalla__mf__{full,graphhash}__directau__s0/best_seed0.pt` and the stored `mapping_items.npy`, with train counts from the GraphHash Gowalla split. It reproduces ρ_item 0.815 / 0.275. Never recompute the mappings on CPU.
 
 **Avoid in the introduction.**
 - "First to discover" (Shiao and GraphHash saw the effect first).
@@ -569,7 +569,7 @@ Each limitation names the boundary and what it changes.
 
 | ID | Section | Job | Status |
 |---|---|---|---|
-| Fig 1a/b | §1 | Symptom; magnitude follows the bucket | 1a ready; **1b: confirm data before G4** |
+| Fig 1a/b | §1 | Symptom; magnitude follows the bucket | ready (1b data confirmed on CPU) |
 | Fig 2 | §6.1 | Two-channel decomposition | ready |
 | Fig 3 | §4.2 | Conceptual schematic | to draw |
 | Tab 1 | §5 | Datasets, buckets, bytes | ready (bucket counts now known) |
@@ -602,7 +602,7 @@ Each limitation names the boundary and what it changes.
 | Day | Work |
 |---|---|
 | Thu 22 | §3, §4 (theory with assumptions; Tab 3 plan) |
-| Fri 23 | §5, §6. Confirm the Fig 1b data. Numbers freeze at 18:00 |
+| Fri 23 | §5, §6. Numbers freeze at 18:00 |
 | Sat 24 | §1 (written after §6), §2, §7; App. A–C |
 | Sun 25 | Abstract, §8, App. D–E; check every causal verb; trim to 8 + 4 pages |
 | Mon 26 | Scrubbed repository; anonymity check; submit by 15:00 |

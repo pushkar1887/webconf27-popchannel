@@ -1,0 +1,184 @@
+[
+  {
+    "source": "D:\\web_2\\papers\\2412.09243v3.pdf",
+    "pages": 10,
+    "bytes": 1228505,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\2412.09243v3.txt"
+  },
+  {
+    "source": "D:\\web_2\\papers\\2412.17245v2.pdf",
+    "pages": 13,
+    "bytes": 1050452,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\2412.17245v2.txt"
+  },
+  {
+    "source": "D:\\web_2\\papers\\2502.12586v1.pdf",
+    "pages": 12,
+    "bytes": 1139428,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\2502.12586v1.txt"
+  },
+  {
+    "source": "D:\\web_2\\papers\\2604.18351v1.pdf",
+    "pages": 14,
+    "bytes": 912352,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\2604.18351v1.txt"
+  },
+  {
+    "source": "D:\\web_2\\papers\\NeurIPS-2023-clustering-the-sketch-dynamic-compression-for-embedding-tables-Paper-Conference.pdf",
+    "pages": 26,
+    "bytes": 934095,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\NeurIPS-2023-clustering-the-sketch-dynamic-compression-for-embedding-tables-Paper-Conference.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Award_winners\\Behavioral_Homophily_in_Social_Media_via_Inverse_Reinforcement_Learning_A_Reddit_Case_Study__2502_02943.pdf",
+    "pages": 14,
+    "bytes": 1830433,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Behavioral_Homophily_in_Social_Media_via_Inverse_Reinforcement_Learning_A_Reddit_Case_Study__2502_02943.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Award_winners\\Responsible_Diffusion_Models_via_Constraining_Text_Embeddings_within_Safe_Regions__2505_15427.pdf",
+    "pages": 14,
+    "bytes": 13108644,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Responsible_Diffusion_Models_via_Constraining_Text_Embeddings_within_Safe_Regions__2505_15427.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\G_Refer_Graph_Retrieval_Augmented_Large_Language_Model_for_Explainable_Recommendation__2502_12586.pdf",
+    "pages": 12,
+    "bytes": 1139428,
+    "identical_text_to": "D:\\web_2\\papers\\2502.12586v1.pdf",
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\2502.12586v1.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\GraphHash_Graph_Clustering_Enables_Parameter_Efficiency_in_Recommender_Systems__2412_17245.pdf",
+    "pages": 13,
+    "bytes": 1050452,
+    "identical_text_to": "D:\\web_2\\papers\\2412.17245v2.pdf",
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\2412.17245v2.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\HtmlRAG_HTML_is_Better_Than_Plain_Text_for_Modeling_Retrieved_Knowledge_in_RAG_Systems__2411_02959.pdf",
+    "pages": 14,
+    "bytes": 1880344,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\HtmlRAG_HTML_is_Better_Than_Plain_Text_for_Modeling_Retrieved_Knowledge_in_RAG_Systems__2411_02959.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\ImageScope_Unifying_Language_Guided_Image_Retrieval_via_Large_Multimodal_Model_Collective_Reas__2503_10166.pdf",
+    "pages": 17,
+    "bytes": 10365189,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\ImageScope_Unifying_Language_Guided_Image_Retrieval_via_Large_Multimodal_Model_Collective_Reas__2503_10166.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\LLM4Rerank_LLM_based_Auto_Reranking_Framework_for_Recommendations__2406_12433.pdf",
+    "pages": 12,
+    "bytes": 1586543,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\LLM4Rerank_LLM_based_Auto_Reranking_Framework_for_Recommendations__2406_12433.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\MA4DIV_Multi_Agent_Reinforcement_Learning_for_Search_Result_Diversification__2403_17421.pdf",
+    "pages": 13,
+    "bytes": 4235577,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\MA4DIV_Multi_Agent_Reinforcement_Learning_for_Search_Result_Diversification__2403_17421.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\PEAR_Position_Embedding_Agnostic_Attention_Re_weighting_Enhances_Retrieval_Augmented_Generatio__2409_19745.pdf",
+    "pages": 14,
+    "bytes": 11779887,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\PEAR_Position_Embedding_Agnostic_Attention_Re_weighting_Enhances_Retrieval_Augmented_Generatio__2409_19745.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\TourRank_Utilizing_Large_Language_Models_for_Documents_Ranking_with_a_Tournament_Inspired_Stra__2406_11678.pdf",
+    "pages": 15,
+    "bytes": 3294457,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\TourRank_Utilizing_Large_Language_Models_for_Documents_Ranking_with_a_Tournament_Inspired_Stra__2406_11678.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Oral_papers\\Unleash_LLMs_Potential_for_Sequential_Recommendation_by_Coordinating_Dual_Dynamic_Index_Mechan__2409_09253.pdf",
+    "pages": 12,
+    "bytes": 1470198,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Unleash_LLMs_Potential_for_Sequential_Recommendation_by_Coordinating_Dual_Dynamic_Index_Mechan__2409_09253.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Analyzing_User_Characteristics_of_Hate_Speech_Spreaders_on_Social_Media__2310_15772.pdf",
+    "pages": 12,
+    "bytes": 1642833,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Analyzing_User_Characteristics_of_Hate_Speech_Spreaders_on_Social_Media__2310_15772.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Before_It_s_Too_Late_A_State_Space_Model_for_the_Early_Prediction_of_Misinformation_and_Disinf__2502_04655.pdf",
+    "pages": 11,
+    "bytes": 3786442,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Before_It_s_Too_Late_A_State_Space_Model_for_the_Early_Prediction_of_Misinformation_and_Disinf__2502_04655.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Contextualized_Counterspeech_Strategies_for_Adaptation_Personalization_and_Evaluation__2412_07338.pdf",
+    "pages": 12,
+    "bytes": 2685890,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Contextualized_Counterspeech_Strategies_for_Adaptation_Personalization_and_Evaluation__2412_07338.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Cross_Modal_Transfer_from_Memes_to_Videos_Addressing_Data_Scarcity_in_Hateful_Video_Detection__2501_15438.pdf",
+    "pages": 10,
+    "bytes": 2940942,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Cross_Modal_Transfer_from_Memes_to_Videos_Addressing_Data_Scarcity_in_Hateful_Video_Detection__2501_15438.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Detecting_Linguistic_Bias_in_Government_Documents_Using_Large_Language_Models__2502_13548.pdf",
+    "pages": 11,
+    "bytes": 657930,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Detecting_Linguistic_Bias_in_Government_Documents_Using_Large_Language_Models__2502_13548.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Evaluating_Robustness_of_LLMs_on_Crisis_Related_Microblogs_across_Events_Information_Types_and__2412_10413.pdf",
+    "pages": 12,
+    "bytes": 1928750,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Evaluating_Robustness_of_LLMs_on_Crisis_Related_Microblogs_across_Events_Information_Types_and__2412_10413.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Modality_Interactive_Mixture_of_Experts_for_Fake_News_Detection__2501_12431.pdf",
+    "pages": 12,
+    "bytes": 3389116,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Modality_Interactive_Mixture_of_Experts_for_Fake_News_Detection__2501_12431.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\SPRec_Self_Play_to_Debias_LLM_based_Recommendation__2412_09243.pdf",
+    "pages": 10,
+    "bytes": 1228505,
+    "identical_text_to": "D:\\web_2\\papers\\2412.09243v3.pdf",
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\2412.09243v3.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Towards_an_Inclusive_Mobile_Web_A_Dataset_and_Framework_for_Focusability_in_UI_Accessibility__WWW2025_pdf.pdf",
+    "pages": 12,
+    "bytes": 1566159,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Towards_an_Inclusive_Mobile_Web_A_Dataset_and_Framework_for_Focusability_in_UI_Accessibility__WWW2025_pdf.txt"
+  },
+  {
+    "source": "C:\\Users\\PUSHKAR\\Downloads\\WWW2025_PDF_Links_and_Downloader\\WWW2025_PDFs\\Web4Good_special_track\\Unmasking_Gender_Bias_in_Recommendation_Systems_and_Enhancing_Category_Aware_Fairness__2502_17921.pdf",
+    "pages": 12,
+    "bytes": 794599,
+    "identical_text_to": null,
+    "text": "D:\\web_2\\research\\2026-10-22-paper-writing-audit\\extracted\\Unmasking_Gender_Bias_in_Recommendation_Systems_and_Enhancing_Category_Aware_Fairness__2502_17921.txt"
+  }
+]

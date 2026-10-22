@@ -78,3 +78,7 @@ experiments/2026-10-15-kuairand-support/raw/log_random_4_22_to_5_08_pure.csv
 experiments/2026-10-15-kuairand-support/raw/log_standard_4_08_to_4_21_pure.csv
 experiments/2026-10-16-exposure-mf/scores_random_evaluation.npz
 experiments/2026-10-16-loss-sharing-repro/_work/datasets.zip
+# writing audit: keep reports, not full texts of other papers
+research/2026-10-22-paper-writing-audit/extracted/
+research/2026-10-22-paper-writing-audit/renders/
+research/2026-10-22-paper-writing-audit/*visual-checks/

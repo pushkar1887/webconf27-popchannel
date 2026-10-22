@@ -177,9 +177,12 @@ Builder `make_sessions_s4.py` → `sessions_s4.py`; 35 jobs in 4 sessions (pc-s4
 ### Writing
 | ID | What | Owner | When | Status |
 |---|---|---|---|---|
-| W0 | `paper/` skeleton (acmart sigconf,anonymous,review) | codex | Sat–Sun | todo |
+| W0a | Section plan: `paper/OUTLINE.md` v5 (claim ledger, review fixes, two-channel decomposition, per-section framing) | claude | Thu 22 | done (23 Oct, 3fc39f5) |
+| W0 | `paper/` skeleton (acmart sigconf,anonymous,review) | codex | Thu–Fri | todo |
+| F1b | Fig 1b data: per-item norms from stored checkpoint + stored mapping on CPU; reproduces ρ_item 0.275 (GraphHash) / 0.815 (Full) | claude | before G4 | done (23 Oct; no GPU job needed) |
 | W1 | Abstract (G1/G2 framing, real numbers, PRISM/DNA positioned, both authors) | human | Sun 12:00–20:00 | done (v4 structure) |
 | W1s | **Submit abstract** | human | Mon 19 by 12:00 | done (human confirmed 21 Oct) |
-| W2 | §1–§6 drafts | human + codex | Mon–Thu | todo |
+| W2 | §1–§8 drafts per `paper/OUTLINE.md` | human + codex | Thu 22–Sun 25 | todo |
 | W3 | 8 pages, anonymity, number check | human | Sat 24 | todo |
-| W3s | **Submit paper** | human | Mon 26 by 12:00 | todo |
+| W3s | **Submit paper** | human | Mon 26 by 15:00 (deadline 17:29 IST) | todo |
+| W4 | Scrubbed anonymous repository (no sessions, slugs, usernames, git history) | claude | Sun 25 | todo |
