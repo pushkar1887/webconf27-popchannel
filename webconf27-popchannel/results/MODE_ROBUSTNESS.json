@@ -1,0 +1,119 @@
+[
+  {
+    "directau": "gowalla__mf__graphhash__directau__s0",
+    "bpr": "gowalla__mf__graphhash__bpr__s0-p500",
+    "directau_mode": "cos_prior",
+    "bpr_mode": "raw_prior",
+    "registered_pairing": true,
+    "delta_pp": 1.99,
+    "ci95": [
+      1.755,
+      2.234
+    ],
+    "worst_case_cross_mode_pp": -0.988
+  },
+  {
+    "directau": "gowalla__mf__graphhash__directau__s1",
+    "bpr": "gowalla__mf__graphhash__bpr__s1",
+    "directau_mode": "cos_prior",
+    "bpr_mode": "raw_prior",
+    "registered_pairing": true,
+    "delta_pp": 2.13,
+    "ci95": [
+      1.892,
+      2.361
+    ],
+    "worst_case_cross_mode_pp": -0.742
+  },
+  {
+    "directau": "gowalla__mf__graphhash__directau__s2",
+    "bpr": "gowalla__mf__graphhash__bpr__s2",
+    "directau_mode": "cos_prior",
+    "bpr_mode": "raw_prior",
+    "registered_pairing": true,
+    "delta_pp": 2.084,
+    "ci95": [
+      1.847,
+      2.314
+    ],
+    "worst_case_cross_mode_pp": -0.73
+  },
+  {
+    "directau": "yelp2018__mf__graphhash__directau__s0",
+    "bpr": "yelp2018__mf__graphhash__bpr__s0",
+    "directau_mode": "cos_prior",
+    "bpr_mode": "cos_prior",
+    "registered_pairing": false,
+    "delta_pp": 0.861,
+    "ci95": [
+      0.721,
+      1.018
+    ],
+    "worst_case_cross_mode_pp": 0.139
+  },
+  {
+    "directau": "yelp2018__mf__graphhash__directau__s1",
+    "bpr": "yelp2018__mf__graphhash__bpr__s1",
+    "directau_mode": "cos_prior",
+    "bpr_mode": "cos_prior",
+    "registered_pairing": false,
+    "delta_pp": 0.783,
+    "ci95": [
+      0.641,
+      0.936
+    ],
+    "worst_case_cross_mode_pp": 0.094
+  },
+  {
+    "directau": "yelp2018__mf__graphhash__directau__s2",
+    "bpr": "yelp2018__mf__graphhash__bpr__s2",
+    "directau_mode": "cos_prior",
+    "bpr_mode": "cos_prior",
+    "registered_pairing": false,
+    "delta_pp": 0.698,
+    "ci95": [
+      0.557,
+      0.836
+    ],
+    "worst_case_cross_mode_pp": 0.051
+  },
+  {
+    "directau": "amazonbook__mf__graphhash__directau__s0",
+    "bpr": "amazonbook__mf__graphhash__bpr__s0",
+    "directau_mode": "cos_prior",
+    "bpr_mode": "raw_prior",
+    "registered_pairing": true,
+    "delta_pp": 1.518,
+    "ci95": [
+      1.404,
+      1.631
+    ],
+    "worst_case_cross_mode_pp": 1.481
+  },
+  {
+    "directau": "amazonbook__mf__graphhash__directau__s1",
+    "bpr": "amazonbook__mf__graphhash__bpr__s1",
+    "directau_mode": "raw_prior",
+    "bpr_mode": "raw_prior",
+    "registered_pairing": false,
+    "delta_pp": 1.515,
+    "ci95": [
+      1.407,
+      1.629
+    ],
+    "worst_case_cross_mode_pp": 1.485
+  },
+  {
+    "directau": "amazonbook__mf__graphhash__directau__s2",
+    "bpr": "amazonbook__mf__graphhash__bpr__s2",
+    "directau_mode": "cos_prior",
+    "bpr_mode": "raw_prior",
+    "registered_pairing": true,
+    "delta_pp": 1.545,
+    "ci95": [
+      1.441,
+      1.662
+    ],
+    "worst_case_cross_mode_pp": 1.404
+  }
+]

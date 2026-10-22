@@ -20,7 +20,7 @@ A trained model can rank items in four ways:
 \emph{cosine}, $\cos(\mathbf{e}_u,\mathbf{q}_i)$;
 the \emph{\crs}, $\cos(\mathbf{e}_u,\mathbf{q}_i)+\beta p_i$;
 and \emph{raw}${}+\beta p$, $\langle\mathbf{e}_u,\mathbf{q}_i\rangle+\beta p_i$.
-The \crs{} has the form of Cheng~\cite{cheng2026rankone} (eq.~53), who adds a log-popularity term to dot-product scores on full tables. We use it as a diagnostic test, not as a new method (\S\ref{sec:intervention}).
+The \crs{} has the form of Cheng~\cite{cheng2026rankone} (eq.~53), who adds a log-popularity term to dot-product scores on full tables. We use it as an instrument: if sharing erases item popularity, restoring item counts should restore DirectAU's lead (\S\ref{sec:intervention}).
 
 \subsection{Diagnostic quantities}
 We measure how magnitude relates to popularity at two levels: $\rho_{\mathrm{item}}=\mathrm{Spearman}(\|\mathbf{q}_i\|,c_i)$ over items and $\rho_{\mathrm{bucket}}=\mathrm{Spearman}(\|\mathbf{E}_b\|,C_b)$ over buckets. For any item-level target $t$ we define the \emph{correlation ratio}
@@ -30,7 +30,7 @@ We measure how magnitude relates to popularity at two levels: $\rho_{\mathrm{ite
 with variances taken over items with uniform weight. We use $t=p$ (log-count variance) and $t=\mathrm{rank}(c)$ (for Spearman correlations).
 
 \subsection{Problem statement}
-Table~\ref{tab:problem} shows the observation this paper explains. With full tables, DirectAU leads BPR on all three datasets; under GraphHash, it trails BPR on Gowalla and Yelp2018. The same behaviour has been reported for hashing-based tables~\cite{wu2025graphhash,shiao2025oov}, without an explanation. We ask: \emph{why does sharing remove DirectAU's advantage, and what does sharing erase?}
+Table~\ref{tab:problem} shows the observation this paper explains. With full tables, DirectAU leads BPR on all three datasets. Under GraphHash, it falls behind BPR on Gowalla and Yelp2018, and its lead on AmazonBook shrinks by 55\% (from $+1.19$ to $+0.53$\pp). Two prior studies report DirectAU underperforming under hashing~\cite{wu2025graphhash,shiao2025oov}; neither explains why. We ask: \emph{why does sharing remove DirectAU's advantage, and what does sharing erase?}
 
 \begin{table}[t]
 \caption{Raw Recall@20 (\%) of MF models, BPR vs DirectAU (DAU).}\label{tab:problem}
@@ -46,4 +46,4 @@ AmazonBook & 9.57 $>$ 8.38 & 4.63 $>$ 4.10\\
 \end{tabular}
 \end{table}
 
-Two boundaries hold from the start. On AmazonBook, DirectAU's lead shrinks from $+1.19$ to $+0.53$\pp{} but does not reverse. With a LightGCN backbone~\cite{he2020lightgcn}, BPR already leads on the full Gowalla table (18.48 vs 18.02), so the full-table premise is specific to MF. We therefore claim that sharing \emph{removes} DirectAU's advantage, not that it reverses the order everywhere.
+The question is posed for MF, where DirectAU is the stronger objective on full tables. With a LightGCN backbone~\cite{he2020lightgcn}, BPR already leads on the full Gowalla table (18.48 vs 18.02); we still use LightGCN to test whether the mechanism survives propagation (RQ5).

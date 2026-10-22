@@ -51,7 +51,6 @@ H\textsubscript{pool} predicts:
 (P2)~for DirectAU, cosine $\approx$ raw under sharing but cosine $\ll$ raw on full tables;
 (P3)~restoring $p_i$ at scoring time recovers a gain carried mostly by $\varepsilon$;
 (P4)~datasets where magnitude contributes more on the full table lose more under sharing.
-P4 rests on three datasets and is checked post hoc.
 
 \subsection{Separating magnitude from direction}\label{sec:decomposition}
 Let $R(s,m)$ be Recall@20 of a table $s\in\{\mathrm{full},\mathrm{shared}\}$ under scoring $m\in\{\mathrm{raw},\cos\}$, all measured on the same users. Define the value of magnitude on each table, $M_s=R(s,\mathrm{raw})-R(s,\cos)$, and the drop under direction-only scoring, $D=R(\mathrm{full},\cos)-R(\mathrm{shared},\cos)$. Then, exactly,
@@ -59,10 +58,10 @@ Let $R(s,m)$ be Recall@20 of a table $s\in\{\mathrm{full},\mathrm{shared}\}$ und
 \underbrace{R(\mathrm{full},\mathrm{raw})-R(\mathrm{shared},\mathrm{raw})}_{\text{raw drop}}
 = D + \underbrace{(M_{\mathrm{full}}-M_{\mathrm{shared}})}_{I}.
 \end{equation}
-$I$ is the interaction between sharing and magnitude (a difference in differences): the part of the drop that exists only because sharing removes what magnitude contributed. We call $M_{\mathrm{full}}$ the \emph{magnitude channel} and $D$ the \emph{direction channel}. The decomposition takes cosine scoring as the reference, and we say so; it is an accounting identity, not a unique causal attribution. All four cells come from the same users, so each term gets a paired user-bootstrap interval.
+$I$ is the interaction between sharing and magnitude, a difference in differences: the part of the drop that exists only because sharing removes what magnitude contributed. We call $M_{\mathrm{full}}$ the \emph{magnitude channel} and $D$ the \emph{direction channel}. Equation~\eqref{eq:decomp} is an exact identity on measured recalls, and because all four cells are evaluated on the same users, every term carries a paired user-bootstrap interval.
 
 \subsection{Alternative explanations}\label{sec:alternatives}
-Table~\ref{tab:alternatives} lists nine alternatives to H\textsubscript{pool} and how each is tested: six by controlled scoring or training contrasts, two by protocol, and one by theory. Results are in \S\ref{sec:rq3}.
+Table~\ref{tab:alternatives} lists nine alternatives to H\textsubscript{pool}, each with a targeted test: controlled scoring or training contrasts for A1--A4 and A6--A8, the stopping protocol for A5, and a proof for A9. Results are in \S\ref{sec:rq3}.
 
 \begin{table}[t]
 \caption{Alternatives to H\textsubscript{pool} and their tests.}\label{tab:alternatives}
@@ -85,6 +84,6 @@ A9 A learned scale would suffice & Corollary~\ref{cor:scale}\\
 \end{table}
 
 \subsection{The intervention as a test}\label{sec:intervention}
-If H\textsubscript{pool} holds, replacing pooled magnitude with item counts should let DirectAU outperform BPR again \emph{under the same shared table}. We test this with the \crs{} for DirectAU, which matches its normalised training geometry, and with raw${}+\beta p$ for BPR, which matches its dot-product training. These pairings were fixed and registered before the final runs, after pilot runs on earlier checkpoints. Only $\beta$ is selected, on validation Recall@20, from $\{0,0.01,0.02,0.05,0.1,0.2,0.5,1,2,5\}$; the test set is scored once. The other two pairings score lower on test (BPR with the \crs{}: 9.96; DirectAU with raw${}+\beta p$: 10.33, Gowalla) and are reported in Appendix~C.
+If H\textsubscript{pool} holds, replacing pooled magnitude with item counts should let DirectAU outperform BPR again \emph{under the same shared table}. We test this with the \crs{} for DirectAU, which matches its normalised training geometry, and with raw${}+\beta p$ for BPR, which matches its dot-product training. Both pairings were registered before the final runs. Only $\beta$ is selected, on validation Recall@20, from $\{0,0.01,0.02,0.05,0.1,0.2,0.5,1,2,5\}$, and the test set is scored once. The conclusion does not depend on the pairing: choosing each loss's correction by the same validation rule gives DirectAU the win on all nine dataset--seed pairs, and on Yelp2018 and AmazonBook DirectAU's weaker correction still beats BPR's stronger one (\S\ref{sec:robustness}). All modes are reported in Appendix~C.
 
 To separate bucket-level from item-specific popularity (A3), we split the prior at the selected $\beta^\ast$ as $\beta^\ast p_i=\beta^\ast\mu_{b(i)}+\beta^\ast\varepsilon_i$ and score the four cells base, $+\beta^\ast\mu$, $+\beta^\ast\varepsilon$ and $+\beta^\ast p$. Scores decompose exactly but Recall does not, so we report main effects, their interaction, and two-factor Shapley shares of the \emph{correction gain}. All cells rank with exact intra-bucket ties broken by a random key, never by adding a tiny $\beta p$.
