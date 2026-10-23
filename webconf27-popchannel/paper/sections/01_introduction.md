@@ -31,7 +31,7 @@ This motivates our central question: *what does embedding sharing erase, and doe
 <!-- P5 Approach (~200 words) -->
 We investigate this hypothesis through a diagnosis in three parts rather than a new model.
 
-1. **What a shared table can represent.** Write an item's log-popularity as its bucket's mean plus a residual, p_i = μ_{b(i)} + ε_i. We prove three results:
+1. **What a shared table can represent.** Write an item's log-popularity as its bucket's mean plus a residual, ℓ_i = μ_{b(i)} + ε_i. We prove three results:
    - items that share a row tie exactly in matrix factorisation;
    - under GraphHash, no bucket-level quantity can explain more than 36–48% of log-popularity variance;
    - a learned per-item scale receives zero gradient from the DirectAU loss.

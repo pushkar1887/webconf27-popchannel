@@ -1,0 +1,145 @@
+% ============================================================
+% Section 3: Problem Formulation and Preliminaries   (draft v1, 23 Oct)
+% Packages used: amsmath, amssymb, booktabs (all loaded by acmart).
+% Notation: user embedding \mathbf{p}_u, item embedding \mathbf{q}_i,
+%           log-popularity \ell_i (NOT p_i; p is reserved for users).
+% ============================================================
+\section{Problem Formulation and Preliminaries}
+\label{sec:prelim}
+
+We fix the recommendation setting (\S\ref{sec:prelim-setting}) and formalise embedding sharing as a fixed many-to-one map onto a smaller table (\S\ref{sec:prelim-sharing}). We then define the two training objectives and four scoring rules we compare (\S\ref{sec:prelim-objectives}). Finally, we state the problem together with the quantities used to diagnose it (\S\ref{sec:prelim-problem}).
+
+\subsection{Recommendation Setting and Notation}
+\label{sec:prelim-setting}
+
+Let $\mathcal{U}$ and $\mathcal{I}$ be the sets of users and items, with $n_U=|\mathcal{U}|$ and $n_I=|\mathcal{I}|$. Implicit feedback is a set of observed interactions $\mathcal{E}\subseteq\mathcal{U}\times\mathcal{I}$. It is split into training, validation and test sets, $\mathcal{E}_{\mathrm{tr}}$, $\mathcal{E}_{\mathrm{va}}$ and $\mathcal{E}_{\mathrm{te}}$. The \emph{popularity} of item $i$ is its training count, and we write $\ell_i$ for its log-popularity:
+\begin{equation}
+  c_i = \bigl|\{u : (u,i)\in\mathcal{E}_{\mathrm{tr}}\}\bigr|,
+  \qquad
+  \ell_i = \log(1+c_i).
+  \label{eq:popularity}
+\end{equation}
+Only training interactions enter $c_i$. A model assigns each user an embedding $\mathbf{p}_u\in\mathbb{R}^d$ and each item an embedding $\mathbf{q}_i\in\mathbb{R}^d$, and scores a pair with a rule $s(u,i)$ (\S\ref{sec:prelim-objectives}). It recommends the $K$ highest-scoring items that $u$ has not interacted with in training; at test time, validation items are also excluded. We use matrix factorisation (MF), in which $\mathbf{p}_u$ and $\mathbf{q}_i$ are read directly from embedding tables. We also use LightGCN~\cite{LightGCN}, in which $\mathbf{p}_u$ and $\mathbf{q}_i$ are the outputs of $L$ rounds of propagation over the normalised training graph. All later definitions apply to these final vectors unchanged.
+
+\subsection{Embedding Sharing Under a Memory Budget}
+\label{sec:prelim-sharing}
+
+A \emph{full} model stores one row per ID, in tables $\mathbf{E}_U\in\mathbb{R}^{n_U\times d}$ and $\mathbf{E}_I\in\mathbb{R}^{n_I\times d}$, at a cost of $(n_U+n_I)\,d$ parameters. Embedding sharing replaces these with smaller tables $\mathbf{E}_U\in\mathbb{R}^{B_U\times d}$ and $\mathbf{E}_I\in\mathbb{R}^{B_I\times d}$, where $B_U\ll n_U$ and $B_I\ll n_I$. It also fixes, before training, the assignment maps $h_U:\mathcal{U}\to[B_U]$ and $h_I:\mathcal{I}\to[B_I]$. Under \emph{single-row sharing},
+\begin{equation}
+  \mathbf{p}_u = \mathbf{E}_U[h_U(u)],
+  \qquad
+  \mathbf{q}_i = \mathbf{E}_I[h_I(i)],
+  \label{eq:sharing}
+\end{equation}
+and the table costs $(B_U+B_I)\,d$ parameters, independent of the catalog size.
+
+The \emph{bucket} of item $i$ is $b(i)=h_I(i)$. The items in bucket $b$ are $\mathcal{I}_b=\{i : b(i)=b\}$. The bucket's \emph{traffic} is the sum of its items' counts,
+\begin{equation}
+  C_b=\sum_{i\in\mathcal{I}_b} c_i .
+  \label{eq:traffic}
+\end{equation}
+\emph{Two-row} schemes give each item two codes and sum the two rows, $\mathbf{q}_i=\mathbf{E}_I[h^{(1)}_I(i)]+\mathbf{E}_I[h^{(2)}_I(i)]$, and likewise for users.
+
+We study four assignment schemes.
+\begin{itemize}
+  \item \textbf{GraphHash}~\cite{GraphHash} partitions the bipartite training graph by Louvain modularity maximisation, with resolution 200. Each user and each item is assigned the row of its cluster. This is our main setting.
+  \item \textbf{Random} hashing assigns IDs uniformly at random, using GraphHash's bucket counts.
+  \item \textbf{DoubleFreq} uses frequency-based double hashing~\cite{Zhang2020freq}, a two-row scheme in which popular IDs receive near-unique code pairs.
+  \item \textbf{DoubleGraph} is a two-row scheme that sums a universal-hash code and a Louvain-cluster code. We use it as a structure-aware substitute for BACO~\cite{BACO}.
+\end{itemize}
+
+On Gowalla, Yelp2018 and AmazonBook, GraphHash yields 5{,}806, 7{,}656 and 9{,}804 item buckets, with 7.1, 5.0 and 9.3 items per bucket on average. The shared table is 16.4\%, 21.9\% and 13.6\% of the size of the full table.
+
+Single-row sharing has an immediate consequence: whenever $b(i)=b(j)$, we have $\mathbf{q}_i=\mathbf{q}_j$. Any item-level quantity the model computes from its item embedding, in particular the magnitude $\|\mathbf{q}_i\|$, is therefore constant within a bucket.
+
+\subsection{Training Objectives and Scoring Rules}
+\label{sec:prelim-objectives}
+
+We compare two objectives that differ in whether they see embedding magnitude. Let $\mathcal{B}\subset\mathcal{E}_{\mathrm{tr}}$ be a batch.
+
+\emph{BPR}~\cite{BPR} draws one negative item $j$ uniformly at random for each positive pair and minimises
+\begin{equation}
+  \mathcal{L}_{\mathrm{BPR}}
+  = -\frac{1}{|\mathcal{B}|}\sum_{(u,i)\in\mathcal{B}}
+    \log\sigma\!\bigl(\langle\mathbf{p}_u,\mathbf{q}_i\rangle-\langle\mathbf{p}_u,\mathbf{q}_j\rangle\bigr).
+  \label{eq:bpr}
+\end{equation}
+
+\emph{DirectAU}~\cite{DirectAU} acts on normalised embeddings $\tilde{\mathbf{x}}=\mathbf{x}/\|\mathbf{x}\|$. It combines an alignment term with an in-batch uniformity term:
+\begin{equation}
+\begin{aligned}
+  \mathcal{L}_{\mathrm{DAU}}
+  = \frac{1}{|\mathcal{B}|}\sum_{(u,i)\in\mathcal{B}}
+      \bigl\|\tilde{\mathbf{p}}_u-\tilde{\mathbf{q}}_i\bigr\|^2
+  + \frac{\gamma}{2}\Bigl[
+      &\log \mathbb{E}_{u,u'}\, e^{-2\|\tilde{\mathbf{p}}_u-\tilde{\mathbf{p}}_{u'}\|^2} \\
+      +\,&\log \mathbb{E}_{i,i'}\, e^{-2\|\tilde{\mathbf{q}}_i-\tilde{\mathbf{q}}_{i'}\|^2}
+    \Bigr],
+\end{aligned}
+\label{eq:dau}
+\end{equation}
+with $\gamma=1$ and expectations taken over distinct pairs in $\mathcal{B}$.
+
+The distinction that matters here is that $\mathcal{L}_{\mathrm{BPR}}$ depends on the magnitudes $\|\mathbf{p}_u\|$ and $\|\mathbf{q}_i\|$, whereas $\mathcal{L}_{\mathrm{DAU}}$ depends on the embeddings only through their directions. Both objectives are optimised with Adam and weight decay on the embedding rows.
+
+A trained model is evaluated under four scoring rules:
+\begin{align}
+  s_{\mathrm{raw}}(u,i)   &= \langle\mathbf{p}_u,\mathbf{q}_i\rangle,
+  &
+  s_{\cos}(u,i)           &= \cos(\mathbf{p}_u,\mathbf{q}_i),
+  \label{eq:scores-plain}\\
+  s_{\mathrm{raw}+}(u,i)  &= \langle\mathbf{p}_u,\mathbf{q}_i\rangle+\beta\,\ell_i,
+  &
+  s_{\mathrm{cr}}(u,i)    &= \cos(\mathbf{p}_u,\mathbf{q}_i)+\beta\,\ell_i.
+  \label{eq:scores-prior}
+\end{align}
+We call $s_{\mathrm{cr}}$ the \emph{count-restored score}. Its form is that of Cheng~\cite[Eq.~53]{Cheng2026}, applied here after training to a shared table. The coefficient $\beta$ is chosen from the grid $\{0,0.01,0.02,0.05,0.1,0.2,0.5,1,2,5\}$ by validation Recall@20, with ties going to the smallest $\beta$. The test split is scored once, at the selected $\beta$. Storing the prior costs one scalar per item. The scoring rule for each objective is fixed in advance; \S\ref{sec:method-intervention} gives the rule and its rationale.
+
+\subsection{Problem Statement and Diagnostic Quantities}
+\label{sec:prelim-problem}
+
+We measure whether magnitude follows items or buckets with two rank correlations, computed over items and over non-empty buckets respectively:
+\begin{equation}
+  \rho_{\mathrm{item}}=\operatorname{Spearman}_{i}\bigl(\|\mathbf{q}_i\|,\,c_i\bigr),
+  \qquad
+  \rho_{\mathrm{bucket}}=\operatorname{Spearman}_{b}\bigl(\|\mathbf{E}_I[b]\|,\,C_b\bigr).
+  \label{eq:rho}
+\end{equation}
+For an item-level target $t$, let $\mu_b(t)$ be the mean of $t$ over $\mathcal{I}_b$. The \emph{correlation ratio}
+\begin{equation}
+  \eta^2(t)=\frac{\operatorname{Var}_i\bigl[\mu_{b(i)}(t)\bigr]}{\operatorname{Var}_i\bigl[t_i\bigr]}
+  \label{eq:eta}
+\end{equation}
+is the share of the variance of $t$ that lies between buckets. Variances are taken over items with uniform weight. We use $t=\ell$ for statements about variance and $t=\operatorname{rank}(c)$ for statements about Spearman correlation. Writing $\ell_i=\mu_{b(i)}(\ell)+\varepsilon_i$ splits log-popularity into a bucket-level part and an item-specific residual $\varepsilon_i$.
+
+\begin{table}[t]
+  \caption{The problem: raw test Recall@20 (\%) of MF. DirectAU leads BPR on full tables but loses its advantage under GraphHash. $\Delta$ is DirectAU minus BPR in percentage points.}
+  \label{tab:problem}
+  \small
+  \begin{tabular}{@{}lrrrrrr@{}}
+    \toprule
+    & \multicolumn{3}{c}{Full table} & \multicolumn{3}{c}{GraphHash} \\
+    \cmidrule(lr){2-4}\cmidrule(l){5-7}
+    Dataset & BPR & DAU & $\Delta$ & BPR & DAU & $\Delta$ \\
+    \midrule
+    Gowalla    & 16.55 & 18.02 & $+1.47$ & 9.37 & 7.55 & $\mathbf{-1.82}$ \\
+    Yelp2018   &  8.02 & 11.10 & $+3.08$ & 3.78 & 2.41 & $\mathbf{-1.37}$ \\
+    AmazonBook &  8.38 &  9.57 & $+1.19$ & 4.10 & 4.63 & $+0.53$ \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+Table~\ref{tab:problem} states the problem. With full tables, DirectAU outperforms BPR on all three datasets. Under GraphHash, the order reverses on Gowalla and Yelp2018, and on AmazonBook DirectAU's lead shrinks from $1.19$ to $0.53$ points. With LightGCN, BPR already leads on the full Gowalla table ($18.48\%$ vs.\ $18.02\%$), so the premise that DirectAU wins on full tables is specific to MF. Given a fixed sharing map, fixed training protocols and a fixed evaluation protocol, we ask:
+\begin{enumerate}
+  \item \emph{what} item-level information a shared table cannot represent;
+  \item \emph{whether} losing that information accounts for DirectAU's loss of advantage;
+  \item \emph{what} restoring it costs.
+\end{enumerate}
+Section~\ref{sec:method} develops the analysis and the tests that answer these questions.
+
+% ------------------------------------------------------------
+% Labels referenced here that must exist elsewhere:
+%   sec:method             (Section 4, Diagnostic Methodology)
+%   sec:method-intervention (Section 4.6, the intervention as a test)
+% Bib keys used: LightGCN, GraphHash, Zhang2020freq, BACO, BPR, DirectAU, Cheng2026
+% ------------------------------------------------------------
