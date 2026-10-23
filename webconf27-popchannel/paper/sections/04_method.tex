@@ -9,10 +9,17 @@ Our method is a diagnosis: research questions, theory that fixes what sharing ca
 \item[RQ4] Does restoring item counts let DirectAU outperform BPR again under the same table, and is the gain item-specific?
 \item[RQ5] Does the pattern hold for other sharing schemes, bucket resolutions and LightGCN?
 \end{description}
-Costs and robustness are treated in \S\ref{sec:tradeoffs}.
+These questions operationalise the problem of \S\ref{sec:prelim-problem}: the theory below and RQ2 answer Q1, RQ1 and RQ3 answer Q2, and RQ4 together with \S\ref{sec:tradeoffs} answers Q3. RQ5 tests how far the answers extend.
 
 \subsection{What a shared table can represent}\label{sec:theory}
 Each result states its assumptions in its first clause; proofs are in Appendix~\ref{app:proofs}.
+
+\paragraph{Diagnostic quantities}
+We measure how magnitude relates to popularity at two levels: over items, $\rho_{\mathrm{item}}=\mathrm{Spearman}(\|\mathbf{q}_i\|,c_i)$, and over buckets, $\rho_{\mathrm{bucket}}=\mathrm{Spearman}(\|\mathbf{E}_b\|,C_b)$. For any item-level target $t$, the \emph{correlation ratio}
+\begin{equation}\label{eq:eta}
+\eta^2(t)=\frac{\Var\bigl(\mu_{b(i)}(t)\bigr)}{\Var(t)},\qquad \mu_b(t)=\frac{1}{|b|}\sum_{j:\,b(j)=b}t_j,
+\end{equation}
+is the share of the variance of $t$ that lies between buckets, with variances taken over items with uniform weight. We use $t=p$ and $t=\mathrm{rank}(c)$; we write $\eta^2_p$ for $\eta^2(p)$.
 
 \begin{lemma}[User scale]\label{lem:user}
 Under raw, cosine and count-restored scoring, rescaling $\mathbf{e}_u$ by any $a>0$ leaves the ranking of user $u$ unchanged. Under raw${}+\beta p$ it does not.

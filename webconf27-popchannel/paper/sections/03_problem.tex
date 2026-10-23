@@ -1,49 +1,81 @@
-\section{Problem Formulation and Preliminaries}\label{sec:problem}
+\section{Problem Formulation and Preliminaries}\label{sec:prelim}
 
-\subsection{Notation}
-Let $\mathcal{U}$ and $\mathcal{I}$ be the users and items, and let $c_i$ be the number of training interactions of item $i$. We write $p_i=\log(1+c_i)$ for its log-count. A matrix-factorisation (MF) model assigns user $u$ an embedding $\mathbf{e}_u\in\mathbb{R}^d$ and item $i$ an embedding $\mathbf{q}_i\in\mathbb{R}^d$, with $d=64$. We call $\|\mathbf{q}_i\|_2$ the item's \emph{magnitude} and $\mathbf{q}_i/\|\mathbf{q}_i\|_2$ its \emph{direction}.
+We first fix the recommendation setting and the sharing schemes we study (\S\ref{sec:prelim-setting}). We then separate the objective a model is trained with from the rule used to score it (\S\ref{sec:prelim-scoring}), and finally state the problem that the rest of the paper diagnoses (\S\ref{sec:prelim-problem}).
 
-\subsection{Embedding sharing}
-A sharing scheme maps items to buckets, $b:\mathcal{I}\to\mathcal{B}$ with $|\mathcal{B}|\ll|\mathcal{I}|$, and stores one row per bucket: $\mathbf{q}_i=\mathbf{E}_{b(i)}$ (\emph{single-row sharing}). Two-row schemes such as double hashing sum two rows, $\mathbf{q}_i=\mathbf{E}^{(1)}_{b_1(i)}+\mathbf{E}^{(2)}_{b_2(i)}$. Users are shared in the same way. The \emph{traffic} of bucket $b$ is $C_b=\sum_{i:b(i)=b}c_i$.
-Our main scheme is GraphHash~\cite{wu2025graphhash}, which clusters the user--item graph with Louvain modularity optimisation~\cite{blondel2008louvain} at resolution 200. On Gowalla, Yelp2018 and AmazonBook it yields 5{,}806, 7{,}656 and 9{,}804 item buckets (mean 7.06, 4.97 and 9.34 items per bucket; largest 124, 183 and 343), and the shared tables hold 16.4\%, 21.9\% and 13.6\% of the full tables' parameters.
+\subsection{Recommendation Setting and Embedding Sharing}\label{sec:prelim-setting}
 
-\subsection{Training objectives}
-BPR~\cite{rendle2009bpr} minimises $-\sum\log\sigma\big(\langle\mathbf{e}_u,\mathbf{q}_i\rangle-\langle\mathbf{e}_u,\mathbf{q}_j\rangle\big)$ over observed items $i$ and sampled items $j$. DirectAU~\cite{wang2022directau} minimises an alignment term and two uniformity terms on $\ell_2$-normalised embeddings $\hat{\mathbf{e}}_u,\hat{\mathbf{q}}_i$:
-\begin{equation}
-\mathcal{L}_{\mathrm{DAU}}=\E\|\hat{\mathbf{e}}_u-\hat{\mathbf{q}}_i\|^2+\tfrac{\gamma}{2}\Big[\log\E e^{-t\|\hat{\mathbf{e}}_u-\hat{\mathbf{e}}_{u'}\|^2}+\log\E e^{-t\|\hat{\mathbf{q}}_i-\hat{\mathbf{q}}_{i'}\|^2}\Big],
+We study top-$K$ recommendation from implicit feedback. Users $\mathcal{U}$ and items $\mathcal{I}$ interact through observed pairs, which are split into training, validation and test sets. A model represents user $u$ by $\mathbf{e}_u\in\mathbb{R}^d$ and item $i$ by $\mathbf{q}_i\in\mathbb{R}^d$, with $d=64$. For each user it scores every item the user has not interacted with during training, and it recommends the $K$ highest-scoring items. We call $\|\mathbf{q}_i\|_2$ the \emph{magnitude} of item $i$ and $\mathbf{q}_i/\|\mathbf{q}_i\|_2$ its \emph{direction}. The \emph{popularity} of item $i$ is its number of training interactions $c_i$, and $p_i=\log(1+c_i)$ is its log-count. Validation and test interactions never enter either quantity. Our primary backbone is matrix factorisation (MF), in which $\mathbf{e}_u$ and $\mathbf{q}_i$ are rows of embedding tables. In LightGCN~\cite{he2020lightgcn}, the tables supply the layer-0 embeddings, and $\mathbf{e}_u$ and $\mathbf{q}_i$ are the outputs of propagation over the training graph.
+
+A full model stores one trainable row for each ID. Embedding sharing instead fixes, before training, a many-to-one map $b:\mathcal{I}\to\mathcal{B}$ with $|\mathcal{B}|\ll|\mathcal{I}|$, and it stores one row for each \emph{bucket}. Under single-row sharing,
+\begin{equation}\label{eq:sharing}
+  \mathbf{q}_i=\mathbf{E}_{b(i)},\qquad C_b=\sum_{j:\,b(j)=b}c_j,
 \end{equation}
-with $t=2$ and $\gamma=1$. The distinction that matters here: BPR's loss sees magnitude; DirectAU's loss does not.
+where $\mathbf{E}$ is the shared table and $C_b$ is the \emph{traffic} of bucket $b$. Users are shared in the same way. Two-row schemes give an item the sum of two rows, $\mathbf{q}_i=\mathbf{E}^{(1)}_{b_1(i)}+\mathbf{E}^{(2)}_{b_2(i)}$.
 
-\subsection{Scoring modes}
-A trained model can rank items in four ways:
-\emph{raw}, $\langle\mathbf{e}_u,\mathbf{q}_i\rangle$;
-\emph{cosine}, $\cos(\mathbf{e}_u,\mathbf{q}_i)$;
-the \crs{}, $\cos(\mathbf{e}_u,\mathbf{q}_i)+\beta p_i$;
-and \emph{raw}${}+\beta p$, $\langle\mathbf{e}_u,\mathbf{q}_i\rangle+\beta p_i$.
-The \crs{} has the form of Cheng~\cite{cheng2026rankone} (eq.~53), who adds a log-popularity term to dot-product scores on full tables. We use it as an instrument: if sharing erases item popularity, restoring item counts should restore DirectAU's lead (\S\ref{sec:intervention}).
+Our main scheme is GraphHash~\cite{wu2025graphhash}. It clusters the bipartite training graph by Louvain modularity optimisation~\cite{blondel2008louvain} at resolution 200 and gives each cluster one row. On Gowalla, Yelp2018 and AmazonBook, it yields 5{,}806, 7{,}656 and 9{,}804 item buckets, with means of 7.06, 4.97 and 9.34 items per bucket and largest buckets of 124, 183 and 343 items. The shared tables hold 16.4\%, 21.9\% and 13.6\% of the full tables' parameters. Three further schemes test how far the analysis extends:
+\begin{itemize}
+\item \emph{Random}: modulo hashing, $b(i)=i\bmod|\mathcal{B}|$, with GraphHash's row counts.
+\item \emph{DoubleFreq}: the two-row frequency-based double hashing of Zhang et al.~\cite{zhang2020doublehash}.
+\item \emph{DoubleGraph}: the two-row graph-based variant of GraphHash~\cite{wu2025graphhash}.
+\end{itemize}
 
-\subsection{Diagnostic quantities}
-We measure how magnitude relates to popularity at two levels: $\rho_{\mathrm{item}}=\mathrm{Spearman}(\|\mathbf{q}_i\|,c_i)$ over items and $\rho_{\mathrm{bucket}}=\mathrm{Spearman}(\|\mathbf{E}_b\|,C_b)$ over buckets. For any item-level target $t$ we define the \emph{correlation ratio}
-\begin{equation}
-\eta^2(t)=\frac{\Var\big(\mu_{b}(t)\big)}{\Var(t)},\qquad \mu_b(t)=\frac{1}{|b|}\sum_{j:b(j)=b}t_j,
+Under \eqref{eq:sharing}, all items in a bucket share one vector, and therefore one magnitude, however much their popularities differ. A rarely seen item in a busy bucket inherits the magnitude that its bucket's traffic earns. On a full table, magnitude can record popularity item by item. Under single-row sharing, it can record popularity only bucket by bucket. Whether this matters depends on whether the objective, and the rule used for scoring, make use of magnitude.
+
+\subsection{Training Objectives and Scoring Rules}\label{sec:prelim-scoring}
+
+We compare two objectives that differ in exactly the property that sharing alters: whether the loss sees magnitude.
+\begin{itemize}
+\item BPR~\cite{rendle2009bpr} trains on dot products. For each observed pair $(u,i)$ and one item $j$ sampled uniformly from the catalog, it minimises $-\log\sigma\bigl(\langle\mathbf{e}_u,\mathbf{q}_i\rangle-\langle\mathbf{e}_u,\mathbf{q}_j\rangle\bigr)$. Its loss therefore depends on both magnitude and direction.
+\item DirectAU~\cite{wang2022directau} trains on the normalised embeddings $\hat{\mathbf{e}}_u$ and $\hat{\mathbf{q}}_i$. It minimises $\mathcal{L}_{\mathrm{DAU}}=\E\|\hat{\mathbf{e}}_u-\hat{\mathbf{q}}_i\|^2+\tfrac{\gamma}{2}\bigl[\ell_{\mathrm{unif}}(\hat{\mathbf{e}})+\ell_{\mathrm{unif}}(\hat{\mathbf{q}})\bigr]$, where the expectation is over observed pairs, $\ell_{\mathrm{unif}}(\hat{\mathbf{x}})=\log\E\,e^{-2\|\hat{\mathbf{x}}-\hat{\mathbf{x}}'\|^2}$ is taken over pairs within a batch, and $\gamma=1$. The first term aligns interacting users and items; the uniformity terms spread representations over the unit sphere.
+\end{itemize}
+The DirectAU loss depends on directions only. Magnitudes still evolve under the optimiser and weight decay, but nothing in the loss asks them to encode anything (\S\ref{sec:theory}). Both objectives are optimised with Adam.
+
+We separate the training objective from the \emph{scoring rule} applied to the trained embeddings. Raw scoring, $\langle\mathbf{e}_u,\mathbf{q}_i\rangle$, uses magnitude and direction. Cosine scoring, $\cos(\mathbf{e}_u,\mathbf{q}_i)$, uses direction only. Comparing the two on one checkpoint therefore measures what magnitude contributes to ranking, without changing any learned parameter. To measure what item-level popularity contributes, we add a log-count term to either base score:
+\begin{equation}\label{eq:score}
+  s_\beta(u,i)=s_{\mathrm{base}}(u,i)+\beta\,p_i,\qquad
+  s_{\mathrm{base}}\in\bigl\{\langle\mathbf{e}_u,\mathbf{q}_i\rangle,\ \cos(\mathbf{e}_u,\mathbf{q}_i)\bigr\}.
 \end{equation}
-with variances taken over items with uniform weight. We use $t=p$ (log-count variance) and $t=\mathrm{rank}(c)$ (for Spearman correlations).
+This is the score form of Cheng~\cite[eq.~53]{cheng2026rankone}. We call its cosine version the \crs{} and its raw version raw${}+\beta p$. It is applied after training and stores one scalar per item. We use it as a probe of the diagnosis, not as a proposed method. Each objective's base score was fixed before the final runs to match its training geometry: cosine for DirectAU, which is trained on normalised embeddings, and raw for BPR, which is trained on dot products. Only $\beta$ is selected, on validation Recall@20, and the test split is scored once. The conclusion does not depend on this pairing (\S\ref{sec:intervention}).
 
-\subsection{Problem statement}
-Table~\ref{tab:problem} shows the observation this paper explains. With full tables, DirectAU leads BPR on all three datasets. Under GraphHash, it falls behind BPR on Gowalla and Yelp2018, and its lead on AmazonBook shrinks by 55\% (from $+1.19$ to $+0.53$\pp). Two prior studies report DirectAU underperforming under hashing~\cite{wu2025graphhash,shiao2025oov}; neither explains why. We ask: \emph{why does sharing remove DirectAU's advantage, and what does sharing erase?}
+\subsection{Problem Statement}\label{sec:prelim-problem}
+
+Table~\ref{tab:problem} reports the behaviour that this paper explains. Within each setting, both objectives use the same data, backbone, embedding dimension and sharing map, and therefore the same number of parameters. Each objective uses its own learning rate and weight decay (\S\ref{sec:setup}).
 
 \begin{table}[t]
-\caption{Raw Recall@20 (\%) of MF models, BPR vs DirectAU (DAU).}\label{tab:problem}
-\centering\small
-\begin{tabular}{lcc}
-\toprule
-Dataset & Full table: DAU vs BPR & GraphHash: DAU vs BPR\\
-\midrule
-Gowalla & 18.02 $>$ 16.55 & 7.55 $<$ 9.37\\
-Yelp2018 & 11.10 $>$ 8.02 & 2.41 $<$ 3.78\\
-AmazonBook & 9.57 $>$ 8.38 & 4.63 $>$ 4.10\\
-\bottomrule
-\end{tabular}
+  \caption{Raw test Recall@20 (\%) of BPR and DirectAU (DAU). The cost of sharing is the full-table value minus the GraphHash value, in percentage points. The MF and LightGCN full-table DirectAU values coincide only at two decimals: their top-20 lists differ for 92\% of Gowalla users.}
+  \label{tab:problem}
+  \small
+  \setlength{\tabcolsep}{4pt}
+  \begin{tabular}{@{}lrrrrrr@{}}
+    \toprule
+    & \multicolumn{2}{c}{Full} & \multicolumn{2}{c}{GraphHash} & \multicolumn{2}{c}{Cost of sharing}\\
+    \cmidrule(lr){2-3}\cmidrule(lr){4-5}\cmidrule(l){6-7}
+    Setting & BPR & DAU & BPR & DAU & BPR & DAU\\
+    \midrule
+    MF, Gowalla       & 16.55 & 18.02 & 9.37  & 7.55  & 7.18 & 10.47\\
+    MF, Yelp2018      &  8.02 & 11.10 & 3.78  & 2.41  & 4.24 &  8.69\\
+    MF, AmazonBook    &  8.38 &  9.57 & 4.10  & 4.63  & 4.28 &  4.94\\
+    \midrule
+    LightGCN, Gowalla & 18.48 & 18.02 & 16.22 & 11.29 & 2.26 &  6.73\\
+    \bottomrule
+  \end{tabular}
 \end{table}
 
-The question is posed for MF, where DirectAU is the stronger objective on full tables. With a LightGCN backbone~\cite{he2020lightgcn}, BPR already leads on the full Gowalla table (18.48 vs 18.02); we still use LightGCN to test whether the mechanism survives propagation (RQ5).
+Two patterns stand out.
+\begin{enumerate}
+\item \textbf{Sharing costs DirectAU more than BPR in all four settings}, by a factor of 1.15 to 2.98.
+\item \textbf{Where DirectAU leads on the full table, this asymmetry can reverse the order.} The order reverses on Gowalla and Yelp2018. On AmazonBook, where the asymmetry is smallest, DirectAU's lead narrows by 55\%, from 1.19 to 0.53 points. With LightGCN, BPR already leads on the full Gowalla table, so DirectAU has no lead to lose, yet sharing widens BPR's margin from 0.46 to 4.93 points.
+\end{enumerate}
+The reversal is therefore the visible symptom, and the asymmetric cost is the phenomenon to explain. GraphHash~\cite{wu2025graphhash} and Shiao et al.~\cite{shiao2025oov} report the symptom, but neither identifies a mechanism.
+
+\medskip
+\noindent\fbox{\parbox{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}{%
+\textbf{Problem.} For a fixed sharing map and fixed training and evaluation protocols, explain why embedding sharing costs DirectAU more than BPR. The explanation must answer three questions.
+\begin{description}
+\item[Q1.] What item-level popularity information can a shared table represent, and what does it lose?
+\item[Q2.] Does that loss account for DirectAU's larger cost, as opposed to reduced directional capacity, ties within buckets, or training artefacts?
+\item[Q3.] What does restoring item-level popularity at scoring time recover, and what does it cost in storage, tail recall and catalog coverage?
+\end{description}}}
+\medskip
+
+The representational analysis is exact for single-row sharing in MF, where all items in a bucket share one vector. Two-row schemes give an item the sum of two rows. LightGCN propagates each item over its own neighbourhood, so items that share a row need not end with identical embeddings. We therefore treat these settings as tests of how far the diagnosis extends, not as cases of the theory. Section~\ref{sec:method} turns Q1--Q3 into hypotheses and tests.
