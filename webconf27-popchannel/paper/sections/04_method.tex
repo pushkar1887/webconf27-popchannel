@@ -22,7 +22,7 @@ Under the first three scorings, popularity can therefore reach a ranking only th
 \begin{lemma}[Intra-bucket score ties]\label{lem:ties}
 Under single-row sharing in MF, items with $b(i)=b(j)$ receive identical scores for every user under any scoring that depends on the item only through $\mathbf{q}_i$.
 \end{lemma}
-The lemma does not cover two-row schemes unless both rows coincide, nor LightGCN, whose propagated item embeddings differ within a bucket. Any item term, such as $\beta p_i$, breaks these \emph{intra-bucket score ties}. They are common: on Gowalla, 87\% of evaluated users have a tie that straddles rank 20, and the mean tied group at that boundary has 14.7 items.
+The lemma does not cover two-row schemes unless both rows coincide, nor LightGCN, whose propagated item embeddings differ within a bucket. Any item term, such as $\beta p_i$, breaks these intra-bucket score ties. They are common: on Gowalla, 87\% of evaluated users have a tie that straddles rank 20, and the mean tied group at that boundary has 14.7 items.
 
 \begin{proposition}[Scale invariance]\label{prop:scale}
 $\mathcal{L}_{\mathrm{DAU}}$ depends on each item embedding only through $\mathbf{q}_i/\|\mathbf{q}_i\|$.
@@ -58,7 +58,7 @@ Let $R(s,m)$ be Recall@20 of a table $s\in\{\mathrm{full},\mathrm{shared}\}$ und
 \underbrace{R(\mathrm{full},\mathrm{raw})-R(\mathrm{shared},\mathrm{raw})}_{\text{raw drop}}
 = D + \underbrace{(M_{\mathrm{full}}-M_{\mathrm{shared}})}_{I}.
 \end{equation}
-$I$ is the interaction between sharing and magnitude, a difference in differences: the part of the drop that exists only because sharing removes what magnitude contributed. We call $M_{\mathrm{full}}$ the \emph{magnitude channel} and $D$ the \emph{direction channel}. Equation~\eqref{eq:decomp} is an exact identity on measured recalls, and because all four cells are evaluated on the same users, every term carries a paired user-bootstrap interval.
+$I$ is the interaction between sharing and magnitude, a difference in differences: the part of the drop that exists only because sharing removes what magnitude contributed. We call $M_{\mathrm{full}}$ the magnitude channel and $D$ the direction channel. Equation~\eqref{eq:decomp} is an exact identity on measured recalls, and because all four cells are evaluated on the same users, every term carries a paired user-bootstrap interval.
 
 \subsection{Alternative explanations}\label{sec:alternatives}
 Table~\ref{tab:alternatives} lists nine alternatives to H\textsubscript{pool}, each with a targeted test: controlled scoring or training contrasts for A1--A4 and A6--A8, the stopping protocol for A5, and a proof for A9. Results are in \S\ref{sec:rq3}.

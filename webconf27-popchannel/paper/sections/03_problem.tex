@@ -18,7 +18,7 @@ with $t=2$ and $\gamma=1$. The distinction that matters here: BPR's loss sees ma
 A trained model can rank items in four ways:
 \emph{raw}, $\langle\mathbf{e}_u,\mathbf{q}_i\rangle$;
 \emph{cosine}, $\cos(\mathbf{e}_u,\mathbf{q}_i)$;
-the \emph{\crs}, $\cos(\mathbf{e}_u,\mathbf{q}_i)+\beta p_i$;
+the \crs{}, $\cos(\mathbf{e}_u,\mathbf{q}_i)+\beta p_i$;
 and \emph{raw}${}+\beta p$, $\langle\mathbf{e}_u,\mathbf{q}_i\rangle+\beta p_i$.
 The \crs{} has the form of Cheng~\cite{cheng2026rankone} (eq.~53), who adds a log-popularity term to dot-product scores on full tables. We use it as an instrument: if sharing erases item popularity, restoring item counts should restore DirectAU's lead (\S\ref{sec:intervention}).
 

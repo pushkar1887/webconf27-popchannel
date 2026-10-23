@@ -1,2 +1,47 @@
-\section{Introduction}
-% TODO(W2): draft per paper/OUTLINE.md.
+\section{Introduction}\label{sec:intro}
+
+Embedding sharing stores one embedding row for many item IDs, so a recommender's embedding table grows with the number of rows rather than with the size of the catalog. It is a standard way for Web-scale recommenders to fit their per-ID embedding tables, which hold most of their parameters, into a fixed memory budget~\cite{naumov2019dlrm,wu2025graphhash}.
+
+Sharing schemes are compared by the accuracy they retain per byte, and the comparison is usually run under a single training objective. That leaves a second decision unexamined. The objective a deployment should train with depends on what the compressed table can still represent: if sharing removes information that one objective relies on, a memory decision becomes a modelling decision. Because Web platforms serve catalogs of millions of items under fixed memory budgets, knowing what sharing removes determines which objective to deploy, not only how much memory is saved.
+
+Two lines of work bear on this question. Compression research has steadily improved how IDs are assigned to rows. The hashing trick assigns them uniformly~\cite{weinberger2009hashing}; frequency-aware and double hashing give popular items private rows or row pairs~\cite{zhang2020doublehash}; graph-based methods place items with similar interaction patterns in the same bucket. GraphHash~\cite{wu2025graphhash} clusters the user--item graph by modularity and outperforms hashing baselines at equal parameter budgets, BACO~\cite{jiang2026baco} balances co-clusters of users and items, and GDE~\cite{lee2026gde} replaces hard buckets with soft gating. A second line studies full embedding tables and finds that embedding magnitude encodes item popularity: frequently interacted items acquire longer vectors, and dot-product scores exploit that length~\cite{loveland2025prism,chen2023adaptau,liu2026ddc}. Training objectives treat magnitude differently. BPR~\cite{rendle2009bpr} is trained on dot products and sees it; DirectAU~\cite{wang2022directau} aligns and spreads $\ell_2$-normalised embeddings, so its loss never sees magnitude.
+
+The two lines have not been connected, and the gap shows up as an unexplained result. GraphHash reports that every hashing method it evaluates loses accuracy when the objective changes from BPR to DirectAU, and suggests that DirectAU may be incompatible with hashing~\cite{wu2025graphhash}. Shiao et al.~\cite{shiao2025oov} likewise find BPR ahead of DirectAU for out-of-vocabulary users embedded by hashing-based methods. Neither work identifies a mechanism. We reproduce the effect under a controlled protocol (Figure~\ref{fig:teaser-a}). With matrix factorisation (MF) on Gowalla, DirectAU leads BPR on the full table (18.02\% vs 16.55\% Recall@20) but trails it under GraphHash (7.55\% vs 9.37\%). The order also reverses on Yelp2018, and on AmazonBook DirectAU's lead shrinks by 55\%.
+
+The obvious remedies do not close this gap. More buckets give memory back, yet raw DirectAU still trails BPR with 25{,}993 buckets for 40{,}981 items (10.87\% vs 12.61\%). A learned per-item scale on a shared row, as in MEmCom~\cite{pansare2022memcom}, receives no gradient from the DirectAU loss (\S\ref{sec:theory}). Breaking ties within shared rows recovers only 12\% of the gain we report below. A practitioner therefore cannot tell whether DirectAU is unsuited to compression or whether compression removes something DirectAU needs.
+
+We ask what embedding sharing erases, and whether that loss explains why the preferred objective changes under compression. Our key observation is that sharing turns magnitude into a property of the bucket rather than of the item (Figure~\ref{fig:teaser-b}). Under GraphHash, a shared row's norm tracks the total traffic of its bucket (Spearman 0.75--0.94) but tracks the popularity of the individual item far less (0.19--0.52, against 0.79--0.91 on full tables). We call this \emph{bucket-level magnitude pooling} and test the hypothesis that it accounts for DirectAU's loss under sharing.
+
+We test this hypothesis with a diagnosis rather than a new model, in three parts.
+\textbf{What a shared table can represent.} Writing an item's log-count as its bucket's mean plus a residual, $p_i=\mu_{b(i)}+\varepsilon_i$, we prove that items sharing a row produce \emph{intra-bucket score ties} in MF; that under GraphHash no bucket-level quantity can explain more than 36--48\% of log-count variance; and that a learned per-item scale receives zero gradient from the DirectAU loss.
+\textbf{Where the accuracy goes.} An exact identity splits the full-to-shared drop into a \emph{direction channel} and the loss of the \emph{magnitude channel}, each with a paired confidence interval, and nine targeted tests address alternative explanations, including lost capacity, ties, initialisation, early stopping, weight decay and generic popularity.
+\textbf{The prediction the diagnosis makes.} If pooled magnitude is the problem, replacing it with item counts should let DirectAU outperform BPR again under the same table. We test this with the published log-prior score form of Cheng~\cite{cheng2026rankone} (eq.~53), applied after training with one validation-tuned weight $\beta$. For DirectAU we call $\cos(\mathbf{e}_u,\mathbf{q}_i)+\beta\log(1+c_i)$ the \emph{\crs{}}; BPR receives the same term on its dot-product score. The score is a probe of the diagnosis, not a proposed method.
+We evaluate on Gowalla, Yelp2018 and AmazonBook, with MF and LightGCN~\cite{he2020lightgcn}, under GraphHash and three other sharing schemes.
+
+The evidence supports the diagnosis. On Gowalla, the loss of the magnitude channel accounts for 4.98 of the 10.47-point drop (95\% CI 4.57--5.37). Across datasets, sharing removes 89--100\% of what magnitude contributes on full tables; on AmazonBook, where the order does not reverse, magnitude contributes only 0.87 points to begin with. Restoring item counts raises compressed DirectAU from 7.55\% to 13.30\% on Gowalla, and corrected DirectAU outperforms equally corrected BPR on all nine dataset--seed pairs ($+0.83$ to $+2.13$ points; every paired 95\% confidence interval lies above zero). The result does not depend on how each loss is scored: choosing each loss's correction by the same validation rule yields the same winner on all nine pairs. The correction has a cost. It adds 3.9--7.3\% to the compressed table and re-concentrates recommendations on popular items: catalog coverage returns to roughly the full-table level (28.4\% vs 30.8\% on Gowalla), while tail recall stays below it.
+
+Our contributions are:
+\begin{itemize}
+\item \textbf{Diagnosis.} Under embedding sharing, magnitude tracks bucket traffic rather than item popularity, and for DirectAU it no longer helps ranking: discarding it changes GraphHash DirectAU's Recall@20 by at most 0.44 points, against 0.87--4.96 points on full tables.
+\item \textbf{Analysis.} Three results fix what a shared table can represent: exact intra-bucket ties, a correlation-ratio bound on the popularity any bucket-level quantity can carry, and zero gradient for learned per-item scales under DirectAU. An exact decomposition separates the loss of popularity information from the loss of directional capacity.
+\item \textbf{Controlled test with costs.} Restoring item counts lets corrected DirectAU outperform corrected BPR on all nine dataset--seed pairs, with 71--76\% of the gain item-specific. The ordering holds across seeds, sharing schemes, bucket resolutions and LightGCN, and we report the storage, tail and coverage costs.
+\end{itemize}
+
+The score form is Cheng's; our contribution is the diagnosis it tests, and we do not claim the correction is tail-safe. The ordering does not reverse on AmazonBook, and with LightGCN on Gowalla, BPR already leads on the full table (18.48\% vs 18.02\%). Predictions were registered before each experimental stage, and we report those that failed.
+
+\begin{figure}[t]
+  \centering
+  \begin{subfigure}[b]{0.49\columnwidth}
+    \centering
+    \IfFileExists{figures/fig1a_recall.pdf}{\includegraphics[width=\linewidth]{figures/fig1a_recall.pdf}}{\fbox{\parbox[c][3.2cm][c]{0.92\linewidth}{\centering\small Figure 1a\\(figures/fig1a\_recall.pdf)}}}
+    \caption{Test Recall@20 (\%)}\label{fig:teaser-a}
+  \end{subfigure}\hfill
+  \begin{subfigure}[b]{0.49\columnwidth}
+    \centering
+    \IfFileExists{figures/fig1b_norms.pdf}{\includegraphics[width=\linewidth]{figures/fig1b_norms.pdf}}{\fbox{\parbox[c][3.2cm][c]{0.92\linewidth}{\centering\small Figure 1b\\(figures/fig1b\_norms.pdf)}}}
+    \caption{Item norm vs.\ $\log(1+c_i)$}\label{fig:teaser-b}
+  \end{subfigure}
+  \caption{Under embedding sharing, DirectAU loses its lead over BPR, consistent with magnitude no longer following the item (Gowalla, MF). (a)~Solid bars: raw dot-product scores with full and GraphHash tables (BPR 16.55 / 9.37; DirectAU 18.02 / 7.55). Hatched bars: each model's score plus $\beta\log(1+c_i)$ under GraphHash (BPR 11.31; DirectAU 13.30). (b)~Item embedding norm against log training count. Full table: Spearman 0.81; GraphHash: 0.28. Each horizontal stripe is one bucket, whose items share a single norm.}
+  \Description{Left: bar chart of Recall@20 for BPR and DirectAU with full and GraphHash tables, with and without the count term. Right: scatter of item embedding norm against log training count for the full table and for GraphHash, where GraphHash items form horizontal stripes.}
+  \label{fig:teaser}
+\end{figure}
